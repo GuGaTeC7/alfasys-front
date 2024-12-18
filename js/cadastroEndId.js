@@ -87,6 +87,7 @@ function realizarCadastro() {
     .then((data) => {
       console.log("Cadastro realizado com sucesso:", data);
       alert("Cadastro realizado com sucesso!");
+      resetarCampos(); // Reseta os campos após o sucesso
     })
     .catch((error) => {
       console.error("Erro ao realizar cadastro:", error);
@@ -113,4 +114,3 @@ function resetarCampos() {
 
 // Adiciona o evento ao botão resetar
 document.getElementById("botaoResetar").addEventListener("click", resetarCampos);
-
