@@ -170,8 +170,15 @@ function preencherTabela() {
     });
 }
 
-// Chama a função ao carregar a página
-document.addEventListener("DOMContentLoaded", preencherTabela);
+// Selecione o link "Histórico de cadastros"
+const historicoLink = document.querySelector("a[href='#cadastro-feito']");
+
+// Adicione o evento de clique
+historicoLink.addEventListener("click", function(event) {
+  // Chama a função para preencher a tabela ao clicar no link
+  preencherTabela();
+});
+
 
 // Adiciona o evento ao botão resetar
 document.getElementById("botaoResetar").addEventListener("click", resetarCampos);
