@@ -22,7 +22,8 @@
       crossorigin="anonymous"
     />
     <!-- css link  -->
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/spinner.css" />
     <!-- font awesome link -->
     <link
       rel="stylesheet"
@@ -610,7 +611,7 @@
                         type="button"
                         id="botaoResetar"
                       >
-                       Resetar
+                        Resetar
                       </button>
                     </div>
                   </div>
@@ -828,12 +829,18 @@
                       placeholder="Pesquisar por Estado.."
                       id="pesquisaEstado"
                     />
-                    <button class="btn btn-warning text-white" onclick="filtrarTabela()">
+                    <button
+                      class="btn btn-warning text-white"
+                      onclick="filtrarTabela()"
+                    >
                       Pesquisar
                     </button>
                   </div>
                   <div class="table-responsive text-nowrap">
-                    <table class="table my-4 table-hover table-striped w-100" id="tabelaHistorico">
+                    <table
+                      class="table my-4 table-hover table-striped w-100"
+                      id="tabelaHistorico"
+                    >
                       <thead>
                         <tr>
                           <th>END ID</th>
@@ -864,7 +871,6 @@
               </div>
             </div>
           </div>
-          
 
           <!-- ============================== PÁGINA DE STATUS ============================== -->
 
