@@ -233,6 +233,25 @@ document.querySelectorAll(".btn-outline-primary").forEach((button) => {
   });
 });
 
+
+// Funções reutilizáveis
+function dismissAlert() {
+  const alertDiv = document.querySelector(".custom-alert");
+  if (alertDiv) {
+    alertDiv.remove();
+  }
+}
+
+function confirmAlert(action, endId) {
+  if (action === "finalizar") {
+    alert(`END ID ${endId} enviado com sucesso.`);
+  } else if (action === "iniciar") {
+    alert(`Etapa iniciada com sucesso.`);
+  }
+  dismissAlert();
+}
+
+// BOTÃO FINALIZAR
 document.querySelectorAll(".finalizar-btn").forEach((button) => {
   button.addEventListener("click", (event) => {
     const endId = event.target.getAttribute("data-id");
@@ -255,30 +274,14 @@ document.querySelectorAll(".finalizar-btn").forEach((button) => {
     alertDiv.innerHTML = `
         <strong>Tem certeza que deseja enviar o END ID ${endId}?</strong><br>
         <button class="btn btn-light mt-2" onclick="dismissAlert()">Cancelar</button>
-        <button class="btn btn-warning text-white mt-2" onclick="confirmAlert('${endId}')">Enviar</button>
+        <button class="btn btn-warning text-white mt-2" onclick="confirmAlert('finalizar', '${endId}')">Enviar</button>
       `;
 
     document.body.appendChild(alertDiv);
   });
- });
-
-function dismissAlert() {
-  const alertDiv = document.querySelector(".custom-alert");
-  if (alertDiv) {
-    alertDiv.remove();
-  }
-}
-
-function confirmAlert(endId) {
-  alert(`END ID ${endId} enviado com sucesso.`);
-  dismissAlert();
-}
-
-document.getElementById("logout").addEventListener("click", function () {
-  localStorage.removeItem("token");
-  window.location.href = "login.html";
 });
 
+// BOTÃO INICIAR
 document.querySelectorAll(".iniciar-btn").forEach((button) => {
   button.addEventListener("click", (event) => {
     const endId = event.target.getAttribute("data-id");
@@ -301,21 +304,17 @@ document.querySelectorAll(".iniciar-btn").forEach((button) => {
     alertDiv.innerHTML = `
         <strong>Tem certeza que deseja iniciar essa etapa?</strong><br>
         <button class="btn btn-light mt-2" onclick="dismissAlert()">Não</button>
-        <button class="btn btn-warning text-white mt-2" onclick="confirmAlert('${endId}')">Iniciar</button>
+        <button class="btn btn-warning text-white mt-2" onclick="confirmAlert('iniciar', '${endId}')">Iniciar</button>
       `;
 
     document.body.appendChild(alertDiv);
   });
 });
 
-function dismissAlert() {
-  const alertDiv = document.querySelector(".custom-alert");
-  if (alertDiv) {
-    alertDiv.remove();
-  }
-}
 
-function confirmAlert(endId) {
-  alert(`Etapa iniciada com sucesso.`);
-  dismissAlert();
-}
+
+
+document.getElementById("logout").addEventListener("click", function () {
+  localStorage.removeItem("token");
+  window.location.href = "login.html";
+});
