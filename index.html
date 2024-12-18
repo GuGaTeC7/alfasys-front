@@ -1,0 +1,2562 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Grupo Alfa Arujá</title>
+
+    <!-- favicon link  -->
+    <link rel="icon" type="image/x-icon" href="img/logo_alfa-1.png" />
+
+    <!-- Boxicons CSS -->
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <!-- bootstrap link  -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+      integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N"
+      crossorigin="anonymous"
+    />
+    <!-- css link  -->
+    <link rel="stylesheet" href="style.css" />
+    <!-- font awesome link -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="container-fluid px-0">
+      <!-- ========================= header ========================= -->
+      <div class="navbar fixed-top">
+        <a href="#" class="navbar-brand">
+          <span>AlfaSys</span>
+        </a>
+        <div class="actions mr-auto d-flex align-items-center">
+          <span><i class="bx bx-menu menu mr-3" id="menu"></i></span>
+          <div class="input">
+            <i class="bx bx-search"></i>
+            <input
+              type="search"
+              id="search-input"
+              placeholder="Pesquisar"
+              class="form-control"
+            />
+          </div>
+          <i class="bx bx-search search-icon"></i>
+        </div>
+
+        <div class="user">
+          <span class="mr-3 d-flex"
+            ><i class="bx bx-bell notice-icon">
+              <div class="badge-icon bg-primary">1</div>
+            </i></span
+          >
+
+          <span
+            ><img
+              src="img/1077114.png"
+              class="ml-3 rounded-circle img-fluid user-img"
+              alt=""
+          /></span>
+          <div class="user-descr">
+            <h6 class="ml-3 mb-0" id="nomeUserHeader"></h6>
+            <small class="text-muted h6 ml-3" id="cargoHeader"></small>
+          </div>
+
+          <!-- monitoramento -->
+          <div class="notice rounded">
+            <ul class="list-group">
+              <li
+                class="list-group-item d-flex align-items-center border-top-0"
+              >
+                <div>
+                  <small class="text-muted">Houve uma mudança</small>
+                  <small class="text-white bg-primary py-1 px-2 ml-3 view-all"
+                    >Ver</small
+                  >
+                </div>
+              </li>
+              <li class="list-group-item d-flex align-items-center">
+                <div class="mr-3">
+                  <span><i class="bx bx-error-circle text-warning"></i></span>
+                </div>
+                <div>
+                  <h6 class="text-dark">Titulo</h6>
+                  <small class="text-muted">Mudança que aconteceu!</small>
+                  <br />
+                  <small class="text-muted">Foi quando?</small>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <!-- perfil -->
+          <div class="profile rounded">
+            <div class="user-info">
+              <span>
+                <img
+                  src="img/1077114.png"
+                  class="mr-2 rounded-circle img-fluid"
+                  alt=""
+                />
+              </span>
+              <div class="user-name">
+                <h5 class="mb-0" id="nomeUserInfo">Raul Guilherme</h5>
+                <small class="text-muted h6 ml-1" id="cargoInfo">Boss</small>
+              </div>
+            </div>
+            <ul class="list-group">
+              <li class="list-group-item border-top text-muted">
+                <span class="mr-3"><i class="bx bx-user"></i></span>
+                <span>Meu perfil</span>
+              </li>
+              <li class="list-group-item border-top text-muted">
+                <span class="mr-3"><i class="bx bx-cog"></i></span>
+                <span>Configurações</span>
+              </li>
+              <li class="list-group-item border-top text-muted">
+                <span class="mr-3"><i class="bx bx-help-circle"></i></span>
+                <span>Suporte</span>
+              </li>
+              <li class="list-group-item border-top text-muted" id="logout">
+                <span class="mr-3"><i class="bx bx-log-in"></i></span>
+                <span>Sair</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <!-- ============================== sidebar ============================== -->
+      <div class="sidebar">
+        <ul class="unstayled menu nav nav-pills flex-column">
+          <!------------------------------------------- RAUL CENTRAL - INICIO CENTRAL  ------------------------------------------------>
+
+          <li class="rounded mt-1 list nav-item">
+            <a
+              href="#inicio"
+              class="text-decoration-none d-flex"
+              data-toggle="pill"
+            >
+              <span>
+                <i class="fa-solid fa-house"></i>
+              </span>
+              <div class="ml-4">
+                <span class=""> INÍCIO </span>
+              </div>
+            </a>
+          </li>
+
+          <!------------------------------------------- CADASTRO END ID ------------------------------------------------>
+
+          <li
+            class="rounded active mb-1 list nav-item"
+            data-toggle="collapse"
+            data-target="#cadastro"
+          >
+            <a href="#" class="text-decoration-none sub-menu">
+              <div class="text d-flex">
+                <span>
+                  <i class="fa-solid fa-id-card-clip"></i>
+                </span>
+                <div class="ml-4">
+                  <span class=""> CADASTRO END ID </span>
+                </div>
+              </div>
+              <span><i class="bx bx-chevron-down"></i></span>
+            </a>
+          </li>
+          <div class="collapse" id="cadastro">
+            <ul class="unstyled pl-5 ml-4 submenu nav nav-pills flex-column">
+              <li class="py-2 nav-item">
+                <a
+                  data-toggle="pill"
+                  href="#cadastro-fazer"
+                  class="text-decoration-none titulo-item"
+                >
+                  Realizar cadastro
+                </a>
+              </li>
+              <li class="py-2 nav-item">
+                <a
+                  data-toggle="pill"
+                  href="#cadastro-editar"
+                  class="text-decoration-none titulo-item"
+                >
+                  Editar cadastro
+                </a>
+              </li>
+              <li class="py-2 nav-item">
+                <a
+                  data-toggle="pill"
+                  href="#cadastro-feito"
+                  class="text-decoration-none titulo-item"
+                >
+                  Histórico de cadastros
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!------------------------------------------- STATUS ------------------------------------------------>
+
+          <li class="rounded mt-1 list nav-item">
+            <a
+              href="#status"
+              class="text-decoration-none d-flex"
+              data-toggle="pill"
+            >
+              <span>
+                <i class="fa-solid fa-chart-simple"></i>
+              </span>
+              <div class="ml-4">
+                <span class=""> STATUS </span>
+              </div>
+            </a>
+          </li>
+
+          <!------------------------------------------- LIBERAÇÃO DE ACESSO------------------------------------------------>
+
+          <li
+            class="rounded active mb-1 list nav-item"
+            data-toggle="collapse"
+            data-target="#liberação"
+          >
+            <a href="#" class="text-decoration-none sub-menu">
+              <div class="text d-flex">
+                <span>
+                  <i class="fa-solid fa-unlock-keyhole"></i>
+                </span>
+                <div class="ml-4">
+                  <span class=""> LIBERAÇÃO DE ACESSO </span>
+                </div>
+              </div>
+              <span><i class="bx bx-chevron-down"></i></span>
+            </a>
+          </li>
+          <div class="collapse" id="liberação">
+            <ul class="unstyled pl-5 ml-4 submenu nav nav-pills flex-column">
+              <li class="py-2 nav-item">
+                <a
+                  data-toggle="pill"
+                  href="#editar-agendamento"
+                  class="text-decoration-none"
+                >
+                  Editar agendamento
+                </a>
+              </li>
+              <li class="py-2 nav-item">
+                <a
+                  data-toggle="pill"
+                  href="#todos-agendamentos"
+                  class="text-decoration-none"
+                >
+                  Histórico de agendamentos
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-------------------------------------------  VISTORIA ------------------------------------------------>
+
+          <li class="rounded mt-1 list nav-item">
+            <a
+              href="#vistoria"
+              class="text-decoration-none d-flex"
+              data-toggle="pill"
+            >
+              <span>
+                <i class="fa-solid fa-screwdriver-wrench"></i>
+              </span>
+              <div class="ml-4">
+                <span class=""> VISTORIA </span>
+              </div>
+            </a>
+          </li>
+
+          <!------------------------------------------- KIT-TSSR ------------------------------------------------>
+
+          <li class="rounded mt-1 list nav-item">
+            <a
+              href="#kit-tssr"
+              class="text-decoration-none d-flex"
+              data-toggle="pill"
+            >
+              <span>
+                <i class="fa-brands fa-uikit mr-1"></i>
+              </span>
+              <div class="ml-4">
+                <span class=""> KIT TSSR </span>
+              </div>
+            </a>
+          </li>
+
+          <!------------------------------------------- SCI INCLUSAO ------------------------------------------------>
+
+          <li class="rounded mt-1 list nav-item">
+            <a
+              href="#sci-inclusao"
+              class="text-decoration-none d-flex"
+              data-toggle="pill"
+            >
+              <span>
+                <i class="fa-solid fa-plus mr-1"></i>
+              </span>
+              <div class="ml-4">
+                <span class=""> SCI DE INCLUSÃO </span>
+              </div>
+            </a>
+          </li>
+
+          <!------------------------------------------- OBRA ------------------------------------------------>
+
+          <li class="rounded mt-1 list nav-item">
+            <a
+              href="#obra"
+              class="text-decoration-none d-flex"
+              data-toggle="pill"
+            >
+              <span>
+                <i class="fa-solid fa-helmet-safety"></i>
+              </span>
+              <div class="ml-4">
+                <span class=""> OBRA </span>
+              </div>
+            </a>
+          </li>
+
+          <!------------------------------------------- PROJETOS ------------------------------------------------>
+
+          <li
+            class="rounded active mb-1 list nav-item"
+            data-toggle="collapse"
+            data-target="#projeto"
+          >
+            <a href="#" class="text-decoration-none sub-menu">
+              <div class="text d-flex">
+                <span>
+                  <i class="fa-solid fa-clipboard ml-1"></i>
+                </span>
+                <div class="ml-4">
+                  <span class=""> PROJETOS </span>
+                </div>
+              </div>
+              <span><i class="bx bx-chevron-down"></i></span>
+            </a>
+          </li>
+          <div class="collapse" id="projeto">
+            <ul class="unstyled pl-5 ml-4 submenu nav nav-pills flex-column">
+              <li class="py-2 nav-item">
+                <a
+                  href="#editar-projeto"
+                  class="text-decoration-none"
+                  data-toggle="pill"
+                >
+                  Informações de ligação
+                </a>
+              </li>
+              <li class="py-2 nav-item">
+                <a
+                  data-toggle="pill"
+                  href="#todos-projetos"
+                  class="text-decoration-none"
+                >
+                  Todos projetos
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!------------------------------------------- SCI DE EXCLUSÃO ------------------------------------------------>
+
+          <li class="rounded mt-1 list nav-item">
+            <a
+              href="#sci-exclusão"
+              class="text-decoration-none d-flex"
+              data-toggle="pill"
+            >
+              <span><i class="fa-solid fa-minus ml-1"></i></span>
+              <div class="ml-4">
+                <span class=""> SCI DE EXCLUSÃO </span>
+              </div>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- ============================== Main ============================== -->
+
+      <div class="main">
+        <div class="tab-content">
+          <!-- ============================== PÁGINA DE INICIO ============================== -->
+
+          <div class="tab-pane fade show active px-4" id="inicio">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="info-pages mb-3">
+                  <h3 class="">Demanda</h3>
+                  <p class="h6">Home /<span> Serviços</span></p>
+                </div>
+              </div>
+              <div class="row my-3">
+                <div
+                  class="box d-flex align-items-center justify-content-between my-2 w-100"
+                >
+                  <div class="cards">
+                    <div class="icon cadastro1">
+                      <i class="fa-solid fa-id-card-clip"></i>
+                    </div>
+                    <div class="desc">
+                      <h6 class="text-muted">CADASTROS</h6>
+                      <h5 class="">1350 cadastros</h5>
+                    </div>
+                  </div>
+                  <div class="cards">
+                    <div class="icon agendamento1">
+                      <i class="fa-solid fa-unlock-keyhole"></i>
+                    </div>
+                    <div class="desc">
+                      <h6 class="text-muted">ACESSO</h6>
+                      <h5 class="">210</h5>
+                    </div>
+                  </div>
+                  <div class="cards">
+                    <div class="icon vistoria1">
+                      <i class="fa-solid fa-screwdriver-wrench"></i>
+                    </div>
+                    <div class="desc">
+                      <h6 class="text-muted">VISTORIA</h6>
+                      <h5 class="">330 vistorias</h5>
+                    </div>
+                  </div>
+                  <div class="cards">
+                    <div class="icon kit1">
+                      <i class="fa-brands fa-uikit"></i>
+                    </div>
+                    <div class="desc">
+                      <h6 class="text-muted">KIT TSSR</h6>
+                      <h5 class="">110 kit-tssr</h5>
+                    </div>
+                  </div>
+                  <div class="cards">
+                    <div class="icon inclusão1">
+                      <i class="fa-solid fa-plus"></i>
+                    </div>
+                    <div class="desc">
+                      <h6 class="text-muted">SCI DE INCLUSÃO</h6>
+                      <h5 class="">120 sci de inclusão</h5>
+                    </div>
+                  </div>
+                  <div class="cards">
+                    <div class="icon obra1">
+                      <i class="fa-solid fa-helmet-safety"></i>
+                    </div>
+                    <div class="desc">
+                      <h6 class="text-muted">OBRA</h6>
+                      <h5 class="">100 obras</h5>
+                    </div>
+                  </div>
+                  <div class="cards">
+                    <div class="icon projeto1">
+                      <i class="fa-solid fa-clipboard"></i>
+                    </div>
+                    <div class="desc">
+                      <h6 class="text-muted">PROJETOS</h6>
+                      <h5 class="">200 projetos</h5>
+                    </div>
+                  </div>
+                  <div class="cards">
+                    <div class="icon exclusão1">
+                      <i class="fa-solid fa-minus"></i>
+                    </div>
+                    <div class="desc">
+                      <h6 class="text-muted">SCI DE EXCLUSÃO</h6>
+                      <h5 class="">50 sci de exclusão</h5>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ============================== PÁGINA DE CADASTRO END ID ============================== -->
+
+          <!-- realizar cadastro -->
+
+          <div class="tab-pane fade px-4" id="cadastro-fazer">
+            <div class="container-fluid">
+              <div class="row justify-content-between my-4">
+                <div class="col shadow bg-white p-4 rounded">
+                  <h4 class="mb-3">Realizar cadastro:</h4>
+                  <div class="row form-desing my-4">
+                    <div class="col-md-6 mt-2 mt-md-0">
+                      <label>Site ID *</label><br />
+                      <input type="text" class="form-control" id="siteId" />
+                    </div>
+                    <div class="col-md-6 mt-2 mt-md-0">
+                      <label>End ID *</label><br />
+                      <input type="text" class="form-control" id="endId" />
+                    </div>
+                  </div>
+
+                  <div class="row form-desing my-4">
+                    <div class="col-md-6 mt-2 mt-md-0">
+                      <label>Demanda *</label><br />
+                      <input type="text" class="form-control" id="demanda" />
+                    </div>
+                    <div class="col-md-6 mt-2 mt-md-0">
+                      <label>ID Detentora *</label><br />
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="idDetentora"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="row form-desing my-4">
+                    <div class="col-md-6 mt-2 mt-md-0">
+                      <label>Detentora *</label><br />
+                      <input type="text" class="form-control" id="detentora" />
+                    </div>
+                    <div class="col-md-6 mt-2 mt-md-0">
+                      <label>ID Operadora *</label><br />
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="idOperadora"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="row form-desing my-4">
+                    <div class="col-md-6 mt-2 mt-md-0">
+                      <label>Operadora cedente *</label><br />
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="operadoraCedente"
+                      />
+                    </div>
+                    <div class="col-md-6 mt-2 mt-md-0">
+                      <label>Logradouro *</label><br />
+                      <input type="text" class="form-control" id="logradouro" />
+                    </div>
+                  </div>
+
+                  <div class="row form-desing my-4">
+                    <div class="col-md-6 mt-2 mt-md-0">
+                      <label>Número *</label><br />
+                      <input type="text" class="form-control" id="numero" />
+                    </div>
+                    <div class="col-md-6 mt-2 mt-md-0">
+                      <label>Município *</label><br />
+                      <input type="text" class="form-control" id="municipio" />
+                    </div>
+                  </div>
+
+                  <div class="row form-desing my-4">
+                    <div class="col-md-6 mt-2 mt-md-0">
+                      <label>Estado *</label><br />
+                      <input type="text" class="form-control" id="estado" />
+                    </div>
+                    <div class="col-md-6 mt-2 mt-md-0">
+                      <label>Bairro *</label><br />
+                      <input type="text" class="form-control" id="bairro" />
+                    </div>
+                  </div>
+
+                  <div class="row form-desing my-4">
+                    <div class="col-md-6 mt-2 mt-md-0">
+                      <label>CEP *</label><br />
+                      <input type="text" class="form-control" id="cep" />
+                    </div>
+                    <div class="col-md-6 mt-2 mt-md-0">
+                      <label>Longitude *</label><br />
+                      <input type="text" class="form-control" id="longitude" />
+                    </div>
+                  </div>
+
+                  <div class="row form-desing my-4">
+                    <div class="col-md-6 mt-2 mt-md-0">
+                      <label>Latitude *</label><br />
+                      <input type="text" class="form-control" id="latitude" />
+                    </div>
+                    <div class="col-md-6 mt-2 mt-md-0">
+                      <label>Observações</label><br />
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="observacoes"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="row form-desing my-4">
+                    <div class="col">
+                      <button
+                        class="btn save text-white py-2 px-5"
+                        type="button"
+                        onclick="realizarCadastro()"
+                      >
+                        Salvar
+                      </button>
+                      <button
+                        class="btn reset text-white py-2 px-5"
+                        type="reset"
+                      >
+                        Resetar
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <script>
+            // Função para coletar os dados e fazer a requisição
+            function realizarCadastro() {
+              // Coleta os valores dos campos
+              const endId = document.getElementById("endId").value;
+              const siteId = document.getElementById("siteId").value;
+              const demanda = document.getElementById("demanda").value;
+              const observacoes = document.getElementById("observacoes").value;
+
+              const idDetentora = document.getElementById("idDetentora").value;
+              const detentora = document.getElementById("detentora").value;
+
+              const idOperadora = document.getElementById("idOperadora").value;
+              const operadora =
+                document.getElementById("operadoraCedente").value;
+
+              const logradouro = document.getElementById("logradouro").value;
+              const numero = document.getElementById("numero").value;
+              const bairro = document.getElementById("bairro").value;
+              const municipio = document.getElementById("municipio").value;
+              const estado = document.getElementById("estado").value;
+              const cep = document.getElementById("cep").value;
+
+              const latitude = document.getElementById("latitude").value;
+              const longitude = document.getElementById("longitude").value;
+
+              // Validação dos campos obrigatórios (exceto observações)
+              if (
+                !endId ||
+                !siteId ||
+                !demanda ||
+                !idDetentora ||
+                !detentora ||
+                !idOperadora ||
+                !operadora ||
+                !logradouro ||
+                !numero ||
+                !bairro ||
+                !municipio ||
+                !estado ||
+                !cep ||
+                !latitude ||
+                !longitude
+              ) {
+                alert("Por favor, preencha todos os campos obrigatórios.");
+                return; // Interrompe a execução da função se algum campo obrigatório não foi preenchido
+              }
+
+              // Estrutura do payload
+              const payload = {
+                endId: endId,
+                siteId: siteId,
+                demanda: demanda,
+                observacoes: observacoes || null,
+                detentora: {
+                  idDetentora: idDetentora,
+                  detentora: detentora,
+                },
+                cedente: {
+                  idOperadora: idOperadora,
+                  operadora: operadora,
+                },
+                endereco: {
+                  logradouro: logradouro,
+                  numero: numero,
+                  bairro: bairro,
+                  municipio: municipio,
+                  estado: estado,
+                  cep: cep,
+                  latitude: parseFloat(latitude),
+                  longitude: parseFloat(longitude),
+                },
+              };
+
+              // Envia a requisição para o servidor
+              fetch(`${host}/cadastroEndIds`, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(payload), // Envia o payload estruturado
+              })
+                .then((response) => response.json())
+                .then((data) => {
+                  console.log("Cadastro realizado com sucesso:", data);
+                  alert("Cadastro realizado com sucesso!");
+                })
+                .catch((error) => {
+                  console.error("Erro ao realizar cadastro:", error);
+                  alert("Erro ao realizar cadastro, tente novamente.");
+                });
+            }
+          </script>
+
+          <!--editar cadastro-->
+
+          <div class="tab-pane fade px-4" id="cadastro-editar">
+            <div class="container-fluid">
+              <div class="row justify-content-between my-4">
+                <div class="col shadow bg-white p-4 rounded">
+                  <h4 class="mb-3">Editar Cadastro</h4>
+                  <form>
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label>END ID *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Informe o END ID"
+                        />
+                      </div>
+                      <div class="col-md-0 mt-0 mt-md-0 d-flex align-items-end">
+                        <button class="btn btn-primary w-100">
+                          <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                      </div>
+                    </div>
+
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label>Site ID *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Informe o Site ID"
+                        />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label>Demanda *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Informe a Demanda"
+                        />
+                      </div>
+                    </div>
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label>Detentora *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Informe a Detentora"
+                        />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label>ID Detentora *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Informe o ID da Detentora"
+                        />
+                      </div>
+                    </div>
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label>Operadora Cedente *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Informe a Operadora Cedente"
+                        />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label>ID Operadora *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Informe o ID da Operadora"
+                        />
+                      </div>
+                    </div>
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label>Logradouro *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Informe o Logradouro"
+                        />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label>Número *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Informe o Número"
+                        />
+                      </div>
+                    </div>
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label>Bairro *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Informe o Bairro"
+                        />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label>Município *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Informe o Município"
+                        />
+                      </div>
+                    </div>
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label>Estado *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Informe o Estado"
+                        />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label>CEP *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Informe o CEP"
+                        />
+                      </div>
+                    </div>
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label>Latitude *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Informe a Latitude"
+                        />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label>Longitude *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Informe a Longitude"
+                        />
+                      </div>
+                    </div>
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label>Observações </label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Deixe uma observação caso precise"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="row form-desing my-4">
+                      <div class="col">
+                        <button
+                          class="btn btn-primary text-white py-2 px-5"
+                          type="button"
+                        >
+                          Atualizar
+                        </button>
+                        <button
+                          class="btn btn-secondary text-white py-2 px-5"
+                          type="reset"
+                        >
+                          Resetar
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!--todos cadastros-->
+
+          <div class="tab-pane fade px-4" id="cadastro-feito">
+            <div class="container-fluid">
+              <div class="row justify-content-between my-4">
+                <div class="col shadow bg-white p-4 rounded">
+                  <h4 class="mb-3">Histórico de cadastros:</h4>
+                  <div class="header-result">
+                    <input
+                      type="search"
+                      class="border-0 bg-light p-2 w-40"
+                      placeholder="Pesquisar por Site ID.."
+                    />
+                    <input
+                      type="search"
+                      class="border-0 bg-light p-2"
+                      placeholder="Pesquisar por End ID.."
+                    />
+                    <input
+                      type="search"
+                      class="border-0 bg-light p-2"
+                      placeholder="Pesquisar por Estado.."
+                    />
+                    <button class="btn btn-warning text-white">
+                      Pesquisar
+                    </button>
+                  </div>
+                  <div class="table-responsive text-nowrap">
+                    <table class="table my-4 table-hover table-striped w-100">
+                      <thead>
+                        <tr>
+                          <th>END ID</th>
+                          <th>Demanda</th>
+                          <th>Site ID</th>
+                          <th>Detentora</th>
+                          <th>ID Detentora</th>
+                          <th>Operadora Cedente</th>
+                          <th>ID Operadora</th>
+                          <th>Logradouro</th>
+                          <th>Número</th>
+                          <th>Bairro</th>
+                          <th>Município</th>
+                          <th>Estado</th>
+                          <th>CEP</th>
+                          <th>Latitude</th>
+                          <th>Longitude</th>
+                          <th>Observações</th>
+                          <th>Ação</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>SITE001</td>
+                          <td>Expansão</td>
+                          <td>END1234</td>
+                          <td>Empresa A</td>
+                          <td>DET001</td>
+                          <td>Operadora X</td>
+                          <td>OPX001</td>
+                          <td>Rua das Flores</td>
+                          <td>123</td>
+                          <td>Centro</td>
+                          <td>São Paulo</td>
+                          <td>SP</td>
+                          <td>12345-678</td>
+                          <td>-23.55052</td>
+                          <td>-46.633308</td>
+                          <td>Nenhuma</td>
+                          <td>
+                            <button
+                              class="btn btn-primary finalizar-btn"
+                              data-id="#001"
+                            >
+                              Finalizar
+                            </button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>SITE002</td>
+                          <td>Manutenção</td>
+                          <td>END5678</td>
+                          <td>Empresa B</td>
+                          <td>DET002</td>
+                          <td>Operadora Y</td>
+                          <td>OPY002</td>
+                          <td>Avenida Paulista</td>
+                          <td>456</td>
+                          <td>Jardins</td>
+                          <td>Rio de Janeiro</td>
+                          <td>RJ</td>
+                          <td>23456-789</td>
+                          <td>-22.9068</td>
+                          <td>-43.1729</td>
+                          <td>Nenhuma</td>
+                          <td>
+                            <button
+                              class="btn btn-primary finalizar-btn"
+                              data-id="#002"
+                            >
+                              Finalizar
+                            </button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>SITE003</td>
+                          <td>Instalação</td>
+                          <td>END9101</td>
+                          <td>Empresa C</td>
+                          <td>DET003</td>
+                          <td>Operadora Z</td>
+                          <td>OPZ003</td>
+                          <td>Rua das Acácias</td>
+                          <td>789</td>
+                          <td>Santa Cecília</td>
+                          <td>Curitiba</td>
+                          <td>PR</td>
+                          <td>34567-890</td>
+                          <td>-25.4284</td>
+                          <td>-49.2733</td>
+                          <td>Nenhuma</td>
+                          <td>
+                            <button
+                              class="btn btn-primary finalizar-btn"
+                              data-id="#003"
+                            >
+                              Finalizar
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ============================== PÁGINA DE STATUS ============================== -->
+
+          <div class="tab-pane fade px-4" id="status">
+            <div class="container-fluid">
+              <div class="row justify-content-between my-4">
+                <div class="col shadow bg-white p-4 rounded">
+                  <h4 class="mb-3">Status dos cadastros:</h4>
+                  <div class="header-result">
+                    <input
+                      type="search"
+                      class="border-0 bg-light p-2 w-40"
+                      placeholder="Pesquisar por END ID.."
+                    />
+                    <input
+                      type="search"
+                      class="border-0 bg-light p-2"
+                      placeholder="Pesquisar por Data de Cadastro.."
+                    />
+                    <input
+                      type="search"
+                      class="border-0 bg-light p-2"
+                      placeholder="Pesquisar por Situação.."
+                    />
+                    <button class="btn btn-warning text-white">
+                      Pesquisar
+                    </button>
+                  </div>
+                  <div class="table-responsive text-nowrap">
+                    <table class="table my-4 table-hover table-striped w-100">
+                      <thead>
+                        <tr>
+                          <th>END ID</th>
+                          <th>Data de Cadastro</th>
+                          <th>Etapa</th>
+                          <th>Situação</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>END001</td>
+                          <td>01/12/2024</td>
+                          <td>Agendamento</td>
+                          <td>Em andamento</td>
+                        </tr>
+                        <tr>
+                          <td>END002</td>
+                          <td>05/12/2024</td>
+                          <td>Vistoria</td>
+                          <td>Não iniciado</td>
+                        </tr>
+                        <tr>
+                          <td>END003</td>
+                          <td>07/12/2024</td>
+                          <td>Obra</td>
+                          <td>Em andamento</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ============================== PÁGINA DE LIBERAÇÃO DE ACESSO ============================== -->
+
+          <!-- editar end id -->
+
+          <div class="tab-pane fade px-4" id="editar-agendamento">
+            <div class="container-fluid">
+              <div class="row justify-content-between my-4">
+                <div class="col shadow bg-white p-4 rounded">
+                  <h4 class="mb-3">Editar agendamento:</h4>
+                  <form>
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label>END ID *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Informe o END ID"
+                        />
+                      </div>
+                      <div class="col-md-0 mt-0 mt-md-0 d-flex align-items-end">
+                        <button class="btn btn-primary w-100">
+                          <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label>Data de solicitação *</label>
+                        <input type="date" class="form-control" />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label>Data de previsão *</label>
+                        <input type="date" class="form-control" />
+                      </div>
+                    </div>
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label>Data de liberação *</label>
+                        <input type="date" class="form-control" />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label>Site ID *</label>
+                        <input type="text" class="form-control" />
+                      </div>
+                    </div>
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label>Demanda *</label>
+                        <input type="text" class="form-control" />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label>End ID *</label>
+                        <input type="text" class="form-control" />
+                      </div>
+                    </div>
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label>Detentora *</label>
+                        <input type="text" class="form-control" />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label>ID Detentora *</label>
+                        <input type="text" class="form-control" />
+                      </div>
+                    </div>
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label>Operadora cedente *</label>
+                        <input type="text" class="form-control" />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label>ID Operadora *</label>
+                        <input type="text" class="form-control" />
+                      </div>
+                    </div>
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label>Logradouro *</label>
+                        <input type="text" class="form-control" />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label>Número *</label>
+                        <input type="text" class="form-control" />
+                      </div>
+                    </div>
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label>Bairro *</label>
+                        <input type="text" class="form-control" />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label>Município *</label>
+                        <input type="text" class="form-control" />
+                      </div>
+                    </div>
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label>Estado *</label>
+                        <input type="text" class="form-control" />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label>CEP *</label>
+                        <input type="text" class="form-control" />
+                      </div>
+                    </div>
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label>Latitude *</label>
+                        <input type="text" class="form-control" />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label>Longitude *</label>
+                        <input type="text" class="form-control" />
+                      </div>
+                    </div>
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label>Status do agendamento *</label>
+                        <select class="form-select form-control">
+                          <option value="pendente">Pendente</option>
+                          <option value="concluido">Concluído</option>
+                          <option value="cancelado">Cancelado</option>
+                        </select>
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label>Observações</label>
+                        <textarea class="form-control" rows="3"></textarea>
+                      </div>
+                    </div>
+                    <div class="row form-desing my-4">
+                      <div class="col">
+                        <button
+                          class="btn btn-primary text-white py-2 px-5"
+                          type="button"
+                        >
+                          Atualizar
+                        </button>
+                        <button
+                          class="btn btn-secondary text-white py-2 px-5"
+                          type="reset"
+                        >
+                          Resetar
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- todos agendamentos -->
+
+          <div class="tab-pane fade px-4" id="todos-agendamentos">
+            <div class="container-fluid">
+              <div class="row justify-content-between my-4">
+                <div class="col shadow bg-white p-4 rounded">
+                  <h4 class="mb-3">Histórico de Agendamentos:</h4>
+                  <div class="header-result mb-3">
+                    <input
+                      type="search"
+                      class="border-0 bg-light p-2 w-40"
+                      placeholder="Pesquisar por END ID..."
+                    />
+                    <input
+                      type="search"
+                      class="border-0 bg-light p-2"
+                      placeholder="Pesquisar por Status..."
+                    />
+                    <input
+                      type="search"
+                      class="border-0 bg-light p-2"
+                      placeholder="Pesquisar por Site ID "
+                    />
+                    <button class="btn btn-warning text-white">BUSCAR</button>
+                  </div>
+                  <div class="table-responsive text-nowrap">
+                    <table class="table table-hover table-striped w-100">
+                      <thead class="bg-light">
+                        <tr>
+                          <th>End ID</th>
+                          <th>Data Solicitação</th>
+                          <th>Data Previsão</th>
+                          <th>Data de Liberação</th>
+                          <th>Site ID</th>
+                          <th>Demanda</th>
+                          <th>Detentora</th>
+                          <th>ID Detentora</th>
+                          <th>Operadora Cedente</th>
+                          <th>ID Operadora</th>
+                          <th>Logradouro</th>
+                          <th>Número</th>
+                          <th>Bairro</th>
+                          <th>Município</th>
+                          <th>Estado</th>
+                          <th>CEP</th>
+                          <th>Latitude</th>
+                          <th>Longitude</th>
+                          <th>Status Agendamento</th>
+                          <th>Observações</th>
+                          <th>Ação</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>#98765</td>
+                          <td><input type="date" class="form-control" /></td>
+                          <td><input type="date" class="form-control" /></td>
+                          <td><input type="date" class="form-control" /></td>
+                          <td>12345</td>
+                          <td>Instalação</td>
+                          <td>Empresa A</td>
+                          <td>00123</td>
+                          <td>Operadora B</td>
+                          <td>00234</td>
+                          <td>Rua Exemplo</td>
+                          <td>123</td>
+                          <td>Centro</td>
+                          <td>São Paulo</td>
+                          <td>SP</td>
+                          <td>01000-000</td>
+                          <td>-23.55052</td>
+                          <td>-46.6333</td>
+                          <td>
+                            <select
+                              disabled
+                              class="form-select border-0 bg-light p-2"
+                            >
+                              <option value="nao-iniciado">Não Iniciado</option>
+                              <option value="em-andamento">Em Andamento</option>
+                              <option value="concluido">Concluído</option>
+                            </select>
+                          </td>
+                          <td>Verificar documentação</td>
+                          <td>
+                            <button
+                              class="btn btn-primary finalizar-btn"
+                              data-id="#001"
+                            >
+                              Finalizar
+                            </button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>#98765</td>
+                          <td><input type="date" class="form-control" /></td>
+                          <td><input type="date" class="form-control" /></td>
+                          <td><input type="date" class="form-control" /></td>
+                          <td>54321</td>
+                          <td>Manutenção</td>
+                          <td>Empresa B</td>
+                          <td>00456</td>
+                          <td>Operadora A</td>
+                          <td>00789</td>
+                          <td>Rua Outro Exemplo</td>
+                          <td>456</td>
+                          <td>Jardim</td>
+                          <td>Rio de Janeiro</td>
+                          <td>RJ</td>
+                          <td>20000-000</td>
+                          <td>-22.9068</td>
+                          <td>-43.1729</td>
+                          <td>
+                            <select
+                              disabled
+                              class="form-select border-0 bg-light p-2"
+                            >
+                              <option value="nao-iniciado">Não Iniciado</option>
+                              <option value="em-andamento">Em Andamento</option>
+                              <option value="concluido">Concluído</option>
+                            </select>
+                          </td>
+                          <td>Serviço concluído com sucesso</td>
+                          <td>
+                            <button
+                              class="btn btn-primary finalizar-btn"
+                              data-id="#002"
+                            >
+                              Finalizar
+                            </button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>#67890</td>
+                          <td><input type="date" class="form-control" /></td>
+                          <td><input type="date" class="form-control" /></td>
+                          <td><input type="date" class="form-control" /></td>
+                          <td>54321</td>
+                          <td>Reparo</td>
+                          <td>Empresa C</td>
+                          <td>00987</td>
+                          <td>Operadora C</td>
+                          <td>00654</td>
+                          <td>Rua Último Exemplo</td>
+                          <td>789</td>
+                          <td>Vila Nova</td>
+                          <td>Curitiba</td>
+                          <td>PR</td>
+                          <td>80000-000</td>
+                          <td>-25.4296</td>
+                          <td>-49.2713</td>
+                          <td>
+                            <select
+                              disabled
+                              class="form-select border-0 bg-light p-2"
+                            >
+                              <option value="nao-iniciado">Não Iniciado</option>
+                              <option value="em-andamento">Em Andamento</option>
+                              <option value="concluido">Concluído</option>
+                            </select>
+                          </td>
+                          <td>Aguardando reagendamento</td>
+                          <td>
+                            <button
+                              class="btn btn-primary finalizar-btn"
+                              data-id="#003"
+                            >
+                              Finalizar
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ============================== PÁGINA DE VISTORIA ============================== -->
+
+          <div class="tab-pane fade px-4" id="vistoria">
+            <div class="container-fluid">
+              <div class="row"></div>
+            </div>
+            <div class="container-fluid">
+              <div class="row justify-content-between my-4">
+                <div class="col-12 shadow bg-white p-4 rounded">
+                  <h4 class="mb-3">Vistorias</h4>
+                  <div
+                    class="header-result d-flex justify-content-start gap-3 mb-3"
+                  >
+                    <input
+                      type="search"
+                      class="border-0 bg-light p-2 w-15"
+                      placeholder="Procurar por END ID.."
+                    />
+                    <input
+                      type="search"
+                      class="border-0 bg-light p-2 w-15"
+                      placeholder="Procurar por Status.."
+                    />
+                    <input
+                      type="search"
+                      class="border-0 bg-light p-2 w-15"
+                      placeholder="Procurar por Parecer.."
+                    />
+                    <button class="btn btn-warning text-white">
+                      Pesquisar
+                    </button>
+                  </div>
+                  <div class="table-responsive text-nowrap">
+                    <table class="table my-4 table-hover table-striped w-100">
+                      <thead>
+                        <tr>
+                          <th>END ID</th>
+                          <th>Status Vistoria</th>
+                          <th>Data Realização</th>
+                          <th>Parecer</th>
+                          <th>Ação</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>
+                            <button
+                              class="btn btn-link p-0 text-decoration-none end-id"
+                              data-id="#001"
+                            >
+                              #001
+                            </button>
+                          </td>
+                          <td>
+                            <div class="d-flex align-items-center">
+                              <select
+                                disabled
+                                class="form-select border-0 bg-light p-2"
+                              >
+                                <option value="nao-iniciado">
+                                  Não Iniciado
+                                </option>
+                                <option selected value="em-andamento">
+                                  Em Andamento
+                                </option>
+                                <option value="concluido">Concluído</option>
+                              </select>
+                            </div>
+                          </td>
+                          <td>
+                            <input type="date" class="form-control" />
+                          </td>
+                          <td>
+                            <select class="form-select border-0 bg-light p-2">
+                              <option value="" selected disabled>
+                                Selecione uma opção
+                              </option>
+                              <option value="viavel">Viável</option>
+                              <option value="inviavel">Inviável</option>
+                            </select>
+                          </td>
+                          <td>
+                            <button
+                              class="btn btn-primary finalizar-btn"
+                              data-id="#001"
+                            >
+                              Finalizar
+                            </button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <button
+                              class="btn btn-link p-0 text-decoration-none end-id"
+                              data-id="#002"
+                            >
+                              #002
+                            </button>
+                          </td>
+                          <td>
+                            <div class="d-flex align-items-center">
+                              <select
+                                disabled
+                                class="form-select border-0 bg-light p-2"
+                              >
+                                <option value="nao-iniciado">
+                                  Não Iniciado
+                                </option>
+                                <option value="em-andamento">
+                                  Em Andamento
+                                </option>
+                                <option value="concluido">Concluído</option>
+                              </select>
+                              <button
+                                class="btn iniciar-btn p-0 border-0 bg-transparent ml-2"
+                              >
+                                <i class="fa-solid fa-circle-play"></i>
+                              </button>
+                            </div>
+                          </td>
+                          <td>
+                            <input type="date" class="form-control" />
+                          </td>
+                          <td>
+                            <select class="form-select border-0 bg-light p-2">
+                              <option value="" selected disabled>
+                                Selecione uma opção
+                              </option>
+                              <option value="viavel">Viável</option>
+                              <option value="inviavel">Inviável</option>
+                            </select>
+                          </td>
+                          <td>
+                            <button
+                              class="btn btn-primary finalizar-btn"
+                              data-id="#002"
+                            >
+                              Finalizar
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ============================== PÁGINA DE KIT TSSR ============================== -->
+
+          <div class="tab-pane fade px-4" id="kit-tssr">
+            <div class="container-fluid"></div>
+            <div class="container-fluid">
+              <div class="row justify-content-between my-4">
+                <div class="col-12 shadow bg-white p-4 rounded">
+                  <h4 class="mb-3">KITS-TSSR</h4>
+                  <div
+                    class="header-result d-flex justify-content-start gap-3 mb-3"
+                  >
+                    <input
+                      type="search"
+                      class="border-0 bg-light p-2 w-15"
+                      placeholder="Procurar por END ID.."
+                    />
+                    <input
+                      type="search"
+                      class="border-0 bg-light p-2 w-15"
+                      placeholder="Procurar por Status.."
+                    />
+                    <input
+                      type="search"
+                      class="border-0 bg-light p-2 w-15"
+                      placeholder="Procurar por Parecer.."
+                    />
+                    <button class="btn btn-warning text-white">
+                      Pesquisar
+                    </button>
+                  </div>
+                  <div class="table-responsive text-nowrap">
+                    <table class="table my-4 table-hover table-striped w-100">
+                      <thead>
+                        <tr>
+                          <th>END ID</th>
+                          <th>Status TSSR-KIT</th>
+                          <th>Data Realização</th>
+                          <th>Data Prevista</th>
+                          <th>Parecer</th>
+                          <th>Ação</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>
+                            <button
+                              class="btn btn-link p-0 text-decoration-none end-id"
+                              data-id="#001"
+                            >
+                              #001
+                            </button>
+                          </td>
+                          <td>
+                            <select
+                              disabled
+                              class="form-select border-0 bg-light p-2"
+                            >
+                              <option value="nao-iniciado">Não Iniciado</option>
+                              <option value="em-andamento">Em Andamento</option>
+                              <option value="concluido">Concluído</option>
+                            </select>
+                            <button
+                              class="btn iniciar-btn p-0 border-0 bg-transparent ml-2"
+                            >
+                              <i class="fa-solid fa-circle-play"></i>
+                            </button>
+                          </td>
+                          <td>
+                            <input type="date" class="form-control" />
+                          </td>
+                          <td>
+                            <input type="date" class="form-control" />
+                          </td>
+                          <td>
+                            <select class="form-select border-0 bg-light p-2">
+                              <option value="" selected disabled>
+                                Selecione uma opção
+                              </option>
+                              <option value="viavel">Viável</option>
+                              <option value="inviavel">Inviável</option>
+                            </select>
+                          </td>
+                          <td>
+                            <button
+                              class="btn btn-primary finalizar-btn"
+                              data-id="#001"
+                            >
+                              Finalizar
+                            </button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <button
+                              class="btn btn-link p-0 text-decoration-none end-id"
+                              data-id="#001"
+                            >
+                              #002
+                            </button>
+                          </td>
+                          <td>
+                            <select
+                              disabled
+                              class="form-select border-0 bg-light p-2"
+                            >
+                              <option value="nao-iniciado">Não Iniciado</option>
+                              <option value="em-andamento">Em Andamento</option>
+                              <option value="concluido">Concluído</option>
+                            </select>
+                            <button
+                              class="btn iniciar-btn p-0 border-0 bg-transparent ml-2"
+                            >
+                              <i class="fa-solid fa-circle-play"></i>
+                            </button>
+                          </td>
+                          <td>
+                            <input type="date" class="form-control" />
+                          </td>
+                          <td>
+                            <input type="date" class="form-control" />
+                          </td>
+                          <td>
+                            <select class="form-select border-0 bg-light p-2">
+                              <option value="" selected disabled>
+                                Selecione uma opção
+                              </option>
+                              <option value="viavel">Viável</option>
+                              <option value="inviavel">Inviável</option>
+                            </select>
+                          </td>
+                          <td>
+                            <button
+                              class="btn btn-primary finalizar-btn"
+                              data-id="#002"
+                            >
+                              Finalizar
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ============================== PÁGINA DE SCI INCLUSÃO ============================== -->
+
+          <div class="tab-pane fade px-4" id="sci-inclusao">
+            <div class="container-fluid">
+              <div class="row justify-content-between my-4">
+                <div class="col-12 shadow bg-white p-4 rounded">
+                  <h4 class="mb-3">SCI de Inclusão</h4>
+                  <div
+                    class="header-result d-flex justify-content-start gap-3 mb-3"
+                  >
+                    <input
+                      type="search"
+                      class="border-0 bg-light p-2 w-15"
+                      placeholder="Procurar por END ID.."
+                    />
+                    <input
+                      type="search"
+                      class="border-0 bg-light p-2 w-15"
+                      placeholder="Procurar por Status.."
+                    />
+                    <input
+                      type="search"
+                      class="border-0 bg-light p-2 w-15"
+                      placeholder="Procurar por Código SCI.."
+                    />
+                    <button class="btn btn-warning text-white">
+                      Pesquisar
+                    </button>
+                  </div>
+                  <div class="table-responsive text-nowrap">
+                    <table class="table my-4 table-hover table-striped w-100">
+                      <thead>
+                        <tr>
+                          <th>END ID</th>
+                          <th>Status SCI-Inclusão</th>
+                          <th>Código SCI</th>
+                          <th>Data Envio</th>
+                          <th>Data Aprovação</th>
+                          <th>Ação</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>
+                            <button
+                              class="btn btn-link p-0 text-decoration-none end-id"
+                              data-id="#001"
+                            >
+                              #001
+                            </button>
+                          </td>
+                          <td>
+                            <select
+                              disabled
+                              class="form-select border-0 bg-light p-2"
+                            >
+                              <option value="nao-iniciado">Não Iniciado</option>
+                              <option value="em-andamento">Em Andamento</option>
+                              <option value="concluido">Concluído</option>
+                            </select>
+
+                            <button
+                              class="btn iniciar-btn p-0 border-0 bg-transparent ml-2"
+                            >
+                              <i class="fa-solid fa-circle-play"></i>
+                            </button>
+                          </td>
+                          <td>
+                            <input
+                              type="text"
+                              class="form-control"
+                              placeholder="Código SCI"
+                            />
+                          </td>
+                          <td><input type="date" class="form-control" /></td>
+                          <td><input type="date" class="form-control" /></td>
+                          <td>
+                            <button
+                              class="btn btn-primary finalizar-btn"
+                              data-id="#001"
+                            >
+                              Finalizar
+                            </button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <button
+                              class="btn btn-link p-0 text-decoration-none end-id"
+                              data-id="#002"
+                            >
+                              #002
+                            </button>
+                          </td>
+                          <td>
+                            <select
+                              disabled
+                              class="form-select border-0 bg-light p-2"
+                            >
+                              <option value="nao-iniciado">Não Iniciado</option>
+                              <option value="em-andamento">Em Andamento</option>
+                              <option value="concluido">Concluído</option>
+                            </select>
+
+                            <button
+                              class="btn iniciar-btn p-0 border-0 bg-transparent ml-2"
+                            >
+                              <i class="fa-solid fa-circle-play"></i>
+                            </button>
+                          </td>
+                          <td>
+                            <input
+                              type="text"
+                              class="form-control"
+                              placeholder="Código SCI"
+                            />
+                          </td>
+                          <td><input type="date" class="form-control" /></td>
+                          <td><input type="date" class="form-control" /></td>
+                          <td>
+                            <button
+                              class="btn btn-primary finalizar-btn"
+                              data-id="#002"
+                            >
+                              Finalizar
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ============================== PÁGINA DE OBRA ============================== -->
+
+          <div class="tab-pane fade px-4" id="obra">
+            <div class="container-fluid">
+              <div class="row justify-content-between my-4">
+                <div class="col-12 shadow bg-white p-4 rounded">
+                  <h4 class="mb-3">Todas obras</h4>
+                  <div
+                    class="header-result d-flex justify-content-start gap-3 mb-3"
+                  >
+                    <input
+                      type="search"
+                      class="border-0 bg-light p-2 w-15"
+                      placeholder="Procurar por Status..."
+                    />
+                    <input
+                      type="search"
+                      class="border-0 bg-light p-2 w-15"
+                      placeholder="Procurar por Início Previsto..."
+                    />
+                    <input
+                      type="search"
+                      class="border-0 bg-light p-2 w-15"
+                      placeholder="Procurar por Data Final..."
+                    />
+                    <button class="btn btn-warning text-white">
+                      Pesquisar
+                    </button>
+                  </div>
+                  <div class="table-responsive text-nowrap">
+                    <table class="table my-4 table-hover table-striped w-100">
+                      <thead>
+                        <tr>
+                          <th>END ID</th>
+                          <th>Status Obra</th>
+                          <th>Início Previsto</th>
+                          <th>Data Final</th>
+                          <th>Ação</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>
+                            <button
+                              class="btn btn-link p-0 text-decoration-none end-id"
+                              data-id="#001"
+                            >
+                              #001
+                            </button>
+                          </td>
+                          <td>
+                            <select
+                              disabled
+                              class="form-select border-0 bg-light p-2"
+                            >
+                              <option value="nao-iniciado">Não Iniciado</option>
+                              <option value="em-andamento">Em Andamento</option>
+                              <option value="concluido">Concluído</option>
+                            </select>
+                            <button
+                              class="btn iniciar-btn p-0 border-0 bg-transparent ml-2"
+                            >
+                              <i class="fa-solid fa-circle-play"></i>
+                            </button>
+                          </td>
+                          <td><input type="date" class="form-control" /></td>
+                          <td><input type="date" class="form-control" /></td>
+                          <td>
+                            <button
+                              class="btn btn-primary finalizar-btn"
+                              data-id="#001"
+                            >
+                              Finalizar
+                            </button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <button
+                              class="btn btn-link p-0 text-decoration-none end-id"
+                              data-id="#002"
+                            >
+                              #002
+                            </button>
+                          </td>
+                          <td>
+                            <select
+                              disabled
+                              class="form-select border-0 bg-light p-2"
+                            >
+                              <option value="nao-iniciado">Não Iniciado</option>
+                              <option value="em-andamento">Em Andamento</option>
+                              <option value="concluido">Concluído</option>
+                            </select>
+                            <button
+                              class="btn iniciar-btn p-0 border-0 bg-transparent ml-2"
+                            >
+                              <i class="fa-solid fa-circle-play"></i>
+                            </button>
+                          </td>
+                          <td><input type="date" class="form-control" /></td>
+                          <td><input type="date" class="form-control" /></td>
+                          <td>
+                            <button
+                              class="btn btn-primary finalizar-btn"
+                              data-id="#002"
+                            >
+                              Finalizar
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ============================== PÁGINA DE PROJETO ============================== -->
+
+          <!--  editar projeto-->
+
+          <div class="tab-pane fade px-4" id="editar-projeto">
+            <div class="container-fluid">
+              <div class="row justify-content-between my-4">
+                <div class="col shadow bg-white p-4 rounded">
+                  <h4 class="mb-3">Informações de ligação</h4>
+                  <form>
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label>END ID *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Informe o END ID"
+                        />
+                      </div>
+                      <div class="col-md-0 mt-0 mt-md-0 d-flex align-items-end">
+                        <button class="btn btn-primary w-100">
+                          <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                      </div>
+                    </div>
+
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label class="">ENDEREÇO ID *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Informe o ENDEREÇO ID"
+                        />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label class="">SITE ID *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Informe o SITE ID"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label class="">Leitura inicial *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Informe a LEITURA INICIAL"
+                        />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label class="">Concessionária *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Informe a CONCESSIONÁRIA"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label class="">REGIONAL *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Informe a REGIONAL"
+                        />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label class="">CEP *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Informe o CEP"
+                        />
+                      </div>
+                    </div>
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label class="">UF *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Informe o UF"
+                        />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label class="">CIDADE *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Informe a CIDADE"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label class="">ENDEREÇO *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Informe o ENDEREÇO"
+                        />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label class="">NÚMERO *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Informe o NÚMERO"
+                        />
+                      </div>
+                    </div>
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label class="">BAIRRO *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Informe o BAIRRO"
+                        />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label class="">COMPLEMENTO</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Informe o COMPLEMENTO"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label class="">CNPJ *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Informe o CNPJ"
+                        />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label class="">CMPJ DA UC SOLICITADA *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Informe o CMPJ DA UC SOLICITADA"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label class="">Previsão de ligação *</label>
+                        <input
+                          type="date"
+                          class="form-control"
+                          placeholder="Informe a PREVISÃO"
+                        />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label class="">Número Medidor *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Informe o NÚMERO MEDIDOR"
+                        />
+                      </div>
+                    </div>
+
+                    <!-- Novos campos: TIPO DE TENSAO e UNIDADE -->
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label class="">TIPO DE TENSAO *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Informe o TIPO DE TENSAO"
+                        />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label class="">UNIDADE *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Informe a UNIDADE"
+                        />
+                      </div>
+                    </div>
+
+                    <!-- Número de instalação e Número de fases -->
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label class="">Número de instalação *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Informe o NÚMERO DE INSTALAÇÃO"
+                        />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label class="">Número de fases *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Informe o NÚMERO DE FASES"
+                        />
+                      </div>
+                    </div>
+
+                    <!-- Leitura inicial -->
+                    <div class="col-md-6 mt-2 mt-md-0">
+                      <label class="">Status ligação *</label>
+                      <select class="form-select form-control">
+                        <option value="pendente">Pendente</option>
+                        <option value="concluido">Concluído</option>
+                        <option value="cancelado">Cancelado</option>
+                      </select>
+                    </div>
+
+                    <!-- Botões -->
+                    <div class="row form-desing my-4">
+                      <div class="col">
+                        <button
+                          class="btn btn-primary text-white py-2 px-5"
+                          type="button"
+                        >
+                          Atualizar
+                        </button>
+                        <button
+                          class="btn btn-secondary text-white py-2 px-5"
+                          type="reset"
+                        >
+                          Resetar
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- todos projetos-->
+
+          <div class="tab-pane fade px-4" id="todos-projetos">
+            <div class="container-fluid">
+              <div class="row justify-content-between my-4">
+                <div class="col shadow bg-white p-4 rounded">
+                  <h4 class="mb-3">Todos projetos:</h4>
+                  <div class="header-result mb-3">
+                    <input
+                      type="search"
+                      class="border-0 bg-light p-2 w-40"
+                      placeholder="Pesquisar por END ID..."
+                    />
+                    <input
+                      type="search"
+                      class="border-0 bg-light p-2"
+                      placeholder="Pesquisar por Status..."
+                    />
+                    <input
+                      type="search"
+                      class="border-0 bg-light p-2"
+                      placeholder="Pesquisar por Data Entrada..."
+                    />
+                    <button class="btn btn-warning text-white">BUSCAR</button>
+                  </div>
+                  <div class="table-responsive text-nowrap">
+                    <table class="table table-hover table-striped w-100">
+                      <thead class="bg-light">
+                        <tr>
+                          <th>End ID</th>
+                          <th></th>
+                          <th>Status Projeto</th>
+                          <th>Data Entrada</th>
+                          <th>Data Aprovação</th>
+                          <th>Data Ligação</th>
+                          <th>Ação</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>
+                            <button
+                              class="btn btn-link p-0 text-decoration-none end-id"
+                              data-id="#001"
+                            >
+                              #001
+                            </button>
+                          </td>
+                          <td>
+                            <button class="btn btn-outline-primary btn-sm">
+                              Ver mais..
+                            </button>
+                          </td>
+                          <td>
+                            <select
+                              disabled
+                              class="form-select border-0 bg-light p-2"
+                            >
+                              <option value="nao-iniciado">Não Iniciado</option>
+                              <option value="em-andamento" selected>
+                                Em Andamento
+                              </option>
+                              <option value="concluido">Concluído</option>
+                              <option value="aprovado">Aprovado</option>
+                              <option value="inviavel">Inviável</option>
+                            </select>
+                          </td>
+                          <td><input type="date" class="form-control" /></td>
+                          <td><input type="date" class="form-control" /></td>
+                          <td><input type="date" class="form-control" /></td>
+                          <td>
+                            <button
+                              class="btn btn-primary finalizar-btn"
+                              data-id="#001"
+                            >
+                              Finalizar
+                            </button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <button
+                              class="btn btn-link p-0 text-decoration-none end-id"
+                              data-id="#001"
+                            >
+                              #002
+                            </button>
+                          </td>
+                          <td>
+                            <button class="btn btn-outline-primary btn-sm">
+                              Ver mais..
+                            </button>
+                          </td>
+                          <td>
+                            <select
+                              disabled
+                              class="form-select border-0 bg-light p-2"
+                            >
+                              <option value="nao-iniciado">Não Iniciado</option>
+                              <option value="em-andamento">Em Andamento</option>
+                              <option value="concluido">Concluído</option>
+                              <option value="aprovado">Aprovado</option>
+                              <option value="inviavel">Inviável</option>
+                            </select>
+                            <button
+                              class="btn iniciar-btn p-0 border-0 bg-transparent ml-2"
+                            >
+                              <i class="fa-solid fa-circle-play"></i>
+                            </button>
+                          </td>
+                          <td><input type="date" class="form-control" /></td>
+                          <td><input type="date" class="form-control" /></td>
+                          <td><input type="date" class="form-control" /></td>
+                          <td>
+                            <button
+                              class="btn btn-primary finalizar-btn"
+                              data-id="#002"
+                            >
+                              Finalizar
+                            </button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <button
+                              class="btn btn-link p-0 text-decoration-none end-id"
+                              data-id="#001"
+                            >
+                              #003
+                            </button>
+                          </td>
+                          <td>
+                            <button class="btn btn-outline-primary btn-sm">
+                              Ver mais..
+                            </button>
+                          </td>
+                          <td>
+                            <select
+                              disabled
+                              class="form-select border-0 bg-light p-2"
+                            >
+                              <option value="nao-iniciado">Não Iniciado</option>
+                              <option value="em-andamento">Em Andamento</option>
+                              <option value="concluido">Concluído</option>
+                              <option value="aprovado">Aprovado</option>
+                              <option value="inviavel">Inviável</option>
+                            </select>
+                            <button
+                              class="btn iniciar-btn p-0 border-0 bg-transparent ml-2"
+                            >
+                              <i class="fa-solid fa-circle-play"></i>
+                            </button>
+                          </td>
+                          <td><input type="date" class="form-control" /></td>
+                          <td><input type="date" class="form-control" /></td>
+                          <td><input type="date" class="form-control" /></td>
+                          <td>
+                            <button
+                              class="btn btn-primary finalizar-btn"
+                              data-id="#002"
+                            >
+                              Finalizar
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ============================== PÁGINA DE SCI EXCLUSÃO ============================== -->
+
+          <div class="tab-pane fade px-4" id="sci-exclusão">
+            <div class="container-fluid">
+              <div class="row justify-content-between my-4">
+                <div class="col-12 shadow bg-white p-4 rounded">
+                  <h4 class="mb-3">SCI de Exclusão</h4>
+                  <div
+                    class="header-result d-flex justify-content-start gap-3 mb-3"
+                  >
+                    <input
+                      type="search"
+                      class="border-0 bg-light p-2 w-15"
+                      placeholder="Procurar por Status..."
+                    />
+                    <input
+                      type="search"
+                      class="border-0 bg-light p-2 w-15"
+                      placeholder="Procurar por Código SCI..."
+                    />
+                    <input
+                      type="search"
+                      class="border-0 bg-light p-2 w-15"
+                      placeholder="Procurar por Cadastro Workflow..."
+                    />
+                    <button class="btn btn-warning text-white">
+                      Pesquisar
+                    </button>
+                  </div>
+                  <div class="table-responsive text-nowrap">
+                    <table class="table my-4 table-hover table-striped w-100">
+                      <thead>
+                        <tr>
+                          <th>END ID</th>
+                          <th>Status SCI de Exclusão</th>
+                          <th>Código SCI</th>
+                          <th>Data Envio</th>
+                          <th>Data Aprovação</th>
+                          <th>Última Cobrança</th>
+                          <th>Cadastro Workflow</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>
+                            <button
+                              class="btn btn-link p-0 text-decoration-none end-id"
+                              data-id="#001"
+                            >
+                              #001
+                            </button>
+                          </td>
+                          <td>
+                            <select
+                              disabled
+                              class="form-select border-0 bg-light p-2"
+                            >
+                              <option value="nao-iniciado">Não Iniciado</option>
+                              <option value="em-andamento">Em Andamento</option>
+                              <option value="concluido">Concluído</option>
+                            </select>
+                            <button
+                              class="btn iniciar-btn p-0 border-0 bg-transparent ml-2"
+                            >
+                              <i class="fa-solid fa-circle-play"></i>
+                            </button>
+                          </td>
+                          <td>
+                            <input
+                              type="text"
+                              class="form-control"
+                              placeholder="Código SCI"
+                            />
+                          </td>
+                          <td>
+                            <input type="date" class="form-control" />
+                          </td>
+                          <td>
+                            <input type="date" class="form-control" />
+                          </td>
+                          <td>
+                            <input type="date" class="form-control" />
+                          </td>
+                          <td>
+                            <select class="form-select border-0 bg-light p-2">
+                              <option value="nao-iniciado">Não Iniciado</option>
+                              <option value="em-andamento">Em Andamento</option>
+                              <option value="concluido">Concluído</option>
+                            </select>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <button
+                              class="btn btn-link p-0 text-decoration-none end-id"
+                              data-id="#001"
+                            >
+                              #002
+                            </button>
+                          </td>
+                          <td>
+                            <select
+                              disabled
+                              class="form-select border-0 bg-light p-2"
+                            >
+                              <option value="nao-iniciado">Não Iniciado</option>
+                              <option value="em-andamento">Em Andamento</option>
+                              <option value="concluido">Concluído</option>
+                            </select>
+                            <button
+                              class="btn iniciar-btn p-0 border-0 bg-transparent ml-2"
+                            >
+                              <i class="fa-solid fa-circle-play"></i>
+                            </button>
+                          </td>
+                          <td>
+                            <input
+                              type="text"
+                              class="form-control"
+                              placeholder="Código SCI"
+                            />
+                          </td>
+                          <td>
+                            <input type="date" class="form-control" />
+                          </td>
+                          <td>
+                            <input type="date" class="form-control" />
+                          </td>
+                          <td>
+                            <input type="date" class="form-control" />
+                          </td>
+                          <td>
+                            <select
+                              disabled
+                              class="form-select border-0 bg-light p-2"
+                            >
+                              <option value="nao-iniciado">Não Iniciado</option>
+                              <option value="em-andamento">Em Andamento</option>
+                              <option value="concluido">Concluído</option>
+                            </select>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ============================== script ============================== -->
+    <script src="js/host.js"></script>
+    <script src="js/validaToken.js"></script>
+    <script src="js/cadastroEndId.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"></script>
+    <script src="js/script.js"></script>
+  </body>
+</html>
