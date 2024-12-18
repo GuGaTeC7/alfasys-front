@@ -814,23 +814,26 @@
                       type="search"
                       class="border-0 bg-light p-2 w-40"
                       placeholder="Pesquisar por Site ID.."
+                      id="pesquisaSiteId"
                     />
                     <input
                       type="search"
                       class="border-0 bg-light p-2"
                       placeholder="Pesquisar por End ID.."
+                      id="pesquisaEndId"
                     />
                     <input
                       type="search"
                       class="border-0 bg-light p-2"
                       placeholder="Pesquisar por Estado.."
+                      id="pesquisaEstado"
                     />
-                    <button class="btn btn-warning text-white">
+                    <button class="btn btn-warning text-white" onclick="filtrarTabela()">
                       Pesquisar
                     </button>
                   </div>
                   <div class="table-responsive text-nowrap">
-                    <table class="table my-4 table-hover table-striped w-100">
+                    <table class="table my-4 table-hover table-striped w-100" id="tabelaHistorico">
                       <thead>
                         <tr>
                           <th>END ID</th>
@@ -853,84 +856,7 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <td>SITE001</td>
-                          <td>Expansão</td>
-                          <td>END1234</td>
-                          <td>Empresa A</td>
-                          <td>DET001</td>
-                          <td>Operadora X</td>
-                          <td>OPX001</td>
-                          <td>Rua das Flores</td>
-                          <td>123</td>
-                          <td>Centro</td>
-                          <td>São Paulo</td>
-                          <td>SP</td>
-                          <td>12345-678</td>
-                          <td>-23.55052</td>
-                          <td>-46.633308</td>
-                          <td>Nenhuma</td>
-                          <td>
-                            <button
-                              class="btn btn-primary finalizar-btn"
-                              data-id="#001"
-                            >
-                              Finalizar
-                            </button>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>SITE002</td>
-                          <td>Manutenção</td>
-                          <td>END5678</td>
-                          <td>Empresa B</td>
-                          <td>DET002</td>
-                          <td>Operadora Y</td>
-                          <td>OPY002</td>
-                          <td>Avenida Paulista</td>
-                          <td>456</td>
-                          <td>Jardins</td>
-                          <td>Rio de Janeiro</td>
-                          <td>RJ</td>
-                          <td>23456-789</td>
-                          <td>-22.9068</td>
-                          <td>-43.1729</td>
-                          <td>Nenhuma</td>
-                          <td>
-                            <button
-                              class="btn btn-primary finalizar-btn"
-                              data-id="#002"
-                            >
-                              Finalizar
-                            </button>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>SITE003</td>
-                          <td>Instalação</td>
-                          <td>END9101</td>
-                          <td>Empresa C</td>
-                          <td>DET003</td>
-                          <td>Operadora Z</td>
-                          <td>OPZ003</td>
-                          <td>Rua das Acácias</td>
-                          <td>789</td>
-                          <td>Santa Cecília</td>
-                          <td>Curitiba</td>
-                          <td>PR</td>
-                          <td>34567-890</td>
-                          <td>-25.4284</td>
-                          <td>-49.2733</td>
-                          <td>Nenhuma</td>
-                          <td>
-                            <button
-                              class="btn btn-primary finalizar-btn"
-                              data-id="#003"
-                            >
-                              Finalizar
-                            </button>
-                          </td>
-                        </tr>
+                        <!-- Dados preenchidos dinamicamente por JavaScript -->
                       </tbody>
                     </table>
                   </div>
@@ -938,6 +864,7 @@
               </div>
             </div>
           </div>
+          
 
           <!-- ============================== PÁGINA DE STATUS ============================== -->
 

@@ -1,3 +1,4 @@
+// Função para realizar o cadastro
 function realizarCadastro() {
   // Coleta os valores dos campos
   const endId = document.getElementById("endId").value;
@@ -88,6 +89,7 @@ function realizarCadastro() {
       console.log("Cadastro realizado com sucesso:", data);
       alert("Cadastro realizado com sucesso!");
       resetarCampos(); // Reseta os campos após o sucesso
+      preencherTabela(); // Atualiza a tabela com os novos dados
     })
     .catch((error) => {
       console.error("Erro ao realizar cadastro:", error);
@@ -111,6 +113,65 @@ function resetarCampos() {
 
   console.log("Todos os campos foram resetados.");
 }
+
+// Função para buscar dados e preencher a tabela
+function preencherTabela() {
+  fetch(`${host}/cadastroEndIds`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Erro ao buscar dados.");
+      }
+      return response.json();
+    })
+    .then((dados) => {
+      const tbody = document.querySelector("table tbody");
+      tbody.innerHTML = ""; // Limpa a tabela antes de preencher
+
+      // Preenche a tabela com os dados recebidos
+      dados.forEach((item) => {
+        const row = `
+          <tr>
+            <td>${item.endId}</td>
+            <td>${item.demanda}</td>
+            <td>${item.siteId}</td>
+            <td>${item.detentora.detentora}</td>
+            <td>${item.detentora.idDetentora}</td>
+            <td>${item.cedente.operadora}</td>
+            <td>${item.cedente.idOperadora}</td>
+            <td>${item.endereco.logradouro}</td>
+            <td>${item.endereco.numero}</td>
+            <td>${item.endereco.bairro}</td>
+            <td>${item.endereco.municipio}</td>
+            <td>${item.endereco.estado}</td>
+            <td>${item.endereco.cep}</td>
+            <td>${item.endereco.latitude}</td>
+            <td>${item.endereco.longitude}</td>
+            <td>${item.observacoes || "Nenhuma"}</td>
+            <td>
+              <button
+                class="btn btn-primary finalizar-btn"
+                data-id="${item.id}"
+              >
+                Finalizar
+              </button>
+            </td>
+          </tr>`;
+        tbody.insertAdjacentHTML("beforeend", row);
+      });
+    })
+    .catch((error) => {
+      console.error("Erro ao buscar dados:", error);
+      alert("Erro ao carregar os dados. Tente novamente.");
+    });
+}
+
+// Chama a função ao carregar a página
+document.addEventListener("DOMContentLoaded", preencherTabela);
 
 // Adiciona o evento ao botão resetar
 document.getElementById("botaoResetar").addEventListener("click", resetarCampos);

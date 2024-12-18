@@ -14,7 +14,6 @@ let notice = document.querySelector(".notice");
 
 // Dados do user
 const decodedToken = jwt_decode(token);
-console.log(decodedToken);
 
 userName.innerHTML = `${decodedToken.nome
   .split(" ")
