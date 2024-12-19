@@ -91,7 +91,6 @@ function realizarCadastro() {
       console.log("Cadastro realizado com sucesso:", data);
       alert("Cadastro realizado com sucesso!");
       resetarCampos(); // Reseta os campos após o sucesso
-      preencherTabela(); // Atualiza a tabela com os novos dados
     })
     .catch((error) => {
       console.error("Erro ao realizar cadastro:", error);
@@ -139,41 +138,61 @@ function preencherTabela() {
     .then((dados) => {
       tbody.innerHTML = ""; // Limpa a tabela antes de preencher
 
+      function formataData(data) {
+        // Verifica se a data é um array válido
+        if (!Array.isArray(data) || data.length !== 3) {
+          return "Data inválida";
+        }
+
+        const [ano, mes, dia] = data;
+
+        // Formata a data no estilo "DD/MM/YYYY"
+        return `${String(dia).padStart(2, "0")}/${String(mes).padStart(
+          2,
+          "0"
+        )}/${ano}`;
+      }
+
       // Preenche a tabela com os dados recebidos
       dados.forEach((item) => {
+        const dataCadastro = item.dataCadastro
+          ? formataData(item.dataCadastro)
+          : "Não informado";
+
         const row = `
-          <tr>
-            <td>${item.endId}</td>
-            <td>${item.demanda}</td>
-            <td>${item.siteId}</td>
-            <td>${item.detentora.detentora}</td>
-            <td>${item.detentora.idDetentora}</td>
-            <td>${item.cedente.operadora}</td>
-            <td>${item.cedente.idOperadora}</td>
-            <td>${item.endereco.logradouro}</td>
-            <td>${item.endereco.numero}</td>
-            <td>${item.endereco.bairro}</td>
-            <td>${item.endereco.municipio}</td>
-            <td>${item.endereco.estado}</td>
-            <td>${item.endereco.cep}</td>
-            <td>${item.endereco.latitude}</td>
-            <td>${item.endereco.longitude}</td>
-            <td>${item.observacoes || "Nenhuma"}</td>
-            <td>
-              <button
-                class="btn btn-primary finalizar-btn"
-                data-id="${item.id}"
-              >
-                Finalizar
-              </button>
-            </td>
-          </tr>`;
+    <tr>
+      <td>${item.endId}</td>
+      <td>${item.demanda}</td>
+      <td>${item.siteId}</td>
+      <td>${item.detentora.detentora}</td>
+      <td>${item.detentora.idDetentora}</td>
+      <td>${item.cedente.operadora}</td>
+      <td>${item.cedente.idOperadora}</td>
+      <td>${item.endereco.logradouro}</td>
+      <td>${item.endereco.numero}</td>
+      <td>${item.endereco.bairro}</td>
+      <td>${item.endereco.municipio}</td>
+      <td>${item.endereco.estado}</td>
+      <td>${item.endereco.cep}</td>
+      <td>${item.endereco.latitude}</td>
+      <td>${item.endereco.longitude}</td>
+      <td>${item.observacoes || "Nenhuma"}</td>
+      <td>${dataCadastro}</td>
+      <td>
+        <button
+          class="btn btn-primary finalizar-btn"
+          data-id="${item.id}"
+        >
+          Finalizar
+        </button>
+      </td>
+    </tr>`;
         tbody.insertAdjacentHTML("beforeend", row);
       });
     })
     .catch((error) => {
       console.error("Erro ao buscar dados:", error);
-      alert("Erro ao carregar os dados. Tente novamente.");
+      alert("Erro ao carregar os dados. Atualize a tela.");
     })
     .finally(() => {
       // Oculta o overlay
@@ -181,163 +200,155 @@ function preencherTabela() {
     });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  let globalId = null; // Variável global para armazenar o ID retornado
+let globalId = null;
 
-  // Evento de clique no botão "Buscar"
-  document
-    .getElementById("button-buscar-endid")
-    .addEventListener("click", function (event) {
-      event.preventDefault();
+function buscaEnId() {
+  const botaoBuscar = event.target;
+  botaoBuscar.disabled = true;
+  botaoBuscar.innerHTML =
+    '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Buscando...';
 
-      const botaoBuscar = this;
-      botaoBuscar.disabled = true;
+  const endId = document.getElementById("editarEndId").value;
+
+  if (!endId) {
+    alert("Por favor, informe o END ID.");
+    botaoBuscar.disabled = false;
+    botaoBuscar.innerHTML =
+      '<i class="fa-solid fa-magnifying-glass"></i>⠀Buscar';
+    return;
+  }
+
+  fetch(`${host}/cadastroEndIds/${endId}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Erro ao buscar dados. Verifique o END ID informado.");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      document.getElementById("editarSiteId").value = data.siteId || "";
+      document.getElementById("editarDemanda").value = data.demanda || "";
+      document.getElementById("editarDetentora").value =
+        data.detentora.detentora || "";
+      document.getElementById("editarIdDetentora").value =
+        data.detentora.idDetentora || "";
+      document.getElementById("editarOperadora").value =
+        data.cedente.operadora || "";
+      document.getElementById("editarIdOperadora").value =
+        data.cedente.idOperadora || "";
+      document.getElementById("editarLogradouro").value =
+        data.endereco.logradouro || "";
+      document.getElementById("editarNumero").value =
+        data.endereco.numero || "";
+      document.getElementById("editarBairro").value =
+        data.endereco.bairro || "";
+      document.getElementById("editarMunicipio").value =
+        data.endereco.municipio || "";
+      document.getElementById("editarEstado").value =
+        data.endereco.estado || "";
+      document.getElementById("editarCep").value = data.endereco.cep || "";
+      document.getElementById("editarLatitude").value =
+        data.endereco.latitude || "";
+      document.getElementById("editarLongitude").value =
+        data.endereco.longitude || "";
+      document.getElementById("editarObservacoes").value =
+        data.observacoes || "";
+
+      globalId = data.id;
+      botaoBuscar.disabled = false;
       botaoBuscar.innerHTML =
-        '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Buscando...';
-
-      const endId = document.getElementById("editarEndId").value;
-
-      if (!endId) {
-        alert("Por favor, informe o END ID.");
-        botaoBuscar.disabled = false;
-        botaoBuscar.innerHTML =
-          '<i class="fa-solid fa-magnifying-glass"></i>⠀Buscar';
-        return;
-      }
-
-      fetch(`${host}/cadastroEndIds/${endId}`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(
-              "Erro ao buscar dados. Verifique o END ID informado."
-            );
-          }
-          return response.json();
-        })
-        .then((data) => {
-          // Preenchendo os campos com os dados retornados
-          document.getElementById("editarSiteId").value = data.siteId || "";
-          document.getElementById("editarDemanda").value = data.demanda || "";
-          document.getElementById("editarDetentora").value =
-            data.detentora.detentora || "";
-          document.getElementById("editarIdDetentora").value =
-            data.detentora.idDetentora || "";
-          document.getElementById("editarOperadora").value =
-            data.cedente.operadora || "";
-          document.getElementById("editarIdOperadora").value =
-            data.cedente.idOperadora || "";
-          document.getElementById("editarLogradouro").value =
-            data.endereco.logradouro || "";
-          document.getElementById("editarNumero").value =
-            data.endereco.numero || "";
-          document.getElementById("editarBairro").value =
-            data.endereco.bairro || "";
-          document.getElementById("editarMunicipio").value =
-            data.endereco.municipio || "";
-          document.getElementById("editarEstado").value =
-            data.endereco.estado || "";
-          document.getElementById("editarCep").value = data.endereco.cep || "";
-          document.getElementById("editarLatitude").value =
-            data.endereco.latitude || "";
-          document.getElementById("editarLongitude").value =
-            data.endereco.longitude || "";
-          document.getElementById("editarObservacoes").value =
-            data.observacoes || "";
-
-          globalId = data.id; // Armazena o ID globalmente
-
-          botaoBuscar.disabled = false;
-          botaoBuscar.innerHTML =
-            '<i class="fa-solid fa-magnifying-glass"></i>⠀Buscar';
-        })
-        .catch((error) => {
-          console.error("Erro:", error);
-          alert(
-            "Não foi possível buscar os dados. Verifique o console para mais detalhes."
-          );
-          botaoBuscar.disabled = false;
-          botaoBuscar.innerHTML =
-            '<i class="fa-solid fa-magnifying-glass"></i>⠀Buscar';
-        });
+        '<i class="fa-solid fa-magnifying-glass"></i>⠀Buscar';
+    })
+    .catch((error) => {
+      console.error("Erro:", error);
+      alert(
+        "Não foi possível buscar os dados. Verifique o console para mais detalhes."
+      );
+      botaoBuscar.disabled = false;
+      botaoBuscar.innerHTML =
+        '<i class="fa-solid fa-magnifying-glass"></i>⠀Buscar';
     });
+}
 
-  document
-    .querySelector("#salvarEndIdNovo")
-    .addEventListener("click", function (event) {
-      event.preventDefault();
+function atualizaEndId() {
+  const endId = document.getElementById("editarEndId").value;
 
-      const endId = document.getElementById("editarEndId").value;
+  console.log("Iniciando atualização do END ID...");
+  console.log("Global ID capturado:", globalId);
 
-      if (!endId) {
-        alert("Por favor, informe o END ID antes de atualizar.");
-        return;
+  if (!endId) {
+    alert("Por favor, informe o END ID antes de atualizar.");
+    console.warn("Tentativa de atualização sem informar o END ID.");
+    return;
+  }
+
+  const payload = {
+    endId: document.getElementById("editarEndId").value,
+    siteId: document.getElementById("editarSiteId").value,
+    demanda: document.getElementById("editarDemanda").value,
+    observacoes: document.getElementById("editarObservacoes").value,
+    detentora: {
+      id: 8,
+      idDetentora: document.getElementById("editarIdDetentora").value,
+      detentora: document.getElementById("editarDetentora").value,
+    },
+    cedente: {
+      id: 8,
+      idOperadora: document.getElementById("editarIdOperadora").value,
+      operadora: document.getElementById("editarOperadora").value,
+    },
+    endereco: {
+      id: 8,
+      logradouro: document.getElementById("editarLogradouro").value,
+      numero: document.getElementById("editarNumero").value,
+      bairro: document.getElementById("editarBairro").value,
+      municipio: document.getElementById("editarMunicipio").value,
+      estado: document.getElementById("editarEstado").value,
+      cep: document.getElementById("editarCep").value,
+      latitude: parseFloat(document.getElementById("editarLatitude").value),
+      longitude: parseFloat(document.getElementById("editarLongitude").value),
+    },
+  };
+
+  console.log(
+    "Payload preparado para envio:",
+    JSON.stringify(payload, null, 2)
+  );
+
+  fetch(`${host}/cadastroEndIds/SPLUE_0001`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  })
+    .then((response) => {
+      console.log("Resposta da requisição recebida:", response);
+      if (!response.ok) {
+        console.error(
+          "Erro na resposta do servidor:",
+          response.status,
+          response.statusText
+        );
+        throw new Error(`Erro ao atualizar os dados: ${response.statusText}`);
       }
-
-      // Criando o payload com a estrutura correta
-      const payload = {
-        endId: document.getElementById("editarEndId").value,
-        siteId: document.getElementById("editarSiteId").value,
-        demanda: document.getElementById("editarDemanda").value,
-        observacoes: document.getElementById("editarObservacoes").value,
-        detentora: {
-          id: 8, // Esse valor parece fixo, ajuste conforme necessário
-          idDetentora: document.getElementById("editarIdDetentora").value,
-          detentora: document.getElementById("editarDetentora").value,
-        },
-        cedente: {
-          id: 8, // Esse valor também parece fixo
-          idOperadora: document.getElementById("editarIdOperadora").value,
-          operadora: document.getElementById("editarOperadora").value,
-        },
-        endereco: {
-          id: 8, // Esse valor também parece fixo
-          logradouro: document.getElementById("editarLogradouro").value,
-          numero: document.getElementById("editarNumero").value,
-          bairro: document.getElementById("editarBairro").value,
-          municipio: document.getElementById("editarMunicipio").value,
-          estado: document.getElementById("editarEstado").value,
-          cep: document.getElementById("editarCep").value,
-          latitude: parseFloat(document.getElementById("editarLatitude").value),
-          longitude: parseFloat(
-            document.getElementById("editarLongitude").value
-          ),
-        },
-      };
-
-      // Realizando a requisição PUT
-      fetch(`${host}/cadastroEndIds/1`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(payload),
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Erro ao atualizar os dados.");
-          }
-          return response.json();
-        })
-        .then((data) => {
-          alert("Dados atualizados com sucesso!");
-          console.log("Resposta do servidor:", data);
-        })
-        .catch((error) => {
-          console.error("Erro:", error);
-          alert("Erro: " + error.message); // Exibe a mensagem do erro
-
-          alert(
-            "Não foi possível atualizar os dados. Verifique o console para mais detalhes."
-          );
-        });
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Dados retornados pelo servidor:", data);
+      alert("Dados atualizados com sucesso!");
+    })
+    .catch((error) => {
+      console.error("Erro durante a atualização dos dados:", error);
+      alert("Erro ao atualizar os dados. Detalhes no console.");
     });
-});
+}
 
 // Selecione o link "Histórico de cadastros"
 const historicoLink = document.querySelector("a[href='#cadastro-feito']");

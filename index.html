@@ -628,6 +628,7 @@
                 <div class="col shadow bg-white p-4 rounded">
                   <h4 class="mb-3">Editar Cadastro</h4>
                   <form>
+                    <!-- Seção de busca por END ID -->
                     <div class="row form-desing my-4">
                       <div class="col-md-4 mt-2 mt-md-0">
                         <label for="editarEndId">END ID *</label>
@@ -640,14 +641,17 @@
                       </div>
                       <div class="col-md-2 mt-2 mt-md-0 d-flex align-items-end">
                         <button
+                          type="button"
                           class="btn btn-primary w-100"
                           id="button-buscar-endid"
+                          onclick="buscaEnId()"
                         >
                           <i class="fa-solid fa-magnifying-glass"></i>⠀Buscar
                         </button>
                       </div>
                     </div>
 
+                    <!-- Campos de edição -->
                     <div class="row form-desing my-4">
                       <div class="col-md-6 mt-2 mt-md-0">
                         <label for="editarSiteId">Site ID *</label>
@@ -783,7 +787,7 @@
 
                     <div class="row form-desing my-4">
                       <div class="col-md-6 mt-2 mt-md-0">
-                        <label for="editarObservacoes">Observações </label>
+                        <label for="editarObservacoes">Observações</label>
                         <input
                           type="text"
                           class="form-control"
@@ -792,12 +796,14 @@
                       </div>
                     </div>
 
+                    <!-- Botões -->
                     <div class="row form-desing my-4">
                       <div class="col">
                         <button
                           class="btn btn-primary text-white py-2 px-5"
                           type="button"
                           id="salvarEndIdNovo"
+                          onclick="atualizaEndId()"
                         >
                           Atualizar
                         </button>
@@ -871,6 +877,7 @@
                           <th>Latitude</th>
                           <th>Longitude</th>
                           <th>Observações</th>
+                          <!-- <th>Data Cadastro</th> -->
                           <th>Ação</th>
                         </tr>
                       </thead>
@@ -950,7 +957,7 @@
 
           <!-- ============================== PÁGINA DE LIBERAÇÃO DE ACESSO ============================== -->
 
-          <!-- editar end id -->
+          <!-- editar agendamento -->
 
           <div class="tab-pane fade px-4" id="editar-agendamento">
             <div class="container-fluid">
@@ -1113,9 +1120,21 @@
                 <div class="col shadow bg-white p-4 rounded">
                   <h4 class="mb-3">Histórico de Agendamentos:</h4>
                   <div class="header-result mb-3">
-                    <input type="search" class="border-0 bg-light p-2 w-40" placeholder="Pesquisar por END ID..." />
-                    <input type="search" class="border-0 bg-light p-2" placeholder="Pesquisar por Status..." />
-                    <input type="search" class="border-0 bg-light p-2" placeholder="Pesquisar por Site ID" />
+                    <input
+                      type="search"
+                      class="border-0 bg-light p-2 w-40"
+                      placeholder="Pesquisar por END ID..."
+                    />
+                    <input
+                      type="search"
+                      class="border-0 bg-light p-2"
+                      placeholder="Pesquisar por Status..."
+                    />
+                    <input
+                      type="search"
+                      class="border-0 bg-light p-2"
+                      placeholder="Pesquisar por Site ID"
+                    />
                     <button class="btn btn-warning text-white">BUSCAR</button>
                   </div>
                   <div class="table-responsive text-nowrap">
@@ -1149,16 +1168,19 @@
                         <tr>
                           <td>#98765</td>
                           <td>
-                            <select disabled class="form-select border-0 bg-light p-2">
+                            <select
+                              disabled
+                              class="form-select border-0 bg-light p-2"
+                            >
                               <option value="nao-iniciado">Não Iniciado</option>
                               <option value="em-andamento">Em Andamento</option>
                               <option value="concluido">Concluído</option>
                             </select>
                             <button
-                                class="btn iniciar-btn p-0 border-0 bg-transparent ml-2"
-                              >
-                                <i class="fa-solid fa-circle-play"></i>
-                              </button>
+                              class="btn iniciar-btn p-0 border-0 bg-transparent ml-2"
+                            >
+                              <i class="fa-solid fa-circle-play"></i>
+                            </button>
                           </td>
                           <td><input type="date" class="form-control" /></td>
                           <td><input type="date" class="form-control" /></td>
@@ -1179,22 +1201,30 @@
                           <td>-46.6333</td>
                           <td>Verificar documentação</td>
                           <td>
-                            <button class="btn btn-primary finalizar-btn" data-id="#001">Finalizar</button>
+                            <button
+                              class="btn btn-primary finalizar-btn"
+                              data-id="#001"
+                            >
+                              Finalizar
+                            </button>
                           </td>
                         </tr>
                         <tr>
                           <td>#98765</td>
                           <td>
-                            <select disabled class="form-select border-0 bg-light p-2">
+                            <select
+                              disabled
+                              class="form-select border-0 bg-light p-2"
+                            >
                               <option value="nao-iniciado">Não Iniciado</option>
                               <option value="em-andamento">Em Andamento</option>
                               <option value="concluido">Concluído</option>
                             </select>
                             <button
-                                class="btn iniciar-btn p-0 border-0 bg-transparent ml-2"
-                              >
-                                <i class="fa-solid fa-circle-play"></i>
-                              </button>
+                              class="btn iniciar-btn p-0 border-0 bg-transparent ml-2"
+                            >
+                              <i class="fa-solid fa-circle-play"></i>
+                            </button>
                           </td>
                           <td><input type="date" class="form-control" /></td>
                           <td><input type="date" class="form-control" /></td>
@@ -1215,22 +1245,30 @@
                           <td>-43.1729</td>
                           <td>Serviço concluído com sucesso</td>
                           <td>
-                            <button class="btn btn-primary finalizar-btn" data-id="#002">Finalizar</button>
+                            <button
+                              class="btn btn-primary finalizar-btn"
+                              data-id="#002"
+                            >
+                              Finalizar
+                            </button>
                           </td>
                         </tr>
                         <tr>
                           <td>#67890</td>
                           <td>
-                            <select disabled class="form-select border-0 bg-light p-2">
+                            <select
+                              disabled
+                              class="form-select border-0 bg-light p-2"
+                            >
                               <option value="nao-iniciado">Não Iniciado</option>
                               <option value="em-andamento">Em Andamento</option>
                               <option value="concluido">Concluído</option>
                             </select>
                             <button
-                                class="btn iniciar-btn p-0 border-0 bg-transparent ml-2"
-                              >
-                                <i class="fa-solid fa-circle-play"></i>
-                              </button>
+                              class="btn iniciar-btn p-0 border-0 bg-transparent ml-2"
+                            >
+                              <i class="fa-solid fa-circle-play"></i>
+                            </button>
                           </td>
                           <td><input type="date" class="form-control" /></td>
                           <td><input type="date" class="form-control" /></td>
@@ -1251,7 +1289,12 @@
                           <td>-49.2713</td>
                           <td>Aguardando reagendamento</td>
                           <td>
-                            <button class="btn btn-primary finalizar-btn" data-id="#003">Finalizar</button>
+                            <button
+                              class="btn btn-primary finalizar-btn"
+                              data-id="#003"
+                            >
+                              Finalizar
+                            </button>
                           </td>
                         </tr>
                       </tbody>
@@ -1260,7 +1303,7 @@
                 </div>
               </div>
             </div>
-          </div>          
+          </div>
 
           <!-- ============================== PÁGINA DE VISTORIA ============================== -->
 
@@ -2326,10 +2369,24 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"></script>
     <script src="js/script.js"></script>
 
-
-    <div id="loading-overlay" style="display: none;">
+    <div id="loading-overlay" style="display: none">
       <div
-        style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; align-items: center; justify-content: center; z-index: 1050; flex-direction: column; color: #fff; font-size: 18px; background: rgba(0, 0, 0, 0.5); padding: 20px; border-radius: 8px;"
+        style="
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 1050;
+          flex-direction: column;
+          color: #fff;
+          font-size: 18px;
+          background: rgba(0, 0, 0, 0.5);
+          padding: 20px;
+          border-radius: 8px;
+        "
       >
         <div class="spinner-border text-warning" role="status">
           <span class="sr-only">Carregando...</span>
@@ -2337,8 +2394,5 @@
         <p>Carregando, por favor aguarde...</p>
       </div>
     </div>
-    
-    
-
   </body>
 </html>
