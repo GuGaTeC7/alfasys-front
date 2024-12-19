@@ -1083,21 +1083,9 @@
                 <div class="col shadow bg-white p-4 rounded">
                   <h4 class="mb-3">Histórico de Agendamentos:</h4>
                   <div class="header-result mb-3">
-                    <input
-                      type="search"
-                      class="border-0 bg-light p-2 w-40"
-                      placeholder="Pesquisar por END ID..."
-                    />
-                    <input
-                      type="search"
-                      class="border-0 bg-light p-2"
-                      placeholder="Pesquisar por Status..."
-                    />
-                    <input
-                      type="search"
-                      class="border-0 bg-light p-2"
-                      placeholder="Pesquisar por Site ID "
-                    />
+                    <input type="search" class="border-0 bg-light p-2 w-40" placeholder="Pesquisar por END ID..." />
+                    <input type="search" class="border-0 bg-light p-2" placeholder="Pesquisar por Status..." />
+                    <input type="search" class="border-0 bg-light p-2" placeholder="Pesquisar por Site ID" />
                     <button class="btn btn-warning text-white">BUSCAR</button>
                   </div>
                   <div class="table-responsive text-nowrap">
@@ -1105,6 +1093,7 @@
                       <thead class="bg-light">
                         <tr>
                           <th>End ID</th>
+                          <th>Status Agendamento</th>
                           <th>Data Solicitação</th>
                           <th>Data Previsão</th>
                           <th>Data de Liberação</th>
@@ -1122,7 +1111,6 @@
                           <th>CEP</th>
                           <th>Latitude</th>
                           <th>Longitude</th>
-                          <th>Status Agendamento</th>
                           <th>Observações</th>
                           <th>Ação</th>
                         </tr>
@@ -1130,6 +1118,18 @@
                       <tbody>
                         <tr>
                           <td>#98765</td>
+                          <td>
+                            <select disabled class="form-select border-0 bg-light p-2">
+                              <option value="nao-iniciado">Não Iniciado</option>
+                              <option value="em-andamento">Em Andamento</option>
+                              <option value="concluido">Concluído</option>
+                            </select>
+                            <button
+                                class="btn iniciar-btn p-0 border-0 bg-transparent ml-2"
+                              >
+                                <i class="fa-solid fa-circle-play"></i>
+                              </button>
+                          </td>
                           <td><input type="date" class="form-control" /></td>
                           <td><input type="date" class="form-control" /></td>
                           <td><input type="date" class="form-control" /></td>
@@ -1147,28 +1147,25 @@
                           <td>01000-000</td>
                           <td>-23.55052</td>
                           <td>-46.6333</td>
-                          <td>
-                            <select
-                              disabled
-                              class="form-select border-0 bg-light p-2"
-                            >
-                              <option value="nao-iniciado">Não Iniciado</option>
-                              <option value="em-andamento">Em Andamento</option>
-                              <option value="concluido">Concluído</option>
-                            </select>
-                          </td>
                           <td>Verificar documentação</td>
                           <td>
-                            <button
-                              class="btn btn-primary finalizar-btn"
-                              data-id="#001"
-                            >
-                              Finalizar
-                            </button>
+                            <button class="btn btn-primary finalizar-btn" data-id="#001">Finalizar</button>
                           </td>
                         </tr>
                         <tr>
                           <td>#98765</td>
+                          <td>
+                            <select disabled class="form-select border-0 bg-light p-2">
+                              <option value="nao-iniciado">Não Iniciado</option>
+                              <option value="em-andamento">Em Andamento</option>
+                              <option value="concluido">Concluído</option>
+                            </select>
+                            <button
+                                class="btn iniciar-btn p-0 border-0 bg-transparent ml-2"
+                              >
+                                <i class="fa-solid fa-circle-play"></i>
+                              </button>
+                          </td>
                           <td><input type="date" class="form-control" /></td>
                           <td><input type="date" class="form-control" /></td>
                           <td><input type="date" class="form-control" /></td>
@@ -1186,28 +1183,25 @@
                           <td>20000-000</td>
                           <td>-22.9068</td>
                           <td>-43.1729</td>
-                          <td>
-                            <select
-                              disabled
-                              class="form-select border-0 bg-light p-2"
-                            >
-                              <option value="nao-iniciado">Não Iniciado</option>
-                              <option value="em-andamento">Em Andamento</option>
-                              <option value="concluido">Concluído</option>
-                            </select>
-                          </td>
                           <td>Serviço concluído com sucesso</td>
                           <td>
-                            <button
-                              class="btn btn-primary finalizar-btn"
-                              data-id="#002"
-                            >
-                              Finalizar
-                            </button>
+                            <button class="btn btn-primary finalizar-btn" data-id="#002">Finalizar</button>
                           </td>
                         </tr>
                         <tr>
                           <td>#67890</td>
+                          <td>
+                            <select disabled class="form-select border-0 bg-light p-2">
+                              <option value="nao-iniciado">Não Iniciado</option>
+                              <option value="em-andamento">Em Andamento</option>
+                              <option value="concluido">Concluído</option>
+                            </select>
+                            <button
+                                class="btn iniciar-btn p-0 border-0 bg-transparent ml-2"
+                              >
+                                <i class="fa-solid fa-circle-play"></i>
+                              </button>
+                          </td>
                           <td><input type="date" class="form-control" /></td>
                           <td><input type="date" class="form-control" /></td>
                           <td><input type="date" class="form-control" /></td>
@@ -1225,24 +1219,9 @@
                           <td>80000-000</td>
                           <td>-25.4296</td>
                           <td>-49.2713</td>
-                          <td>
-                            <select
-                              disabled
-                              class="form-select border-0 bg-light p-2"
-                            >
-                              <option value="nao-iniciado">Não Iniciado</option>
-                              <option value="em-andamento">Em Andamento</option>
-                              <option value="concluido">Concluído</option>
-                            </select>
-                          </td>
                           <td>Aguardando reagendamento</td>
                           <td>
-                            <button
-                              class="btn btn-primary finalizar-btn"
-                              data-id="#003"
-                            >
-                              Finalizar
-                            </button>
+                            <button class="btn btn-primary finalizar-btn" data-id="#003">Finalizar</button>
                           </td>
                         </tr>
                       </tbody>
@@ -1251,7 +1230,7 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div>          
 
           <!-- ============================== PÁGINA DE VISTORIA ============================== -->
 
