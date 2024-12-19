@@ -116,6 +116,12 @@ function resetarCampos() {
 
 // Função para buscar dados e preencher a tabela
 function preencherTabela() {
+  const loadingOverlay = document.getElementById("loading-overlay"); // Seleciona o overlay
+  const tbody = document.querySelector("table tbody");
+
+  // Exibe o overlay
+  loadingOverlay.style.display = "block";
+
   fetch(`${host}/cadastroEndIds`, {
     method: "GET",
     headers: {
@@ -129,7 +135,6 @@ function preencherTabela() {
       return response.json();
     })
     .then((dados) => {
-      const tbody = document.querySelector("table tbody");
       tbody.innerHTML = ""; // Limpa a tabela antes de preencher
 
       // Preenche a tabela com os dados recebidos
@@ -167,8 +172,13 @@ function preencherTabela() {
     .catch((error) => {
       console.error("Erro ao buscar dados:", error);
       alert("Erro ao carregar os dados. Tente novamente.");
+    })
+    .finally(() => {
+      // Oculta o overlay
+      loadingOverlay.style.display = "none";
     });
 }
+
 
 // Selecione o link "Histórico de cadastros"
 const historicoLink = document.querySelector("a[href='#cadastro-feito']");
