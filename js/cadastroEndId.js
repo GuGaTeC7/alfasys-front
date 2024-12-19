@@ -45,7 +45,9 @@ function realizarCadastro() {
   }
 
   // Referência ao botão
-  const botaoSalvar = document.querySelector('button[onclick="realizarCadastro()"]');
+  const botaoSalvar = document.querySelector(
+    'button[onclick="realizarCadastro()"]'
+  );
   botaoSalvar.disabled = true; // Desabilita o botão
   botaoSalvar.textContent = "Cadastrando..."; // Altera o texto do botão
 
@@ -170,31 +172,174 @@ function preencherTabela() {
     });
 }
 
+document.addEventListener("DOMContentLoaded", () => {
+  let globalId = null; // Variável global para armazenar o ID retornado
+
+  // Evento de clique no botão "Buscar"
+  document
+    .getElementById("button-buscar-endid")
+    .addEventListener("click", function (event) {
+      event.preventDefault();
+
+      const botaoBuscar = this;
+      botaoBuscar.disabled = true;
+      botaoBuscar.innerHTML =
+        '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Buscando...';
+
+      const endId = document.getElementById("editarEndId").value;
+
+      if (!endId) {
+        alert("Por favor, informe o END ID.");
+        botaoBuscar.disabled = false;
+        botaoBuscar.innerHTML =
+          '<i class="fa-solid fa-magnifying-glass"></i>⠀Buscar';
+        return;
+      }
+
+      fetch(`${host}/cadastroEndIds/${endId}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(
+              "Erro ao buscar dados. Verifique o END ID informado."
+            );
+          }
+          return response.json();
+        })
+        .then((data) => {
+          // Preenchendo os campos com os dados retornados
+          document.getElementById("editarSiteId").value = data.siteId || "";
+          document.getElementById("editarDemanda").value = data.demanda || "";
+          document.getElementById("editarDetentora").value =
+            data.detentora.detentora || "";
+          document.getElementById("editarIdDetentora").value =
+            data.detentora.idDetentora || "";
+          document.getElementById("editarOperadora").value =
+            data.cedente.operadora || "";
+          document.getElementById("editarIdOperadora").value =
+            data.cedente.idOperadora || "";
+          document.getElementById("editarLogradouro").value =
+            data.endereco.logradouro || "";
+          document.getElementById("editarNumero").value =
+            data.endereco.numero || "";
+          document.getElementById("editarBairro").value =
+            data.endereco.bairro || "";
+          document.getElementById("editarMunicipio").value =
+            data.endereco.municipio || "";
+          document.getElementById("editarEstado").value =
+            data.endereco.estado || "";
+          document.getElementById("editarCep").value = data.endereco.cep || "";
+          document.getElementById("editarLatitude").value =
+            data.endereco.latitude || "";
+          document.getElementById("editarLongitude").value =
+            data.endereco.longitude || "";
+          document.getElementById("editarObservacoes").value =
+            data.observacoes || "";
+
+          globalId = data.id; // Armazena o ID globalmente
+
+          botaoBuscar.disabled = false;
+          botaoBuscar.innerHTML =
+            '<i class="fa-solid fa-magnifying-glass"></i>⠀Buscar';
+        })
+        .catch((error) => {
+          console.error("Erro:", error);
+          alert(
+            "Não foi possível buscar os dados. Verifique o console para mais detalhes."
+          );
+          botaoBuscar.disabled = false;
+          botaoBuscar.innerHTML =
+            '<i class="fa-solid fa-magnifying-glass"></i>⠀Buscar';
+        });
+    });
+
+  document
+    .querySelector("#salvarEndIdNovo")
+    .addEventListener("click", function (event) {
+      event.preventDefault();
+
+      const endId = document.getElementById("editarEndId").value;
+
+      if (!endId) {
+        alert("Por favor, informe o END ID antes de atualizar.");
+        return;
+      }
+
+      // Criando o payload com a estrutura correta
+      const payload = {
+        endId: document.getElementById("editarEndId").value,
+        siteId: document.getElementById("editarSiteId").value,
+        demanda: document.getElementById("editarDemanda").value,
+        observacoes: document.getElementById("editarObservacoes").value,
+        detentora: {
+          id: 8, // Esse valor parece fixo, ajuste conforme necessário
+          idDetentora: document.getElementById("editarIdDetentora").value,
+          detentora: document.getElementById("editarDetentora").value,
+        },
+        cedente: {
+          id: 8, // Esse valor também parece fixo
+          idOperadora: document.getElementById("editarIdOperadora").value,
+          operadora: document.getElementById("editarOperadora").value,
+        },
+        endereco: {
+          id: 8, // Esse valor também parece fixo
+          logradouro: document.getElementById("editarLogradouro").value,
+          numero: document.getElementById("editarNumero").value,
+          bairro: document.getElementById("editarBairro").value,
+          municipio: document.getElementById("editarMunicipio").value,
+          estado: document.getElementById("editarEstado").value,
+          cep: document.getElementById("editarCep").value,
+          latitude: parseFloat(document.getElementById("editarLatitude").value),
+          longitude: parseFloat(
+            document.getElementById("editarLongitude").value
+          ),
+        },
+      };
+
+      // Realizando a requisição PUT
+      fetch(`${host}/cadastroEndIds/1`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Erro ao atualizar os dados.");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          alert("Dados atualizados com sucesso!");
+          console.log("Resposta do servidor:", data);
+        })
+        .catch((error) => {
+          console.error("Erro:", error);
+          alert("Erro: " + error.message); // Exibe a mensagem do erro
+
+          alert(
+            "Não foi possível atualizar os dados. Verifique o console para mais detalhes."
+          );
+        });
+    });
+});
+
 // Selecione o link "Histórico de cadastros"
 const historicoLink = document.querySelector("a[href='#cadastro-feito']");
 
 // Adicione o evento de clique
-historicoLink.addEventListener("click", function(event) {
+historicoLink.addEventListener("click", function (event) {
   // Chama a função para preencher a tabela ao clicar no link
   preencherTabela();
 });
 
-
 // Adiciona o evento ao botão resetar
-document.getElementById("botaoResetar").addEventListener("click", resetarCampos);
-
-
-//BOTAO BUSCAR DO EDITAR CADASTRO //
-document.getElementById("button-buscar-endid").addEventListener("click", function (event) {
-  event.preventDefault(); // Previne o comportamento padrão do botão, como submissão de formulário.
-
-  const botaoBuscar = this; // Referência ao botão
-  botaoBuscar.disabled = true; // Desabilita o botão temporariamente
-  botaoBuscar.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Buscando...';
-
-  // Simula o processo de busca com um delay de 3 segundos
-  setTimeout(() => {
-    botaoBuscar.disabled = false; // Habilita o botão novamente
-    botaoBuscar.innerHTML = '<i class="fa-solid fa-magnifying-glass"></i>⠀Buscar'; // Restaura o conteúdo original do botão
-  }, 3000);
-});
+document
+  .getElementById("botaoResetar")
+  .addEventListener("click", resetarCampos);
