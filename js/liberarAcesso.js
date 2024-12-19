@@ -11,3 +11,69 @@ document.getElementById("button-buscar-agendamento").addEventListener("click", f
       botaoBuscar.innerHTML = '<i class="fa-solid fa-magnifying-glass"></i>⠀Buscar'; // Restaura o conteúdo original do botão
     }, 3000);
   });
+
+
+// Função para buscar dados e preencher a tabela
+function preencherTabelaAcesso() {
+  const loadingOverlay = document.getElementById("loading-overlay"); // Seleciona o overlay
+  const tbody = document.querySelector("table tbody");
+
+  // Exibe o overlay
+  loadingOverlay.style.display = "block";
+
+  fetch(`${host}/cadastroEndIds`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Erro ao buscar dados.");
+      }
+      return response.json();
+    })
+    .then((dados) => {
+      tbody.innerHTML = ""; // Limpa a tabela antes de preencher
+
+      // Preenche a tabela com os dados recebidos
+      dados.forEach((item) => {
+        const row = `
+          <tr>
+            <td>${item.endId}</td>
+            <td>${item.demanda}</td>
+            <td>${item.siteId}</td>
+            <td>${item.detentora.detentora}</td>
+            <td>${item.detentora.idDetentora}</td>
+            <td>${item.cedente.operadora}</td>
+            <td>${item.cedente.idOperadora}</td>
+            <td>${item.endereco.logradouro}</td>
+            <td>${item.endereco.numero}</td>
+            <td>${item.endereco.bairro}</td>
+            <td>${item.endereco.municipio}</td>
+            <td>${item.endereco.estado}</td>
+            <td>${item.endereco.cep}</td>
+            <td>${item.endereco.latitude}</td>
+            <td>${item.endereco.longitude}</td>
+            <td>${item.observacoes || "Nenhuma"}</td>
+            <td>
+              <button
+                class="btn btn-primary finalizar-btn"
+                data-id="${item.id}"
+              >
+                Finalizar
+              </button>
+            </td>
+          </tr>`;
+        tbody.insertAdjacentHTML("beforeend", row);
+      });
+    })
+    .catch((error) => {
+      console.error("Erro ao buscar dados:", error);
+      alert("Erro ao carregar os dados. Tente novamente.");
+    })
+    .finally(() => {
+      // Oculta o overlay
+      loadingOverlay.style.display = "none";
+    });
+}
