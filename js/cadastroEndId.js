@@ -90,7 +90,7 @@ function realizarCadastro() {
     .then((data) => {
       console.log("Cadastro realizado com sucesso:", data);
       alert("Cadastro realizado com sucesso!");
-      resetarCampos(); // Reseta os campos após o sucesso
+      resetarCampos("cadastro-fazer"); // Reseta os campos após o sucesso
     })
     .catch((error) => {
       console.error("Erro ao realizar cadastro:", error);
@@ -103,91 +103,109 @@ function realizarCadastro() {
 }
 
 // Função para resetar todos os campos
-function resetarCampos() {
-  // Seleciona todos os inputs dentro do formulário
-  const inputs = document.querySelectorAll("#cadastro-fazer input");
+// Função genérica para resetar os campos de um formulário
+function resetarCampos(formularioId) {
+  const formulario = document.getElementById(formularioId);
 
-  // Itera sobre os inputs e zera seus valores
-  inputs.forEach((input) => {
-    input.value = "";
+  if (!formulario) {
+    console.error(`Formulário com o ID "${formularioId}" não encontrado.`);
+    return;
+  }
+
+  // Limpa todos os inputs, selects e textareas do formulário
+  formulario.querySelectorAll("input, select, textarea").forEach((campo) => {
+    if (campo.type === "checkbox" || campo.type === "radio") {
+      campo.checked = false; // Desmarca checkboxes e radios
+    } else {
+      campo.value = ""; // Reseta o valor dos campos
+    }
   });
 
-  console.log("Todos os campos foram resetados.");
+  console.log(
+    `Todos os campos do formulário "${formularioId}" foram resetados.`
+  );
 }
 
-// Função para buscar dados e preencher a tabela
 function preencherTabela() {
-  const loadingOverlay = document.getElementById("loading-overlay"); // Seleciona o overlay
+  const loadingOverlay = document.getElementById("loading-overlay");
   const tbody = document.querySelector("table tbody");
 
-  // Exibe o overlay
   loadingOverlay.style.display = "block";
 
   fetch(`${host}/cadastroEndIds`, {
     method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+    headers: { Authorization: `Bearer ${token}` },
   })
     .then((response) => {
-      if (!response.ok) {
-        throw new Error("Erro ao buscar dados.");
-      }
+      if (!response.ok) throw new Error("Erro ao buscar dados.");
       return response.json();
     })
     .then((dados) => {
-      tbody.innerHTML = ""; // Limpa a tabela antes de preencher
+      tbody.innerHTML = "";
 
-      function formataData(data) {
-        // Verifica se a data é um array válido
-        if (!Array.isArray(data) || data.length !== 3) {
-          return "Data inválida";
-        }
-
+      const formataData = (data) => {
+        if (!Array.isArray(data) || data.length !== 3) return "Data inválida";
         const [ano, mes, dia] = data;
-
-        // Formata a data no estilo "DD/MM/YYYY"
         return `${String(dia).padStart(2, "0")}/${String(mes).padStart(
           2,
           "0"
         )}/${ano}`;
-      }
+      };
 
-      // Preenche a tabela com os dados recebidos
-      dados.forEach((item) => {
+      dados.forEach((item, i) => {
         const dataCadastro = item.dataCadastro
           ? formataData(item.dataCadastro)
           : "Não informado";
+        const finalizarId = `finalizar-${i}`;
 
         const row = `
-    <tr>
-      <td>${item.endId}</td>
-      <td>${item.demanda}</td>
-      <td>${item.siteId}</td>
-      <td>${item.detentora.detentora}</td>
-      <td>${item.detentora.idDetentora}</td>
-      <td>${item.cedente.operadora}</td>
-      <td>${item.cedente.idOperadora}</td>
-      <td>${item.endereco.logradouro}</td>
-      <td>${item.endereco.numero}</td>
-      <td>${item.endereco.bairro}</td>
-      <td>${item.endereco.municipio}</td>
-      <td>${item.endereco.estado}</td>
-      <td>${item.endereco.cep}</td>
-      <td>${item.endereco.latitude}</td>
-      <td>${item.endereco.longitude}</td>
-      <td>${item.observacoes || "Nenhuma"}</td>
-      <td>${dataCadastro}</td>
-      <td>
-        <button
-          class="btn btn-primary finalizar-btn"
-          data-id="${item.id}"
-        >
-          Finalizar
-        </button>
-      </td>
-    </tr>`;
+          <tr>
+            <td>${item.endId}</td>
+            <td>${item.demanda}</td>
+            <td>${item.siteId}</td>
+            <td>${item.detentora.detentora}</td>
+            <td>${item.detentora.idDetentora}</td>
+            <td>${item.cedente.operadora}</td>
+            <td>${item.cedente.idOperadora}</td>
+            <td>${item.endereco.logradouro}</td>
+            <td>${item.endereco.numero}</td>
+            <td>${item.endereco.bairro}</td>
+            <td>${item.endereco.municipio}</td>
+            <td>${item.endereco.estado}</td>
+            <td>${item.endereco.cep}</td>
+            <td>${item.endereco.latitude}</td>
+            <td>${item.endereco.longitude}</td>
+            <td>${item.observacoes || ""}</td>
+            <td>${dataCadastro}</td>
+            <td>
+              <button class="btn btn-primary finalizar-btn" data-id="${
+                item.endId
+              }" id="${finalizarId}">
+                Finalizar
+              </button>
+            </td>
+          </tr>`;
+
         tbody.insertAdjacentHTML("beforeend", row);
+
+        const button = document.getElementById(finalizarId);
+        button.addEventListener("click", (event) => {
+          const endId = event.target.getAttribute("data-id");
+          const alertDiv = document.createElement("div");
+          alertDiv.className = "custom-alert";
+          alertDiv.style.cssText = `
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 300px; padding: 15px; background-color: rgba(1, 41, 112, 0.9);
+            color: #ffffff; border-radius: 5px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            z-index: 1000; text-align: center;
+          `;
+          alertDiv.innerHTML = `
+            <strong>Tem certeza que deseja finalizar o END ID ${endId}?</strong><br>
+            <button class="btn btn-light mt-2" onclick="dismissAlert()">Cancelar</button>
+            <button class="btn btn-warning text-white mt-2" onclick="confirmFinalizar('${endId}')">Confirmar</button>
+          `;
+          document.body.appendChild(alertDiv);
+        });
       });
     })
     .catch((error) => {
@@ -195,7 +213,6 @@ function preencherTabela() {
       alert("Erro ao carregar os dados. Atualize a tela.");
     })
     .finally(() => {
-      // Oculta o overlay
       loadingOverlay.style.display = "none";
     });
 }
@@ -287,23 +304,27 @@ function atualizaEndId() {
     return;
   }
 
+  // Referência ao botão
+  const botaoAtualizar = document.querySelector(
+    'button[onclick="atualizaEndId()"]'
+  );
+  botaoAtualizar.disabled = true; // Desabilita o botão
+  botaoAtualizar.textContent = "Alterando..."; // Altera o texto do botão
+
   const payload = {
     endId: document.getElementById("editarEndId").value,
     siteId: document.getElementById("editarSiteId").value,
     demanda: document.getElementById("editarDemanda").value,
     observacoes: document.getElementById("editarObservacoes").value,
     detentora: {
-      id: 8,
       idDetentora: document.getElementById("editarIdDetentora").value,
       detentora: document.getElementById("editarDetentora").value,
     },
     cedente: {
-      id: 8,
       idOperadora: document.getElementById("editarIdOperadora").value,
       operadora: document.getElementById("editarOperadora").value,
     },
     endereco: {
-      id: 8,
       logradouro: document.getElementById("editarLogradouro").value,
       numero: document.getElementById("editarNumero").value,
       bairro: document.getElementById("editarBairro").value,
@@ -343,10 +364,15 @@ function atualizaEndId() {
     .then((data) => {
       console.log("Dados retornados pelo servidor:", data);
       alert("Dados atualizados com sucesso!");
+      resetarCampos("cadastro-editar");
     })
     .catch((error) => {
       console.error("Erro durante a atualização dos dados:", error);
       alert("Erro ao atualizar os dados. Detalhes no console.");
+    })
+    .finally(() => {
+      botaoAtualizar.disabled = false; // Reabilita o botão
+      botaoAtualizar.textContent = "Salvar"; // Restaura o texto original do botão
     });
 }
 
