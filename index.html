@@ -106,7 +106,7 @@
                   alt=""
                 />
               </span>
-              <div class="user-name">
+              <div class="user-name ml-2">
                 <h5 class="mb-0" id="nomeUserInfo">Raul Guilherme</h5>
                 <small class="text-muted h6 ml-1" id="cargoInfo">Boss</small>
               </div>
@@ -506,8 +506,8 @@
 
                   <div class="row form-desing my-4">
                     <div class="col-md-6 mt-2 mt-md-0">
-                      <label>Detentora *</label><br />
-                      <input type="text" class="form-control" id="demanda" />
+                      <label>Demanda *</label><br />
+                      <input type="number" class="form-control" id="demanda" />
                     </div>
                     <div class="col-md-6 mt-2 mt-md-0">
                       <label>ID Detentora *</label><br />
@@ -521,7 +521,7 @@
 
                   <div class="row form-desing my-4">
                     <div class="col-md-6 mt-2 mt-md-0">
-                      <label>Operadora cedente *</label><br />
+                      <label>Detentora *</label><br />
                       <input type="text" class="form-control" id="detentora" />
                     </div>
                     <div class="col-md-6 mt-2 mt-md-0">
@@ -536,7 +536,7 @@
 
                   <div class="row form-desing my-4">
                     <div class="col-md-6 mt-2 mt-md-0">
-                      <label>Logradouro *</label><br />
+                      <label>Operadora cedente *</label><br />
                       <input
                         type="text"
                         class="form-control"
@@ -544,14 +544,14 @@
                       />
                     </div>
                     <div class="col-md-6 mt-2 mt-md-0">
-                      <label>Número *</label><br />
-                      <input type="number" class="form-control" id="logradouro" />
+                      <label>Logradouro *</label><br />
+                      <input type="text" class="form-control" id="logradouro" />
                     </div>
                   </div>
 
                   <div class="row form-desing my-4">
                     <div class="col-md-6 mt-2 mt-md-0">
-                      <label>Bairro *</label><br />
+                      <label>Número *</label><br />
                       <input type="text" class="form-control" id="numero" />
                     </div>
                     <div class="col-md-6 mt-2 mt-md-0">
@@ -566,15 +566,15 @@
                       <input type="text" class="form-control" id="estado" />
                     </div>
                     <div class="col-md-6 mt-2 mt-md-0">
-                      <label>CEP *</label><br />
+                      <label>Bairro *</label><br />
                       <input type="text" class="form-control" id="bairro" />
                     </div>
                   </div>
 
                   <div class="row form-desing my-4">
                     <div class="col-md-6 mt-2 mt-md-0">
-                      <label>Latitude *</label><br />
-                      <input type="text" class="form-control" id="cep" />
+                      <label>CEP *</label><br />
+                      <input type="number" class="form-control" id="cep" />
                     </div>
                     <div class="col-md-6 mt-2 mt-md-0">
                       <label>Longitude *</label><br />
@@ -584,8 +584,8 @@
 
                   <div class="row form-desing my-4">
                     <div class="col-md-6 mt-2 mt-md-0">
-                      <label>Demanda *</label><br />
-                      <input type="number" class="form-control" id="latitude" />
+                      <label>Latitude *</label><br />
+                      <input type="text" class="form-control" id="latitude" />
                     </div>
                     <div class="col-md-6 mt-2 mt-md-0">
                       <label>Observações</label><br />
@@ -628,149 +628,182 @@
                 <div class="col shadow bg-white p-4 rounded">
                   <h4 class="mb-3">Editar Cadastro</h4>
                   <form>
+                    <!-- Seção de busca por END ID -->
                     <div class="row form-desing my-4">
                       <div class="col-md-4 mt-2 mt-md-0">
-                        <label>END ID *</label>
+                        <label for="editarEndId">END ID *</label>
                         <input
                           type="text"
                           class="form-control"
+                          id="editarEndId"
                           placeholder="Informe o END ID"
                         />
                       </div>
                       <div class="col-md-2 mt-2 mt-md-0 d-flex align-items-end">
-                        <button class="btn btn-primary w-100" id="button-buscar-endid">
+                        <button
+                          type="button"
+                          class="btn btn-primary w-100"
+                          id="button-buscar-endid"
+                          onclick="buscaEnId()"
+                        >
                           <i class="fa-solid fa-magnifying-glass"></i>⠀Buscar
                         </button>
                       </div>
                     </div>
 
+                    <!-- Campos de edição -->
                     <div class="row form-desing my-4">
                       <div class="col-md-6 mt-2 mt-md-0">
-                        <label>Site ID *</label>
+                        <label for="editarSiteId">Site ID *</label>
                         <input
                           type="text"
                           class="form-control"
+                          id="editarSiteId"
                         />
                       </div>
                       <div class="col-md-6 mt-2 mt-md-0">
-                        <label>Demanda *</label>
+                        <label for="editarDemanda">Demanda *</label>
                         <input
                           type="text"
                           class="form-control"
-                        />
-                      </div>
-                    </div>
-                    <div class="row form-desing my-4">
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label>Detentora *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                        />
-                      </div>
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label>ID Detentora *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                        />
-                      </div>
-                    </div>
-                    <div class="row form-desing my-4">
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label>Operadora Cedente *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                        />
-                      </div>
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label>ID Operadora *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                        />
-                      </div>
-                    </div>
-                    <div class="row form-desing my-4">
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label>Logradouro *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                        />
-                      </div>
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label>Número *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                        />
-                      </div>
-                    </div>
-                    <div class="row form-desing my-4">
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label>Bairro *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                        />
-                      </div>
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label>Município *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                        />
-                      </div>
-                    </div>
-                    <div class="row form-desing my-4">
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label>Estado *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                        />
-                      </div>
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label>CEP *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                        />
-                      </div>
-                    </div>
-                    <div class="row form-desing my-4">
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label>Latitude *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                        />
-                      </div>
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label>Longitude *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                        />
-                      </div>
-                    </div>
-                    <div class="row form-desing my-4">
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label>Observações </label>
-                        <input
-                          type="text"
-                          class="form-control"
+                          id="editarDemanda"
                         />
                       </div>
                     </div>
 
                     <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarDetentora">Detentora *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="editarDetentora"
+                        />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarIdDetentora">ID Detentora *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="editarIdDetentora"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarOperadora">Operadora Cedente *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="editarOperadora"
+                        />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarIdOperadora">ID Operadora *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="editarIdOperadora"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarLogradouro">Logradouro *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="editarLogradouro"
+                        />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarNumero">Número *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="editarNumero"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarBairro">Bairro *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="editarBairro"
+                        />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarMunicipio">Município *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="editarMunicipio"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarEstado">Estado *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="editarEstado"
+                        />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarCep">CEP *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="editarCep"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarLatitude">Latitude *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="editarLatitude"
+                        />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarLongitude">Longitude *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="editarLongitude"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarObservacoes">Observações</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="editarObservacoes"
+                        />
+                      </div>
+                    </div>
+
+                    <!-- Botões -->
+                    <div class="row form-desing my-4">
                       <div class="col">
                         <button
                           class="btn btn-primary text-white py-2 px-5"
                           type="button"
+                          id="salvarEndIdNovo"
+                          onclick="atualizaEndId()"
                         >
                           Atualizar
                         </button>
@@ -844,6 +877,7 @@
                           <th>Latitude</th>
                           <th>Longitude</th>
                           <th>Observações</th>
+                          <th>Data Cadastro</th>
                           <th>Ação</th>
                         </tr>
                       </thead>
@@ -923,7 +957,7 @@
 
           <!-- ============================== PÁGINA DE LIBERAÇÃO DE ACESSO ============================== -->
 
-          <!-- editar end id -->
+          <!-- editar agendamento -->
 
           <div class="tab-pane fade px-4" id="editar-agendamento">
             <div class="container-fluid">
@@ -941,7 +975,10 @@
                         />
                       </div>
                       <div class="col-md-2 mt-2 mt-md-0 d-flex align-items-end">
-                        <button class="btn btn-primary w-100" id="button-buscar-agendamento">
+                        <button
+                          class="btn btn-primary w-100"
+                          id="button-buscar-agendamento"
+                        >
                           <i class="fa-solid fa-magnifying-glass"></i> Buscar
                         </button>
                       </div>
@@ -1083,9 +1120,21 @@
                 <div class="col shadow bg-white p-4 rounded">
                   <h4 class="mb-3">Histórico de Agendamentos:</h4>
                   <div class="header-result mb-3">
-                    <input type="search" class="border-0 bg-light p-2 w-40" placeholder="Pesquisar por END ID..." />
-                    <input type="search" class="border-0 bg-light p-2" placeholder="Pesquisar por Status..." />
-                    <input type="search" class="border-0 bg-light p-2" placeholder="Pesquisar por Site ID" />
+                    <input
+                      type="search"
+                      class="border-0 bg-light p-2 w-40"
+                      placeholder="Pesquisar por END ID..."
+                    />
+                    <input
+                      type="search"
+                      class="border-0 bg-light p-2"
+                      placeholder="Pesquisar por Status..."
+                    />
+                    <input
+                      type="search"
+                      class="border-0 bg-light p-2"
+                      placeholder="Pesquisar por Site ID"
+                    />
                     <button class="btn btn-warning text-white">BUSCAR</button>
                   </div>
                   <div class="table-responsive text-nowrap">
@@ -1119,16 +1168,19 @@
                         <tr>
                           <td>#98765</td>
                           <td>
-                            <select disabled class="form-select border-0 bg-light p-2">
+                            <select
+                              disabled
+                              class="form-select border-0 bg-light p-2"
+                            >
                               <option value="nao-iniciado">Não Iniciado</option>
                               <option value="em-andamento">Em Andamento</option>
                               <option value="concluido">Concluído</option>
                             </select>
                             <button
-                                class="btn iniciar-btn p-0 border-0 bg-transparent ml-2"
-                              >
-                                <i class="fa-solid fa-circle-play"></i>
-                              </button>
+                              class="btn iniciar-btn p-0 border-0 bg-transparent ml-2"
+                            >
+                              <i class="fa-solid fa-circle-play"></i>
+                            </button>
                           </td>
                           <td><input type="date" class="form-control" /></td>
                           <td><input type="date" class="form-control" /></td>
@@ -1149,22 +1201,30 @@
                           <td>-46.6333</td>
                           <td>Verificar documentação</td>
                           <td>
-                            <button class="btn btn-primary finalizar-btn" data-id="#001">Finalizar</button>
+                            <button
+                              class="btn btn-primary finalizar-btn"
+                              data-id="#001"
+                            >
+                              Finalizar
+                            </button>
                           </td>
                         </tr>
                         <tr>
                           <td>#98765</td>
                           <td>
-                            <select disabled class="form-select border-0 bg-light p-2">
+                            <select
+                              disabled
+                              class="form-select border-0 bg-light p-2"
+                            >
                               <option value="nao-iniciado">Não Iniciado</option>
                               <option value="em-andamento">Em Andamento</option>
                               <option value="concluido">Concluído</option>
                             </select>
                             <button
-                                class="btn iniciar-btn p-0 border-0 bg-transparent ml-2"
-                              >
-                                <i class="fa-solid fa-circle-play"></i>
-                              </button>
+                              class="btn iniciar-btn p-0 border-0 bg-transparent ml-2"
+                            >
+                              <i class="fa-solid fa-circle-play"></i>
+                            </button>
                           </td>
                           <td><input type="date" class="form-control" /></td>
                           <td><input type="date" class="form-control" /></td>
@@ -1185,22 +1245,30 @@
                           <td>-43.1729</td>
                           <td>Serviço concluído com sucesso</td>
                           <td>
-                            <button class="btn btn-primary finalizar-btn" data-id="#002">Finalizar</button>
+                            <button
+                              class="btn btn-primary finalizar-btn"
+                              data-id="#002"
+                            >
+                              Finalizar
+                            </button>
                           </td>
                         </tr>
                         <tr>
                           <td>#67890</td>
                           <td>
-                            <select disabled class="form-select border-0 bg-light p-2">
+                            <select
+                              disabled
+                              class="form-select border-0 bg-light p-2"
+                            >
                               <option value="nao-iniciado">Não Iniciado</option>
                               <option value="em-andamento">Em Andamento</option>
                               <option value="concluido">Concluído</option>
                             </select>
                             <button
-                                class="btn iniciar-btn p-0 border-0 bg-transparent ml-2"
-                              >
-                                <i class="fa-solid fa-circle-play"></i>
-                              </button>
+                              class="btn iniciar-btn p-0 border-0 bg-transparent ml-2"
+                            >
+                              <i class="fa-solid fa-circle-play"></i>
+                            </button>
                           </td>
                           <td><input type="date" class="form-control" /></td>
                           <td><input type="date" class="form-control" /></td>
@@ -1221,7 +1289,12 @@
                           <td>-49.2713</td>
                           <td>Aguardando reagendamento</td>
                           <td>
-                            <button class="btn btn-primary finalizar-btn" data-id="#003">Finalizar</button>
+                            <button
+                              class="btn btn-primary finalizar-btn"
+                              data-id="#003"
+                            >
+                              Finalizar
+                            </button>
                           </td>
                         </tr>
                       </tbody>
@@ -1230,7 +1303,7 @@
                 </div>
               </div>
             </div>
-          </div>          
+          </div>
 
           <!-- ============================== PÁGINA DE VISTORIA ============================== -->
 
@@ -1803,7 +1876,10 @@
                         />
                       </div>
                       <div class="col-md-2 mt-2 mt-md-0 d-flex align-items-end">
-                        <button class="btn btn-primary w-100" id="button-buscar-projeto">
+                        <button
+                          class="btn btn-primary w-100"
+                          id="button-buscar-projeto"
+                        >
                           <i class="fa-solid fa-magnifying-glass"></i> Buscar
                         </button>
                       </div>
@@ -1812,189 +1888,126 @@
                     <div class="row form-desing my-4">
                       <div class="col-md-6 mt-2 mt-md-0">
                         <label class="">Endereço ID *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                        />
+                        <input type="text" class="form-control" />
                       </div>
                       <div class="col-md-6 mt-2 mt-md-0">
                         <label class="">Site ID *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                        />
+                        <input type="text" class="form-control" />
                       </div>
                     </div>
 
                     <div class="row form-desing my-4">
                       <div class="col-md-6 mt-2 mt-md-0">
                         <label class="">Leitura inicial *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                        />
+                        <input type="text" class="form-control" />
                       </div>
                       <div class="col-md-6 mt-2 mt-md-0">
                         <label class="">Concessionária *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                        />
+                        <input type="text" class="form-control" />
                       </div>
                     </div>
 
                     <div class="row form-desing my-4">
                       <div class="col-md-6 mt-2 mt-md-0">
                         <label class="">Regional *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                        />
+                        <input type="text" class="form-control" />
                       </div>
                       <div class="col-md-6 mt-2 mt-md-0">
                         <label class="">CEP *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                        />
+                        <input type="text" class="form-control" />
                       </div>
                     </div>
                     <div class="row form-desing my-4">
                       <div class="col-md-6 mt-2 mt-md-0">
                         <label class="">UF *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                        />
+                        <input type="text" class="form-control" />
                       </div>
                       <div class="col-md-6 mt-2 mt-md-0">
                         <label class="">Cidade *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                        />
+                        <input type="text" class="form-control" />
                       </div>
                     </div>
 
                     <div class="row form-desing my-4">
                       <div class="col-md-6 mt-2 mt-md-0">
                         <label class="">Endereço *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                        />
+                        <input type="text" class="form-control" />
                       </div>
                       <div class="col-md-6 mt-2 mt-md-0">
                         <label class="">Número *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                        />
+                        <input type="text" class="form-control" />
                       </div>
                     </div>
                     <div class="row form-desing my-4">
                       <div class="col-md-6 mt-2 mt-md-0">
                         <label class="">Bairro *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                        />
+                        <input type="text" class="form-control" />
                       </div>
                       <div class="col-md-6 mt-2 mt-md-0">
                         <label class="">Complemento</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                        />
+                        <input type="text" class="form-control" />
                       </div>
                     </div>
 
                     <div class="row form-desing my-4">
                       <div class="col-md-6 mt-2 mt-md-0">
                         <label class="">CNPJ *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                        />
+                        <input type="text" class="form-control" />
                       </div>
                       <div class="col-md-6 mt-2 mt-md-0">
                         <label class="">CNPJ da UC solicitada *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                        />
+                        <input type="text" class="form-control" />
                       </div>
                     </div>
 
                     <div class="row form-desing my-4">
                       <div class="col-md-6 mt-2 mt-md-0">
                         <label class="">Tipo de tensão *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                        />
+                        <input type="text" class="form-control" />
                       </div>
                       <div class="col-md-6 mt-2 mt-md-0">
                         <label class="">Unidade *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                        />
+                        <input type="text" class="form-control" />
                       </div>
                     </div>
 
                     <div class="row form-desing my-4">
                       <div class="col-md-6 mt-2 mt-md-0">
                         <label class="">Número de instalação *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                        />
+                        <input type="text" class="form-control" />
                       </div>
                       <div class="col-md-6 mt-2 mt-md-0">
                         <label class="">Número de fases *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                        />
+                        <input type="text" class="form-control" />
                       </div>
                     </div>
 
                     <div class="row form-desing my-4">
                       <div class="col-md-6 mt-2 mt-md-0">
                         <label class="">Previsão de ligação *</label>
-                        <input
-                          type="date"
-                          class="form-control"
-                        />
+                        <input type="date" class="form-control" />
                       </div>
                       <div class="col-md-6 mt-2 mt-md-0">
                         <label class="">Número Medidor *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                        />
+                        <input type="text" class="form-control" />
                       </div>
                     </div>
 
                     <div class="row form-desing my-4">
                       <div class="col-md-6 mt-2 mt-md-0">
-                      <label class="">Status ligação *</label>
-                      <select class="form-select border-0 bg-light p-2">
-                        <option value="" selected disabled>
-                          Selecione uma opção
-                        </option>
-                        <option value="pendente">Pendente</option>
-                        <option value="nao-iniciado">Não Iniciado</option>
-                        <option value="concluido">Concluído</option>
-                      </select>
+                        <label class="">Status ligação *</label>
+                        <select class="form-select border-0 bg-light p-2">
+                          <option value="" selected disabled>
+                            Selecione uma opção
+                          </option>
+                          <option value="pendente">Pendente</option>
+                          <option value="nao-iniciado">Não Iniciado</option>
+                          <option value="concluido">Concluído</option>
+                        </select>
                       </div>
                       <div class="col-md-6 mt-2 mt-md-0">
                         <label class="">Observações</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                        />
+                        <input type="text" class="form-control" />
                       </div>
                     </div>
 
@@ -2348,25 +2361,32 @@
     <!-- ============================== script ============================== -->
     <script src="js/host.js"></script>
     <script src="js/validaToken.js"></script>
-    <script src="js/inicio.js"></script>
     <script src="js/cadastroEndId.js"></script>
     <script src="js/liberarAcesso.js"></script>
-    <script src="js/status.js"></script>
-    <script src="js/vistoria.js"></script>
-    <script src="js/kitTssr.js"></script>
-    <script src="js/inclusao.js"></script>
-    <script src="js/obra.js"></script>
     <script src="js/projetos.js"></script>
-    <script src="js/exclusao.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"></script>
     <script src="js/script.js"></script>
 
-
-    <div id="loading-overlay" style="display: none;">
+    <div id="loading-overlay" style="display: none">
       <div
-        style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; align-items: center; justify-content: center; z-index: 1050; flex-direction: column; color: #fff; font-size: 18px; background: rgba(0, 0, 0, 0.5); padding: 20px; border-radius: 8px;"
+        style="
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 1050;
+          flex-direction: column;
+          color: #fff;
+          font-size: 18px;
+          background: rgba(0, 0, 0, 0.5);
+          padding: 20px;
+          border-radius: 8px;
+        "
       >
         <div class="spinner-border text-warning" role="status">
           <span class="sr-only">Carregando...</span>
@@ -2374,8 +2394,5 @@
         <p>Carregando, por favor aguarde...</p>
       </div>
     </div>
-    
-    
-
   </body>
 </html>
