@@ -341,7 +341,7 @@ function atualizaEndId() {
     JSON.stringify(payload, null, 2)
   );
 
-  fetch(`${host}/cadastroEndIds/SPLUE_0001`, {
+  fetch(`${host}/cadastroEndIds/${endId}`, {
     method: "PUT",
     headers: {
       Authorization: `Bearer ${token}`,
