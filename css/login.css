@@ -288,17 +288,59 @@ input.error::placeholder {
   }
   
     
-  /* Responsividade */
-  @media (max-width: 768px) {
-    .input-container input {
-      font-size: 0.9rem;
+/* Responsividade */
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
     }
-  
+
+    .input-container,
+    .input-wrapper,
+    .input-password {
+        width: 90%; /* Aumenta a largura dos inputs */
+    }
+
+    .input-container input,
+    .input-password input {
+        font-size: 1rem; /* Mantém o texto legível */
+        padding: 12px 20px; /* Ajusta o padding para inputs menores */
+    }
+
     .input-container i,
-    .icon-container i {
-      font-size: 1.1rem;
+    .input-password i {
+        font-size: 1.2rem; /* Tamanho proporcional para ícones */
     }
-  }
+
+    /* Redimensiona o botão */
+    .container button {
+        padding: 12px 40px; /* Mantém o botão clicável */
+        font-size: 14px;
+    }
+
+    .alert-error {
+        font-size: 12px;
+        padding: 8px 15px; /* Ajusta para telas menores */
+    }
+}
+
+@media (max-width: 480px) {
+    .input-container,
+    .input-wrapper,
+    .input-password {
+        width: 100%; /* Inputs ocupam toda a largura */
+    }
+
+    .input-container input,
+    .input-password input {
+        font-size: 0.9rem; /* Ajusta o tamanho do texto */
+        padding: 10px 15px; /* Reduz o padding */
+    }
+
+    .container {
+        padding: 10px; /* Reduz as margens internas */
+    }
+}
+
 
   button:disabled {
     background-color: #ccc;
