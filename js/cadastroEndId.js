@@ -5,6 +5,7 @@ function realizarCadastro() {
   const siteId = document.getElementById("siteId").value;
   const demanda = document.getElementById("demanda").value;
   const observacoes = document.getElementById("observacoes").value;
+  const localizacao = document.getElementById("localizacao").value;
 
   const idDetentora = document.getElementById("idDetentora").value;
   const detentora = document.getElementById("detentora").value;
@@ -38,7 +39,8 @@ function realizarCadastro() {
     !estado ||
     !cep ||
     !latitude ||
-    !longitude
+    !longitude ||
+    !localizacao
   ) {
     alert("Por favor, preencha todos os campos obrigatórios.");
     return;
@@ -57,6 +59,7 @@ function realizarCadastro() {
     siteId: siteId,
     demanda: demanda,
     observacoes: observacoes || null,
+    localizacao: localizacao || null,
     detentora: {
       idDetentora: idDetentora,
       detentora: detentora,
@@ -163,18 +166,8 @@ function preencherTabela() {
             <td>${item.endId}</td>
             <td>${item.demanda}</td>
             <td>${item.siteId}</td>
-            <td>${item.detentora.detentora}</td>
-            <td>${item.detentora.idDetentora}</td>
-            <td>${item.cedente.operadora}</td>
-            <td>${item.cedente.idOperadora}</td>
-            <td>${item.endereco.logradouro}</td>
-            <td>${item.endereco.numero}</td>
-            <td>${item.endereco.bairro}</td>
-            <td>${item.endereco.municipio}</td>
-            <td>${item.endereco.estado}</td>
-            <td>${item.endereco.cep}</td>
-            <td>${item.endereco.latitude}</td>
-            <td>${item.endereco.longitude}</td>
+            <td>${item.municipio}</td>
+            <td><a href="${item.linkLocalizacao || ""}" target="_blank">${item.linkLocalizacao || ""}</a></td>
             <td>${item.observacoes || ""}</td>
             <td>${dataCadastro}</td>
             <td>
@@ -275,6 +268,8 @@ function buscaEnId() {
         data.endereco.longitude || "";
       document.getElementById("editarObservacoes").value =
         data.observacoes || "";
+      document.getElementById("editarLocalizacao").value =
+        data.linkLocalizacao || "";
 
       globalId = data.id;
       botaoBuscar.disabled = false;
@@ -316,6 +311,7 @@ function atualizaEndId() {
     siteId: document.getElementById("editarSiteId").value,
     demanda: document.getElementById("editarDemanda").value,
     observacoes: document.getElementById("editarObservacoes").value,
+    linkLocalizacao: document.getElementById("editarLocalizacao").value,
     detentora: {
       idDetentora: document.getElementById("editarIdDetentora").value,
       detentora: document.getElementById("editarDetentora").value,
