@@ -129,13 +129,16 @@ function resetarCampos(formularioId) {
   );
 }
 
-function preencherTabela() {
+let currentPage = 0; // Página inicial
+const pageSize = 5; // Tamanho da página
+
+function preencherTabela(page = 0) {
   const loadingOverlay = document.getElementById("loading-overlay");
-  const tbody = document.querySelector("table tbody");
+  const tbody = document.querySelector("#tabelaHistorico tbody");
 
   loadingOverlay.style.display = "block";
 
-  fetch(`${host}/cadastroEndIds`, {
+  fetch(`${host}/cadastroEndIds?page=${page}&size=${pageSize}`, {
     method: "GET",
     headers: { Authorization: `Bearer ${token}` },
   })
@@ -155,7 +158,7 @@ function preencherTabela() {
         )}/${ano}`;
       };
 
-      dados.forEach((item, i) => {
+      dados.content.forEach((item, i) => {
         const dataCadastro = item.dataCadastro
           ? formataData(item.dataCadastro)
           : "Não informado";
@@ -180,26 +183,9 @@ function preencherTabela() {
           </tr>`;
 
         tbody.insertAdjacentHTML("beforeend", row);
-
-        const button = document.getElementById(finalizarId);
-        button.addEventListener("click", (event) => {
-          const endId = event.target.getAttribute("data-id");
-          const alertDiv = document.createElement("div");
-          alertDiv.className = "custom-alert";
-          alertDiv.style.cssText = `
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 300px; padding: 15px; background-color: rgba(1, 41, 112, 0.9);
-            color: #ffffff; border-radius: 5px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-            z-index: 1000; text-align: center;
-          `;
-          alertDiv.innerHTML = `
-            <strong>Tem certeza que deseja finalizar o END ID ${endId}?</strong><br>
-            <button class="btn btn-light mt-2" onclick="dismissAlert()">Cancelar</button>
-            <button class="btn btn-warning text-white mt-2" onclick="confirmFinalizar('${endId}')">Confirmar</button>
-          `;
-          document.body.appendChild(alertDiv);
-        });
       });
+
+      renderizarBotoesPaginacao(dados.pageable.pageNumber, dados.totalPages);
     })
     .catch((error) => {
       console.error("Erro ao buscar dados:", error);
@@ -209,6 +195,22 @@ function preencherTabela() {
       loadingOverlay.style.display = "none";
     });
 }
+
+function renderizarBotoesPaginacao(currentPage, totalPages) {
+  const paginationControls = document.getElementById("pagination-controls");
+  paginationControls.innerHTML = ""; // Limpa botões antigos
+
+  for (let i = 0; i < totalPages; i++) {
+    const button = document.createElement("button");
+    button.className = `btn btn-sm ${
+      i === currentPage ? "btn-primary" : "btn-light"
+    } mx-1`;
+    button.textContent = i + 1;
+    button.addEventListener("click", () => preencherTabela(i));
+    paginationControls.appendChild(button);
+  }
+}
+
 
 let globalId = null;
 

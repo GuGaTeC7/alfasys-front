@@ -598,13 +598,16 @@
                         id="observacoes"
                       />
                     </div>
-
                   </div>
 
                   <div class="row form-desing my-4">
                     <div class="col-md-6 mt-2 mt-md-0">
                       <label>Localizacao Maps</label><br />
-                      <input type="text" class="form-control" id="localizacao" />
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="localizacao"
+                      />
                     </div>
                   </div>
 
@@ -894,6 +897,13 @@
                         <!-- Dados preenchidos dinamicamente por JavaScript -->
                       </tbody>
                     </table>
+                  </div>
+                  <!-- Controles de Paginação -->
+                  <div
+                    id="pagination-controls"
+                    class="d-flex justify-content-center my-3"
+                  >
+                    <!-- Botões serão gerados dinamicamente -->
                   </div>
                 </div>
               </div>
@@ -2145,7 +2155,9 @@
                               class="form-select border-0 bg-light p-2"
                             >
                               <option value="nao-iniciado">Não Iniciado</option>
-                              <option value="em-andamento" selected>Em Andamento</option>
+                              <option value="em-andamento" selected>
+                                Em Andamento
+                              </option>
                               <option value="concluido">Concluído</option>
                               <option value="aprovado">Aprovado</option>
                               <option value="inviavel">Inviável</option>
@@ -2365,10 +2377,10 @@
                               disabled
                               class="form-select border-0 bg-light p-2"
                             >
-                            <option value="nao-iniciado">Não Iniciado</option>
-                            <option value="em-andamento">Inviável</option>
-                            <option value="concluido">Concluído</option>
-                            <option value="concluido">Aprovado</option>
+                              <option value="nao-iniciado">Não Iniciado</option>
+                              <option value="em-andamento">Inviável</option>
+                              <option value="concluido">Concluído</option>
+                              <option value="concluido">Aprovado</option>
                             </select>
                             <button
                               class="btn iniciar-btn p-0 border-0 bg-transparent ml-2"
