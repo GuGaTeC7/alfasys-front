@@ -433,6 +433,13 @@ table tr td {
   color: var(--color);
   font-weight: 500;
 }
+
+.table td,
+.table th {
+  padding: 0.65rem;
+  vertical-align: middle;
+}
+
 .icons .cards {
   flex-basis: 24%;
   margin: 0.5%;

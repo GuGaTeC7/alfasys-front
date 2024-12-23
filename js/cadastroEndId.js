@@ -130,7 +130,7 @@ function resetarCampos(formularioId) {
 }
 
 let currentPage = 0; // Página inicial
-const pageSize = 5; // Tamanho da página
+const pageSize = 5; // Elementos por página
 
 function preencherTabela(page = 0) {
   const loadingOverlay = document.getElementById("loading-overlay");
@@ -170,7 +170,15 @@ function preencherTabela(page = 0) {
             <td>${item.demanda}</td>
             <td>${item.siteId}</td>
             <td>${item.municipio}</td>
-            <td><a href="${item.linkLocalizacao || ""}" target="_blank">${item.linkLocalizacao || ""}</a></td>
+            <td style="text-align: center; vertical-align: middle;">
+              <a href="${item.linkLocalizacao || "#"}" target="_blank">
+                ${
+                  item.linkLocalizacao
+                    ? '<img width="30" height="auto" src="img/mapa-icon.png" alt="address--v1"/>'
+                    : "Não informada"
+                }
+              </a>
+            </td>
             <td>${item.observacoes || ""}</td>
             <td>${dataCadastro}</td>
             <td>
@@ -189,7 +197,7 @@ function preencherTabela(page = 0) {
     })
     .catch((error) => {
       console.error("Erro ao buscar dados:", error);
-      alert("Erro ao carregar os dados. Atualize a tela.");
+      alert("Erro ao carregar os dados. Atualize a tela apertando 'F5'.");
     })
     .finally(() => {
       loadingOverlay.style.display = "none";
@@ -211,6 +219,92 @@ function renderizarBotoesPaginacao(currentPage, totalPages) {
   }
 }
 
+function filtrarTabela(page = 0) {
+  const loadingOverlay = document.getElementById("loading-overlay");
+  const tbody = document.querySelector("#tabelaHistorico tbody");
+
+  // Pegando os valores dos campos de pesquisa
+  const endId = document.getElementById("pesquisaEndId").value.trim();
+  const siteId = document.getElementById("pesquisaSiteId").value.trim();
+  const municipio = document.getElementById("pesquisaEstado").value.trim();
+
+  // Montando os parâmetros da URL dinamicamente
+  const params = new URLSearchParams();
+  if (endId) params.append("endId", endId.toUpperCase());
+  if (siteId) params.append("siteId", siteId.toUpperCase());
+  if (municipio) params.append("municipio", municipio.toUpperCase());
+  params.append("page", page);
+  params.append("size", pageSize);
+
+  loadingOverlay.style.display = "block";
+
+  fetch(`${host}/cadastroEndIds/buscar?${params.toString()}`, {
+    method: "GET",
+    headers: { Authorization: `Bearer ${token}` },
+  })
+    .then((response) => {
+      if (!response.ok) throw new Error("Erro ao buscar dados.");
+      return response.json();
+    })
+    .then((dados) => {
+      tbody.innerHTML = "";
+
+      const formataData = (data) => {
+        if (!Array.isArray(data) || data.length !== 3) return "Data inválida";
+        const [ano, mes, dia] = data;
+        return `${String(dia).padStart(2, "0")}/${String(mes).padStart(
+          2,
+          "0"
+        )}/${ano}`;
+      };
+
+      if (!dados.content || dados.content.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" class="text-center">Nenhum dado encontrado.</td></tr>`;
+        renderizarBotoesPaginacao(0, 0);
+        return;
+      }
+
+      dados.content.forEach((item, i) => {
+        const dataCadastro = item.dataCadastro
+          ? formataData(item.dataCadastro)
+          : "Não informado";
+        const finalizarId = `finalizar-${i}`;
+
+        const row = `
+          <tr>
+            <td>${item.endId}</td>
+            <td>${item.demanda}</td>
+            <td>${item.siteId}</td>
+            <td>${item.municipio}</td>
+            <td style="text-align: center; vertical-align: middle;">
+              <a href="${item.linkLocalizacao || ""}" target="_blank">${
+          item.linkLocalizacao
+            ? '<img width="30" height="auto" src="img/mapa-icon.png" alt="address--v1"/>'
+            : "Não disponível"
+        }</a>
+            </td>
+            <td>${item.observacoes || ""}</td>
+            <td>${dataCadastro}</td>
+            <td>
+              <button class="btn btn-primary finalizar-btn" data-id="${
+                item.endId
+              }" id="${finalizarId}">Finalizar</button>
+            </td>
+          </tr>`;
+
+        tbody.insertAdjacentHTML("beforeend", row);
+      });
+
+      renderizarBotoesPaginacao(dados.pageable.pageNumber, dados.totalPages);
+    })
+    .catch((error) => {
+      console.error("Erro ao buscar dados:", error);
+      alert("Erro ao carregar os dados. Atualize a tela apertando 'F5'.");
+    })
+    .finally(() => {
+      loadingOverlay.style.display = "none";
+    });
+}
 
 let globalId = null;
 
@@ -374,13 +468,11 @@ function atualizaEndId() {
     });
 }
 
-// Selecione o link "Histórico de cadastros"
+// Selecione o link "Histórico de cadastros" e "Editar Cadastro"
 const historicoLink = document.querySelector("a[href='#cadastro-feito']");
-
-// Adicione o evento de clique
+// Adicione o evento de clique ao link de "Histórico de cadastros"
 historicoLink.addEventListener("click", function (event) {
-  // Chama a função para preencher a tabela ao clicar no link
-  preencherTabela();
+  preencherTabela(); // Função chamada ao clicar no link
 });
 
 // Adiciona o evento ao botão resetar
