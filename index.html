@@ -648,8 +648,7 @@
                         <label for="editarEndId">END ID *</label>
                         <input
                           type="text"
-                          class="form-control"
-                          id="editarEndId"
+                          class="form-control editarEndId"
                           placeholder="Informe o END ID"
                           autofocus
                         />
@@ -659,7 +658,7 @@
                           type="button"
                           class="btn btn-primary w-100"
                           id="button-buscar-endid"
-                          onclick="buscaEnId()"
+                          onclick="buscaEnId('cadastro-editar')"
                         >
                           <i class="fa-solid fa-magnifying-glass"></i>⠀Buscar
                         </button>
@@ -826,7 +825,7 @@
                           class="btn btn-primary text-white py-2 px-5"
                           type="button"
                           id="salvarEndIdNovo"
-                          onclick="atualizaEndId()"
+                          onclick="atualizaEndId('cadastro-editar')"
                         >
                           Atualizar
                         </button>
@@ -872,7 +871,7 @@
                     />
                     <button
                       class="btn btn-warning text-white"
-                      onclick="filtrarTabela()"
+                      onclick="filtrarTabela(0, 'cadastro-feito', 'tabelaHistorico')"
                     >
                       Pesquisar
                     </button>
@@ -1011,7 +1010,7 @@
                         <label>END ID *</label>
                         <input
                           type="text"
-                          class="form-control"
+                          class="form-control editarEndId"
                           placeholder="Informe o END ID"
                         />
                       </div>
@@ -1165,21 +1164,27 @@
                       type="search"
                       class="border-0 bg-light p-2 w-40"
                       placeholder="Pesquisar por END ID..."
-                    />
-                    <input
-                      type="search"
-                      class="border-0 bg-light p-2"
-                      placeholder="Pesquisar por Status..."
+                      id="pesquisaEndId"
                     />
                     <input
                       type="search"
                       class="border-0 bg-light p-2"
                       placeholder="Pesquisar por Site ID"
+                      id="pesquisaSiteId"
                     />
-                    <button class="btn btn-warning text-white">BUSCAR</button>
+                    <input
+                      type="search"
+                      class="border-0 bg-light p-2"
+                      placeholder="Pesquisar por estado"
+                      id="pesquisaEstado"
+
+                    />
+                    <button class="btn btn-warning text-white"
+                      onclick="filtrarTabela(0, 'todos-agendamentos', 'tabelaHistoricoAgendamento')"
+                      >BUSCAR</button>
                   </div>
                   <div class="table-responsive text-nowrap">
-                    <table class="table table-hover table-striped w-100">
+                    <table class="table table-hover table-striped w-100" id="tabelaHistoricoAgendamento">
                       <thead class="bg-light">
                         <tr>
                           <th>End ID</th>
@@ -1187,180 +1192,19 @@
                           <th>Data Solicitação</th>
                           <th>Data Previsão</th>
                           <th>Data de Liberação</th>
-                          <th>Site ID</th>
-                          <th>Demanda</th>
-                          <th>Detentora</th>
-                          <th>ID Detentora</th>
-                          <th>Operadora Cedente</th>
-                          <th>ID Operadora</th>
-                          <th>Logradouro</th>
-                          <th>Número</th>
-                          <th>Bairro</th>
-                          <th>Município</th>
-                          <th>Estado</th>
-                          <th>CEP</th>
-                          <th>Latitude</th>
-                          <th>Longitude</th>
-                          <th>Observações</th>
                           <th>Ação</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <td>
-                            <button
-                              class="btn btn-link p-0 text-decoration-none end-id"
-                              data-id="#001"
-                            >
-                              #001
-                            </button>
-                          </td>
-                          <td>
-                            <select
-                              disabled
-                              class="form-select border-0 bg-light p-2"
-                            >
-                              <option value="nao-iniciado">Não Iniciado</option>
-                              <option value="em-andamento">Em Andamento</option>
-                              <option value="concluido">Concluído</option>
-                            </select>
-                            <button
-                              class="btn iniciar-btn p-0 border-0 bg-transparent ml-2"
-                            >
-                              <i class="fa-solid fa-circle-play"></i>
-                            </button>
-                          </td>
-                          <td><input type="date" class="form-control" /></td>
-                          <td><input type="date" class="form-control" /></td>
-                          <td><input type="date" class="form-control" /></td>
-                          <td>12345</td>
-                          <td>Instalação</td>
-                          <td>Empresa A</td>
-                          <td>00123</td>
-                          <td>Operadora B</td>
-                          <td>00234</td>
-                          <td>Rua Exemplo</td>
-                          <td>123</td>
-                          <td>Centro</td>
-                          <td>São Paulo</td>
-                          <td>SP</td>
-                          <td>01000-000</td>
-                          <td>-23.55052</td>
-                          <td>-46.6333</td>
-                          <td>Verificar documentação</td>
-                          <td>
-                            <button
-                              class="btn btn-primary finalizar-btn"
-                              data-id="#001"
-                            >
-                              Finalizar
-                            </button>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <button
-                              class="btn btn-link p-0 text-decoration-none end-id"
-                              data-id="#002"
-                            >
-                              #002
-                            </button>
-                          </td>
-                          <td>
-                            <select
-                              disabled
-                              class="form-select border-0 bg-light p-2"
-                            >
-                              <option value="nao-iniciado">Não Iniciado</option>
-                              <option value="em-andamento">Em Andamento</option>
-                              <option value="concluido">Concluído</option>
-                            </select>
-                            <button
-                              class="btn iniciar-btn p-0 border-0 bg-transparent ml-2"
-                            >
-                              <i class="fa-solid fa-circle-play"></i>
-                            </button>
-                          </td>
-                          <td><input type="date" class="form-control" /></td>
-                          <td><input type="date" class="form-control" /></td>
-                          <td><input type="date" class="form-control" /></td>
-                          <td>54321</td>
-                          <td>Manutenção</td>
-                          <td>Empresa B</td>
-                          <td>00456</td>
-                          <td>Operadora A</td>
-                          <td>00789</td>
-                          <td>Rua Outro Exemplo</td>
-                          <td>456</td>
-                          <td>Jardim</td>
-                          <td>Rio de Janeiro</td>
-                          <td>RJ</td>
-                          <td>20000-000</td>
-                          <td>-22.9068</td>
-                          <td>-43.1729</td>
-                          <td>Serviço concluído com sucesso</td>
-                          <td>
-                            <button
-                              class="btn btn-primary finalizar-btn"
-                              data-id="#002"
-                            >
-                              Finalizar
-                            </button>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <button
-                              class="btn btn-link p-0 text-decoration-none end-id"
-                              data-id="#003"
-                            >
-                              #003
-                            </button>
-                          </td>
-                          <td>
-                            <select
-                              disabled
-                              class="form-select border-0 bg-light p-2"
-                            >
-                              <option value="nao-iniciado">Não Iniciado</option>
-                              <option value="em-andamento">Em Andamento</option>
-                              <option value="concluido">Concluído</option>
-                            </select>
-                            <button
-                              class="btn iniciar-btn p-0 border-0 bg-transparent ml-2"
-                            >
-                              <i class="fa-solid fa-circle-play"></i>
-                            </button>
-                          </td>
-                          <td><input type="date" class="form-control" /></td>
-                          <td><input type="date" class="form-control" /></td>
-                          <td><input type="date" class="form-control" /></td>
-                          <td>54321</td>
-                          <td>Reparo</td>
-                          <td>Empresa C</td>
-                          <td>00987</td>
-                          <td>Operadora C</td>
-                          <td>00654</td>
-                          <td>Rua Último Exemplo</td>
-                          <td>789</td>
-                          <td>Vila Nova</td>
-                          <td>Curitiba</td>
-                          <td>PR</td>
-                          <td>80000-000</td>
-                          <td>-25.4296</td>
-                          <td>-49.2713</td>
-                          <td>Aguardando reagendamento</td>
-                          <td>
-                            <button
-                              class="btn btn-primary finalizar-btn"
-                              data-id="#003"
-                            >
-                              Finalizar
-                            </button>
-                          </td>
-                        </tr>
+
                       </tbody>
                     </table>
+                    <!-- Controles de Paginação -->
+                    <div
+                    id="pagination-controls-agendamento"
+                    class="d-flex justify-content-center my-2"
+                    >
+                    <!-- Botões serão gerados dinamicamente -->
                   </div>
                 </div>
               </div>
@@ -2426,11 +2270,12 @@
       </div>
     </div>
     <!-- ============================== script ============================== -->
-    <script src="js/botoes.js"></script>
     <script src="js/host.js"></script>
+    <script src="js/funcoes.js"></script>
     <script src="js/validaToken.js"></script>
     <script src="js/inicio.js"></script>
     <script src="js/cadastroEndId.js"></script>
+    <!-- <script src="js/agendamento.js"></script> -->
     <script src="js/liberarAcesso.js"></script>
     <script src="js/status.js"></script>
     <script src="js/vistoria.js"></script>
