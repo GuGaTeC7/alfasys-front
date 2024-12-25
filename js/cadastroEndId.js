@@ -193,7 +193,7 @@ function preencherTabela(page = 0) {
         tbody.insertAdjacentHTML("beforeend", row);
       });
 
-      renderizarBotoesPaginacao(dados.pageable.pageNumber, dados.totalPages);
+      renderizarBotoesPaginacao("pagination-controls", dados.pageable.pageNumber, dados.totalPages);
     })
     .catch((error) => {
       console.error("Erro ao buscar dados:", error);
@@ -202,21 +202,6 @@ function preencherTabela(page = 0) {
     .finally(() => {
       loadingOverlay.style.display = "none";
     });
-}
-
-function renderizarBotoesPaginacao(currentPage, totalPages) {
-  const paginationControls = document.getElementById("pagination-controls");
-  paginationControls.innerHTML = ""; // Limpa botões antigos
-
-  for (let i = 0; i < totalPages; i++) {
-    const button = document.createElement("button");
-    button.className = `btn btn-sm ${
-      i === currentPage ? "btn-primary" : "btn-light"
-    } mx-1`;
-    button.textContent = i + 1;
-    button.addEventListener("click", () => preencherTabela(i));
-    paginationControls.appendChild(button);
-  }
 }
 
 // Selecione o link "Histórico de cadastros" e "Editar Cadastro"
