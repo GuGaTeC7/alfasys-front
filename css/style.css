@@ -550,7 +550,10 @@ table tr td {
   align-items: center;
   position: relative;
 }
-
+.btnCopiar {
+  cursor: pointer;
+  margin-left: 3px;
+}
 .input-icon-group input {
   flex: 1;
   padding-right: 2.5rem; /* Ajuste se necessário */

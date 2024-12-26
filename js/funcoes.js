@@ -13,7 +13,6 @@ async function confirmAlert(action, endId, etapa) {
     if (etapa === "agendamento") {
       await iniciaAgendamento(endId)
     }
-    alert(`Etapa iniciada com sucesso.`);
   }
   dismissAlert();
 }
@@ -44,6 +43,8 @@ function createAlert(content, onConfirm) {
 
   document.body.appendChild(alertDiv);
 }
+
+
 
 // Botão para ver o End ID
 document.querySelectorAll(".end-id").forEach((button) => {
