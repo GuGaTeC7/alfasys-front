@@ -401,7 +401,7 @@ document
       alertDiv.style.zIndex = "1000";
       alertDiv.style.textAlign = "center";
       alertDiv.innerHTML = `
-      <strong>Tem certeza que deseja iniciar essa etapa?</strong><br>
+      <h6 style="font-size: 1.3rem;">Tem certeza que deseja <b>iniciar</b> essa etapa?</h6>
       <button class="btn btn-light mt-2" id="cancel-button">Cancelar</button>
       <button class="btn btn-warning text-white mt-2" id="confirm-button">Iniciar</button>
     `;
