@@ -75,9 +75,11 @@ document.querySelectorAll(".finalizar-btn").forEach((button) => {
   });
 });
 
+
 // Botão para ver o End ID
 document.querySelectorAll(".end-id").forEach((button) => {
   button.addEventListener("click", (event) => {
+    console.log("cliclou");
     const endId = event.target.getAttribute("data-id");
 
     const alertDiv = document.createElement("div");
@@ -151,6 +153,118 @@ document.querySelectorAll(".end-id").forEach((button) => {
     );
   });
 });
+
+// Delegação de eventos no contêiner pai (exemplo: o `tbody` da tabela)
+document
+  .querySelector("#tabelaHistoricoAgendamento")
+  .addEventListener("click", (event) => {
+    const loadingOverlay = document.getElementById("loading-overlay");
+    if (event.target.classList.contains("end-id")) {
+      console.log("Clicou no botão com classe end-id");
+      const endId = event.target.getAttribute("data-id");
+
+      if (!loadingOverlay) {
+        console.error("Elemento de loadingOverlay não encontrado!");
+        return;
+      }
+
+      loadingOverlay.style.display = "block";
+
+      // Criação do elemento de alerta
+      const alertDiv = document.createElement("div");
+      alertDiv.className = "alert-container";
+      alertDiv.style.position = "fixed";
+      alertDiv.style.top = "50%";
+      alertDiv.style.left = "50%";
+      alertDiv.style.transform = "translate(-50%, -50%)";
+      alertDiv.style.width = "86%";
+      alertDiv.style.maxWidth = "900px";
+      alertDiv.style.padding = "30px";
+      alertDiv.style.backgroundColor = "#012970";
+      alertDiv.style.color = "#ffffff";
+      alertDiv.style.border = "2px solid #012970";
+      alertDiv.style.borderRadius = "15px";
+      alertDiv.style.boxShadow = "0 4px 20px rgba(0, 0, 0, 0.15)";
+      alertDiv.style.zIndex = "1000";
+      alertDiv.style.overflow = "hidden";
+
+      // Verificação do token de autenticação
+      if (!token) {
+        console.error("Token de autenticação não encontrado!");
+        loadingOverlay.style.display = "none";
+        return;
+      }
+
+      fetch(`${host}/cadastroEndIds/${endId}`, {
+        method: "GET",
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then((response) => {
+          if (!response.ok) throw new Error("Erro ao buscar dados.");
+          return response.json();
+        })
+        .then((dados) => {
+          alertDiv.innerHTML = `
+          <h1 style="display: block; text-align: center; margin-bottom: 20px; font-size: 1.5em;">
+            Detalhes do END ID: <b>${endId}</b>
+          </h1>
+          <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+              <ul style="flex: 1; padding-left: 20px; font-size: 1em; list-style: none;">
+                  <li><strong>Site ID:</strong> ${dados.siteId}</li>
+                  <li><strong>Demanda:</strong> ${dados.demanda}</li>
+                  <li><strong>Detentora:</strong> ${dados.detentora.detentora}</li>
+                  <li><strong>ID Detentora:</strong> ${dados.detentora.idDetentora}</li>
+                  <li><strong>Operadora cedente:</strong> ${dados.cedente.operadora}</li>
+                  <li><strong>ID Operadora:</strong> ${dados.cedente.idOperadora}</li>
+                  <li><strong>Logradouro:</strong> ${dados.endereco.logradouro}</li>
+                  <li><strong>Número:</strong> ${dados.endereco.numero}</li>
+              </ul>
+              <ul style="flex: 1; padding-right: 20px; font-size: 1em; list-style: none;">
+                  <li><strong>Bairro:</strong> ${dados.endereco.bairro}</li>
+                  <li><strong>Município:</strong> ${dados.endereco.municipio}</li>
+                  <li><strong>Estado:</strong> ${dados.endereco.estado}</li>
+                  <li><strong>CEP:</strong> ${dados.endereco.cep}</li>
+                  <li><strong>Latitude:</strong> ${dados.endereco.latitude}</li>
+                  <li><strong>Longitude:</strong> ${dados.endereco.longitude}</li>
+                  <li><strong>Observações:</strong> ${dados.observacoes}</li>
+              </ul>
+          </div>
+        `;
+
+          const closeButton = document.createElement("button");
+          closeButton.innerText = "Fechar";
+          closeButton.style.marginTop = "20px";
+          closeButton.style.padding = "12px 20px";
+          closeButton.style.backgroundColor = "#ffffff";
+          closeButton.style.border = "2px solid #ffffff";
+          closeButton.style.color = "#012970";
+          closeButton.style.cursor = "pointer";
+          closeButton.style.borderRadius = "10px";
+          closeButton.style.display = "block";
+          closeButton.style.marginLeft = "auto";
+          closeButton.style.marginRight = "auto";
+
+          closeButton.addEventListener("click", () => {
+            alertDiv.remove();
+          });
+
+          alertDiv.appendChild(closeButton);
+          document.body.appendChild(alertDiv);
+
+          window.scrollTo(
+            0,
+            alertDiv.getBoundingClientRect().top + window.scrollY - 100
+          );
+        })
+        .catch((error) => {
+          console.error("Erro ao buscar dados:", error);
+          alert("Erro ao carregar os dados. Atualize a tela apertando 'F5'.");
+        })
+        .finally(() => {
+          loadingOverlay.style.display = "none";
+        });
+    }
+  });
 
 // Botão de ver mais informações do projeto
 document.querySelectorAll(".btn-outline-primary").forEach((button) => {
@@ -376,7 +490,9 @@ function filtrarTabela(page = 0, secao, idTabela) {
             ? `
           <tr>
             <td>
-              <button class="btn btn-link p-0 text-decoration-none end-id" data-id="${item.endId}">
+              <button class="btn btn-link p-0 text-decoration-none end-id" data-id="${
+                item.endId
+              }">
                 ${item.endId}
               </button>
             </td>
@@ -413,7 +529,9 @@ function filtrarTabela(page = 0, secao, idTabela) {
               />
             </td>
             <td>
-              <button class="btn btn-primary finalizar-btn" data-id="${item.endId}">
+              <button class="btn btn-primary finalizar-btn" data-id="${
+                item.endId
+              }">
                 Finalizar
               </button>
             </td>
@@ -434,15 +552,23 @@ function filtrarTabela(page = 0, secao, idTabela) {
             <td>${item.observacoes || ""}</td>
             <td>${dataCadastro}</td>
             <td>
-              <button class="btn btn-primary finalizar-btn" data-id="${item.endId}" id="${finalizarId}">Finalizar</button>
+              <button class="btn btn-primary finalizar-btn" data-id="${
+                item.endId
+              }" id="${finalizarId}">Finalizar</button>
             </td>
           </tr>`;
 
         tbody.insertAdjacentHTML("beforeend", row);
       });
 
-      const pagination = idTabela === "tabelaHistoricoAgendamento" ? "pagination-controls-agendamento" : "pagination-controls";
-      const funcaoPreencher = idTabela === "tabelaHistoricoAgendamento" ? preencherTabelaAcesso : preencherTabela;
+      const pagination =
+        idTabela === "tabelaHistoricoAgendamento"
+          ? "pagination-controls-agendamento"
+          : "pagination-controls";
+      const funcaoPreencher =
+        idTabela === "tabelaHistoricoAgendamento"
+          ? preencherTabelaAcesso
+          : preencherTabela;
 
       renderizarBotoesPaginacao(
         pagination,
@@ -459,7 +585,6 @@ function filtrarTabela(page = 0, secao, idTabela) {
       loadingOverlay.style.display = "none";
     });
 }
-
 
 function buscaEnId(secao) {
   const botaoBuscar = event.target;
