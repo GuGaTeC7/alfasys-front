@@ -82,7 +82,11 @@ function preencherTabelaAcesso(page = 0) {
                       value="${dataSolicitacao}" 
                       disabled
                     />`
-                  : renderInputDate("data-solicitacao", item.endId, item.statusAgendamento)
+                  : renderInputDate(
+                      "data-solicitacao",
+                      item.endId,
+                      item.statusAgendamento
+                    )
               }
             </td>
             <td>
@@ -94,16 +98,28 @@ function preencherTabelaAcesso(page = 0) {
                       value="${dataPrevisao}" 
                       disabled
                     />`
-                  : renderInputDate("data-previsao", item.endId, item.statusAgendamento)
+                  : renderInputDate(
+                      "data-previsao",
+                      item.endId,
+                      item.statusAgendamento
+                    )
               }
             </td>
             <td>
-              <input 
-                type="date" 
-                class="form-control ${dataLiberacao ? "text-center" : ""}" 
-                value="${dataLiberacao}" 
-                ${dataLiberacao || item.statusAgendamento === "Não iniciado" ? "disabled" : ""}
-              />
+              ${
+                dataLiberacao
+                  ? `<input 
+                      type="date" 
+                      class="form-control text-center" 
+                      value="${dataLiberacao}" 
+                      disabled
+                    />`
+                  : renderInputDate(
+                      "data-liberacao",
+                      item.endId,
+                      item.statusAgendamento
+                    )
+              }
             </td>
             <td>
               <button class="btn btn-primary finalizar-btn" data-id-botao="${
@@ -165,8 +181,8 @@ function renderInputDate(action, endId, status) {
           data-action="${action}" 
           data-id="${endId}"></i>
       </div>`;
-    }
-    return `
+  }
+  return `
       <div class="input-icon-group">
         <input 
           type="date" 
@@ -238,6 +254,40 @@ function iniciaAgendamento(endId) {
       console.log("Dados retornados pelo servidor:", data);
       const botaoIniciar = document.querySelector(`[data-id-botao="${endId}"]`);
       botaoIniciar.style.display = "none";
+      const paginacao = document.getElementById(
+        "pagination-controls-agendamento"
+      );
+      const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
+      preencherTabelaAcesso(paginaAtual - 1);
+    })
+    .catch((error) => {
+      console.error("Erro durante a atualização dos dados:", error);
+      alert("Erro ao iniciar.");
+    });
+}
+
+function finalizaAgendamento(endId) {
+  const payload = {
+    statusAgendamento: "Concluído",
+  };
+  fetch(`${host}/cadastroEndIds/agendamento-parcial/${endId}`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  })
+    .then((response) => {
+      console.log("Resposta da requisição recebida:", response);
+      if (!response.ok) {
+        throw new Error(`Erro ao atualizar os dados: ${response.statusText}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Dados retornados pelo servidor:", data);
+
       const paginacao = document.getElementById(
         "pagination-controls-agendamento"
       );
@@ -360,7 +410,9 @@ function enviarData(endId, dateInput, action) {
   const payload =
     action === "data-solicitacao"
       ? { dataSolicitacao: dateInput }
-      : { dataPrevisao: dateInput };
+      : action === "data-previsao"
+      ? { dataPrevisao: dateInput }
+      : { dataLiberacao: dateInput };
 
   fetch(`${host}/cadastroEndIds/agendamento-parcial/${endId}`, {
     method: "PATCH",
@@ -579,7 +631,7 @@ document
     } else if (button.classList.contains("finalizar-btn")) {
       // Lógica para o botão "Finalizar"
       exibirConfirmacao(
-        `Tem certeza que deseja enviar o END ID <strong>${endId}</strong>?`,
+        `Tem certeza que deseja concluir o END ID <strong>${endId}</strong>?`,
         () => confirmAlert("finalizar", endId, "agendamento")
       );
     }

@@ -6,12 +6,15 @@ function dismissAlert() {
   }
 }
 
-async function confirmAlert(action, endId, etapa) {
+function confirmAlert(action, endId, etapa) {
   if (action === "finalizar") {
-    alert(`END ID ${endId} enviado com sucesso.`);
+    if (etapa === "agendamento") {
+      finalizaAgendamento(endId);
+    }
+    alert(`END ID ${endId} concluído com sucesso.`);
   } else if (action === "iniciar") {
     if (etapa === "agendamento") {
-      await iniciaAgendamento(endId)
+      iniciaAgendamento(endId);
     }
   }
   dismissAlert();
@@ -43,8 +46,6 @@ function createAlert(content, onConfirm) {
 
   document.body.appendChild(alertDiv);
 }
-
-
 
 // Botão para ver o End ID
 document.querySelectorAll(".end-id").forEach((button) => {
@@ -123,7 +124,6 @@ document.querySelectorAll(".end-id").forEach((button) => {
     );
   });
 });
-
 
 // Botão de ver mais informações do projeto
 document.querySelectorAll(".btn-outline-primary").forEach((button) => {
@@ -349,46 +349,79 @@ function filtrarTabela(page = 0, secao, idTabela) {
             ? `
           <tr>
             <td>
-              <button class="btn btn-link p-0 text-decoration-none end-id" data-id="${
+              <button class="btn btn-link p-0 text-decoration-none end-id" id="textoParaCopiar" data-id="${
                 item.endId
               }">
                 ${item.endId}
               </button>
+              <i class="fa-regular fa-copy btnCopiar" title="Copiar" data-id="${
+                item.endId
+              }"></i>
             </td>
             <td>
               <select disabled class="form-select border-0 bg-light p-2">
                 <option value="status">${item.statusAgendamento}</option>
               </select>
-              <button class="btn iniciar-btn p-0 border-0 bg-transparent ml-2">
+              <button class="btn iniciar-btn p-0 border-0 bg-transparent ml-2" 
+                style="display:${
+                  ["Em andamento", "Concluído"].includes(item.statusAgendamento)
+                    ? "none"
+                    : ""
+                };" 
+                data-id-botao="${item.endId}">
                 <i class="fa-solid fa-circle-play"></i>
               </button>
             </td>
             <td>
-              <input 
-                type="date" 
-                class="form-control ${dataSolicitacao ? "text-center" : ""}" 
-                value="${dataSolicitacao}" 
-                ${dataSolicitacao ? "disabled" : ""}
-              />
+              ${
+                dataSolicitacao
+                  ? `<input 
+                      type="date" 
+                      class="form-control text-center" 
+                      value="${dataSolicitacao}" 
+                      disabled
+                    />`
+                  : renderInputDate(
+                      "data-solicitacao",
+                      item.endId,
+                      item.statusAgendamento
+                    )
+              }
             </td>
             <td>
-              <input 
-                type="date" 
-                class="form-control ${dataPrevisao ? "text-center" : ""}" 
-                value="${dataPrevisao}" 
-                ${dataPrevisao ? "disabled" : ""}
-              />
+              ${
+                dataPrevisao
+                  ? `<input 
+                      type="date" 
+                      class="form-control text-center" 
+                      value="${dataPrevisao}" 
+                      disabled
+                    />`
+                  : renderInputDate(
+                      "data-previsao",
+                      item.endId,
+                      item.statusAgendamento
+                    )
+              }
             </td>
             <td>
-              <input 
-                type="date" 
-                class="form-control ${dataLiberacao ? "text-center" : ""}" 
-                value="${dataLiberacao}" 
-                ${dataLiberacao ? "disabled" : ""}
-              />
+              ${
+                dataLiberacao
+                  ? `<input 
+                      type="date" 
+                      class="form-control text-center" 
+                      value="${dataLiberacao}" 
+                      disabled
+                    />`
+                  : renderInputDate(
+                      "data-liberacao",
+                      item.endId,
+                      item.statusAgendamento
+                    )
+              }
             </td>
             <td>
-              <button class="btn btn-primary finalizar-btn" data-id="${
+              <button class="btn btn-primary finalizar-btn" data-id-botao="${
                 item.endId
               }">
                 Finalizar
@@ -416,6 +449,23 @@ function filtrarTabela(page = 0, secao, idTabela) {
               }" id="${finalizarId}">Finalizar</button>
             </td>
           </tr>`;
+
+        document.querySelectorAll(".btnCopiar").forEach((button) => {
+          button.addEventListener("click", function () {
+            const endId = this.getAttribute("data-id");
+            const textoParaCopiarPuro = document.querySelector(
+              `button[data-id="${endId}"]`
+            ).textContent;
+            const textoParaCopiar = textoParaCopiarPuro.trim();
+
+            navigator.clipboard
+              .writeText(textoParaCopiar)
+              .then(function () {})
+              .catch(function (err) {
+                console.error("Erro ao tentar copiar o texto: ", err);
+              });
+          });
+        });
 
         tbody.insertAdjacentHTML("beforeend", row);
       });
@@ -521,5 +571,3 @@ function buscaEnId(secao) {
         '<i class="fa-solid fa-magnifying-glass"></i>⠀Buscar';
     });
 }
-
-
