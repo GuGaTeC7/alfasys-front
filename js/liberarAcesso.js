@@ -124,7 +124,12 @@ function preencherTabelaAcesso(page = 0) {
             <td>
               <button class="btn btn-primary finalizar-btn" data-id-botao="${
                 item.endId
-              }">
+              }" ${
+          item.statusAgendamento === "Não iniciado" ||
+          item.statusAgendamento === "Concluído"
+            ? "disabled"
+            : ""
+        }>
                 Finalizar
               </button>
             </td>
