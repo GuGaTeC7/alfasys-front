@@ -6,75 +6,44 @@ function dismissAlert() {
   }
 }
 
-function confirmAlert(action, endId) {
+async function confirmAlert(action, endId, etapa) {
   if (action === "finalizar") {
     alert(`END ID ${endId} enviado com sucesso.`);
   } else if (action === "iniciar") {
+    if (etapa === "agendamento") {
+      await iniciaAgendamento(endId)
+    }
     alert(`Etapa iniciada com sucesso.`);
   }
   dismissAlert();
 }
 
-// Botão iniciar
-document.querySelectorAll(".iniciar-btn").forEach((button) => {
-  button.addEventListener("click", (event) => {
-    const endId = event.target.getAttribute("data-id");
+function createAlert(content, onConfirm) {
+  const alertDiv = document.createElement("div");
+  alertDiv.className = "custom-alert";
+  alertDiv.style.position = "fixed";
+  alertDiv.style.top = "50%";
+  alertDiv.style.left = "50%";
+  alertDiv.style.transform = "translate(-50%, -50%)";
+  alertDiv.style.width = "300px";
+  alertDiv.style.padding = "15px";
+  alertDiv.style.backgroundColor = "rgba(1, 41, 112, 0.9)";
+  alertDiv.style.color = "#ffffff";
+  alertDiv.style.borderRadius = "5px";
+  alertDiv.style.boxShadow = "0 4px 20px rgba(0, 0, 0, 0.15)";
+  alertDiv.style.zIndex = "1000";
+  alertDiv.style.textAlign = "center";
+  alertDiv.innerHTML = content;
 
-    const alertDiv = document.createElement("div");
-    alertDiv.className = "custom-alert";
+  // Botões
+  const cancelButton = alertDiv.querySelector("#cancel-button");
+  cancelButton.addEventListener("click", dismissAlert);
 
-    alertDiv.style.position = "fixed";
-    alertDiv.style.top = "50%";
-    alertDiv.style.left = "50%";
-    alertDiv.style.transform = "translate(-50%, -50%)";
-    alertDiv.style.width = "300px";
-    alertDiv.style.padding = "15px";
-    alertDiv.style.backgroundColor = "rgba(1, 41, 112, 0.9)";
-    alertDiv.style.color = "#ffffff";
-    alertDiv.style.borderRadius = "5px";
-    alertDiv.style.boxShadow = "0 4px 20px rgba(0, 0, 0, 0.15)";
-    alertDiv.style.zIndex = "1000";
-    alertDiv.style.textAlign = "center";
-    alertDiv.innerHTML = `
-          <strong>Tem certeza que deseja iniciar essa etapa?</strong><br>
-          <button class="btn btn-light mt-2" onclick="dismissAlert()">Não</button>
-          <button class="btn btn-warning text-white mt-2" onclick="confirmAlert('iniciar', '${endId}')">Iniciar</button>
-        `;
+  const confirmButton = alertDiv.querySelector("#confirm-button");
+  confirmButton.addEventListener("click", onConfirm);
 
-    document.body.appendChild(alertDiv);
-  });
-});
-
-// Botão finalizar
-document.querySelectorAll(".finalizar-btn").forEach((button) => {
-  button.addEventListener("click", (event) => {
-    const endId = event.target.getAttribute("data-id");
-
-    const alertDiv = document.createElement("div");
-    alertDiv.className = "custom-alert";
-
-    alertDiv.style.position = "fixed";
-    alertDiv.style.top = "50%";
-    alertDiv.style.left = "50%";
-    alertDiv.style.transform = "translate(-50%, -50%)";
-    alertDiv.style.width = "300px";
-    alertDiv.style.padding = "15px";
-    alertDiv.style.backgroundColor = "rgba(1, 41, 112, 0.9)";
-    alertDiv.style.color = "#ffffff";
-    alertDiv.style.borderRadius = "5px";
-    alertDiv.style.boxShadow = "0 4px 20px rgba(0, 0, 0, 0.15)";
-    alertDiv.style.zIndex = "1000";
-    alertDiv.style.textAlign = "center";
-    alertDiv.innerHTML = `
-          <strong>Tem certeza que deseja enviar o END ID ${endId}?</strong><br>
-          <button class="btn btn-light mt-2" onclick="dismissAlert()">Cancelar</button>
-          <button class="btn btn-warning text-white mt-2" onclick="confirmAlert('finalizar', '${endId}')">Enviar</button>
-        `;
-
-    document.body.appendChild(alertDiv);
-  });
-});
-
+  document.body.appendChild(alertDiv);
+}
 
 // Botão para ver o End ID
 document.querySelectorAll(".end-id").forEach((button) => {
@@ -154,117 +123,6 @@ document.querySelectorAll(".end-id").forEach((button) => {
   });
 });
 
-// Delegação de eventos no contêiner pai (exemplo: o `tbody` da tabela)
-document
-  .querySelector("#tabelaHistoricoAgendamento")
-  .addEventListener("click", (event) => {
-    const loadingOverlay = document.getElementById("loading-overlay");
-    if (event.target.classList.contains("end-id")) {
-      console.log("Clicou no botão com classe end-id");
-      const endId = event.target.getAttribute("data-id");
-
-      if (!loadingOverlay) {
-        console.error("Elemento de loadingOverlay não encontrado!");
-        return;
-      }
-
-      loadingOverlay.style.display = "block";
-
-      // Criação do elemento de alerta
-      const alertDiv = document.createElement("div");
-      alertDiv.className = "alert-container";
-      alertDiv.style.position = "fixed";
-      alertDiv.style.top = "50%";
-      alertDiv.style.left = "50%";
-      alertDiv.style.transform = "translate(-50%, -50%)";
-      alertDiv.style.width = "86%";
-      alertDiv.style.maxWidth = "900px";
-      alertDiv.style.padding = "30px";
-      alertDiv.style.backgroundColor = "#012970";
-      alertDiv.style.color = "#ffffff";
-      alertDiv.style.border = "2px solid #012970";
-      alertDiv.style.borderRadius = "15px";
-      alertDiv.style.boxShadow = "0 4px 20px rgba(0, 0, 0, 0.15)";
-      alertDiv.style.zIndex = "1000";
-      alertDiv.style.overflow = "hidden";
-
-      // Verificação do token de autenticação
-      if (!token) {
-        console.error("Token de autenticação não encontrado!");
-        loadingOverlay.style.display = "none";
-        return;
-      }
-
-      fetch(`${host}/cadastroEndIds/${endId}`, {
-        method: "GET",
-        headers: { Authorization: `Bearer ${token}` },
-      })
-        .then((response) => {
-          if (!response.ok) throw new Error("Erro ao buscar dados.");
-          return response.json();
-        })
-        .then((dados) => {
-          alertDiv.innerHTML = `
-          <h1 style="display: block; text-align: center; margin-bottom: 20px; font-size: 1.5em;">
-            Detalhes do END ID: <b>${endId}</b>
-          </h1>
-          <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-              <ul style="flex: 1; padding-left: 20px; font-size: 1em; list-style: none;">
-                  <li><strong>Site ID:</strong> ${dados.siteId}</li>
-                  <li><strong>Demanda:</strong> ${dados.demanda}</li>
-                  <li><strong>Detentora:</strong> ${dados.detentora.detentora}</li>
-                  <li><strong>ID Detentora:</strong> ${dados.detentora.idDetentora}</li>
-                  <li><strong>Operadora cedente:</strong> ${dados.cedente.operadora}</li>
-                  <li><strong>ID Operadora:</strong> ${dados.cedente.idOperadora}</li>
-                  <li><strong>Logradouro:</strong> ${dados.endereco.logradouro}</li>
-                  <li><strong>Número:</strong> ${dados.endereco.numero}</li>
-              </ul>
-              <ul style="flex: 1; padding-right: 20px; font-size: 1em; list-style: none;">
-                  <li><strong>Bairro:</strong> ${dados.endereco.bairro}</li>
-                  <li><strong>Município:</strong> ${dados.endereco.municipio}</li>
-                  <li><strong>Estado:</strong> ${dados.endereco.estado}</li>
-                  <li><strong>CEP:</strong> ${dados.endereco.cep}</li>
-                  <li><strong>Latitude:</strong> ${dados.endereco.latitude}</li>
-                  <li><strong>Longitude:</strong> ${dados.endereco.longitude}</li>
-                  <li><strong>Observações:</strong> ${dados.observacoes}</li>
-              </ul>
-          </div>
-        `;
-
-          const closeButton = document.createElement("button");
-          closeButton.innerText = "Fechar";
-          closeButton.style.marginTop = "20px";
-          closeButton.style.padding = "12px 20px";
-          closeButton.style.backgroundColor = "#ffffff";
-          closeButton.style.border = "2px solid #ffffff";
-          closeButton.style.color = "#012970";
-          closeButton.style.cursor = "pointer";
-          closeButton.style.borderRadius = "10px";
-          closeButton.style.display = "block";
-          closeButton.style.marginLeft = "auto";
-          closeButton.style.marginRight = "auto";
-
-          closeButton.addEventListener("click", () => {
-            alertDiv.remove();
-          });
-
-          alertDiv.appendChild(closeButton);
-          document.body.appendChild(alertDiv);
-
-          window.scrollTo(
-            0,
-            alertDiv.getBoundingClientRect().top + window.scrollY - 100
-          );
-        })
-        .catch((error) => {
-          console.error("Erro ao buscar dados:", error);
-          alert("Erro ao carregar os dados. Atualize a tela apertando 'F5'.");
-        })
-        .finally(() => {
-          loadingOverlay.style.display = "none";
-        });
-    }
-  });
 
 // Botão de ver mais informações do projeto
 document.querySelectorAll(".btn-outline-primary").forEach((button) => {
@@ -663,97 +521,4 @@ function buscaEnId(secao) {
     });
 }
 
-function atualizaEndId(secao) {
-  const secaoId = document.querySelector(`#${secao}`);
 
-  if (!secaoId) {
-    console.error(`Seção com ID '${secao}' não encontrada no DOM.`);
-    return;
-  }
-
-  const endIdInput = secaoId.querySelector(".editarEndId");
-  if (!endIdInput) {
-    console.error(
-      "Elemento .editarEndId não encontrado na seção especificada."
-    );
-    return;
-  }
-
-  const endId = endIdInput.value;
-  if (!endId) {
-    alert("Por favor, informe o END ID para poder atualizar.");
-    return;
-  }
-
-  const botaoAtualizar = document.querySelector("#salvarEndIdNovo");
-  if (botaoAtualizar) {
-    botaoAtualizar.disabled = true;
-    botaoAtualizar.textContent = "Alterando...";
-  }
-
-  const payload = {
-    endId: endId,
-    siteId: secaoId.querySelector("#editarSiteId")?.value || "",
-    demanda: secaoId.querySelector("#editarDemanda")?.value || "",
-    observacoes: secaoId.querySelector("#editarObservacoes")?.value || "",
-    linkLocalizacao: secaoId.querySelector("#editarLocalizacao")?.value || "",
-    detentora: {
-      idDetentora: secaoId.querySelector("#editarIdDetentora")?.value || "",
-      detentora: secaoId.querySelector("#editarDetentora")?.value || "",
-    },
-    cedente: {
-      idOperadora: secaoId.querySelector("#editarIdOperadora")?.value || "",
-      operadora: secaoId.querySelector("#editarOperadora")?.value || "",
-    },
-    endereco: {
-      logradouro: secaoId.querySelector("#editarLogradouro")?.value || "",
-      numero: secaoId.querySelector("#editarNumero")?.value || "",
-      bairro: secaoId.querySelector("#editarBairro")?.value || "",
-      municipio: secaoId.querySelector("#editarMunicipio")?.value || "",
-      estado: secaoId.querySelector("#editarEstado")?.value || "",
-      cep: secaoId.querySelector("#editarCep")?.value || "",
-      latitude: parseFloat(
-        secaoId.querySelector("#editarLatitude")?.value || 0
-      ),
-      longitude: parseFloat(
-        secaoId.querySelector("#editarLongitude")?.value || 0
-      ),
-    },
-  };
-
-  console.log(
-    "Payload preparado para envio:",
-    JSON.stringify(payload, null, 2)
-  );
-
-  fetch(`${host}/cadastroEndIds/${endId}`, {
-    method: "PUT",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(payload),
-  })
-    .then((response) => {
-      console.log("Resposta da requisição recebida:", response);
-      if (!response.ok) {
-        throw new Error(`Erro ao atualizar os dados: ${response.statusText}`);
-      }
-      return response.json();
-    })
-    .then((data) => {
-      console.log("Dados retornados pelo servidor:", data);
-      alert("Dados atualizados com sucesso!");
-      resetarCampos(secao);
-    })
-    .catch((error) => {
-      console.error("Erro durante a atualização dos dados:", error);
-      alert("Erro ao atualizar os dados. Veja os detalhes no console.");
-    })
-    .finally(() => {
-      if (botaoAtualizar) {
-        botaoAtualizar.disabled = false;
-        botaoAtualizar.textContent = "Salvar";
-      }
-    });
-}

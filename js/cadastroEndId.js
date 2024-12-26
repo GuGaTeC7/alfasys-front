@@ -105,6 +105,102 @@ function realizarCadastro() {
     });
 }
 
+// Atualiza END ID
+function atualizaEndId(secao) {
+  const secaoId = document.querySelector(`#${secao}`);
+
+  if (!secaoId) {
+    console.error(`Seção com ID '${secao}' não encontrada no DOM.`);
+    return;
+  }
+
+  const endIdInput = secaoId.querySelector(".editarEndId");
+  if (!endIdInput) {
+    console.error(
+      "Elemento .editarEndId não encontrado na seção especificada."
+    );
+    return;
+  }
+
+  const endId = endIdInput.value;
+  if (!endId) {
+    alert("Por favor, informe o END ID para poder atualizar.");
+    return;
+  }
+
+  const botaoAtualizar = document.querySelector("#salvarEndIdNovo");
+  if (botaoAtualizar) {
+    botaoAtualizar.disabled = true;
+    botaoAtualizar.textContent = "Alterando...";
+  }
+
+  const payload = {
+    endId: endId,
+    siteId: secaoId.querySelector("#editarSiteId")?.value || "",
+    demanda: secaoId.querySelector("#editarDemanda")?.value || "",
+    observacoes: secaoId.querySelector("#editarObservacoes")?.value || "",
+    linkLocalizacao: secaoId.querySelector("#editarLocalizacao")?.value || "",
+    detentora: {
+      idDetentora: secaoId.querySelector("#editarIdDetentora")?.value || "",
+      detentora: secaoId.querySelector("#editarDetentora")?.value || "",
+    },
+    cedente: {
+      idOperadora: secaoId.querySelector("#editarIdOperadora")?.value || "",
+      operadora: secaoId.querySelector("#editarOperadora")?.value || "",
+    },
+    endereco: {
+      logradouro: secaoId.querySelector("#editarLogradouro")?.value || "",
+      numero: secaoId.querySelector("#editarNumero")?.value || "",
+      bairro: secaoId.querySelector("#editarBairro")?.value || "",
+      municipio: secaoId.querySelector("#editarMunicipio")?.value || "",
+      estado: secaoId.querySelector("#editarEstado")?.value || "",
+      cep: secaoId.querySelector("#editarCep")?.value || "",
+      latitude: parseFloat(
+        secaoId.querySelector("#editarLatitude")?.value || 0
+      ),
+      longitude: parseFloat(
+        secaoId.querySelector("#editarLongitude")?.value || 0
+      ),
+    },
+  };
+
+  console.log(
+    "Payload preparado para envio:",
+    JSON.stringify(payload, null, 2)
+  );
+
+  fetch(`${host}/cadastroEndIds/${endId}`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  })
+    .then((response) => {
+      console.log("Resposta da requisição recebida:", response);
+      if (!response.ok) {
+        throw new Error(`Erro ao atualizar os dados: ${response.statusText}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Dados retornados pelo servidor:", data);
+      alert("Dados atualizados com sucesso!");
+      resetarCampos(secao);
+    })
+    .catch((error) => {
+      console.error("Erro durante a atualização dos dados:", error);
+      alert("Erro ao atualizar os dados. Veja os detalhes no console.");
+    })
+    .finally(() => {
+      if (botaoAtualizar) {
+        botaoAtualizar.disabled = false;
+        botaoAtualizar.textContent = "Salvar";
+      }
+    });
+}
+
 // Função para resetar todos os campos
 // Função genérica para resetar os campos de um formulário
 function resetarCampos(formularioId) {
