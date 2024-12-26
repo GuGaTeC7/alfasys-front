@@ -50,14 +50,11 @@ function preencherTabelaAcesso(page = 0) {
         const row = `
           <tr>
             <td>
-              <button class="btn btn-link p-0 text-decoration-none end-id" id="textoParaCopiar" data-id="${
+              <button class="btn btn-link p-0 text-decoration-none end-id" data-id="${
                 item.endId
               }">
                 ${item.endId}
               </button>
-              <i class="fa-regular fa-copy btnCopiar" title="Copiar" data-id="${
-                item.endId
-              }"></i>
             </td>
             <td>
               <select disabled class="form-select border-0 bg-light p-2">
@@ -82,11 +79,7 @@ function preencherTabelaAcesso(page = 0) {
                       value="${dataSolicitacao}" 
                       disabled
                     />`
-                  : renderInputDate(
-                      "data-solicitacao",
-                      item.endId,
-                      item.statusAgendamento
-                    )
+                  : renderInputDate("data-solicitacao", item.endId)
               }
             </td>
             <td>
@@ -98,28 +91,16 @@ function preencherTabelaAcesso(page = 0) {
                       value="${dataPrevisao}" 
                       disabled
                     />`
-                  : renderInputDate(
-                      "data-previsao",
-                      item.endId,
-                      item.statusAgendamento
-                    )
+                  : renderInputDate("data-previsao", item.endId)
               }
             </td>
             <td>
-              ${
-                dataLiberacao
-                  ? `<input 
-                      type="date" 
-                      class="form-control text-center" 
-                      value="${dataLiberacao}" 
-                      disabled
-                    />`
-                  : renderInputDate(
-                      "data-liberacao",
-                      item.endId,
-                      item.statusAgendamento
-                    )
-              }
+              <input 
+                type="date" 
+                class="form-control ${dataLiberacao ? "text-center" : ""}" 
+                value="${dataLiberacao}" 
+                ${dataLiberacao ? "disabled" : ""}
+              />
             </td>
             <td>
               <button class="btn btn-primary finalizar-btn" data-id-botao="${
@@ -129,26 +110,7 @@ function preencherTabelaAcesso(page = 0) {
               </button>
             </td>
           </tr>`;
-
         tbody.insertAdjacentHTML("beforeend", row);
-      });
-
-      // Adicionar eventListener para cada botão "Copiar Texto"
-      document.querySelectorAll(".btnCopiar").forEach((button) => {
-        button.addEventListener("click", function () {
-          const endId = this.getAttribute("data-id");
-          const textoParaCopiarPuro = document.querySelector(
-            `button[data-id="${endId}"]`
-          ).textContent;
-          const textoParaCopiar = textoParaCopiarPuro.trim();
-
-          navigator.clipboard
-            .writeText(textoParaCopiar)
-            .then(function () {})
-            .catch(function (err) {
-              console.error("Erro ao tentar copiar o texto: ", err);
-            });
-        });
       });
 
       renderizarBotoesPaginacao(
@@ -168,30 +130,14 @@ function preencherTabelaAcesso(page = 0) {
 }
 
 // Função para renderizar o input de data com ícone de envio
-function renderInputDate(action, endId, status) {
-  if (status === "Não iniciado") {
-    return `
-      <div class="input-icon-group">
-        <input 
-          type="date" 
-          class="form-control" 
-          disabled
-        />
-        <i class="fa-sharp-duotone fa-solid fa-square-arrow-up-right" 
-          data-action="${action}" 
-          data-id="${endId}"></i>
-      </div>`;
-  }
+function renderInputDate(action, endId) {
   return `
-      <div class="input-icon-group">
-        <input 
-          type="date" 
-          class="form-control" 
-        />
-        <i class="fa-sharp-duotone fa-solid fa-square-arrow-up-right" 
-          data-action="${action}" 
-          data-id="${endId}"></i>
-      </div>`;
+    <div class="input-icon-group">
+      <input type="date" class="form-control" />
+      <i class="fa-sharp-duotone fa-solid fa-square-arrow-up-right" 
+        data-action="${action}" 
+        data-id="${endId}"></i>
+    </div>`;
 }
 
 // Função para exibir uma confirmação
@@ -254,40 +200,6 @@ function iniciaAgendamento(endId) {
       console.log("Dados retornados pelo servidor:", data);
       const botaoIniciar = document.querySelector(`[data-id-botao="${endId}"]`);
       botaoIniciar.style.display = "none";
-      const paginacao = document.getElementById(
-        "pagination-controls-agendamento"
-      );
-      const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
-      preencherTabelaAcesso(paginaAtual - 1);
-    })
-    .catch((error) => {
-      console.error("Erro durante a atualização dos dados:", error);
-      alert("Erro ao iniciar.");
-    });
-}
-
-function finalizaAgendamento(endId) {
-  const payload = {
-    statusAgendamento: "Concluído",
-  };
-  fetch(`${host}/cadastroEndIds/agendamento-parcial/${endId}`, {
-    method: "PATCH",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(payload),
-  })
-    .then((response) => {
-      console.log("Resposta da requisição recebida:", response);
-      if (!response.ok) {
-        throw new Error(`Erro ao atualizar os dados: ${response.statusText}`);
-      }
-      return response.json();
-    })
-    .then((data) => {
-      console.log("Dados retornados pelo servidor:", data);
-
       const paginacao = document.getElementById(
         "pagination-controls-agendamento"
       );
@@ -410,9 +322,7 @@ function enviarData(endId, dateInput, action) {
   const payload =
     action === "data-solicitacao"
       ? { dataSolicitacao: dateInput }
-      : action === "data-previsao"
-      ? { dataPrevisao: dateInput }
-      : { dataLiberacao: dateInput };
+      : { dataPrevisao: dateInput };
 
   fetch(`${host}/cadastroEndIds/agendamento-parcial/${endId}`, {
     method: "PATCH",
@@ -631,7 +541,7 @@ document
     } else if (button.classList.contains("finalizar-btn")) {
       // Lógica para o botão "Finalizar"
       exibirConfirmacao(
-        `Tem certeza que deseja concluir o END ID <strong>${endId}</strong>?`,
+        `Tem certeza que deseja enviar o END ID <strong>${endId}</strong>?`,
         () => confirmAlert("finalizar", endId, "agendamento")
       );
     }

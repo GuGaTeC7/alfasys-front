@@ -494,12 +494,12 @@
                   <h4 class="mb-3">Realizar cadastro:</h4>
                   <div class="row form-desing my-4">
                     <div class="col-md-6 mt-2 mt-md-0">
-                      <label>Site ID *</label><br />
-                      <input type="text" class="form-control" id="siteId" />
-                    </div>
-                    <div class="col-md-6 mt-2 mt-md-0">
                       <label>End ID *</label><br />
                       <input type="text" class="form-control" id="endId" />
+                    </div>
+                    <div class="col-md-6 mt-2 mt-md-0">
+                      <label>Site ID *</label><br />
+                      <input type="text" class="form-control" id="siteId" />
                     </div>
                   </div>
 
@@ -587,26 +587,26 @@
 
                   <div class="row form-desing my-4">
                     <div class="col-md-6 mt-2 mt-md-0">
+                      <label>Localização Maps</label><br />
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="localizacao"
+                      />
+                    </div>
+                    <div class="col-md-6 mt-2 mt-md-0">
                       <label>Demanda *</label><br />
                       <input type="number" class="form-control" id="latitude" />
                     </div>
+                  </div>
+
+                  <div class="row form-desing my-4">
                     <div class="col-md-6 mt-2 mt-md-0">
                       <label>Observações</label><br />
                       <input
                         type="text"
                         class="form-control"
                         id="observacoes"
-                      />
-                    </div>
-                  </div>
-
-                  <div class="row form-desing my-4">
-                    <div class="col-md-6 mt-2 mt-md-0">
-                      <label>Localizacao Maps</label><br />
-                      <input
-                        type="text"
-                        class="form-control"
-                        id="localizacao"
                       />
                     </div>
                   </div>
@@ -801,19 +801,19 @@
 
                     <div class="row form-desing my-4">
                       <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarLocalizacao">Localização Maps *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="editarLocalizacao"
+                        />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
                         <label for="editarObservacoes">Observações</label>
                         <input
                           type="text"
                           class="form-control"
                           id="editarObservacoes"
-                        />
-                      </div>
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label for="editarLocalizacao">Localização Maps</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="editarLocalizacao"
                         />
                       </div>
                     </div>
@@ -1007,17 +1007,20 @@
                   <form>
                     <div class="row form-desing my-4">
                       <div class="col-md-4 mt-2 mt-md-0">
-                        <label>END ID *</label>
+                        <label for="editarEndIdAcesso">END ID *</label>
                         <input
                           type="text"
                           class="form-control editarEndId"
                           placeholder="Informe o END ID"
+                          autofocus
                         />
                       </div>
                       <div class="col-md-2 mt-2 mt-md-0 d-flex align-items-end">
                         <button
+                          type="button"
                           class="btn btn-primary w-100"
                           id="button-buscar-agendamento"
+                          onclick="buscaAcesso('editar-agendamento')"
                         >
                           <i class="fa-solid fa-magnifying-glass"></i> Buscar
                         </button>
@@ -1025,98 +1028,163 @@
                     </div>
                     <div class="row form-desing my-4">
                       <div class="col-md-6 mt-2 mt-md-0">
-                        <label>Data de solicitação *</label>
-                        <input type="date" class="form-control" />
+                        <label for="editarDataSolicitaçaoAcesso">Data de solicitação *</label>
+                        <input 
+                          type="date" 
+                          class="form-control" 
+                          id="editarDataSolicitaçaoAcesso"
+                        />
                       </div>
                       <div class="col-md-6 mt-2 mt-md-0">
-                        <label>Data de previsão *</label>
-                        <input type="date" class="form-control" />
-                      </div>
-                    </div>
-                    <div class="row form-desing my-4">
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label>Data de liberação *</label>
-                        <input type="date" class="form-control" />
-                      </div>
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label>Site ID *</label>
-                        <input type="text" class="form-control" />
+                        <label for="editarDataPrevisaoAcesso">Data de previsão *</label>
+                        <input 
+                          type="date" 
+                          class="form-control" 
+                          id="editarDataPrevisaoAcesso"
+                        />
                       </div>
                     </div>
                     <div class="row form-desing my-4">
                       <div class="col-md-6 mt-2 mt-md-0">
-                        <label>Demanda *</label>
-                        <input type="text" class="form-control" />
+                        <label for="editarDataLiberacaoAcesso">Data de liberação *</label>
+                        <input 
+                          type="date" 
+                          class="form-control" 
+                          id="editarDataLiberacaoAcesso"
+                        />
                       </div>
                       <div class="col-md-6 mt-2 mt-md-0">
-                        <label>End ID *</label>
-                        <input type="text" class="form-control" />
-                      </div>
-                    </div>
-                    <div class="row form-desing my-4">
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label>Detentora *</label>
-                        <input type="text" class="form-control" />
-                      </div>
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label>ID Detentora *</label>
-                        <input type="text" class="form-control" />
+                        <label for="editarSiteIdAcesso">Site ID *</label>
+                        <input 
+                          type="text" 
+                          class="form-control" 
+                          id="editarSiteIdAcesso"
+                        />
                       </div>
                     </div>
                     <div class="row form-desing my-4">
                       <div class="col-md-6 mt-2 mt-md-0">
-                        <label>Operadora cedente *</label>
-                        <input type="text" class="form-control" />
+                        <label for="editarDetentoraAcesso">Detentora *</label>
+                        <input 
+                          type="text" 
+                          class="form-control" 
+                          id="editarDetentoraAcesso"
+                        />
                       </div>
                       <div class="col-md-6 mt-2 mt-md-0">
-                        <label>ID Operadora *</label>
-                        <input type="text" class="form-control" />
-                      </div>
-                    </div>
-                    <div class="row form-desing my-4">
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label>Logradouro *</label>
-                        <input type="text" class="form-control" />
-                      </div>
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label>Número *</label>
-                        <input type="text" class="form-control" />
+                        <label for="editarEndIdDetentoraAcesso">ID Detentora *</label>
+                        <input 
+                          type="text" 
+                          class="form-control"
+                          id="editarEndIdDetentoraAcesso"
+                        />
                       </div>
                     </div>
                     <div class="row form-desing my-4">
                       <div class="col-md-6 mt-2 mt-md-0">
-                        <label>Bairro *</label>
-                        <input type="text" class="form-control" />
+                        <label for="editarOperadoraAcesso">Operadora cedente *</label>
+                        <input 
+                          type="text" 
+                          class="form-control" 
+                          id="editarOperadoraAcesso"
+                        />
                       </div>
                       <div class="col-md-6 mt-2 mt-md-0">
-                        <label>Município *</label>
-                        <input type="text" class="form-control" />
-                      </div>
-                    </div>
-                    <div class="row form-desing my-4">
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label>Estado *</label>
-                        <input type="text" class="form-control" />
-                      </div>
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label>CEP *</label>
-                        <input type="text" class="form-control" />
+                        <label for="editarIdOperadoraAcesso">ID Operadora *</label>
+                        <input 
+                          type="text" 
+                          class="form-control" 
+                          id="editarIdOperadoraAcesso"
+                        />
                       </div>
                     </div>
                     <div class="row form-desing my-4">
                       <div class="col-md-6 mt-2 mt-md-0">
-                        <label>Latitude *</label>
-                        <input type="text" class="form-control" />
+                        <label for="editarLogradouroAcesso">Logradouro *</label>
+                        <input 
+                          type="text" 
+                          class="form-control" 
+                          id="editarLogradouroAcesso"
+                        />
                       </div>
                       <div class="col-md-6 mt-2 mt-md-0">
-                        <label>Longitude *</label>
-                        <input type="text" class="form-control" />
+                        <label for="editarNumeroAcesso">Número *</label>
+                        <input 
+                          type="text" 
+                          class="form-control" 
+                          id="editarNumeroAcesso"
+                        />
                       </div>
                     </div>
                     <div class="row form-desing my-4">
                       <div class="col-md-6 mt-2 mt-md-0">
-                        <label>Status do agendamento *</label>
-                        <select class="form-select border-0 bg-light p-2">
+                        <label for="editarBairroAcesso">Bairro *</label>
+                        <input 
+                          type="text" 
+                          class="form-control" 
+                          id="editarBairroAcesso"
+                        />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarMunicipioAcesso">Município *</label>
+                        <input 
+                          type="text" 
+                          class="form-control" 
+                          id="editarMunicipioAcesso"
+                        />
+                      </div>
+                    </div>
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarEstadoAcesso">Estado *</label>
+                        <input 
+                          type="text" 
+                          class="form-control"
+                          id="editarEstadoAcesso" 
+                        />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarCepAcesso">CEP *</label>
+                        <input 
+                          type="text" 
+                          class="form-control" 
+                          id="editarCepAcesso"
+                        />
+                      </div>
+                    </div>
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarLatitudeAcesso">Latitude *</label>
+                        <input 
+                          type="text" 
+                          class="form-control" 
+                          id="editarLatitudeAcesso"
+                        />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarLongitudeAcesso">Longitude *</label>
+                        <input 
+                          type="text" 
+                          class="form-control" 
+                          id="editarLongitudeAcesso"
+                        />
+                      </div>
+                    </div>
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarDemandaAcesso">Demanda *</label>
+                        <input 
+                          type="text" 
+                          class="form-control"
+                          id="editarDemandaAcesso"
+                        />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarStatusAcesso">Status do agendamento *</label>
+                        <select 
+                          class="form-select border-0 bg-light p-2"
+                          id="editarStatusAcesso"  
+                        >
                           <option value="" selected disabled>
                             Selecione uma opção
                           </option>
@@ -1125,9 +1193,15 @@
                           <option value="concluido">Concluído</option>
                         </select>
                       </div>
+                    </div>
+                    <div class="row form-desing my-4">
                       <div class="col-md-6 mt-2 mt-md-0">
-                        <label>Observações</label>
-                        <textarea class="form-control" rows="3"></textarea>
+                        <label for="editarObservacoesAcesso">Observações</label>
+                        <input 
+                          type="text" 
+                          class="form-control"
+                          id="editarObservacoesAcesso"
+                        />
                       </div>
                     </div>
                     <div class="row form-desing my-4">
