@@ -11,7 +11,6 @@ function confirmAlert(action, endId, etapa) {
     if (etapa === "agendamento") {
       finalizaAgendamento(endId);
     }
-    alert(`END ID ${endId} concluído com sucesso.`);
   } else if (action === "iniciar") {
     if (etapa === "agendamento") {
       iniciaAgendamento(endId);

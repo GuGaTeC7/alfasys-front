@@ -81,6 +81,7 @@ function preencherTabelaAcesso(page = 0) {
                       class="form-control text-center" 
                       value="${dataSolicitacao}" 
                       disabled
+                      id="data-solicitacao-${item.endId}"
                     />`
                   : renderInputDate(
                       "data-solicitacao",
@@ -97,6 +98,7 @@ function preencherTabelaAcesso(page = 0) {
                       class="form-control text-center" 
                       value="${dataPrevisao}" 
                       disabled
+                      id="data-previsao-${item.endId}"
                     />`
                   : renderInputDate(
                       "data-previsao",
@@ -113,6 +115,7 @@ function preencherTabelaAcesso(page = 0) {
                       class="form-control text-center" 
                       value="${dataLiberacao}" 
                       disabled
+                      id="data-liberacao-${item.endId}"
                     />`
                   : renderInputDate(
                       "data-liberacao",
@@ -272,9 +275,23 @@ function iniciaAgendamento(endId) {
 }
 
 function finalizaAgendamento(endId) {
+  // Obtém os valores das datas
+  const dataSolicitacao = document.getElementById(`data-solicitacao-${endId}`)?.value;
+  const dataPrevisao = document.getElementById(`data-previsao-${endId}`)?.value;
+  const dataLiberacao = document.getElementById(`data-liberacao-${endId}`)?.value;
+
+  // Verifica se todas as datas estão preenchidas
+  if (!dataSolicitacao || !dataPrevisao || !dataLiberacao) {
+    alert("Todas as datas (Solicitação, Previsão e Liberação) devem estar preenchidas.");
+    return; // Interrompe a execução se as datas não forem válidas
+  }
+
+  // Monta o payload
   const payload = {
     statusAgendamento: "Concluído",
   };
+
+  // Realiza a requisição
   fetch(`${host}/cadastroEndIds/agendamento-parcial/${endId}`, {
     method: "PATCH",
     headers: {
@@ -293,9 +310,8 @@ function finalizaAgendamento(endId) {
     .then((data) => {
       console.log("Dados retornados pelo servidor:", data);
 
-      const paginacao = document.getElementById(
-        "pagination-controls-agendamento"
-      );
+      // Atualiza a tabela na página atual
+      const paginacao = document.getElementById("pagination-controls-agendamento");
       const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
       preencherTabelaAcesso(paginaAtual - 1);
     })
@@ -304,6 +320,7 @@ function finalizaAgendamento(endId) {
       alert("Erro ao iniciar.");
     });
 }
+
 
 // function atualizaAgendamento(secao) {
 //   const secaoId = document.querySelector(`#${secao}`);
