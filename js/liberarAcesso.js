@@ -72,20 +72,26 @@ function preencherTabelaAcesso(page = 0) {
               </button>
             </td>
             <td>
-              <input 
-                type="date" 
-                class="form-control ${dataSolicitacao ? "text-center" : ""}" 
-                value="${dataSolicitacao}" 
-                ${dataSolicitacao ? "disabled" : ""}
-              />
+              <div class="input-icon-group">
+                <input 
+                  type="date" 
+                  class="form-control ${dataSolicitacao ? "text-center" : ""}" 
+                  value="${dataSolicitacao}" 
+                  ${dataSolicitacao ? "disabled" : ""}
+                />
+                <i class="fa-sharp-duotone fa-solid fa-square-arrow-up-right"></i>
+              </div>
             </td>
             <td>
-              <input 
-                type="date" 
-                class="form-control ${dataPrevisao ? "text-center" : ""}" 
-                value="${dataPrevisao}" 
-                ${dataPrevisao ? "disabled" : ""}
-              />
+              <div class="input-icon-group">
+                <input 
+                  type="date" 
+                  class="form-control ${dataPrevisao ? "text-center" : ""}" 
+                  value="${dataPrevisao}" 
+                  ${dataPrevisao ? "disabled" : ""}
+                />
+                <i class="fa-sharp-duotone fa-solid fa-square-arrow-up-right"></i>
+              </div>
             </td>
             <td>
               <input 
@@ -96,13 +102,14 @@ function preencherTabelaAcesso(page = 0) {
               />
             </td>
             <td>
-              <button class="btn btn-primary finalizar-btn" data-id="${
+              <button class="btn btn-primary finalizar-btn" data-id-botao="${
                 item.endId
               }">
                 Finalizar
               </button>
             </td>
           </tr>`;
+
         tbody.insertAdjacentHTML("beforeend", row);
       });
 
@@ -145,8 +152,10 @@ function iniciaAgendamento(endId) {
       console.log("Dados retornados pelo servidor:", data);
       const botaoIniciar = document.querySelector(`[data-id-botao="${endId}"]`);
       botaoIniciar.style.display = "none";
-      const paginacao = document.getElementById("pagination-controls-agendamento")
-      const paginaAtual = paginacao.querySelector(".btn-primary").textContent
+      const paginacao = document.getElementById(
+        "pagination-controls-agendamento"
+      );
+      const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
       preencherTabelaAcesso(paginaAtual - 1);
     })
     .catch((error) => {
@@ -154,7 +163,6 @@ function iniciaAgendamento(endId) {
       alert("Erro ao iniciar.");
     });
 }
-  
 
 function atualizaAgendamento(secao) {
   const secaoId = document.querySelector(`#${secao}`);
@@ -429,7 +437,7 @@ document
       alertDiv.style.zIndex = "1000";
       alertDiv.style.textAlign = "center";
       alertDiv.innerHTML = `
-      <strong>Tem certeza que deseja enviar o END ID ${endId}?</strong><br>
+      <h6 style="font-size: 1.3rem;">Tem certeza que deseja enviar o END ID <strong>${endId}?</strong></h6>
       <button class="btn btn-light mt-2" id="cancel-button">Cancelar</button>
       <button class="btn btn-warning text-white mt-2" id="confirm-button">Enviar</button>
     `;

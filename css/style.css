@@ -545,6 +545,25 @@ table tr td {
   font-weight: 500;
   color: var(--color);
 }
+.input-icon-group {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.input-icon-group input {
+  flex: 1;
+  padding-right: 2.5rem; /* Ajuste se necessário */
+}
+
+.input-icon-group i {
+  position: absolute;
+  right: 10px; /* Distância do ícone em relação ao lado direito do input */
+  font-size: 1.2rem; /* Ajuste do tamanho do ícone */
+  color: #007bff; /* Cor do ícone */
+  cursor: pointer;
+}
+
 .form-desing input,
 .form-desing select,
 .form-desing textarea {
