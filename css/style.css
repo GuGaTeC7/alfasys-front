@@ -440,6 +440,11 @@ table tr td {
   vertical-align: middle;
 }
 
+#pagination-controls-agendamento {
+  position: relative; /* Ou 'static', dependendo da estrutura */
+  z-index: 1; /* Certifique-se de que o índice não sobrescreva a navegação */
+}
+
 .icons .cards {
   flex-basis: 24%;
   margin: 0.5%;

@@ -124,13 +124,7 @@ function resetarCampos(formularioId) {
     }
   });
 
-  console.log(
-    `Todos os campos do formulário "${formularioId}" foram resetados.`
-  );
 }
-
-let currentPage = 0; // Página inicial
-const pageSize = 5; // Elementos por página
 
 function preencherTabela(page = 0) {
   const loadingOverlay = document.getElementById("loading-overlay");
@@ -149,15 +143,6 @@ function preencherTabela(page = 0) {
     .then((dados) => {
       tbody.innerHTML = "";
 
-      const formataData = (data) => {
-        if (!Array.isArray(data) || data.length !== 3) return "Data inválida";
-        const [ano, mes, dia] = data;
-        return `${String(dia).padStart(2, "0")}/${String(mes).padStart(
-          2,
-          "0"
-        )}/${ano}`;
-      };
-
       dados.content.forEach((item, i) => {
         const dataCadastro = item.dataCadastro
           ? formataData(item.dataCadastro)
@@ -171,11 +156,11 @@ function preencherTabela(page = 0) {
             <td>${item.siteId}</td>
             <td>${item.municipio}</td>
             <td style="text-align: center; vertical-align: middle;">
-              <a href="${item.linkLocalizacao || "#"}" target="_blank">
+              <a href="${item.linkLocalizacao || "#"}" target="_blank" style="text-decoration:none; color: #012970;">
                 ${
                   item.linkLocalizacao
                     ? '<img width="30" height="auto" src="img/mapa-icon.png" alt="address--v1"/>'
-                    : "Não informada"
+                    : "Não informado"
                 }
               </a>
             </td>
@@ -193,7 +178,7 @@ function preencherTabela(page = 0) {
         tbody.insertAdjacentHTML("beforeend", row);
       });
 
-      renderizarBotoesPaginacao("pagination-controls", dados.pageable.pageNumber, dados.totalPages);
+      renderizarBotoesPaginacao("pagination-controls", preencherTabela, dados.pageable.pageNumber, dados.totalPages);
     })
     .catch((error) => {
       console.error("Erro ao buscar dados:", error);

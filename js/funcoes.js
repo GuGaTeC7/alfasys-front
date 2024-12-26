@@ -1,107 +1,104 @@
 // Funções reutilizáveis
 function dismissAlert() {
-    const alertDiv = document.querySelector(".custom-alert");
-    if (alertDiv) {
-      alertDiv.remove();
-    }
+  const alertDiv = document.querySelector(".custom-alert");
+  if (alertDiv) {
+    alertDiv.remove();
   }
-  
-  function confirmAlert(action, endId) {
-    if (action === "finalizar") {
-      alert(`END ID ${endId} enviado com sucesso.`);
-    } else if (action === "iniciar") {
-      alert(`Etapa iniciada com sucesso.`);
-    }
-    dismissAlert();
+}
+
+function confirmAlert(action, endId) {
+  if (action === "finalizar") {
+    alert(`END ID ${endId} enviado com sucesso.`);
+  } else if (action === "iniciar") {
+    alert(`Etapa iniciada com sucesso.`);
   }
+  dismissAlert();
+}
 
-
-// Botão iniciar 
+// Botão iniciar
 document.querySelectorAll(".iniciar-btn").forEach((button) => {
-    button.addEventListener("click", (event) => {
-      const endId = event.target.getAttribute("data-id");
-  
-      const alertDiv = document.createElement("div");
-      alertDiv.className = "custom-alert";
-  
-      alertDiv.style.position = "fixed";
-      alertDiv.style.top = "50%";
-      alertDiv.style.left = "50%";
-      alertDiv.style.transform = "translate(-50%, -50%)";
-      alertDiv.style.width = "300px";
-      alertDiv.style.padding = "15px";
-      alertDiv.style.backgroundColor = "rgba(1, 41, 112, 0.9)";
-      alertDiv.style.color = "#ffffff";
-      alertDiv.style.borderRadius = "5px";
-      alertDiv.style.boxShadow = "0 4px 20px rgba(0, 0, 0, 0.15)";
-      alertDiv.style.zIndex = "1000";
-      alertDiv.style.textAlign = "center";
-      alertDiv.innerHTML = `
+  button.addEventListener("click", (event) => {
+    const endId = event.target.getAttribute("data-id");
+
+    const alertDiv = document.createElement("div");
+    alertDiv.className = "custom-alert";
+
+    alertDiv.style.position = "fixed";
+    alertDiv.style.top = "50%";
+    alertDiv.style.left = "50%";
+    alertDiv.style.transform = "translate(-50%, -50%)";
+    alertDiv.style.width = "300px";
+    alertDiv.style.padding = "15px";
+    alertDiv.style.backgroundColor = "rgba(1, 41, 112, 0.9)";
+    alertDiv.style.color = "#ffffff";
+    alertDiv.style.borderRadius = "5px";
+    alertDiv.style.boxShadow = "0 4px 20px rgba(0, 0, 0, 0.15)";
+    alertDiv.style.zIndex = "1000";
+    alertDiv.style.textAlign = "center";
+    alertDiv.innerHTML = `
           <strong>Tem certeza que deseja iniciar essa etapa?</strong><br>
           <button class="btn btn-light mt-2" onclick="dismissAlert()">Não</button>
           <button class="btn btn-warning text-white mt-2" onclick="confirmAlert('iniciar', '${endId}')">Iniciar</button>
         `;
-  
-      document.body.appendChild(alertDiv);
-    });
-  });
 
+    document.body.appendChild(alertDiv);
+  });
+});
 
 // Botão finalizar
 document.querySelectorAll(".finalizar-btn").forEach((button) => {
-    button.addEventListener("click", (event) => {
-      const endId = event.target.getAttribute("data-id");
-  
-      const alertDiv = document.createElement("div");
-      alertDiv.className = "custom-alert";
-  
-      alertDiv.style.position = "fixed";
-      alertDiv.style.top = "50%";
-      alertDiv.style.left = "50%";
-      alertDiv.style.transform = "translate(-50%, -50%)";
-      alertDiv.style.width = "300px";
-      alertDiv.style.padding = "15px";
-      alertDiv.style.backgroundColor = "rgba(1, 41, 112, 0.9)";
-      alertDiv.style.color = "#ffffff";
-      alertDiv.style.borderRadius = "5px";
-      alertDiv.style.boxShadow = "0 4px 20px rgba(0, 0, 0, 0.15)";
-      alertDiv.style.zIndex = "1000";
-      alertDiv.style.textAlign = "center";
-      alertDiv.innerHTML = `
+  button.addEventListener("click", (event) => {
+    const endId = event.target.getAttribute("data-id");
+
+    const alertDiv = document.createElement("div");
+    alertDiv.className = "custom-alert";
+
+    alertDiv.style.position = "fixed";
+    alertDiv.style.top = "50%";
+    alertDiv.style.left = "50%";
+    alertDiv.style.transform = "translate(-50%, -50%)";
+    alertDiv.style.width = "300px";
+    alertDiv.style.padding = "15px";
+    alertDiv.style.backgroundColor = "rgba(1, 41, 112, 0.9)";
+    alertDiv.style.color = "#ffffff";
+    alertDiv.style.borderRadius = "5px";
+    alertDiv.style.boxShadow = "0 4px 20px rgba(0, 0, 0, 0.15)";
+    alertDiv.style.zIndex = "1000";
+    alertDiv.style.textAlign = "center";
+    alertDiv.innerHTML = `
           <strong>Tem certeza que deseja enviar o END ID ${endId}?</strong><br>
           <button class="btn btn-light mt-2" onclick="dismissAlert()">Cancelar</button>
           <button class="btn btn-warning text-white mt-2" onclick="confirmAlert('finalizar', '${endId}')">Enviar</button>
         `;
-  
-      document.body.appendChild(alertDiv);
-    });
-  });
 
+    document.body.appendChild(alertDiv);
+  });
+});
 
 // Botão para ver o End ID
-  document.querySelectorAll(".end-id").forEach((button) => {
-    button.addEventListener("click", (event) => {
-      const endId = event.target.getAttribute("data-id");
-  
-      const alertDiv = document.createElement("div");
-      alertDiv.className = "alert-container";
-  
-      alertDiv.style.position = "fixed";
-      alertDiv.style.top = "50%";
-      alertDiv.style.left = "50%";
-      alertDiv.style.transform = "translate(-50%, -50%)";
-      alertDiv.style.width = "86%"; /* 7% em cada lado */
-      alertDiv.style.maxWidth = "900px";
-      alertDiv.style.padding = "30px";
-      alertDiv.style.backgroundColor = "#012970";
-      alertDiv.style.color = "#ffffff";
-      alertDiv.style.border = "2px solid #012970";
-      alertDiv.style.borderRadius = "15px";
-      alertDiv.style.boxShadow = "0 4px 20px rgba(0, 0, 0, 0.15)";
-      alertDiv.style.zIndex = "1000";
-      alertDiv.style.overflow = "hidden";
-  
-      alertDiv.innerHTML = `
+document.querySelectorAll(".end-id").forEach((button) => {
+  button.addEventListener("click", (event) => {
+    const endId = event.target.getAttribute("data-id");
+
+    const alertDiv = document.createElement("div");
+    alertDiv.className = "alert-container";
+
+    alertDiv.style.position = "fixed";
+    alertDiv.style.top = "50%";
+    alertDiv.style.left = "50%";
+    alertDiv.style.transform = "translate(-50%, -50%)";
+    alertDiv.style.width = "86%"; /* 7% em cada lado */
+    alertDiv.style.maxWidth = "900px";
+    alertDiv.style.padding = "30px";
+    alertDiv.style.backgroundColor = "#012970";
+    alertDiv.style.color = "#ffffff";
+    alertDiv.style.border = "2px solid #012970";
+    alertDiv.style.borderRadius = "15px";
+    alertDiv.style.boxShadow = "0 4px 20px rgba(0, 0, 0, 0.15)";
+    alertDiv.style.zIndex = "1000";
+    alertDiv.style.overflow = "hidden";
+
+    alertDiv.innerHTML = `
               <strong style="display: block; text-align: center; margin-bottom: 20px; font-size: 1.5em;">Detalhes do Projeto: ${endId}</strong>
               <div style="display: flex; flex-wrap: wrap; gap: 10px;">
                   <ul style="flex: 1; padding-left: 20px; font-size: 1em; list-style: none;">
@@ -127,62 +124,61 @@ document.querySelectorAll(".finalizar-btn").forEach((button) => {
   
               </div>
           `;
-  
-      const closeButton = document.createElement("button");
-      closeButton.innerText = "Fechar";
-      closeButton.style.marginTop = "20px";
-      closeButton.style.padding = "12px 20px";
-      closeButton.style.backgroundColor = "#ffffff";
-      closeButton.style.border = "2px solid #ffffff";
-      closeButton.style.color = "#012970";
-      closeButton.style.cursor = "pointer";
-      closeButton.style.borderRadius = "10px";
-      closeButton.style.display = "block";
-      closeButton.style.marginLeft = "auto";
-      closeButton.style.marginRight = "auto";
-  
-      closeButton.addEventListener("click", () => {
-        alertDiv.remove();
-      });
-  
-      alertDiv.appendChild(closeButton);
-      document.body.appendChild(alertDiv);
-  
-      window.scrollTo(
-        0,
-        alertDiv.getBoundingClientRect().top + window.scrollY - 100
-      );
+
+    const closeButton = document.createElement("button");
+    closeButton.innerText = "Fechar";
+    closeButton.style.marginTop = "20px";
+    closeButton.style.padding = "12px 20px";
+    closeButton.style.backgroundColor = "#ffffff";
+    closeButton.style.border = "2px solid #ffffff";
+    closeButton.style.color = "#012970";
+    closeButton.style.cursor = "pointer";
+    closeButton.style.borderRadius = "10px";
+    closeButton.style.display = "block";
+    closeButton.style.marginLeft = "auto";
+    closeButton.style.marginRight = "auto";
+
+    closeButton.addEventListener("click", () => {
+      alertDiv.remove();
     });
+
+    alertDiv.appendChild(closeButton);
+    document.body.appendChild(alertDiv);
+
+    window.scrollTo(
+      0,
+      alertDiv.getBoundingClientRect().top + window.scrollY - 100
+    );
   });
+});
 
+// Botão de ver mais informações do projeto
+document.querySelectorAll(".btn-outline-primary").forEach((button) => {
+  button.addEventListener("click", (event) => {
+    const endId = event.target
+      .closest("tr")
+      .querySelector(".end-id")
+      .getAttribute("data-id");
 
-// Botão de ver mais informações do projeto 
-  document.querySelectorAll(".btn-outline-primary").forEach((button) => {
-    button.addEventListener("click", (event) => {
-      const endId = event.target
-        .closest("tr")
-        .querySelector(".end-id")
-        .getAttribute("data-id");
-  
-      const alertDiv = document.createElement("div");
-      alertDiv.className = "alert-container";
-  
-      alertDiv.style.position = "fixed";
-      alertDiv.style.top = "50%";
-      alertDiv.style.left = "50%";
-      alertDiv.style.transform = "translate(-50%, -50%)";
-      alertDiv.style.width = "86%"; /* 7% em cada lado */
-      alertDiv.style.maxWidth = "900px";
-      alertDiv.style.padding = "30px";
-      alertDiv.style.backgroundColor = "#012970";
-      alertDiv.style.color = "#ffffff";
-      alertDiv.style.border = "2px solid #012970";
-      alertDiv.style.borderRadius = "15px";
-      alertDiv.style.boxShadow = "0 4px 20px rgba(0, 0, 0, 0.15)";
-      alertDiv.style.zIndex = "1000";
-      alertDiv.style.overflow = "hidden";
-  
-      alertDiv.innerHTML = `
+    const alertDiv = document.createElement("div");
+    alertDiv.className = "alert-container";
+
+    alertDiv.style.position = "fixed";
+    alertDiv.style.top = "50%";
+    alertDiv.style.left = "50%";
+    alertDiv.style.transform = "translate(-50%, -50%)";
+    alertDiv.style.width = "86%"; /* 7% em cada lado */
+    alertDiv.style.maxWidth = "900px";
+    alertDiv.style.padding = "30px";
+    alertDiv.style.backgroundColor = "#012970";
+    alertDiv.style.color = "#ffffff";
+    alertDiv.style.border = "2px solid #012970";
+    alertDiv.style.borderRadius = "15px";
+    alertDiv.style.boxShadow = "0 4px 20px rgba(0, 0, 0, 0.15)";
+    alertDiv.style.zIndex = "1000";
+    alertDiv.style.overflow = "hidden";
+
+    alertDiv.innerHTML = `
               <strong style="display: block; text-align: center; margin-bottom: 20px; font-size: 1.5em;">Informações de ligação do projeto: ${endId}</strong>
               <div style="display: flex; flex-wrap: wrap; gap: 10px;">
               <ul style="flex: 1; padding-left: 20px; font-size: 1em; list-style: none;">
@@ -212,40 +208,39 @@ document.querySelectorAll(".finalizar-btn").forEach((button) => {
           </ul>
       </div>
           `;
-  
-      const closeButton = document.createElement("button");
-      closeButton.innerText = "Fechar";
-      closeButton.style.marginTop = "20px";
-      closeButton.style.padding = "12px 20px";
-      closeButton.style.backgroundColor = "#ffffff";
-      closeButton.style.border = "2px solid #ffffff";
-      closeButton.style.color = "#012970";
-      closeButton.style.cursor = "pointer";
-      closeButton.style.borderRadius = "10px";
-      closeButton.style.display = "block";
-      closeButton.style.marginLeft = "auto";
-      closeButton.style.marginRight = "auto";
-  
-      closeButton.addEventListener("click", () => {
-        alertDiv.remove();
-      });
-  
-      alertDiv.appendChild(closeButton);
-      document.body.appendChild(alertDiv);
-  
-      window.scrollTo(
-        0,
-        alertDiv.getBoundingClientRect().top + window.scrollY - 100
-      );
+
+    const closeButton = document.createElement("button");
+    closeButton.innerText = "Fechar";
+    closeButton.style.marginTop = "20px";
+    closeButton.style.padding = "12px 20px";
+    closeButton.style.backgroundColor = "#ffffff";
+    closeButton.style.border = "2px solid #ffffff";
+    closeButton.style.color = "#012970";
+    closeButton.style.cursor = "pointer";
+    closeButton.style.borderRadius = "10px";
+    closeButton.style.display = "block";
+    closeButton.style.marginLeft = "auto";
+    closeButton.style.marginRight = "auto";
+
+    closeButton.addEventListener("click", () => {
+      alertDiv.remove();
     });
-  });
 
+    alertDiv.appendChild(closeButton);
+    document.body.appendChild(alertDiv);
 
-  // Botão para fazer logout
-  document.getElementById("logout").addEventListener("click", function () {
-    localStorage.removeItem("token");
-    window.location.href = "login.html";
+    window.scrollTo(
+      0,
+      alertDiv.getBoundingClientRect().top + window.scrollY - 100
+    );
   });
+});
+
+// Botão para fazer logout
+document.getElementById("logout").addEventListener("click", function () {
+  localStorage.removeItem("token");
+  window.location.href = "login.html";
+});
 
 // Função genérica para resetar os campos de um formulário
 function resetarCampos(formularioId) {
@@ -270,82 +265,38 @@ function resetarCampos(formularioId) {
   );
 }
 
-// let currentPage = 0; // Página inicial
-// const pageSize = 5; // Elementos por página
+// Função para formatar datas
+function formatarDataParaInput(data) {
+  if (!data) return ""; // Caso a data seja nula ou indefinida
+  if (Array.isArray(data) && data.length === 3) {
+    // Data no formato array [ano, mes, dia]
+    const [ano, mes, dia] = data;
+    return `${ano}-${String(mes).padStart(2, "0")}-${String(dia).padStart(
+      2,
+      "0"
+    )}`;
+  }
+  return ""; // Retorna vazio para outros formatos inválidos
+}
 
-// function preencherTabela(endpoint, idTabela, page = 0) {
-//   const loadingOverlay = document.getElementById("loading-overlay");
-//   const tbody = document.querySelector(`#${idTabela} tbody`);
+function formataData(data) {
+  if (!Array.isArray(data) || data.length !== 3) return "Data inválida";
+  const [ano, mes, dia] = data;
+  return `${String(dia).padStart(2, "0")}/${String(mes).padStart(
+    2,
+    "0"
+  )}/${ano}`;
+}
 
-//   loadingOverlay.style.display = "block";
+let currentPage = 0; // Página inicial
+const pageSize = 5; // Elementos por página
 
-//   fetch(`${host}/${endpoint}?page=${page}&size=${pageSize}`, {
-//     method: "GET",
-//     headers: { Authorization: `Bearer ${token}` },
-//   })
-//     .then((response) => {
-//       if (!response.ok) throw new Error("Erro ao buscar dados.");
-//       return response.json();
-//     })
-//     .then((dados) => {
-//       tbody.innerHTML = "";
-
-//       const formataData = (data) => {
-//         if (!Array.isArray(data) || data.length !== 3) return "Data inválida";
-//         const [ano, mes, dia] = data;
-//         return `${String(dia).padStart(2, "0")}/${String(mes).padStart(
-//           2,
-//           "0"
-//         )}/${ano}`;
-//       };
-
-//       dados.content.forEach((item, i) => {
-//         const dataCadastro = item.dataCadastro
-//           ? formataData(item.dataCadastro)
-//           : "Não informado";
-//         const finalizarId = `finalizar-${i}`;
-
-//         const row = `
-//           <tr>
-//             <td>${item.endId}</td>
-//             <td>${item.demanda}</td>
-//             <td>${item.siteId}</td>
-//             <td>${item.municipio}</td>
-//             <td style="text-align: center; vertical-align: middle;">
-//               <a href="${item.linkLocalizacao || "#"}" target="_blank">
-//                 ${
-//                   item.linkLocalizacao
-//                     ? '<img width="30" height="auto" src="img/mapa-icon.png" alt="address--v1"/>'
-//                     : "Não informada"
-//                 }
-//               </a>
-//             </td>
-//             <td>${item.observacoes || ""}</td>
-//             <td>${dataCadastro}</td>
-//             <td>
-//               <button class="btn btn-primary finalizar-btn" data-id="${
-//                 item.endId
-//               }" id="${finalizarId}">
-//                 Finalizar
-//               </button>
-//             </td>
-//           </tr>`;
-
-//         tbody.insertAdjacentHTML("beforeend", row);
-//       });
-
-//       renderizarBotoesPaginacao(dados.pageable.pageNumber, dados.totalPages);
-//     })
-//     .catch((error) => {
-//       console.error("Erro ao buscar dados:", error);
-//       alert("Erro ao carregar os dados. Atualize a tela apertando 'F5'.");
-//     })
-//     .finally(() => {
-//       loadingOverlay.style.display = "none";
-//     });
-// }
-
-function renderizarBotoesPaginacao(idPaginationControls, currentPage, totalPages) {
+function renderizarBotoesPaginacao(
+  idPaginationControls,
+  tabelaFunction,
+  currentPage,
+  totalPages
+) {
   const paginationControls = document.getElementById(`${idPaginationControls}`);
   paginationControls.innerHTML = ""; // Limpa botões antigos
 
@@ -355,7 +306,9 @@ function renderizarBotoesPaginacao(idPaginationControls, currentPage, totalPages
       i === currentPage ? "btn-primary" : "btn-light"
     } mx-1`;
     button.textContent = i + 1;
-    button.addEventListener("click", () => preencherTabela(i));
+
+    // Passa a página como argumento para a função
+    button.addEventListener("click", () => tabelaFunction(i));
     paginationControls.appendChild(button);
   }
 }
@@ -364,16 +317,13 @@ function filtrarTabela(page = 0, secao, idTabela) {
   const loadingOverlay = document.getElementById("loading-overlay");
   const tbody = document.querySelector(`#${idTabela} tbody`);
   const secaoId = document.getElementById(secao);
-  console.log(secao);
-  console.log(secaoId);
-  console.log(idTabela);
 
-  // Pegando os valores dos campos de pesquisa
+  // Obtém os valores dos campos de pesquisa
   const endId = secaoId.querySelector("#pesquisaEndId").value.trim();
   const siteId = secaoId.querySelector("#pesquisaSiteId").value.trim();
-  const municipio = secaoId.querySelector("#pesquisaEstado").value.trim();
+  const municipio = secaoId.querySelector("#pesquisaMunicipio").value.trim();
 
-  // Montando os parâmetros da URL dinamicamente
+  // Monta os parâmetros da URL
   const params = new URLSearchParams();
   if (endId) params.append("endId", endId.toUpperCase());
   if (siteId) params.append("siteId", siteId.toUpperCase());
@@ -381,9 +331,15 @@ function filtrarTabela(page = 0, secao, idTabela) {
   params.append("page", page);
   params.append("size", pageSize);
 
+  // Define a URL com base no ID da tabela
+  const endpoint =
+    idTabela === "tabelaHistoricoAgendamento"
+      ? `${host}/cadastroEndIds/buscar-agendamento`
+      : `${host}/cadastroEndIds/buscar-endid`;
+
   loadingOverlay.style.display = "block";
 
-  fetch(`${host}/cadastroEndIds/buscar?${params.toString()}`, {
+  fetch(`${endpoint}?${params.toString()}`, {
     method: "GET",
     headers: { Authorization: `Bearer ${token}` },
   })
@@ -392,58 +348,77 @@ function filtrarTabela(page = 0, secao, idTabela) {
       return response.json();
     })
     .then((dados) => {
-      tbody.innerHTML = "";
-
-      const formataData = (data) => {
-        if (!Array.isArray(data) || data.length !== 3) return "Data inválida";
-        const [ano, mes, dia] = data;
-        return `${String(dia).padStart(2, "0")}/${String(mes).padStart(
-          2,
-          "0"
-        )}/${ano}`;
-      };
+      tbody.innerHTML = ""; // Limpa a tabela antes de preencher
 
       if (!dados.content || dados.content.length === 0) {
         tbody.innerHTML = `<tr><td colspan="8" class="text-center">Nenhum dado encontrado.</td></tr>`;
-        renderizarBotoesPaginacao(0, 0);
+        renderizarBotoesPaginacao("pagination-controls", 0, 0);
         return;
       }
 
-      console.log("id tab: ",idTabela)
-
       dados.content.forEach((item, i) => {
+        const dataSolicitacao = item.dataSolicitacao
+          ? formatarDataParaInput(item.dataSolicitacao)
+          : "";
+        const dataPrevisao = item.dataPrevisao
+          ? formatarDataParaInput(item.dataPrevisao)
+          : "";
+        const dataLiberacao = item.dataLiberacao
+          ? formatarDataParaInput(item.dataLiberacao)
+          : "";
         const dataCadastro = item.dataCadastro
           ? formataData(item.dataCadastro)
           : "Não informado";
         const finalizarId = `finalizar-${i}`;
 
-        if (idTabela === "tabelaHistoricoAgendamento") {
-          const row = `
-            <tr>
-              <td>${item.endId}</td>
-              <td>${item.demanda}</td>
-              <td>${item.siteId}</td>
-              <td>${item.municipio}</td>
-              <td style="text-align: center; vertical-align: middle;">
-                <a href="${item.linkLocalizacao || ""}" target="_blank">${
-            item.linkLocalizacao
-              ? '<img width="30" height="auto" src="img/mapa-icon.png" alt="address--v1"/>'
-              : "Não disponível"
-          }</a>
-              </td>
-              <td>${item.observacoes || ""}</td>
-              <td>${dataCadastro}</td>
-              <td>
-                <button class="btn btn-primary finalizar-btn" data-id="${
-                  item.endId
-                }" id="${finalizarId}">Finalizar</button>
-              </td>
-            </tr>`;
-
-          return tbody.insertAdjacentHTML("beforeend", row);
-        } 
-
-        const row = `
+        const row =
+          idTabela === "tabelaHistoricoAgendamento"
+            ? `
+          <tr>
+            <td>
+              <button class="btn btn-link p-0 text-decoration-none end-id" data-id="${item.endId}">
+                ${item.endId}
+              </button>
+            </td>
+            <td>
+              <select disabled class="form-select border-0 bg-light p-2">
+                <option value="status">${item.statusAgendamento}</option>
+              </select>
+              <button class="btn iniciar-btn p-0 border-0 bg-transparent ml-2">
+                <i class="fa-solid fa-circle-play"></i>
+              </button>
+            </td>
+            <td>
+              <input 
+                type="date" 
+                class="form-control ${dataSolicitacao ? "text-center" : ""}" 
+                value="${dataSolicitacao}" 
+                ${dataSolicitacao ? "disabled" : ""}
+              />
+            </td>
+            <td>
+              <input 
+                type="date" 
+                class="form-control ${dataPrevisao ? "text-center" : ""}" 
+                value="${dataPrevisao}" 
+                ${dataPrevisao ? "disabled" : ""}
+              />
+            </td>
+            <td>
+              <input 
+                type="date" 
+                class="form-control ${dataLiberacao ? "text-center" : ""}" 
+                value="${dataLiberacao}" 
+                ${dataLiberacao ? "disabled" : ""}
+              />
+            </td>
+            <td>
+              <button class="btn btn-primary finalizar-btn" data-id="${item.endId}">
+                Finalizar
+              </button>
+            </td>
+          </tr>`
+            : `
           <tr>
             <td>${item.endId}</td>
             <td>${item.demanda}</td>
@@ -451,24 +426,30 @@ function filtrarTabela(page = 0, secao, idTabela) {
             <td>${item.municipio}</td>
             <td style="text-align: center; vertical-align: middle;">
               <a href="${item.linkLocalizacao || ""}" target="_blank">${
-          item.linkLocalizacao
-            ? '<img width="30" height="auto" src="img/mapa-icon.png" alt="address--v1"/>'
-            : "Não disponível"
-        }</a>
+                item.linkLocalizacao
+                  ? '<img width="30" height="auto" src="img/mapa-icon.png" alt="address--v1"/>'
+                  : "Não disponível"
+              }</a>
             </td>
             <td>${item.observacoes || ""}</td>
             <td>${dataCadastro}</td>
             <td>
-              <button class="btn btn-primary finalizar-btn" data-id="${
-                item.endId
-              }" id="${finalizarId}">Finalizar</button>
+              <button class="btn btn-primary finalizar-btn" data-id="${item.endId}" id="${finalizarId}">Finalizar</button>
             </td>
           </tr>`;
 
         tbody.insertAdjacentHTML("beforeend", row);
       });
 
-      renderizarBotoesPaginacao(dados.pageable.pageNumber, dados.totalPages);
+      const pagination = idTabela === "tabelaHistoricoAgendamento" ? "pagination-controls-agendamento" : "pagination-controls";
+      const funcaoPreencher = idTabela === "tabelaHistoricoAgendamento" ? preencherTabelaAcesso : preencherTabela;
+
+      renderizarBotoesPaginacao(
+        pagination,
+        funcaoPreencher,
+        dados.pageable.pageNumber,
+        dados.totalPages
+      );
     })
     .catch((error) => {
       console.error("Erro ao buscar dados:", error);
@@ -479,6 +460,7 @@ function filtrarTabela(page = 0, secao, idTabela) {
     });
 }
 
+
 function buscaEnId(secao) {
   const botaoBuscar = event.target;
   botaoBuscar.disabled = true;
@@ -487,7 +469,7 @@ function buscaEnId(secao) {
 
   const secaoId = document.querySelector(`#${secao}`);
 
-    console.log(secaoId)
+  console.log(secaoId);
   const endId = secaoId.querySelector(".editarEndId").value;
 
   if (!endId) {
@@ -555,7 +537,6 @@ function buscaEnId(secao) {
         '<i class="fa-solid fa-magnifying-glass"></i>⠀Buscar';
     });
 }
-
 
 function atualizaEndId(secao) {
   const secaoId = document.querySelector(`#${secao}`);
