@@ -322,100 +322,101 @@ function finalizaAgendamento(endId) {
 }
 
 
-// function atualizaAgendamento(secao) {
-//   const secaoId = document.querySelector(`#${secao}`);
+// Atualiza END ID
+function atualizarNovoAcesso(secao) {
+  const secaoId = document.querySelector(`#${secao}`);
 
-//   if (!secaoId) {
-//     console.error(`Seção com ID '${secao}' não encontrada no DOM.`);
-//     return;
-//   }
+  if (!secaoId) {
+    console.error(`Seção com ID '${secao}' não encontrada no DOM.`);
+    return;
+  }
 
-//   const endIdInput = secaoId.querySelector(".editarEndId");
-//   if (!endIdInput) {
-//     console.error(
-//       "Elemento .editarEndId não encontrado na seção especificada."
-//     );
-//     return;
-//   }
+  const endIdInput = secaoId.querySelector(".editarEndIdAcesso");
+  if (!endIdInput) {
+    console.error(
+      "Elemento .editarEndIdAcesso não encontrado na seção especificada."
+    );
+    return;
+  }
 
-//   const endId = endIdInput.value;
-//   if (!endId) {
-//     alert("Por favor, informe o END ID para poder atualizar.");
-//     return;
-//   }
+  const endId = endIdInput.value;
+  if (!endId) {
+    alert("Por favor, informe o END ID para poder atualizar.");
+    return;
+  }
 
-//   const botaoAtualizar = document.querySelector("#salvarEndIdNovo");
-//   if (botaoAtualizar) {
-//     botaoAtualizar.disabled = true;
-//     botaoAtualizar.textContent = "Alterando...";
-//   }
+  const botaoAtualizar = document.querySelector("#salvarAcessoNovo");
+  if (botaoAtualizar) {
+    botaoAtualizar.disabled = true;
+    botaoAtualizar.textContent = "Alterando...";
+  }
 
-//   const payload = {
-//     endId: endId,
-//     siteId: secaoId.querySelector("#editarSiteId")?.value || "",
-//     demanda: secaoId.querySelector("#editarDemanda")?.value || "",
-//     observacoes: secaoId.querySelector("#editarObservacoes")?.value || "",
-//     linkLocalizacao: secaoId.querySelector("#editarLocalizacao")?.value || "",
-//     detentora: {
-//       idDetentora: secaoId.querySelector("#editarIdDetentora")?.value || "",
-//       detentora: secaoId.querySelector("#editarDetentora")?.value || "",
-//     },
-//     cedente: {
-//       idOperadora: secaoId.querySelector("#editarIdOperadora")?.value || "",
-//       operadora: secaoId.querySelector("#editarOperadora")?.value || "",
-//     },
-//     endereco: {
-//       logradouro: secaoId.querySelector("#editarLogradouro")?.value || "",
-//       numero: secaoId.querySelector("#editarNumero")?.value || "",
-//       bairro: secaoId.querySelector("#editarBairro")?.value || "",
-//       municipio: secaoId.querySelector("#editarMunicipio")?.value || "",
-//       estado: secaoId.querySelector("#editarEstado")?.value || "",
-//       cep: secaoId.querySelector("#editarCep")?.value || "",
-//       latitude: parseFloat(
-//         secaoId.querySelector("#editarLatitude")?.value || 0
-//       ),
-//       longitude: parseFloat(
-//         secaoId.querySelector("#editarLongitude")?.value || 0
-//       ),
-//     },
-//   };
+  const payload = {
+    endId: endId,
+    siteId: secaoId.querySelector("#editarSiteIdAcesso")?.value || "",
+    demanda: secaoId.querySelector("#editarDemandaAcesso")?.value || "",
+    observacoes: secaoId.querySelector("#editarObservacoesAcesso")?.value || "",
+    detentora: {
+      idDetentora: secaoId.querySelector("#editarIdDetentoraAcesso")?.value || "",
+      detentora: secaoId.querySelector("#editarDetentoraAcesso")?.value || "",
+    },
+    cedente: {
+      idOperadora: secaoId.querySelector("#editarIdOperadoraAcesso")?.value || "",
+      operadora: secaoId.querySelector("#editarOperadoraAcesso")?.value || "",
+    },
+    linkLocalizacao: secaoId.querySelector("#editarLocalizacaoAcesso")?.value || "",
+    endereco: {
+      logradouro: secaoId.querySelector("#editarLogradouroAcesso")?.value || "",
+      numero: secaoId.querySelector("#editarNumeroAcesso")?.value || "",
+      bairro: secaoId.querySelector("#editarBairroAcesso")?.value || "",
+      municipio: secaoId.querySelector("#editarMunicipioAcesso")?.value || "",
+      estado: secaoId.querySelector("#editarEstadoAcesso")?.value || "",
+      cep: secaoId.querySelector("#editarCepAcesso")?.value || "",
+      latitude: parseFloat(
+        secaoId.querySelector("#editarLatitudeAcesso")?.value || 0
+      ),
+      longitude: parseFloat(
+        secaoId.querySelector("#editarLongitudeAcesso")?.value || 0
+      ),
+    },
+  };
 
-//   console.log(
-//     "Payload preparado para envio:",
-//     JSON.stringify(payload, null, 2)
-//   );
+  console.log(
+    "Payload preparado para envio:",
+    JSON.stringify(payload, null, 2)
+  );
 
-//   fetch(`${host}/cadastroEndIds/${endId}`, {
-//     method: "PUT",
-//     headers: {
-//       Authorization: `Bearer ${token}`,
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify(payload),
-//   })
-//     .then((response) => {
-//       console.log("Resposta da requisição recebida:", response);
-//       if (!response.ok) {
-//         throw new Error(`Erro ao atualizar os dados: ${response.statusText}`);
-//       }
-//       return response.json();
-//     })
-//     .then((data) => {
-//       console.log("Dados retornados pelo servidor:", data);
-//       alert("Dados atualizados com sucesso!");
-//       resetarCampos(secao);
-//     })
-//     .catch((error) => {
-//       console.error("Erro durante a atualização dos dados:", error);
-//       alert("Erro ao atualizar os dados. Veja os detalhes no console.");
-//     })
-//     .finally(() => {
-//       if (botaoAtualizar) {
-//         botaoAtualizar.disabled = false;
-//         botaoAtualizar.textContent = "Salvar";
-//       }
-//     });
-// }
+  fetch(`${host}/cadastroEndIds/${endId}`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  })
+    .then((response) => {
+      console.log("Resposta da requisição recebida:", response);
+      if (!response.ok) {
+        throw new Error(`Erro ao atualizar os dados: ${response.statusText}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Dados retornados pelo servidor:", data);
+      alert("Dados atualizados com sucesso!");
+      resetarCampos(secao);
+    })
+    .catch((error) => {
+      console.error("Erro durante a atualização dos dados:", error);
+      alert("Erro ao atualizar os dados. Veja os detalhes no console.");
+    })
+    .finally(() => {
+      if (botaoAtualizar) {
+        botaoAtualizar.disabled = false;
+        botaoAtualizar.textContent = "Salvar";
+      }
+    });
+}
 
 // Função para enviar a data ao backend
 

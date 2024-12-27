@@ -570,3 +570,84 @@ function buscaEnId(secao) {
         '<i class="fa-solid fa-magnifying-glass"></i>⠀Buscar';
     });
 }
+
+
+function buscaAcesso(secao) {
+  const botaoBuscar = event.target;
+  botaoBuscar.disabled = true;
+  botaoBuscar.innerHTML =
+    '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Buscando...';
+
+  const secaoId = document.querySelector(`#${secao}`);
+
+  console.log(secaoId);
+  const endId = secaoId.querySelector(".editarEndIdAcesso").value;
+
+  if (!endId) {
+    alert("Por favor, informe o END ID.");
+    botaoBuscar.disabled = false;
+    botaoBuscar.innerHTML =
+      '<i class="fa-solid fa-magnifying-glass"></i>⠀Buscar';
+    return;
+  }
+
+  fetch(`${host}/cadastroEndIds/${endId}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Erro ao buscar dados. Verifique o END ID informado.");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data)
+      document.getElementById("editarSiteIdAcesso").value = 
+        data.siteId || "";
+      document.getElementById("editarDemandaAcesso").value =
+        data.demanda || "";
+      document.getElementById("editarDetentoraAcesso").value =
+        data.detentora.detentora || "";
+      document.getElementById("editarIdDetentoraAcesso").value =
+        data.detentora.idDetentora || "";
+      document.getElementById("editarOperadoraAcesso").value =
+        data.cedente.operadora || "";
+      document.getElementById("editarIdOperadoraAcesso").value =
+        data.cedente.idOperadora || "";
+      document.getElementById("editarLogradouroAcesso").value =
+        data.endereco.logradouro || "";
+      document.getElementById("editarNumeroAcesso").value =
+        data.endereco.numero || "";
+      document.getElementById("editarBairroAcesso").value =
+        data.endereco.bairro || "";
+      document.getElementById("editarMunicipioAcesso").value =
+        data.endereco.municipio || "";
+      document.getElementById("editarEstadoAcesso").value =
+        data.endereco.estado || "";
+      document.getElementById("editarCepAcesso").value = data.endereco.cep || "";
+      document.getElementById("editarLatitudeAcesso").value =
+        data.endereco.latitude || "";
+      document.getElementById("editarLongitudeAcesso").value =
+        data.endereco.longitude || "";
+      document.getElementById("editarObservacoesAcesso").value =
+        data.observacoes || "";
+      document.getElementById("editarLocalizacaoAcesso").value =
+        data.linkLocalizacao || "";
+
+      botaoBuscar.disabled = false;
+      botaoBuscar.innerHTML =
+        '<i class="fa-solid fa-magnifying-glass"></i>⠀Buscar';
+    })
+    .catch((error) => {
+      console.error("Erro:", error);
+      alert(
+        "Não foi possível buscar os dados. Verifique o console para mais detalhes."
+      );
+      botaoBuscar.disabled = false;
+      botaoBuscar.innerHTML =
+        '<i class="fa-solid fa-magnifying-glass"></i>⠀Buscar';
+    });
+}
