@@ -46,9 +46,15 @@ function preencherTabelaAcesso(page = 0) {
           ? formatarDataParaInput(item.dataLiberacao)
           : "";
 
+        console.log(item);
+
         // Monta a linha da tabela
         const row = `
-          <tr>
+          <tr style="${
+            item.statusAgendamento === "Não iniciado" && item.reset === true
+              ? "background-color: #f75c577d;"
+              : ""
+          }">
             <td>
               <button class="btn btn-link p-0 text-decoration-none end-id" id="textoParaCopiar" data-id="${
                 item.endId
@@ -136,6 +142,16 @@ function preencherTabelaAcesso(page = 0) {
                 Finalizar
               </button>
             </td>
+            <td style="text-align: center;">
+              <i class="fa-solid fa-comments" 
+                style="font-size: 1.7rem; color: ${
+                  item.reset === true ? "#007bff" : "rgba(0, 123, 255, 0.46)"
+                };"
+                onclick="alert('${item.observacoes}');"
+                role="button"
+                style="cursor: pointer;"></i>
+            </td>
+
           </tr>`;
 
         tbody.insertAdjacentHTML("beforeend", row);
@@ -276,13 +292,19 @@ function iniciaAgendamento(endId) {
 
 function finalizaAgendamento(endId) {
   // Obtém os valores das datas
-  const dataSolicitacao = document.getElementById(`data-solicitacao-${endId}`)?.value;
+  const dataSolicitacao = document.getElementById(
+    `data-solicitacao-${endId}`
+  )?.value;
   const dataPrevisao = document.getElementById(`data-previsao-${endId}`)?.value;
-  const dataLiberacao = document.getElementById(`data-liberacao-${endId}`)?.value;
+  const dataLiberacao = document.getElementById(
+    `data-liberacao-${endId}`
+  )?.value;
 
   // Verifica se todas as datas estão preenchidas
   if (!dataSolicitacao || !dataPrevisao || !dataLiberacao) {
-    alert("Todas as datas (Solicitação, Previsão e Liberação) devem estar preenchidas.");
+    alert(
+      "Todas as datas (Solicitação, Previsão e Liberação) devem estar preenchidas."
+    );
     return; // Interrompe a execução se as datas não forem válidas
   }
 
@@ -311,7 +333,9 @@ function finalizaAgendamento(endId) {
       console.log("Dados retornados pelo servidor:", data);
 
       // Atualiza a tabela na página atual
-      const paginacao = document.getElementById("pagination-controls-agendamento");
+      const paginacao = document.getElementById(
+        "pagination-controls-agendamento"
+      );
       const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
       preencherTabelaAcesso(paginaAtual - 1);
     })
@@ -320,7 +344,6 @@ function finalizaAgendamento(endId) {
       alert("Erro ao iniciar.");
     });
 }
-
 
 // Atualiza END ID
 function atualizarNovoAcesso(secao) {
@@ -357,14 +380,17 @@ function atualizarNovoAcesso(secao) {
     demanda: secaoId.querySelector("#editarDemandaAcesso")?.value || "",
     observacoes: secaoId.querySelector("#editarObservacoesAcesso")?.value || "",
     detentora: {
-      idDetentora: secaoId.querySelector("#editarIdDetentoraAcesso")?.value || "",
+      idDetentora:
+        secaoId.querySelector("#editarIdDetentoraAcesso")?.value || "",
       detentora: secaoId.querySelector("#editarDetentoraAcesso")?.value || "",
     },
     cedente: {
-      idOperadora: secaoId.querySelector("#editarIdOperadoraAcesso")?.value || "",
+      idOperadora:
+        secaoId.querySelector("#editarIdOperadoraAcesso")?.value || "",
       operadora: secaoId.querySelector("#editarOperadoraAcesso")?.value || "",
     },
-    linkLocalizacao: secaoId.querySelector("#editarLocalizacaoAcesso")?.value || "",
+    linkLocalizacao:
+      secaoId.querySelector("#editarLocalizacaoAcesso")?.value || "",
     endereco: {
       logradouro: secaoId.querySelector("#editarLogradouroAcesso")?.value || "",
       numero: secaoId.querySelector("#editarNumeroAcesso")?.value || "",
