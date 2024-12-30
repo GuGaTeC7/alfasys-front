@@ -345,89 +345,110 @@ function filtrarTabela(page = 0, secao, idTabela) {
 
         const row =
           idTabela === "tabelaHistoricoAgendamento"
-            ? `
-          <tr>
-            <td>
-              <button class="btn btn-link p-0 text-decoration-none end-id" id="textoParaCopiar" data-id="${
-                item.endId
-              }">
-                ${item.endId}
-              </button>
-              <i class="fa-regular fa-copy btnCopiar" title="Copiar" data-id="${
-                item.endId
-              }"></i>
-            </td>
-            <td>
-              <select disabled class="form-select border-0 bg-light p-2">
-                <option value="status">${item.statusAgendamento}</option>
-              </select>
-              <button class="btn iniciar-btn p-0 border-0 bg-transparent ml-2" 
-                style="display:${
-                  ["Em andamento", "Concluído"].includes(item.statusAgendamento)
-                    ? "none"
-                    : ""
-                };" 
-                data-id-botao="${item.endId}">
-                <i class="fa-solid fa-circle-play"></i>
-              </button>
-            </td>
-            <td>
-              ${
-                dataSolicitacao
-                  ? `<input 
-                      type="date" 
-                      class="form-control text-center" 
-                      value="${dataSolicitacao}" 
-                      disabled
-                    />`
-                  : renderInputDate(
-                      "data-solicitacao",
-                      item.endId,
-                      item.statusAgendamento
-                    )
-              }
-            </td>
-            <td>
-              ${
-                dataPrevisao
-                  ? `<input 
-                      type="date" 
-                      class="form-control text-center" 
-                      value="${dataPrevisao}" 
-                      disabled
-                    />`
-                  : renderInputDate(
-                      "data-previsao",
-                      item.endId,
-                      item.statusAgendamento
-                    )
-              }
-            </td>
-            <td>
-              ${
-                dataLiberacao
-                  ? `<input 
-                      type="date" 
-                      class="form-control text-center" 
-                      value="${dataLiberacao}" 
-                      disabled
-                    />`
-                  : renderInputDate(
-                      "data-liberacao",
-                      item.endId,
-                      item.statusAgendamento
-                    )
-              }
-            </td>
-            <td>
-              <button class="btn btn-primary finalizar-btn" data-id-botao="${
-                item.endId
-              }">
-                Finalizar
-              </button>
-            </td>
-          </tr>`
-            : `
+            ? 
+            `<tr style="${
+              item.statusAgendamento === "Não iniciado" && item.reset === true
+                ? "background-color: #f75c577d;"
+                : ""
+            }">
+              <td>
+                <button class="btn btn-link p-0 text-decoration-none end-id" id="textoParaCopiar" data-id="${
+                  item.endId
+                }">
+                  ${item.endId}
+                </button>
+                <i class="fa-regular fa-copy btnCopiar" title="Copiar" data-id="${
+                  item.endId
+                }"></i>
+              </td>
+              <td>
+                <select disabled class="form-select border-0 bg-light p-2">
+                  <option value="status">${item.statusAgendamento}</option>
+                </select>
+                <button class="btn iniciar-btn p-0 border-0 bg-transparent ml-2" 
+                  style="display:${
+                    ["Em andamento", "Concluído"].includes(item.statusAgendamento)
+                      ? "none"
+                      : ""
+                  };" 
+                  data-id-botao="${item.endId}">
+                  <i class="fa-solid fa-circle-play"></i>
+                </button>
+              </td>
+              <td>
+                ${
+                  dataSolicitacao
+                    ? `<input 
+                        type="date" 
+                        class="form-control text-center" 
+                        value="${dataSolicitacao}" 
+                        disabled
+                        id="data-solicitacao-${item.endId}"
+                      />`
+                    : renderInputDate(
+                        "data-solicitacao",
+                        item.endId,
+                        item.statusAgendamento
+                      )
+                }
+              </td>
+              <td>
+                ${
+                  dataPrevisao
+                    ? `<input 
+                        type="date" 
+                        class="form-control text-center" 
+                        value="${dataPrevisao}" 
+                        disabled
+                        id="data-previsao-${item.endId}"
+                      />`
+                    : renderInputDate(
+                        "data-previsao",
+                        item.endId,
+                        item.statusAgendamento
+                      )
+                }
+              </td>
+              <td>
+                ${
+                  dataLiberacao
+                    ? `<input 
+                        type="date" 
+                        class="form-control text-center" 
+                        value="${dataLiberacao}" 
+                        disabled
+                        id="data-liberacao-${item.endId}"
+                      />`
+                    : renderInputDate(
+                        "data-liberacao",
+                        item.endId,
+                        item.statusAgendamento
+                      )
+                }
+              </td>
+              <td>
+                <button class="btn btn-primary finalizar-btn" data-id-botao="${
+                  item.endId
+                }" ${
+            item.statusAgendamento === "Não iniciado" ||
+            item.statusAgendamento === "Concluído"
+              ? "disabled"
+              : ""
+          }>
+                  Finalizar
+                </button>
+              </td>
+              <td style="text-align: center;">
+                <i 
+                  class="fa-solid fa-comments" 
+                  style="font-size: 1.7rem; color: ${item.reset ? '#007bff' : 'rgba(0, 123, 255, 0.46)'}; 
+                  ${item.observacoes ? `cursor: pointer;"` : 'cursor: not-allowed;"'}" 
+                  ${item.observacoes ? `onclick="alert('${item.observacoes}');"` : 'style="cursor: none !important;"'}>
+                </i>
+              </td>
+            </tr>`
+            : 
+          `
           <tr>
             <td>${item.endId}</td>
             <td>${item.demanda}</td>
