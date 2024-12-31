@@ -21,6 +21,7 @@ document
 function preencherTabelaAcesso(page = 0) {
   const loadingOverlay = document.getElementById("loading-overlay");
   const tbody = document.querySelector("#tabelaHistoricoAgendamento tbody");
+  const totalPesquisado = document.getElementById("total-pesquisa-agendamento");
 
   loadingOverlay.style.display = "block";
 
@@ -34,6 +35,7 @@ function preencherTabelaAcesso(page = 0) {
     })
     .then((dados) => {
       tbody.innerHTML = ""; // Limpa a tabela
+      totalPesquisado.innerHTML = ""; // Limpa a tabela
 
       dados.content.forEach((item) => {
         const dataSolicitacao = item.dataSolicitacao

@@ -326,7 +326,6 @@ function filtrarTabela(page = 0, secao, idTabela) {
       return response.json();
     })
     .then((dados) => {
-      console.log("Total:", dados.totalElements);
       renderizarTabela(dados, idTabela, tbody);
       renderizarBotoesPaginacao(
         idTabela === "tabelaHistoricoAgendamento"
@@ -358,6 +357,8 @@ function filtrarTabela(page = 0, secao, idTabela) {
 
 function exibirTotalResultados(elementoId, total) {
   const totalPesquisaElement = document.getElementById(`${elementoId}`);
+
+  // Limpa o conteúdo anterior
   totalPesquisaElement.innerHTML = "";
 
   // Cria o elemento <p>

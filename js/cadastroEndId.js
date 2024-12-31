@@ -219,12 +219,12 @@ function resetarCampos(formularioId) {
       campo.value = ""; // Reseta o valor dos campos
     }
   });
-
 }
 
 function preencherTabela(page = 0) {
   const loadingOverlay = document.getElementById("loading-overlay");
   const tbody = document.querySelector("#tabelaHistorico tbody");
+  const totalPesquisado = document.getElementById("total-pesquisa");
 
   loadingOverlay.style.display = "block";
 
@@ -238,6 +238,7 @@ function preencherTabela(page = 0) {
     })
     .then((dados) => {
       tbody.innerHTML = "";
+      totalPesquisado.innerHTML = ""; // Limpa a tabela
 
       dados.content.forEach((item, i) => {
         const dataCadastro = item.dataCadastro
@@ -252,7 +253,9 @@ function preencherTabela(page = 0) {
             <td>${item.siteId}</td>
             <td>${item.municipio}</td>
             <td style="text-align: center; vertical-align: middle;">
-              <a href="${item.linkLocalizacao || "#"}" target="_blank" style="text-decoration:none; color: #012970;">
+              <a href="${
+                item.linkLocalizacao || "#"
+              }" target="_blank" style="text-decoration:none; color: #012970;">
                 ${
                   item.linkLocalizacao
                     ? '<img width="30" height="auto" src="img/mapa-icon.png" alt="address--v1"/>'
@@ -267,7 +270,12 @@ function preencherTabela(page = 0) {
         tbody.insertAdjacentHTML("beforeend", row);
       });
 
-      renderizarBotoesPaginacao("pagination-controls", preencherTabela, dados.pageable.pageNumber, dados.totalPages);
+      renderizarBotoesPaginacao(
+        "pagination-controls",
+        preencherTabela,
+        dados.pageable.pageNumber,
+        dados.totalPages
+      );
     })
     .catch((error) => {
       console.error("Erro ao buscar dados:", error);
