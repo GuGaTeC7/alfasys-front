@@ -46,8 +46,6 @@ function preencherTabelaAcesso(page = 0) {
           ? formatarDataParaInput(item.dataLiberacao)
           : "";
 
-        console.log(item);
-
         // Monta a linha da tabela
         const row = `
           <tr style="${

@@ -892,7 +892,6 @@
                           <th>Localizacão Maps</th>
                           <th>Observações</th>
                           <th>Data Cadastro</th>
-                          <th>Ação</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -900,6 +899,8 @@
                       </tbody>
                     </table>
                   </div>
+                  <div id="total-pesquisa"></div>
+
                   <!-- Controles de Paginação -->
                   <div
                     id="pagination-controls"
@@ -1221,8 +1222,8 @@
                     <input
                       type="search"
                       class="border-0 bg-light p-2"
-                      placeholder="Pesquisar por Site ID"
-                      id="pesquisaSiteId"
+                      placeholder="Pesquisar por Status"
+                      id="pesquisaStatusAgendamento"
                     />
                     <input
                       type="search"
@@ -1255,6 +1256,7 @@
                       </thead>
                       <tbody></tbody>
                     </table>
+                    <div id="total-pesquisa-agendamento"></div>
                     <!-- Controles de Paginação -->
                     <div
                       id="pagination-controls-agendamento"

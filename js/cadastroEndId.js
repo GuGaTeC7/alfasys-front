@@ -262,13 +262,6 @@ function preencherTabela(page = 0) {
             </td>
             <td>${item.observacoes || ""}</td>
             <td>${dataCadastro}</td>
-            <td>
-              <button class="btn btn-primary finalizar-btn" data-id="${
-                item.endId
-              }" id="${finalizarId}">
-                Finalizar
-              </button>
-            </td>
           </tr>`;
 
         tbody.insertAdjacentHTML("beforeend", row);

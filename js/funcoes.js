@@ -291,17 +291,22 @@ function filtrarTabela(page = 0, secao, idTabela) {
   const secaoId = document.getElementById(secao);
 
   // Obtém os valores dos campos de pesquisa
-  const endId = secaoId.querySelector("#pesquisaEndId").value.trim();
-  const siteId = secaoId.querySelector("#pesquisaSiteId").value.trim();
-  const municipio = secaoId.querySelector("#pesquisaMunicipio").value.trim();
+  const pesquisaCampos = {
+    endId: secaoId.querySelector("#pesquisaEndId").value.trim(),
+    [secao === "todos-agendamentos" ? "statusAgendamento" : "siteId"]: secaoId
+      .querySelector(
+        `${
+          secao === "todos-agendamentos"
+            ? "#pesquisaStatusAgendamento"
+            : "#pesquisaSiteId"
+        }`
+      )
+      .value.trim(),
+    municipio: secaoId.querySelector("#pesquisaMunicipio").value.trim(),
+  };
 
   // Monta os parâmetros da URL
-  const params = new URLSearchParams();
-  if (endId) params.append("endId", endId.toUpperCase());
-  if (siteId) params.append("siteId", siteId.toUpperCase());
-  if (municipio) params.append("municipio", municipio.toUpperCase());
-  params.append("page", page);
-  params.append("size", pageSize);
+  const params = montarParametros(pesquisaCampos, page);
 
   // Define a URL com base no ID da tabela
   const endpoint =
@@ -311,6 +316,7 @@ function filtrarTabela(page = 0, secao, idTabela) {
 
   loadingOverlay.style.display = "block";
 
+  // Realiza a requisição e manipula a resposta
   fetch(`${endpoint}?${params.toString()}`, {
     method: "GET",
     headers: { Authorization: `Bearer ${token}` },
@@ -320,190 +326,25 @@ function filtrarTabela(page = 0, secao, idTabela) {
       return response.json();
     })
     .then((dados) => {
-      tbody.innerHTML = ""; // Limpa a tabela antes de preencher
-
-      if (!dados.content || dados.content.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8" class="text-center">Nenhum dado encontrado.</td></tr>`;
-        renderizarBotoesPaginacao("pagination-controls", 0, 0);
-        return;
-      }
-
-      dados.content.forEach((item, i) => {
-        const dataSolicitacao = item.dataSolicitacao
-          ? formatarDataParaInput(item.dataSolicitacao)
-          : "";
-        const dataPrevisao = item.dataPrevisao
-          ? formatarDataParaInput(item.dataPrevisao)
-          : "";
-        const dataLiberacao = item.dataLiberacao
-          ? formatarDataParaInput(item.dataLiberacao)
-          : "";
-        const dataCadastro = item.dataCadastro
-          ? formataData(item.dataCadastro)
-          : "Não informado";
-        const finalizarId = `finalizar-${i}`;
-
-        const row =
-          idTabela === "tabelaHistoricoAgendamento"
-            ? 
-            `<tr style="${
-              item.statusAgendamento === "Não iniciado" && item.reset === true
-                ? "background-color: #f75c577d;"
-                : ""
-            }">
-              <td>
-                <button class="btn btn-link p-0 text-decoration-none end-id" id="textoParaCopiar" data-id="${
-                  item.endId
-                }">
-                  ${item.endId}
-                </button>
-                <i class="fa-regular fa-copy btnCopiar" title="Copiar" data-id="${
-                  item.endId
-                }"></i>
-              </td>
-              <td>
-                <select disabled class="form-select border-0 bg-light p-2">
-                  <option value="status">${item.statusAgendamento}</option>
-                </select>
-                <button class="btn iniciar-btn p-0 border-0 bg-transparent ml-2" 
-                  style="display:${
-                    ["Em andamento", "Concluído"].includes(item.statusAgendamento)
-                      ? "none"
-                      : ""
-                  };" 
-                  data-id-botao="${item.endId}">
-                  <i class="fa-solid fa-circle-play"></i>
-                </button>
-              </td>
-              <td>
-                ${
-                  dataSolicitacao
-                    ? `<input 
-                        type="date" 
-                        class="form-control text-center" 
-                        value="${dataSolicitacao}" 
-                        disabled
-                        id="data-solicitacao-${item.endId}"
-                      />`
-                    : renderInputDate(
-                        "data-solicitacao",
-                        item.endId,
-                        item.statusAgendamento
-                      )
-                }
-              </td>
-              <td>
-                ${
-                  dataPrevisao
-                    ? `<input 
-                        type="date" 
-                        class="form-control text-center" 
-                        value="${dataPrevisao}" 
-                        disabled
-                        id="data-previsao-${item.endId}"
-                      />`
-                    : renderInputDate(
-                        "data-previsao",
-                        item.endId,
-                        item.statusAgendamento
-                      )
-                }
-              </td>
-              <td>
-                ${
-                  dataLiberacao
-                    ? `<input 
-                        type="date" 
-                        class="form-control text-center" 
-                        value="${dataLiberacao}" 
-                        disabled
-                        id="data-liberacao-${item.endId}"
-                      />`
-                    : renderInputDate(
-                        "data-liberacao",
-                        item.endId,
-                        item.statusAgendamento
-                      )
-                }
-              </td>
-              <td>
-                <button class="btn btn-primary finalizar-btn" data-id-botao="${
-                  item.endId
-                }" ${
-            item.statusAgendamento === "Não iniciado" ||
-            item.statusAgendamento === "Concluído"
-              ? "disabled"
-              : ""
-          }>
-                  Finalizar
-                </button>
-              </td>
-              <td style="text-align: center;">
-                <i 
-                  class="fa-solid fa-comments" 
-                  style="font-size: 1.7rem; color: ${item.reset ? '#007bff' : 'rgba(0, 123, 255, 0.46)'}; 
-                  ${item.observacoes ? `cursor: pointer;"` : 'cursor: not-allowed;"'}" 
-                  ${item.observacoes ? `onclick="alert('${item.observacoes}');"` : 'style="cursor: none !important;"'}>
-                </i>
-              </td>
-            </tr>`
-            : 
-          `
-          <tr>
-            <td>${item.endId}</td>
-            <td>${item.demanda}</td>
-            <td>${item.siteId}</td>
-            <td>${item.municipio}</td>
-            <td style="text-align: center; vertical-align: middle;">
-              <a href="${item.linkLocalizacao || ""}" target="_blank">${
-                item.linkLocalizacao
-                  ? '<img width="30" height="auto" src="img/mapa-icon.png" alt="address--v1"/>'
-                  : "Não disponível"
-              }</a>
-            </td>
-            <td>${item.observacoes || ""}</td>
-            <td>${dataCadastro}</td>
-            <td>
-              <button class="btn btn-primary finalizar-btn" data-id="${
-                item.endId
-              }" id="${finalizarId}">Finalizar</button>
-            </td>
-          </tr>`;
-
-        document.querySelectorAll(".btnCopiar").forEach((button) => {
-          button.addEventListener("click", function () {
-            const endId = this.getAttribute("data-id");
-            const textoParaCopiarPuro = document.querySelector(
-              `button[data-id="${endId}"]`
-            ).textContent;
-            const textoParaCopiar = textoParaCopiarPuro.trim();
-
-            navigator.clipboard
-              .writeText(textoParaCopiar)
-              .then(function () {})
-              .catch(function (err) {
-                console.error("Erro ao tentar copiar o texto: ", err);
-              });
-          });
-        });
-
-        tbody.insertAdjacentHTML("beforeend", row);
-      });
-
-      const pagination =
+      console.log("Total:", dados.totalElements);
+      renderizarTabela(dados, idTabela, tbody);
+      renderizarBotoesPaginacao(
         idTabela === "tabelaHistoricoAgendamento"
           ? "pagination-controls-agendamento"
-          : "pagination-controls";
-      const funcaoPreencher =
+          : "pagination-controls",
         idTabela === "tabelaHistoricoAgendamento"
           ? preencherTabelaAcesso
-          : preencherTabela;
-
-      renderizarBotoesPaginacao(
-        pagination,
-        funcaoPreencher,
+          : preencherTabela,
         dados.pageable.pageNumber,
         dados.totalPages
+      );
+      exibirTotalResultados(
+        `${
+          idTabela === "tabelaHistoricoAgendamento"
+            ? "total-pesquisa-agendamento"
+            : "total-pesquisa"
+        }`,
+        dados.totalElements
       );
     })
     .catch((error) => {
@@ -513,6 +354,189 @@ function filtrarTabela(page = 0, secao, idTabela) {
     .finally(() => {
       loadingOverlay.style.display = "none";
     });
+}
+
+function exibirTotalResultados(elementoId, total) {
+  const totalPesquisaElement = document.getElementById(`${elementoId}`);
+  totalPesquisaElement.innerHTML = "";
+
+  // Cria o elemento <p>
+  const p = document.createElement("p");
+  p.textContent = `Total de registros encontrados: ${total}`;
+
+  totalPesquisaElement.appendChild(p);
+}
+
+function montarParametros(pesquisaCampos, page) {
+  const params = new URLSearchParams();
+  if (pesquisaCampos.endId)
+    params.append("endId", pesquisaCampos.endId.toUpperCase());
+  if (pesquisaCampos.siteId)
+    params.append("siteId", pesquisaCampos.siteId.toUpperCase());
+  if (pesquisaCampos.municipio)
+    params.append("municipio", pesquisaCampos.municipio.toUpperCase());
+  if (pesquisaCampos.statusAgendamento)
+    params.append("status", pesquisaCampos.statusAgendamento.toUpperCase());
+  params.append("page", page);
+  params.append("size", pageSize);
+  return params;
+}
+
+function renderizarTabela(dados, idTabela, tbody) {
+  tbody.innerHTML = ""; // Limpa a tabela antes de preencher
+
+  if (!dados.content || dados.content.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8" class="text-center">Nenhum dado encontrado.</td></tr>`;
+    return;
+  }
+
+  dados.content.forEach((item, i) => {
+    const row =
+      idTabela === "tabelaHistoricoAgendamento"
+        ? criarLinhaHistoricoAgendamento(item, i)
+        : criarLinhaCadastroEndId(item, i);
+
+    tbody.insertAdjacentHTML("beforeend", row);
+  });
+
+  configurarEventosCopiar();
+}
+
+function criarLinhaHistoricoAgendamento(item, i) {
+  const dataSolicitacao = item.dataSolicitacao
+    ? formatarDataParaInput(item.dataSolicitacao)
+    : "";
+  const dataPrevisao = item.dataPrevisao
+    ? formatarDataParaInput(item.dataPrevisao)
+    : "";
+  const dataLiberacao = item.dataLiberacao
+    ? formatarDataParaInput(item.dataLiberacao)
+    : "";
+
+  return `
+    <tr style="${
+      item.statusAgendamento === "Não iniciado" && item.reset === true
+        ? "background-color: #f75c577d;"
+        : ""
+    }">
+      <td>
+        <button class="btn btn-link p-0 text-decoration-none end-id" id="textoParaCopiar" data-id="${
+          item.endId
+        }">
+          ${item.endId}
+        </button>
+        <i class="fa-regular fa-copy btnCopiar" title="Copiar" data-id="${
+          item.endId
+        }"></i>
+      </td>
+      <td>
+        <select disabled class="form-select border-0 bg-light p-2">
+          <option value="status">${item.statusAgendamento}</option>
+        </select>
+        <button class="btn iniciar-btn p-0 border-0 bg-transparent ml-2" 
+          style="display:${
+            ["Em andamento", "Concluído"].includes(item.statusAgendamento)
+              ? "none"
+              : ""
+          };" 
+          data-id-botao="${item.endId}">
+          <i class="fa-solid fa-circle-play"></i>
+        </button>
+      </td>
+      <td>${renderInputDate(
+        "data-solicitacao",
+        item.endId,
+        item.statusAgendamento,
+        dataSolicitacao
+      )}</td>
+      <td>${renderInputDate(
+        "data-previsao",
+        item.endId,
+        item.statusAgendamento,
+        dataPrevisao
+      )}</td>
+      <td>${renderInputDate(
+        "data-liberacao",
+        item.endId,
+        item.statusAgendamento,
+        dataLiberacao
+      )}</td>
+      <td>
+        <button class="btn btn-primary finalizar-btn" data-id-botao="${
+          item.endId
+        }" 
+          ${
+            item.statusAgendamento === "Não iniciado" ||
+            item.statusAgendamento === "Concluído"
+              ? "disabled"
+              : ""
+          }>
+          Finalizar
+        </button>
+      </td>
+      <td style="text-align: center;">
+        <i class="fa-solid fa-comments" style="font-size: 1.7rem; color: ${
+          item.reset ? "#007bff" : "rgba(0, 123, 255, 0.46)"
+        };" 
+          ${
+            item.observacoes
+              ? `onclick="alert('${item.observacoes}');"`
+              : 'style="cursor: none !important;"'
+          }>
+        </i>
+      </td>
+    </tr>
+  `;
+}
+
+function criarLinhaCadastroEndId(item, i) {
+  const dataCadastro = item.dataCadastro
+    ? formataData(item.dataCadastro)
+    : "Não informado";
+  const finalizarId = `finalizar-${i}`;
+
+  return `
+    <tr>
+      <td>${item.endId}</td>
+      <td>${item.demanda}</td>
+      <td>${item.siteId}</td>
+      <td>${item.municipio}</td>
+      <td style="text-align: center; vertical-align: middle;">
+        <a href="${item.linkLocalizacao || ""}" target="_blank">
+          ${
+            item.linkLocalizacao
+              ? '<img width="30" height="auto" src="img/mapa-icon.png" alt="address--v1"/>'
+              : "Não disponível"
+          }
+        </a>
+      </td>
+      <td>${item.observacoes || ""}</td>
+      <td>${dataCadastro}</td>
+    </tr>
+  `;
+}
+
+function renderInputDate(nome, endId, statusAgendamento, dataValor = "") {
+  return dataValor
+    ? `<input type="date" class="form-control text-center" value="${dataValor}" disabled id="${nome}-${endId}" />`
+    : `<input type="date" class="form-control text-center" id="${nome}-${endId}" ${
+        statusAgendamento === "Em andamento" ? "disabled" : ""
+      } />`;
+}
+
+function configurarEventosCopiar() {
+  document.querySelectorAll(".btnCopiar").forEach((button) => {
+    button.addEventListener("click", function () {
+      const endId = this.getAttribute("data-id");
+      const textoParaCopiarPuro = document
+        .querySelector(`button[data-id="${endId}"]`)
+        .textContent.trim();
+
+      navigator.clipboard
+        .writeText(textoParaCopiarPuro)
+        .catch((err) => console.error("Erro ao tentar copiar o texto: ", err));
+    });
+  });
 }
 
 function buscaEnId(secao) {
@@ -592,7 +616,6 @@ function buscaEnId(secao) {
     });
 }
 
-
 function buscaAcesso(secao) {
   const botaoBuscar = event.target;
   botaoBuscar.disabled = true;
@@ -625,11 +648,9 @@ function buscaAcesso(secao) {
       return response.json();
     })
     .then((data) => {
-      console.log(data)
-      document.getElementById("editarSiteIdAcesso").value = 
-        data.siteId || "";
-      document.getElementById("editarDemandaAcesso").value =
-        data.demanda || "";
+      console.log(data);
+      document.getElementById("editarSiteIdAcesso").value = data.siteId || "";
+      document.getElementById("editarDemandaAcesso").value = data.demanda || "";
       document.getElementById("editarDetentoraAcesso").value =
         data.detentora.detentora || "";
       document.getElementById("editarIdDetentoraAcesso").value =
@@ -648,7 +669,8 @@ function buscaAcesso(secao) {
         data.endereco.municipio || "";
       document.getElementById("editarEstadoAcesso").value =
         data.endereco.estado || "";
-      document.getElementById("editarCepAcesso").value = data.endereco.cep || "";
+      document.getElementById("editarCepAcesso").value =
+        data.endereco.cep || "";
       document.getElementById("editarLatitudeAcesso").value =
         data.endereco.latitude || "";
       document.getElementById("editarLongitudeAcesso").value =
