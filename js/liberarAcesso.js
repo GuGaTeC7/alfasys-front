@@ -142,6 +142,14 @@ function preencherTabelaAcesso(page = 0) {
                 Finalizar
               </button>
             </td>
+            <td style="text-align: center;">
+              <i 
+                class="fa-solid fa-comments" 
+                style="font-size: 1.7rem; color: ${item.reset ? '#007bff' : 'rgba(0, 123, 255, 0.46)'}; 
+                ${item.observacoes ? `cursor: pointer;"` : 'cursor: not-allowed;"'}" 
+                ${item.observacoes ? `onclick="alert('${item.observacoes}');"` : 'style="cursor: none !important;"'}>
+              </i>
+            </td>
           </tr>`;
 
         tbody.insertAdjacentHTML("beforeend", row);
