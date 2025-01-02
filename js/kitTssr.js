@@ -17,7 +17,7 @@ function preencherTabelaKitTssr(page = 0) {
         tbody.innerHTML = ""; // Limpa a tabela
         totalPesquisado.innerHTML = ""; // Limpa a tabela
   
-        dados.content.forEach((item) => {
+        dados.forEach((item) => {
             const dataRealizacao = item.dataRealizacao
               ? formatarDataParaInput(item.dataRealizacao)
               : "";
@@ -205,13 +205,13 @@ function preencherTabelaKitTssr(page = 0) {
     if (button.classList.contains("iniciar-btn")) {
       // Lógica para o botão "Iniciar"
       exibirConfirmacao("Tem certeza que deseja <b>iniciar</b> essa etapa?", () =>
-        confirmAlert("iniciar", endId, "Kit Tssr")
+        confirmAlert("iniciar", endId, "Kit-Tssr")
       );
     } else if (button.classList.contains("finalizar-btn")) {
       // Lógica para o botão "Finalizar"
       exibirConfirmacao(
         `Tem certeza que deseja concluir o END ID <strong>${endId}</strong>?`,
-        () => confirmAlert("finalizar", endId, "Kit Tssr")
+        () => confirmAlert("finalizar", endId, "Kit-Tssr")
       );
     }
   });
