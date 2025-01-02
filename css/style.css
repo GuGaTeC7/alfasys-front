@@ -548,7 +548,6 @@ table tr td {
 .input-icon-group {
   display: flex;
   align-items: center;
-  position: relative;
 }
 .btnCopiar {
   cursor: pointer;
@@ -559,23 +558,17 @@ table tr td {
   transform: scale(0.9); /* Reduz ligeiramente o tamanho ao clicar */
   color: #007bff; /* Altere para a cor que deseja no clique */
 }
-
 .btnCopiar:hover {
   color: #0056b3; /* Cor para hover */
 }
-.input-icon-group input {
+.input-icon-group input[type="date"] {
   flex: 1;
-  padding-right: 2.5rem; /* Ajuste se necessário */
+  padding-right: 30px; /* Adiciona um espaço à direita para o ícone */
 }
-
 .input-icon-group i {
-  position: absolute;
-  right: 10px; /* Distância do ícone em relação ao lado direito do input */
-  font-size: 1.2rem; /* Ajuste do tamanho do ícone */
-  color: #007bff; /* Cor do ícone */
+  margin-left: 4px; /* Espaçamento entre o input e o ícone */
   cursor: pointer;
 }
-
 .form-desing input,
 .form-desing select,
 .form-desing textarea {
