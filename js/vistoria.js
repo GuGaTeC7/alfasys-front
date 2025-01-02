@@ -82,15 +82,19 @@ function preencherTabelaVistoria(page = 0) {
                 </select>
               </td>
               <td>
-                <button class="btn btn-primary finalizar-btn" data-id-botao="${
-                  item.endId
-                }" ${
-          item.status === "Não iniciado" || item.status === "Concluído"
-            ? "disabled"
-            : ""
-        }>
+                <button class="btn btn-primary finalizar-btn" data-id-botao="${item.endId}" ${
+                  item.status === "Não iniciado" || item.status === "Concluído"
+                    ? "disabled"
+                    : ""
+                }>
                   Finalizar
                 </button>
+                <i 
+                  class="fa-solid fa-rotate-left btnResetar" 
+                  title="Resetar End ID" 
+                  data-id="${item.endId}" 
+                  style="cursor: pointer; margin-left: 8px;"></i>
+                </i>
               </td>
             </tr>`;
 
@@ -249,3 +253,6 @@ const historicoLinkVistoria = document.querySelector("a[href='#vistoria']");
 historicoLinkVistoria.addEventListener("click", function (event) {
   preencherTabelaVistoria(); // Função chamada ao clicar no link
 });
+
+
+
