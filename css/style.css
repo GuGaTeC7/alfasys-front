@@ -789,3 +789,16 @@ table th {
   flex-direction: column;
   gap: 10px;
 }
+
+.reset-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: #6c757d;
+  transition: color 0.2s ease;
+}
+
+.reset-btn:hover {
+  color: #007bff;
+}
