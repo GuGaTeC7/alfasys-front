@@ -744,4 +744,12 @@ historicoLinkAgendamento.addEventListener("click", function (event) {
 });
 
 
+function resetarEndId(endId) {
+  console.log(`Resetando END ID: ${endId}`);
+
+}
+
+
+
+
   
