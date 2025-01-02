@@ -443,7 +443,6 @@ function atualizarNovoAcesso(secao) {
 }
 
 // Função para enviar a data ao backend
-
 function enviarData(endId, dateInput, action) {
   console.log(`Data enviada: ${dateInput} (End ID: ${endId})`);
 

@@ -14,6 +14,8 @@ function confirmAlert(action, endId, etapa) {
   } else if (action === "iniciar") {
     if (etapa === "agendamento") {
       iniciaAgendamento(endId);
+    } else if (etapa === "vistoria") {
+      
     }
   }
   dismissAlert();
@@ -517,13 +519,13 @@ function criarLinhaCadastroEndId(item, i) {
   `;
 }
 
-function renderInputDate(nome, endId, statusAgendamento, dataValor = "") {
-  return dataValor
-    ? `<input type="date" class="form-control text-center" value="${dataValor}" disabled id="${nome}-${endId}" />`
-    : `<input type="date" class="form-control text-center" id="${nome}-${endId}" ${
-        statusAgendamento === "Em andamento" ? "disabled" : ""
-      } />`;
-}
+// function renderInputDate(nome, endId, statusAgendamento, dataValor = "") {
+//   return dataValor
+//     ? `<input type="date" class="form-control text-center" value="${dataValor}" disabled id="${nome}-${endId}" />`
+//     : `<input type="date" class="form-control text-center" id="${nome}-${endId}" ${
+//         statusAgendamento === "Em andamento" ? "disabled" : ""
+//       } />`;
+// }
 
 function configurarEventosCopiar() {
   document.querySelectorAll(".btnCopiar").forEach((button) => {

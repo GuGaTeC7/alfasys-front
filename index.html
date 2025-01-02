@@ -1307,112 +1307,25 @@
                       <thead>
                         <tr>
                           <th>END ID</th>
-                          <th>Status Vistoria</th>
+                          <th>Status</th>
                           <th>Data Realização</th>
                           <th>Parecer</th>
                           <th>Ação</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <td>
-                            <button
-                              class="btn btn-link p-0 text-decoration-none end-id"
-                              data-id="#001"
-                            >
-                              #001
-                            </button>
-                          </td>
-                          <td>
-                            <div class="d-flex align-items-center">
-                              <select
-                                disabled
-                                class="form-select border-0 bg-light p-2"
-                              >
-                                <option value="nao-iniciado">
-                                  Não Iniciado
-                                </option>
-                                <option selected value="em-andamento">
-                                  Em Andamento
-                                </option>
-                                <option value="concluido">Concluído</option>
-                              </select>
-                            </div>
-                          </td>
-                          <td>
-                            <input type="date" class="form-control" />
-                          </td>
-                          <td>
-                            <select class="form-select border-0 bg-light p-2">
-                              <option value="" selected disabled>
-                                Selecione uma opção
-                              </option>
-                              <option value="viavel">Viável</option>
-                              <option value="inviavel">Inviável</option>
-                            </select>
-                          </td>
-                          <td>
-                            <button
-                              class="btn btn-primary finalizar-btn"
-                              data-id="#001"
-                            >
-                              Finalizar
-                            </button>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <button
-                              class="btn btn-link p-0 text-decoration-none end-id"
-                              data-id="#002"
-                            >
-                              #002
-                            </button>
-                          </td>
-                          <td>
-                            <div class="d-flex align-items-center">
-                              <select
-                                disabled
-                                class="form-select border-0 bg-light p-2"
-                              >
-                                <option value="nao-iniciado">
-                                  Não Iniciado
-                                </option>
-                                <option value="em-andamento">
-                                  Em Andamento
-                                </option>
-                                <option value="concluido">Concluído</option>
-                              </select>
-                              <button
-                                class="btn iniciar-btn p-0 border-0 bg-transparent ml-2"
-                              >
-                                <i class="fa-solid fa-circle-play"></i>
-                              </button>
-                            </div>
-                          </td>
-                          <td>
-                            <input type="date" class="form-control" />
-                          </td>
-                          <td>
-                            <select class="form-select border-0 bg-light p-2">
-                              <option value="" selected disabled>
-                                Selecione uma opção
-                              </option>
-                              <option value="viavel">Viável</option>
-                              <option value="inviavel">Inviável</option>
-                            </select>
-                          </td>
-                          <td>
-                            <button
-                              class="btn btn-primary finalizar-btn"
-                              data-id="#002"
-                            >
-                              Finalizar
-                            </button>
-                          </td>
-                        </tr>
+                        <!-- Conteudo dinamico -->
                       </tbody>
                     </table>
+                    <div id="total-pesquisa-vistoria"></div>
+
+                    <!-- Controles de Paginação -->
+                    <div
+                      id="pagination-controls"
+                      class="d-flex justify-content-center my-2"
+                    >
+                      <!-- Botões serão gerados dinamicamente -->
+                    </div>
                   </div>
                 </div>
               </div>
