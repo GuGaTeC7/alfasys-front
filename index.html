@@ -1428,7 +1428,10 @@
                     </button>
                   </div>
                   <div class="table-responsive text-nowrap">
-                    <table class="table my-4 table-hover table-striped w-100">
+                    <table 
+                      class="table my-4 table-hover table-striped w-100"
+                      id="tabelaHistoricoInclusao"
+                    >
                       <thead>
                         <tr>
                           <th>END ID</th>
@@ -1440,99 +1443,23 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <td>
-                            <button
-                              class="btn btn-link p-0 text-decoration-none end-id"
-                              data-id="#001"
-                            >
-                              #001
-                            </button>
-                          </td>
-                          <td>
-                            <select
-                              disabled
-                              class="form-select border-0 bg-light p-2"
-                            >
-                              <option value="nao-iniciado">Não Iniciado</option>
-                              <option value="em-andamento">Em Andamento</option>
-                              <option value="concluido">Concluído</option>
-                            </select>
-
-                            <button
-                              class="btn iniciar-btn p-0 border-0 bg-transparent ml-2"
-                            >
-                              <i class="fa-solid fa-circle-play"></i>
-                            </button>
-                          </td>
-                          <td>
-                            <input
-                              type="text"
-                              class="form-control"
-                              placeholder="Código SCI"
-                            />
-                          </td>
-                          <td><input type="date" class="form-control" /></td>
-                          <td><input type="date" class="form-control" /></td>
-                          <td>
-                            <button
-                              class="btn btn-primary finalizar-btn"
-                              data-id="#001"
-                            >
-                              Finalizar
-                            </button>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <button
-                              class="btn btn-link p-0 text-decoration-none end-id"
-                              data-id="#002"
-                            >
-                              #002
-                            </button>
-                          </td>
-                          <td>
-                            <select
-                              disabled
-                              class="form-select border-0 bg-light p-2"
-                            >
-                              <option value="nao-iniciado">Não Iniciado</option>
-                              <option value="em-andamento">Em Andamento</option>
-                              <option value="concluido">Concluído</option>
-                            </select>
-
-                            <button
-                              class="btn iniciar-btn p-0 border-0 bg-transparent ml-2"
-                            >
-                              <i class="fa-solid fa-circle-play"></i>
-                            </button>
-                          </td>
-                          <td>
-                            <input
-                              type="text"
-                              class="form-control"
-                              placeholder="Código SCI"
-                            />
-                          </td>
-                          <td><input type="date" class="form-control" /></td>
-                          <td><input type="date" class="form-control" /></td>
-                          <td>
-                            <button
-                              class="btn btn-primary finalizar-btn"
-                              data-id="#002"
-                            >
-                              Finalizar
-                            </button>
-                          </td>
-                        </tr>
+                        <!-- Conteudo dinamico -->
                       </tbody>
                     </table>
+                    <div id="total-pesquisa-inclusão"></div>
+
+                    <!-- Controles de Paginação -->
+                    <div
+                      id="pagination-controls-inclusão"
+                      class="d-flex justify-content-center my-2"
+                    >
                   </div>
                 </div>
               </div>
             </div>
           </div>
+        </div>
+
 
           <!-- ============================== PÁGINA DE OBRA ============================== -->
 
@@ -1564,7 +1491,10 @@
                     </button>
                   </div>
                   <div class="table-responsive text-nowrap">
-                    <table class="table my-4 table-hover table-striped w-100">
+                    <table 
+                      class="table my-4 table-hover table-striped w-100"
+                      id="tabelaHistoricoObra"
+                      >
                       <thead>
                         <tr>
                           <th>END ID</th>
@@ -1575,85 +1505,23 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <td>
-                            <button
-                              class="btn btn-link p-0 text-decoration-none end-id"
-                              data-id="#001"
-                            >
-                              #001
-                            </button>
-                          </td>
-                          <td>
-                            <select
-                              disabled
-                              class="form-select border-0 bg-light p-2"
-                            >
-                              <option value="nao-iniciado">Não Iniciado</option>
-                              <option value="em-andamento">Em Andamento</option>
-                              <option value="concluido">Concluído</option>
-                              <option value="concluido">Inviável</option>
-                              <option value="concluido">Aprovado</option>
-                            </select>
-                            <button
-                              class="btn iniciar-btn p-0 border-0 bg-transparent ml-2"
-                            >
-                              <i class="fa-solid fa-circle-play"></i>
-                            </button>
-                          </td>
-                          <td><input type="date" class="form-control" /></td>
-                          <td><input type="date" class="form-control" /></td>
-                          <td>
-                            <button
-                              class="btn btn-primary finalizar-btn"
-                              data-id="#001"
-                            >
-                              Finalizar
-                            </button>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <button
-                              class="btn btn-link p-0 text-decoration-none end-id"
-                              data-id="#002"
-                            >
-                              #002
-                            </button>
-                          </td>
-                          <td>
-                            <select
-                              disabled
-                              class="form-select border-0 bg-light p-2"
-                            >
-                              <option value="nao-iniciado">Não Iniciado</option>
-                              <option value="em-andamento">Em Andamento</option>
-                              <option value="concluido">Concluído</option>
-                            </select>
-                            <button
-                              class="btn iniciar-btn p-0 border-0 bg-transparent ml-2"
-                            >
-                              <i class="fa-solid fa-circle-play"></i>
-                            </button>
-                          </td>
-                          <td><input type="date" class="form-control" /></td>
-                          <td><input type="date" class="form-control" /></td>
-                          <td>
-                            <button
-                              class="btn btn-primary finalizar-btn"
-                              data-id="#002"
-                            >
-                              Finalizar
-                            </button>
-                          </td>
-                        </tr>
+                        <!-- Conteudo dinamico -->
                       </tbody>
                     </table>
+                    <div id="total-pesquisa-obra"></div>
+
+                    <!-- Controles de Paginação -->
+                    <div
+                      id="pagination-controls-obra"
+                      class="d-flex justify-content-center my-2"
+                    >
+                  </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+
 
           <!-- ============================== PÁGINA DE PROJETO ============================== -->
 
