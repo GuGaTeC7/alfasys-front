@@ -350,4 +350,78 @@ document
   });
 
 
-  
+  // Função de Reset
+document.querySelector("#tabelaVistoria").addEventListener("click", (event) => {
+  const button = event.target.closest(".btnResetar");
+  if (!button) return; // Se não clicar em um botão relevante, retorna
+
+  const endId = button.getAttribute("data-id");
+
+  // Criação do alerta personalizado
+  const alertDiv = document.createElement("div");
+  alertDiv.className = "alert-container";
+  alertDiv.style.position = "fixed";
+  alertDiv.style.top = "50%";
+  alertDiv.style.left = "50%";
+  alertDiv.style.transform = "translate(-50%, -50%)";
+  alertDiv.style.width = "300px";
+  alertDiv.style.padding = "15px";
+  alertDiv.style.backgroundColor = "rgba(1, 41, 112, 0.9)";
+  alertDiv.style.color = "#ffffff";
+  alertDiv.style.borderRadius = "5px";
+  alertDiv.style.boxShadow = "0 4px 20px rgba(0, 0, 0, 0.15)";
+  alertDiv.style.zIndex = "1000";
+  alertDiv.style.textAlign = "center";
+
+  alertDiv.innerHTML = `
+    <h3 style="font-size: 1.3rem;">Tem certeza que deseja resetar o End ID <strong>${endId}</strong>?</h3>
+    <button class="btn btn-light mt-2" id="cancelReset">
+      Cancelar
+    </button>
+    <button class="btn btn-warning text-white mt-2" id="confirmReset">
+      Confirmar
+    </button>
+  `;
+
+  document.body.appendChild(alertDiv);
+
+  // Event Listener para o botão "Confirmar"
+  document.getElementById("confirmReset").addEventListener("click", () => {
+    resetarVistoria(endId); // Chama a função para resetar a vistoria
+    alertDiv.remove(); // Remove o alerta de confirmação
+  });
+
+  // Event Listener para o botão "Cancelar"
+  document.getElementById("cancelReset").addEventListener("click", () => {
+    alertDiv.remove(); // Remove o alerta de confirmação
+  });
+});
+
+function resetarVistoria(endId) {
+  // Verifique se o método correto é PATCH ou PUT no seu backend
+  fetch(`${host}/vistorias/${endId}`, {
+    method: "PATCH", // Tente PATCH ou PUT, dependendo do seu backend
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({}) // Enviar um objeto vazio, caso o backend exija um corpo
+  })
+    .then((response) => {
+      if (!response.ok) {
+        return response.json().then((errorData) => {
+          throw new Error(`Erro ao resetar os dados: ${errorData.message || response.statusText}`);
+        });
+      }
+      return response.json();
+    })
+    .then((data) => {
+      alert("O End ID foi resetado com sucesso!"); // Alerta de sucesso
+      preencherTabelaVistoria(); // Atualiza a tabela
+    })
+    .catch((error) => {
+      console.error("Erro ao resetar os dados:", error);
+      alert("Erro ao resetar o processo.");
+    });
+}
+
