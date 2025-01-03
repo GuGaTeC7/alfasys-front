@@ -16,8 +16,8 @@ function preencherTabelaKitTssr(page = 0) {
       .then((dados) => {
         tbody.innerHTML = ""; // Limpa a tabela
         totalPesquisado.innerHTML = ""; // Limpa a tabela
-  
-        dados.forEach((item) => {
+        
+        dados.content.forEach((item) => {
             const dataRealizacao = item.dataRealizacao
               ? formatarDataParaInput(item.dataRealizacao)
               : "";
@@ -78,10 +78,10 @@ function preencherTabelaKitTssr(page = 0) {
                           class="form-control text-center" 
                           value="${dataPrevista}" 
                           disabled
-                          id="data-realizacao-${item.endId}"
+                          id="data-prevista-${item.endId}"
                         />`
                       : renderInputDate(
-                          "data-readata-prevista",
+                          "data-prevista",
                           item.endId,
                           item.status
                         )
