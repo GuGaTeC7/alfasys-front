@@ -179,13 +179,13 @@ function preencherTabelaSciInclusao(page = 0) {
   
     // Verifica se todas as datas estão preenchidas
     if (!dataEnvio || !dataAprovacao ) {
-      alert("A data de realização e data prevista devem estar preenchidas.");
+      alert("A data de envio e data de aprovação devem estar preenchidas.");
       return; // Interrompe a execução se a data não for válida
     }
   
     // Verifica se o campo de status está preenchido
     if (!codInclusao || codInclusao === "") {
-      alert("Por favor, selecione algum parecer (Viável ou Inviável).");
+      alert("Por favor, informe algum código.");
       return; // Interrompe a execução se o status não for selecionado
     }
   
