@@ -170,7 +170,60 @@ function preencherTabelaSciInclusao(page = 0) {
       });
   }
 
-
+  //FINALIZAR SCI INCLUSÃO//
+  function finalizaSciInclusao(endId) {
+    // Obtém os valores das datas e do status
+    const codInclusao = document.getElementById(`cod-inclusao-${endId}`)?.value;
+    const dataEnvio = document.getElementById(`data-envio-${endId}`)?.value;
+    const dataAprovacao = document.getElementById(`data-aprovacao-${endId}`)?.value;
+  
+    // Verifica se todas as datas estão preenchidas
+    if (!dataEnvio || !dataAprovacao ) {
+      alert("A data de realização e data prevista devem estar preenchidas.");
+      return; // Interrompe a execução se a data não for válida
+    }
+  
+    // Verifica se o campo de status está preenchido
+    if (!codInclusao || codInclusao === "") {
+      alert("Por favor, selecione algum parecer (Viável ou Inviável).");
+      return; // Interrompe a execução se o status não for selecionado
+    }
+  
+    // Monta o payload
+    const payload = {
+      status: "Concluído",
+      resultado: selectStatus, // Adiciona o status selecionado ao payload
+    };
+  
+    // Realiza a requisição
+    fetch(`${host}/sciInclusao/${endId}`, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    })
+      .then((response) => {
+        console.log("Resposta da requisição recebida:", response);
+        if (!response.ok) {
+          throw new Error(`Erro ao atualizar os dados: ${response.statusText}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Dados retornados pelo servidor:", data);
+  
+        // Atualiza a tabela na página atual
+        const paginacao = document.getElementById("pagination-controls-inclusao");
+        const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
+        preencherTabelaSciInclusao(paginaAtual - 1);
+      })
+      .catch((error) => {
+        console.error("Erro durante a atualização dos dados:", error);
+        alert("Erro ao finalizar a Inclusão.");
+      });
+  }
 
 
 
