@@ -13,6 +13,9 @@ function confirmAlert(action, endId, etapa) {
     } else if (etapa === "vistoria") {
       finalizaVistoria(endId);
     }
+    else if (etapa === "Kit-Tssr") {
+      finalizaKitTssr(endId);
+    }
 
     } else if (action === "iniciar") {
     if (etapa === "agendamento") {

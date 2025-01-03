@@ -110,6 +110,7 @@ function preencherTabelaVistoria(page = 0) {
     });
 }
 
+//FUNÇÃO PARA INICIAR VISTORIA//
 function iniciaVistoria(endId) {
   const payload = {
     status: "Em andamento",
@@ -221,31 +222,7 @@ document.querySelector("#vistoria tbody").addEventListener("click", (event) => {
   }
 });
 
-// Delegação de eventos para os ícones de enviar data
-document
-  .querySelector("#tabelaVistoria")
-  .addEventListener("click", (event) => {
-    const target = event.target;
 
-    if (target.classList.contains("fa-square-arrow-up-right")) {
-      const action = target.getAttribute("data-action");
-      const endId = target.getAttribute("data-id"); // Identifica o End ID
-      const dateInput = target.previousElementSibling.value; // Obtém o valor da data
-      const dataFormatada = formataData(dateInput.split("-"));
-
-      // Verifica se a data foi preenchida
-      if (!dateInput) {
-        alert("Por favor, preencha a data antes de enviá-la.");
-        return;
-      }
-
-      // Exibe a confirmação antes de enviar
-      exibirConfirmacao(
-        `Tem certeza que deseja enviar a data ${dataFormatada}?`,
-        () => enviarData(endId, dateInput, action, "vistoria")
-      );
-    }
-  });
 
 // Selecione o link "Histórico de cadastros" e "Editar Cadastro"
 const historicoLinkVistoria = document.querySelector("a[href='#vistoria']");
@@ -254,6 +231,7 @@ const historicoLinkVistoria = document.querySelector("a[href='#vistoria']");
 historicoLinkVistoria.addEventListener("click", function (event) {
   preencherTabelaVistoria(); // Função chamada ao clicar no link
 });
+
 
 document
   .querySelector("#tabelaVistoria")

@@ -186,9 +186,62 @@ function preencherTabelaKitTssr(page = 0) {
   }
 
 
+  //FINALIZAR KIT TSSR//
+function finalizaKitTssr(endId) {
+  // Obtém os valores das datas e do status
+  const dataRealizacao = document.getElementById(`data-realizacao-${endId}`)?.value;
+  const dataPrevista = document.getElementById(`data-prevista-${endId}`)?.value;
+  const selectStatus = document.getElementById(`select-status-${endId}`)?.value;
 
+  // Verifica se todas as datas estão preenchidas
+  if (!dataRealizacao || !dataPrevista ) {
+    alert("A data de realização e data prevista devem estar preenchidas.");
+    return; // Interrompe a execução se a data não for válida
+  }
 
+  // Verifica se o campo de status está preenchido
+  if (!selectStatus || selectStatus === "") {
+    alert("Por favor, selecione algum parecer (Viável ou Inviável).");
+    return; // Interrompe a execução se o status não for selecionado
+  }
 
+  // Monta o payload
+  const payload = {
+    status: "Concluído",
+    resultado: selectStatus, // Adiciona o status selecionado ao payload
+  };
+
+  // Realiza a requisição
+  fetch(`${host}/tssrs/${endId}`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  })
+    .then((response) => {
+      console.log("Resposta da requisição recebida:", response);
+      if (!response.ok) {
+        throw new Error(`Erro ao atualizar os dados: ${response.statusText}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Dados retornados pelo servidor:", data);
+
+      // Atualiza a tabela na página atual
+      const paginacao = document.getElementById("pagination-controls-Tssr");
+      const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
+      preencherTabelaKitTssr(paginaAtual - 1);
+    })
+    .catch((error) => {
+      console.error("Erro durante a atualização dos dados:", error);
+      alert("Erro ao finalizar o Kit Tssr.");
+    });
+}
+
+// Delegação de eventos para os botões na tabela
 
   document.querySelector("#kit-tssr tbody").addEventListener("click", (event) => {
     const button = event.target.closest("[data-id-botao]");
@@ -209,6 +262,8 @@ function preencherTabelaKitTssr(page = 0) {
       );
     }
   });
+  
+
   
   document.querySelector("#tabelaHistoricoKitTssr").addEventListener("click", (event) => {
     const loadingOverlay = document.getElementById("loading-overlay");
