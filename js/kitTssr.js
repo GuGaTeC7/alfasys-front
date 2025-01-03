@@ -18,12 +18,12 @@ function preencherTabelaKitTssr(page = 0) {
         totalPesquisado.innerHTML = ""; // Limpa a tabela
         
         dados.content.forEach((item) => {
-            const dataRealizacao = item.dataRealizacao
-              ? formatarDataParaInput(item.dataRealizacao)
-              : "";
-          
             const dataPrevista = item.dataPrevista
               ? formatarDataParaInput(item.dataPrevista)
+              : "";
+
+            const dataRealizacao = item.dataRealizacao
+              ? formatarDataParaInput(item.dataRealizacao)
               : "";
   
           // Monta a linha da tabela
@@ -55,23 +55,6 @@ function preencherTabelaKitTssr(page = 0) {
                 </td>
                 <td>
                   ${
-                    dataRealizacao
-                      ? `<input 
-                          type="date" 
-                          class="form-control text-center" 
-                          value="${dataRealizacao}" 
-                          disabled
-                          id="data-realizada-${item.endId}"
-                        />`
-                      : renderInputDate(
-                          "data-readata-realizada",
-                          item.endId,
-                          item.status
-                        )
-                  }
-                </td>
-                <td>
-                  ${
                     dataPrevista
                       ? `<input 
                           type="date" 
@@ -82,6 +65,23 @@ function preencherTabelaKitTssr(page = 0) {
                         />`
                       : renderInputDate(
                           "data-prevista",
+                          item.endId,
+                          item.status
+                        )
+                  }
+                </td>
+                <td>
+                  ${
+                    dataRealizacao
+                      ? `<input 
+                          type="date" 
+                          class="form-control text-center" 
+                          value="${dataRealizacao}" 
+                          disabled
+                          id="data-realizada-${item.endId}"
+                        />`
+                      : renderInputDate(
+                          "data-readata-realizada",
                           item.endId,
                           item.status
                         )
