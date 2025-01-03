@@ -24,81 +24,54 @@ function preencherTabelaVistoria(page = 0) {
 
         // Monta a linha da tabela
         const row = `
-            <tr>
-              <td>
-                <button class="btn btn-link p-0 text-decoration-none end-id" id="textoParaCopiar" data-id="${
-                  item.endId
-                }">
-                  ${item.endId}
-                </button>
-                <i class="fa-regular fa-copy btnCopiar" title="Copiar" data-id="${
-                  item.endId
-                }"></i>
-              </td>
-              <td>
-                <select disabled class="form-select border-0 bg-light p-2">
-                  <option value="status">${item.status}</option>
-                </select>
-                <button class="btn iniciar-btn p-0 border-0 bg-transparent ml-2" 
-                  style="display:${
-                    ["Em andamento", "Concluído"].includes(item.status)
-                      ? "none"
-                      : ""
-                  };" 
-                  data-id-botao="${item.endId}">
-                  <i class="fa-solid fa-circle-play"></i>
-                </button>
-              </td>
-              <td>
-                ${
-                  dataRealizacao
-                    ? `<input 
-                        type="date" 
-                        class="form-control text-center" 
-                        value="${dataRealizacao}" 
-                        disabled
-                        id="data-realizacao-${item.endId}"
-                      />`
-                    : renderInputDate(
-                        "data-realizacao",
-                        item.endId,
-                        item.status
-                      )
-                }
-              </td>
-              <td>
-                <select class="form-select border-0 bg-light p-2" id="select-status-${
-                  item.endId
-                }" ${
-          item.status === "Não iniciado" || item.status === "Concluído"
-            ? "disabled"
-            : ""
-        }>
-                    <option value="" selected>
-                    Selecione uma opção
-                    </option>
-                    <option value="viavel">Viável</option>
-                    <option value="inviavel">Inviável</option>
-                </select>
-              </td>
-              <td>
-                <button class="btn btn-primary finalizar-btn" data-id-botao="${
-                  item.endId
-                }" ${
-          item.status === "Não iniciado" || item.status === "Concluído"
-            ? "disabled"
-            : ""
-        }>
-                  Finalizar
-                </button>
-                <i 
-                  class="fa-solid fa-rotate-left btnResetar" 
-                  title="Resetar End ID" 
-                  data-id="${item.endId}" 
-                  style="cursor: pointer; margin-left: 8px;"></i>
-                </i>
-              </td>
-            </tr>`;
+          <tr>
+            <td>
+              <button class="btn btn-link p-0 text-decoration-none end-id" id="textoParaCopiar" data-id="${item.endId}">
+                ${item.endId}
+              </button>
+              <i class="fa-regular fa-copy btnCopiar" title="Copiar" data-id="${item.endId}"></i>
+            </td>
+            <td>
+              <select disabled class="form-select border-0 bg-light p-2">
+                <option value="status">${item.status}</option>
+              </select>
+              <button class="btn iniciar-btn p-0 border-0 bg-transparent ml-2" 
+                style="display:${["Em andamento", "Concluído"].includes(item.status) ? "none" : ""};" 
+                data-id-botao="${item.endId}">
+                <i class="fa-solid fa-circle-play"></i>
+              </button>
+            </td>
+            <td>
+            <input 
+              type="date" 
+              class="form-control text-center" 
+              value="${dataRealizacao}" 
+              id="data-realizacao-${item.endId}"
+              ${item.status !== "Em andamento" ? "disabled" : ""}
+            />
+          </td>
+          <td>
+            <select class="form-select border-0 bg-light p-2" id="select-status-${item.endId}" 
+              ${item.status !== "Em andamento" ? "disabled" : ""}>
+              <option value="" selected>Selecione uma opção</option>
+              <option value="viavel">Viável</option>
+              <option value="inviavel">Inviável</option>
+            </select>
+          </td>
+          <td>
+            <button class="btn btn-primary finalizar-btn" data-id-botao="${item.endId}" 
+            ${item.status !== "Em andamento" ? "disabled" : ""}>
+            Finalizar
+          </button>
+          <i 
+            class="fa-solid fa-rotate-left btnResetar" 
+            title="Resetar End ID" 
+            data-id="${item.endId}" 
+            style="cursor: pointer; margin-left: 8px;">
+          </i>
+        </td>
+      </tr>`;
+
 
         tbody.insertAdjacentHTML("beforeend", row);
       });
