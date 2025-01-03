@@ -26,17 +26,25 @@ function preencherTabelaVistoria(page = 0) {
         const row = `
           <tr>
             <td>
-              <button class="btn btn-link p-0 text-decoration-none end-id" id="textoParaCopiar" data-id="${item.endId}">
+              <button class="btn btn-link p-0 text-decoration-none end-id" id="textoParaCopiar" data-id="${
+                item.endId
+              }">
                 ${item.endId}
               </button>
-              <i class="fa-regular fa-copy btnCopiar" title="Copiar" data-id="${item.endId}"></i>
+              <i class="fa-regular fa-copy btnCopiar" title="Copiar" data-id="${
+                item.endId
+              }"></i>
             </td>
             <td>
               <select disabled class="form-select border-0 bg-light p-2">
                 <option value="status">${item.status}</option>
               </select>
               <button class="btn iniciar-btn p-0 border-0 bg-transparent ml-2" 
-                style="display:${["Em andamento", "Concluído"].includes(item.status) ? "none" : ""};" 
+                style="display:${
+                  ["Em andamento", "Concluído"].includes(item.status)
+                    ? "none"
+                    : ""
+                };" 
                 data-id-botao="${item.endId}">
                 <i class="fa-solid fa-circle-play"></i>
               </button>
@@ -51,7 +59,9 @@ function preencherTabelaVistoria(page = 0) {
             />
           </td>
           <td>
-            <select class="form-select border-0 bg-light p-2" id="select-status-${item.endId}" 
+            <select class="form-select border-0 bg-light p-2" id="select-status-${
+              item.endId
+            }" 
               ${item.status !== "Em andamento" ? "disabled" : ""}>
               <option value="" selected>Selecione uma opção</option>
               <option value="viavel">Viável</option>
@@ -59,7 +69,9 @@ function preencherTabelaVistoria(page = 0) {
             </select>
           </td>
           <td>
-            <button class="btn btn-primary finalizar-btn" data-id-botao="${item.endId}" 
+            <button class="btn btn-primary finalizar-btn" data-id-botao="${
+              item.endId
+            }" 
             ${item.status !== "Em andamento" ? "disabled" : ""}>
             Finalizar
           </button>
@@ -71,7 +83,6 @@ function preencherTabelaVistoria(page = 0) {
           </i>
         </td>
       </tr>`;
-
 
         tbody.insertAdjacentHTML("beforeend", row);
       });
@@ -148,7 +159,9 @@ function iniciaVistoria(endId) {
 //FINALIZAR VISTORIA//
 function finalizaVistoria(endId) {
   // Obtém os valores das datas e do status
-  const dataRealizacao = document.getElementById(`data-realizacao-${endId}`)?.value;
+  const dataRealizacao = document.getElementById(
+    `data-realizacao-${endId}`
+  )?.value;
   const selectStatus = document.getElementById(`select-status-${endId}`)?.value;
 
   // Verifica se todas as datas estão preenchidas
@@ -199,7 +212,6 @@ function finalizaVistoria(endId) {
     });
 }
 
-
 // Delegação de eventos para os botões na tabela
 
 document.querySelector("#vistoria tbody").addEventListener("click", (event) => {
@@ -222,8 +234,6 @@ document.querySelector("#vistoria tbody").addEventListener("click", (event) => {
   }
 });
 
-
-
 // Selecione o link "Histórico de cadastros" e "Editar Cadastro"
 const historicoLinkVistoria = document.querySelector("a[href='#vistoria']");
 
@@ -232,62 +242,59 @@ historicoLinkVistoria.addEventListener("click", function (event) {
   preencherTabelaVistoria(); // Função chamada ao clicar no link
 });
 
+document.querySelector("#tabelaVistoria").addEventListener("click", (event) => {
+  const loadingOverlay = document.getElementById("loading-overlay");
 
-document
-  .querySelector("#tabelaVistoria")
-  .addEventListener("click", (event) => {
-    const loadingOverlay = document.getElementById("loading-overlay");
+  // Verifica se o elemento clicado possui a classe `end-id`
+  if (event.target.classList.contains("end-id")) {
+    const endId = event.target.getAttribute("data-id");
 
-    // Verifica se o elemento clicado possui a classe `end-id`
-    if (event.target.classList.contains("end-id")) {
-      const endId = event.target.getAttribute("data-id");
+    if (!loadingOverlay) {
+      console.error("Elemento de loadingOverlay não encontrado!");
+      return;
+    }
 
-      if (!loadingOverlay) {
-        console.error("Elemento de loadingOverlay não encontrado!");
-        return;
-      }
+    loadingOverlay.style.display = "block";
 
-      loadingOverlay.style.display = "block";
+    // Criação do elemento de alerta
+    const alertDiv = document.createElement("div");
+    alertDiv.className = "alert-container";
+    alertDiv.style.position = "fixed";
+    alertDiv.style.top = "50%";
+    alertDiv.style.left = "50%";
+    alertDiv.style.transform = "translate(-50%, -50%)";
+    alertDiv.style.width = "86%";
+    alertDiv.style.maxWidth = "900px";
+    alertDiv.style.padding = "30px";
+    alertDiv.style.backgroundColor = "#012970";
+    alertDiv.style.color = "#ffffff";
+    alertDiv.style.border = "2px solid #012970";
+    alertDiv.style.borderRadius = "15px";
+    alertDiv.style.boxShadow = "0 4px 20px rgba(0, 0, 0, 0.15)";
+    alertDiv.style.zIndex = "1000";
+    alertDiv.style.overflow = "hidden";
+    alertDiv.style.display = "flex";
+    alertDiv.style.justifyContent = "center";
+    alertDiv.style.alignItems = "center";
+    alertDiv.style.flexDirection = "column";
 
-      // Criação do elemento de alerta
-      const alertDiv = document.createElement("div");
-      alertDiv.className = "alert-container";
-      alertDiv.style.position = "fixed";
-      alertDiv.style.top = "50%";
-      alertDiv.style.left = "50%";
-      alertDiv.style.transform = "translate(-50%, -50%)";
-      alertDiv.style.width = "86%";
-      alertDiv.style.maxWidth = "900px";
-      alertDiv.style.padding = "30px";
-      alertDiv.style.backgroundColor = "#012970";
-      alertDiv.style.color = "#ffffff";
-      alertDiv.style.border = "2px solid #012970";
-      alertDiv.style.borderRadius = "15px";
-      alertDiv.style.boxShadow = "0 4px 20px rgba(0, 0, 0, 0.15)";
-      alertDiv.style.zIndex = "1000";
-      alertDiv.style.overflow = "hidden";
-      alertDiv.style.display = "flex";
-      alertDiv.style.justifyContent = "center";
-      alertDiv.style.alignItems = "center";
-      alertDiv.style.flexDirection = "column";
+    // Verificação do token de autenticação
+    if (!token) {
+      console.error("Token de autenticação não encontrado!");
+      loadingOverlay.style.display = "none";
+      return;
+    }
 
-      // Verificação do token de autenticação
-      if (!token) {
-        console.error("Token de autenticação não encontrado!");
-        loadingOverlay.style.display = "none";
-        return;
-      }
-
-      fetch(`${host}/cadastroEndIds/${endId}`, {
-        method: "GET",
-        headers: { Authorization: `Bearer ${token}` },
+    fetch(`${host}/cadastroEndIds/${endId}`, {
+      method: "GET",
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error("Erro ao buscar dados.");
+        return response.json();
       })
-        .then((response) => {
-          if (!response.ok) throw new Error("Erro ao buscar dados.");
-          return response.json();
-        })
-        .then((dados) => {
-          alertDiv.innerHTML = `
+      .then((dados) => {
+        alertDiv.innerHTML = `
           <h1 style="display: block; text-align: center; margin-bottom: 25px; font-size: 1.5em; width: 100%;">
             Detalhes do END ID: <b>${endId}</b>
           </h1>
@@ -314,43 +321,42 @@ document
           </div>
         `;
 
-          const closeButton = document.createElement("button");
-          closeButton.innerText = "Fechar";
-          closeButton.style.marginTop = "20px";
-          closeButton.style.padding = "12px 20px";
-          closeButton.style.backgroundColor = "#ffffff";
-          closeButton.style.border = "2px solid #ffffff";
-          closeButton.style.color = "#012970";
-          closeButton.style.cursor = "pointer";
-          closeButton.style.borderRadius = "10px";
-          closeButton.style.display = "block";
-          closeButton.style.marginLeft = "auto";
-          closeButton.style.marginRight = "auto";
+        const closeButton = document.createElement("button");
+        closeButton.innerText = "Fechar";
+        closeButton.style.marginTop = "20px";
+        closeButton.style.padding = "12px 20px";
+        closeButton.style.backgroundColor = "#ffffff";
+        closeButton.style.border = "2px solid #ffffff";
+        closeButton.style.color = "#012970";
+        closeButton.style.cursor = "pointer";
+        closeButton.style.borderRadius = "10px";
+        closeButton.style.display = "block";
+        closeButton.style.marginLeft = "auto";
+        closeButton.style.marginRight = "auto";
 
-          closeButton.addEventListener("click", () => {
-            alertDiv.remove();
-          });
-
-          alertDiv.appendChild(closeButton);
-          document.body.appendChild(alertDiv);
-
-          window.scrollTo(
-            0,
-            alertDiv.getBoundingClientRect().top + window.scrollY - 100
-          );
-        })
-        .catch((error) => {
-          console.error("Erro ao buscar dados:", error);
-          alert("Erro ao carregar os dados. Atualize a tela apertando 'F5'.");
-        })
-        .finally(() => {
-          loadingOverlay.style.display = "none";
+        closeButton.addEventListener("click", () => {
+          alertDiv.remove();
         });
-    }
-  });
 
+        alertDiv.appendChild(closeButton);
+        document.body.appendChild(alertDiv);
 
-  // Função de Reset
+        window.scrollTo(
+          0,
+          alertDiv.getBoundingClientRect().top + window.scrollY - 100
+        );
+      })
+      .catch((error) => {
+        console.error("Erro ao buscar dados:", error);
+        alert("Erro ao carregar os dados. Atualize a tela apertando 'F5'.");
+      })
+      .finally(() => {
+        loadingOverlay.style.display = "none";
+      });
+  }
+});
+
+// Função de Reset
 document.querySelector("#tabelaVistoria").addEventListener("click", (event) => {
   const button = event.target.closest(".btnResetar");
   if (!button) return; // Se não clicar em um botão relevante, retorna
@@ -398,19 +404,33 @@ document.querySelector("#tabelaVistoria").addEventListener("click", (event) => {
 });
 
 function resetarVistoria(endId) {
+  const observacao = prompt("Deixe uma observação:");
+
+  const payload = {
+    statusAgendamento: "Não iniciado",
+    dataSolicitacao: null,
+    dataPrevisao: null,
+    dataLiberacao: null,
+    reset: true,
+    observacoesAgendamento: observacao,
+  };
   // Verifique se o método correto é PATCH ou PUT no seu backend
-  fetch(`${host}/vistorias/${endId}`, {
-    method: "PATCH", // Tente PATCH ou PUT, dependendo do seu backend
+  fetch(`${host}/cadastroEndIds/agendamento/${endId}`, {
+    method: "PUT",
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({}) // Enviar um objeto vazio, caso o backend exija um corpo
+    body: JSON.stringify(payload), // Enviar um objeto vazio, caso o backend exija um corpo
   })
     .then((response) => {
       if (!response.ok) {
         return response.json().then((errorData) => {
-          throw new Error(`Erro ao resetar os dados: ${errorData.message || response.statusText}`);
+          throw new Error(
+            `Erro ao resetar os dados: ${
+              errorData.message || response.statusText
+            }`
+          );
         });
       }
       return response.json();
@@ -424,4 +444,3 @@ function resetarVistoria(endId) {
       alert("Erro ao resetar o processo.");
     });
 }
-
