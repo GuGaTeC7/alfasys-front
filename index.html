@@ -1287,18 +1287,23 @@
                       type="search"
                       class="border-0 bg-light p-2 w-15"
                       placeholder="Procurar por END ID"
+                      id="pesquisaEndIdVistoria"
                     />
                     <input
                       type="search"
                       class="border-0 bg-light p-2 w-15"
                       placeholder="Procurar por Status"
+                      id="pesquisaStatusVistoria"
                     />
                     <input
                       type="search"
                       class="border-0 bg-light p-2 w-15"
                       placeholder="Procurar por Parecer"
+                      id="pesquisaParecerVistoria"
                     />
-                    <button class="btn btn-warning text-white">
+                    <button class="btn btn-warning text-white"
+                    onclick="filtrarTabelaVistoria(0, 'vistoria', 'tabelaVistoria')"
+                    >
                       Pesquisar
                     </button>
                   </div>
@@ -1349,18 +1354,23 @@
                       type="search"
                       class="border-0 bg-light p-2 w-15"
                       placeholder="Procurar por END ID"
+                      id="pesquisaEndIdKitTssr"
                     />
                     <input
                       type="search"
                       class="border-0 bg-light p-2 w-15"
                       placeholder="Procurar por Status"
+                      id="pesquisaStatusKitTssr"
                     />
                     <input
                       type="search"
                       class="border-0 bg-light p-2 w-15"
                       placeholder="Procurar por Parecer"
+                      id="pesquisaParecerKitTssr"
                     />
-                    <button class="btn btn-warning text-white">
+                    <button class="btn btn-warning text-white"
+                    onclick="filtrarTabelaKitTssr(0, 'kit-tssr', 'tabelaHistoricoKitTssr')"
+                    >
                       Pesquisar
                     </button>
                   </div>
@@ -1412,18 +1422,23 @@
                       type="search"
                       class="border-0 bg-light p-2 w-15"
                       placeholder="Procurar por END ID"
+                      id="pesquisaEndIdInclusao"
                     />
                     <input
                       type="search"
                       class="border-0 bg-light p-2 w-15"
                       placeholder="Procurar por Status"
+                      id="pesquisaStatusInclusao"
                     />
                     <input
                       type="search"
                       class="border-0 bg-light p-2 w-15"
                       placeholder="Procurar por Código SCI"
+                      id="pesquisaCodigoSci"
                     />
-                    <button class="btn btn-warning text-white">
+                    <button class="btn btn-warning text-white"
+                      onclick="filtrarTabelaSciInclusao(0, 'sci-inclusao', 'tabelaHistoricoInclusao')"
+                    >
                       Pesquisar
                     </button>
                   </div>

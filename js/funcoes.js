@@ -322,6 +322,7 @@ function filtrarTabela(page = 0, secao, idTabela) {
     municipio: secaoId.querySelector("#pesquisaMunicipio").value.trim(),
   };
 
+
   // Monta os parâmetros da URL
   const params = montarParametros(pesquisaCampos, page);
 
