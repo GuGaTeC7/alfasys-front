@@ -60,7 +60,7 @@ function preencherTabelaVistoria(page = 0) {
                         id="data-realizacao-${item.endId}"
                       />`
                     : renderInputDate(
-                        "data-readata-realizacao",
+                        "data-realizacao",
                         item.endId,
                         item.status
                       )
@@ -68,12 +68,12 @@ function preencherTabelaVistoria(page = 0) {
               </td>
               <td>
                 <select class="form-select border-0 bg-light p-2" id="select-status-${
-                item.endId
-                        }" ${
-                item.status === "Não iniciado" || item.status === "Concluído"
-                    ? "disabled"
-                    : ""
-                }>
+                  item.endId
+                }" ${
+          item.status === "Não iniciado" || item.status === "Concluído"
+            ? "disabled"
+            : ""
+        }>
                     <option value="" selected>
                     Selecione uma opção
                     </option>
@@ -82,11 +82,13 @@ function preencherTabelaVistoria(page = 0) {
                 </select>
               </td>
               <td>
-                <button class="btn btn-primary finalizar-btn" data-id-botao="${item.endId}" ${
-                  item.status === "Não iniciado" || item.status === "Concluído"
-                    ? "disabled"
-                    : ""
-                }>
+                <button class="btn btn-primary finalizar-btn" data-id-botao="${
+                  item.endId
+                }" ${
+          item.status === "Não iniciado" || item.status === "Concluído"
+            ? "disabled"
+            : ""
+        }>
                   Finalizar
                 </button>
                 <i 
@@ -121,7 +123,7 @@ function preencherTabelaVistoria(page = 0) {
 
       renderizarBotoesPaginacao(
         "pagination-controls-vistoria",
-        preencherTabelaAcesso,
+        preencherTabelaVistoria,
         dados.pageable.pageNumber,
         dados.totalPages
       );
@@ -246,6 +248,32 @@ document.querySelector("#vistoria tbody").addEventListener("click", (event) => {
   }
 });
 
+// Delegação de eventos para os ícones de enviar data
+document
+  .querySelector("#tabelaVistoria")
+  .addEventListener("click", (event) => {
+    const target = event.target;
+
+    if (target.classList.contains("fa-square-arrow-up-right")) {
+      const action = target.getAttribute("data-action");
+      const endId = target.getAttribute("data-id"); // Identifica o End ID
+      const dateInput = target.previousElementSibling.value; // Obtém o valor da data
+      const dataFormatada = formataData(dateInput.split("-"));
+
+      // Verifica se a data foi preenchida
+      if (!dateInput) {
+        alert("Por favor, preencha a data antes de enviá-la.");
+        return;
+      }
+
+      // Exibe a confirmação antes de enviar
+      exibirConfirmacao(
+        `Tem certeza que deseja enviar a data ${dataFormatada}?`,
+        () => enviarData(endId, dateInput, action, "vistoria")
+      );
+    }
+  });
+
 // Selecione o link "Histórico de cadastros" e "Editar Cadastro"
 const historicoLinkVistoria = document.querySelector("a[href='#vistoria']");
 
@@ -254,60 +282,61 @@ historicoLinkVistoria.addEventListener("click", function (event) {
   preencherTabelaVistoria(); // Função chamada ao clicar no link
 });
 
+document
+  .querySelector("#tabelaVistoria")
+  .addEventListener("click", (event) => {
+    const loadingOverlay = document.getElementById("loading-overlay");
 
-document.querySelector("#tabelaHistoricoAgendamentoVistoria").addEventListener("click", (event) => {
-  const loadingOverlay = document.getElementById("loading-overlay");
-  
-  // Verifica se o elemento clicado possui a classe `end-id`
-  if (event.target.classList.contains("end-id")) {
-    const endId = event.target.getAttribute("data-id");
+    // Verifica se o elemento clicado possui a classe `end-id`
+    if (event.target.classList.contains("end-id")) {
+      const endId = event.target.getAttribute("data-id");
 
-    if (!loadingOverlay) {
-      console.error("Elemento de loadingOverlay não encontrado!");
-      return;
-    }
+      if (!loadingOverlay) {
+        console.error("Elemento de loadingOverlay não encontrado!");
+        return;
+      }
 
-    loadingOverlay.style.display = "block";
+      loadingOverlay.style.display = "block";
 
-    // Criação do elemento de alerta
-    const alertDiv = document.createElement("div");
-    alertDiv.className = "alert-container";
-    alertDiv.style.position = "fixed";
-    alertDiv.style.top = "50%";
-    alertDiv.style.left = "50%";
-    alertDiv.style.transform = "translate(-50%, -50%)";
-    alertDiv.style.width = "86%";
-    alertDiv.style.maxWidth = "900px";
-    alertDiv.style.padding = "30px";
-    alertDiv.style.backgroundColor = "#012970";
-    alertDiv.style.color = "#ffffff";
-    alertDiv.style.border = "2px solid #012970";
-    alertDiv.style.borderRadius = "15px";
-    alertDiv.style.boxShadow = "0 4px 20px rgba(0, 0, 0, 0.15)";
-    alertDiv.style.zIndex = "1000";
-    alertDiv.style.overflow = "hidden";
-    alertDiv.style.display = "flex";
-    alertDiv.style.justifyContent = "center";
-    alertDiv.style.alignItems = "center";
-    alertDiv.style.flexDirection = "column";
+      // Criação do elemento de alerta
+      const alertDiv = document.createElement("div");
+      alertDiv.className = "alert-container";
+      alertDiv.style.position = "fixed";
+      alertDiv.style.top = "50%";
+      alertDiv.style.left = "50%";
+      alertDiv.style.transform = "translate(-50%, -50%)";
+      alertDiv.style.width = "86%";
+      alertDiv.style.maxWidth = "900px";
+      alertDiv.style.padding = "30px";
+      alertDiv.style.backgroundColor = "#012970";
+      alertDiv.style.color = "#ffffff";
+      alertDiv.style.border = "2px solid #012970";
+      alertDiv.style.borderRadius = "15px";
+      alertDiv.style.boxShadow = "0 4px 20px rgba(0, 0, 0, 0.15)";
+      alertDiv.style.zIndex = "1000";
+      alertDiv.style.overflow = "hidden";
+      alertDiv.style.display = "flex";
+      alertDiv.style.justifyContent = "center";
+      alertDiv.style.alignItems = "center";
+      alertDiv.style.flexDirection = "column";
 
-    // Verificação do token de autenticação
-    if (!token) {
-      console.error("Token de autenticação não encontrado!");
-      loadingOverlay.style.display = "none";
-      return;
-    }
+      // Verificação do token de autenticação
+      if (!token) {
+        console.error("Token de autenticação não encontrado!");
+        loadingOverlay.style.display = "none";
+        return;
+      }
 
-    fetch(`${host}/cadastroEndIds/${endId}`, {
-      method: "GET",
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((response) => {
-        if (!response.ok) throw new Error("Erro ao buscar dados.");
-        return response.json();
+      fetch(`${host}/cadastroEndIds/${endId}`, {
+        method: "GET",
+        headers: { Authorization: `Bearer ${token}` },
       })
-      .then((dados) => {
-        alertDiv.innerHTML = `
+        .then((response) => {
+          if (!response.ok) throw new Error("Erro ao buscar dados.");
+          return response.json();
+        })
+        .then((dados) => {
+          alertDiv.innerHTML = `
           <h1 style="display: block; text-align: center; margin-bottom: 25px; font-size: 1.5em; width: 100%;">
             Detalhes do END ID: <b>${endId}</b>
           </h1>
@@ -334,41 +363,37 @@ document.querySelector("#tabelaHistoricoAgendamentoVistoria").addEventListener("
           </div>
         `;
 
-        const closeButton = document.createElement("button");
-        closeButton.innerText = "Fechar";
-        closeButton.style.marginTop = "20px";
-        closeButton.style.padding = "12px 20px";
-        closeButton.style.backgroundColor = "#ffffff";
-        closeButton.style.border = "2px solid #ffffff";
-        closeButton.style.color = "#012970";
-        closeButton.style.cursor = "pointer";
-        closeButton.style.borderRadius = "10px";
-        closeButton.style.display = "block";
-        closeButton.style.marginLeft = "auto";
-        closeButton.style.marginRight = "auto";
+          const closeButton = document.createElement("button");
+          closeButton.innerText = "Fechar";
+          closeButton.style.marginTop = "20px";
+          closeButton.style.padding = "12px 20px";
+          closeButton.style.backgroundColor = "#ffffff";
+          closeButton.style.border = "2px solid #ffffff";
+          closeButton.style.color = "#012970";
+          closeButton.style.cursor = "pointer";
+          closeButton.style.borderRadius = "10px";
+          closeButton.style.display = "block";
+          closeButton.style.marginLeft = "auto";
+          closeButton.style.marginRight = "auto";
 
-        closeButton.addEventListener("click", () => {
-          alertDiv.remove();
+          closeButton.addEventListener("click", () => {
+            alertDiv.remove();
+          });
+
+          alertDiv.appendChild(closeButton);
+          document.body.appendChild(alertDiv);
+
+          window.scrollTo(
+            0,
+            alertDiv.getBoundingClientRect().top + window.scrollY - 100
+          );
+        })
+        .catch((error) => {
+          console.error("Erro ao buscar dados:", error);
+          alert("Erro ao carregar os dados. Atualize a tela apertando 'F5'.");
+        })
+        .finally(() => {
+          loadingOverlay.style.display = "none";
         });
-
-        alertDiv.appendChild(closeButton);
-        document.body.appendChild(alertDiv);
-
-        window.scrollTo(
-          0,
-          alertDiv.getBoundingClientRect().top + window.scrollY - 100
-        );
-      })
-      .catch((error) => {
-        console.error("Erro ao buscar dados:", error);
-        alert("Erro ao carregar os dados. Atualize a tela apertando 'F5'.");
-      })
-      .finally(() => {
-        loadingOverlay.style.display = "none";
-      });
-  }
-});
-
-
-
-
+    }
+  });

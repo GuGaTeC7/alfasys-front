@@ -542,6 +542,112 @@ function configurarEventosCopiar() {
   });
 }
 
+// Função para enviar a data ao backend
+function enviarData(endId, dateInput, action, etapa) {
+  console.log(`Data enviada: ${dateInput} (End ID: ${endId}, Ação: ${action})`);
+
+  // Verifica se a data está em formato válido
+  const dataValida = !isNaN(new Date(dateInput).getTime());
+  if (!dataValida) {
+    alert("Formato de data inválido.");
+    return;
+  }
+
+  // Mapeamento dinâmico de ações para endpoints
+  const endpointMap = {
+    "data-solicitacao": {
+      payloadKey: "dataSolicitacao",
+      url: `${host}/cadastroEndIds/agendamento-parcial/${endId}`,
+    },
+    "data-previsao": {
+      payloadKey: "dataPrevisao",
+      url: `${host}/cadastroEndIds/agendamento-parcial/${endId}`,
+    },
+    "data-liberacao": {
+      payloadKey: "dataLiberacao",
+      url: `${host}/cadastroEndIds/agendamento-parcial/${endId}`,
+    },
+    "data-realizacao": {
+      payloadKey: "dataRealizacao",
+      url: `${host}/vistorias/${endId}`,
+    },
+  };
+
+  // Valida se a ação está mapeada
+  const endpointConfig = endpointMap[action];
+  if (!endpointConfig) {
+    console.error("Ação inválida ou não mapeada.");
+    alert("Ação inválida. Verifique o código.");
+    return;
+  }
+
+  // Cria o payload dinamicamente
+  const payload = endpointConfig.payloadKey
+    ? { [endpointConfig.payloadKey]: dateInput }
+    : null;
+
+  // Realiza o fetch para o endpoint correto
+  fetch(endpointConfig.url, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: payload ? JSON.stringify(payload) : null,
+  })
+    .then((response) => {
+      if (!response.ok) {
+        return response.json().then((err) => {
+          throw new Error(
+            `${response.status} - ${response.statusText}: ${
+              err.message || "Erro desconhecido"
+            }`
+          );
+        });
+      }
+      return response.json();
+    })
+    .then((dados) => {
+      // Oculta o botão correspondente
+      const button = document.querySelector(
+        `i[data-action="${action}"][data-id="${endId}"]`
+      );
+      if (button) {
+        button.style.display = "none";
+      } else {
+        console.warn("Botão não encontrado! Mas a operação continua.");
+      }
+      
+      const paginacaoAgendamento = "pagination-controls-agendamento"
+      const paginacaoVistoria = "pagination-controls-vistoria"
+
+      // Atualiza a tabela ou controla a paginação
+      const paginacao = document.getElementById(
+        etapa === "agendamento" ? paginacaoAgendamento : paginacaoVistoria
+      );
+      if (paginacao) {
+        const paginaAtual = parseInt(
+          paginacao.querySelector(".btn-primary").textContent,
+          10
+        );
+        if (!isNaN(paginaAtual)) {
+          if (etapa === "agendamento") preencherTabelaAcesso(paginaAtual - 1); else preencherTabelaVistoria(paginaAtual - 1);
+        } else {
+          console.error("Erro ao obter a página atual.");
+        }
+      } else {
+        console.warn("Controle de paginação não encontrado.");
+      }
+
+      alert("Data enviada com sucesso!");
+      console.log("Resposta do servidor:", dados);
+    })
+    .catch((error) => {
+      console.error("Erro ao enviar a data:", error);
+      alert("Erro ao enviar a data. Tente novamente.");
+    });
+}
+
 function buscaEnId(secao) {
   const botaoBuscar = event.target;
   botaoBuscar.disabled = true;

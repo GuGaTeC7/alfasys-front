@@ -145,9 +145,19 @@ function preencherTabelaAcesso(page = 0) {
             <td style="text-align: center;">
               <i 
                 class="fa-solid fa-comments" 
-                style="font-size: 1.7rem; color: ${item.reset ? '#007bff' : 'rgba(0, 123, 255, 0.46)'}; 
-                ${item.observacoes ? `cursor: pointer;"` : 'cursor: not-allowed;"'}" 
-                ${item.observacoes ? `onclick="alert('${item.observacoes}');"` : 'style="cursor: none !important;"'}>
+                style="font-size: 1.7rem; color: ${
+                  item.reset ? "#007bff" : "rgba(0, 123, 255, 0.46)"
+                }; 
+                ${
+                  item.observacoes
+                    ? `cursor: pointer;"`
+                    : 'cursor: not-allowed;"'
+                }" 
+                ${
+                  item.observacoes
+                    ? `onclick="alert('${item.observacoes}');"`
+                    : 'style="cursor: none !important;"'
+                }>
               </i>
             </td>
           </tr>`;
@@ -442,81 +452,6 @@ function atualizarNovoAcesso(secao) {
     });
 }
 
-// Função para enviar a data ao backend
-function enviarData(endId, dateInput, action) {
-  console.log(`Data enviada: ${dateInput} (End ID: ${endId})`);
-
-  // Verifica se a data está em formato válido
-  const dataValida = !isNaN(new Date(dateInput).getTime());
-  if (!dataValida) {
-    alert("Formato de data inválido.");
-    return;
-  }
-
-  const payload =
-    action === "data-solicitacao"
-      ? { dataSolicitacao: dateInput }
-      : action === "data-previsao"
-      ? { dataPrevisao: dateInput }
-      : { dataLiberacao: dateInput };
-
-  fetch(`${host}/cadastroEndIds/agendamento-parcial/${endId}`, {
-    method: "PATCH",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(payload),
-  })
-    .then((response) => {
-      if (!response.ok) {
-        return response.json().then((err) => {
-          throw new Error(
-            `${response.status} - ${response.statusText}: ${
-              err.message || "Erro desconhecido"
-            }`
-          );
-        });
-      }
-
-      return response.json();
-    })
-    .then((dados) => {
-      // Captura o botão pelo seletor baseado nos atributos
-      const button = document.querySelector(
-        `i[data-action="${action}"][data-id="${endId}"]`
-      );
-
-      // Verifica se o botão foi encontrado e o oculta
-      if (button) {
-        button.style.display = "none"; // Oculta o botão
-      } else {
-        console.warn("Botão não encontrado! Mas a operação continua.");
-      }
-
-      // Garantir que paginação está funcionando corretamente
-      const paginacao = document.getElementById(
-        "pagination-controls-agendamento"
-      );
-      const paginaAtual = parseInt(
-        paginacao.querySelector(".btn-primary").textContent,
-        10
-      );
-      if (!isNaN(paginaAtual)) {
-        preencherTabelaAcesso(paginaAtual - 1); // Preenche a tabela com base na página atual
-      } else {
-        console.error("Erro ao obter a página atual.");
-      }
-
-      alert("Data enviada com sucesso!");
-      console.log("Resposta do servidor:", dados);
-    })
-    .catch((error) => {
-      console.error("Erro ao enviar a data:", error);
-      alert("Erro ao enviar a data. Tente novamente.");
-    });
-}
-
 // Delegação de eventos para os ícones de enviar data
 document
   .querySelector("#tabelaHistoricoAgendamento")
@@ -538,7 +473,7 @@ document
       // Exibe a confirmação antes de enviar
       exibirConfirmacao(
         `Tem certeza que deseja enviar a data ${dataFormatada}?`,
-        () => enviarData(endId, dateInput, action)
+        () => enviarData(endId, dateInput, action, "agendamento")
       );
     }
   });
