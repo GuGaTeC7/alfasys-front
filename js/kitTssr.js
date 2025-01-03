@@ -110,12 +110,6 @@ function preencherTabelaKitTssr(page = 0) {
                   }>
                     Finalizar
                   </button>
-                  <i 
-                    class="fa-solid fa-rotate-left btnResetar" 
-                    title="Resetar End ID" 
-                    data-id="${item.endId}" 
-                    style="cursor: pointer; margin-left: 8px;"></i>
-                  </i>
                 </td>
               </tr>`;
   
@@ -180,7 +174,7 @@ function preencherTabelaKitTssr(page = 0) {
         console.log("Dados retornados pelo servidor:", data);
         const botaoIniciar = document.querySelector(`[data-id-botao="${endId}"]`);
         botaoIniciar.style.display = "none";
-        const paginacao = document.getElementById("pagination-control-Tssr");
+        const paginacao = document.getElementById("pagination-controls-Tssr");
         const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
   
         preencherTabelaKitTssr(paginaAtual - 1);

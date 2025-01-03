@@ -20,6 +20,9 @@ function confirmAlert(action, endId, etapa) {
     else if (etapa === "Kit-Tssr") {
       iniciaTssr(endId);
     }
+    else if (etapa === "sci-inclusao") {
+      iniciaInclusao(endId);
+    }
   }
   dismissAlert();
 }
