@@ -10,7 +10,10 @@ function confirmAlert(action, endId, etapa) {
   if (action === "finalizar") {
     if (etapa === "agendamento") {
       finalizaAgendamento(endId);
+    } else if (etapa === "vistoria") {
+      finalizaVistoria(endId);
     }
+
     } else if (action === "iniciar") {
     if (etapa === "agendamento") {
       iniciaAgendamento(endId);

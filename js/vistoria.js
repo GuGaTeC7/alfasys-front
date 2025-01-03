@@ -171,60 +171,60 @@ function iniciaVistoria(endId) {
     });
 }
 
-// function finalizaVistoria(endId) {
-//   // Obtém os valores das datas
-//   const dataRealizacao = document.getElementById(
-//     `data-realizacao-${endId}`
-//   )?.value;
+//FINALIZAR VISTORIA//
+function finalizaVistoria(endId) {
+  // Obtém os valores das datas e do status
+  const dataRealizacao = document.getElementById(`data-realizacao-${endId}`)?.value;
+  const selectStatus = document.getElementById(`select-status-${endId}`)?.value;
 
-//   const selectStatus = document.getElementById(
-//     `select-status-${endId}`
-//   )?.value;
+  // Verifica se todas as datas estão preenchidas
+  if (!dataRealizacao) {
+    alert("A data de realização deve estar preenchida.");
+    return; // Interrompe a execução se a data não for válida
+  }
 
-//   // Verifica se todas as datas estão preenchidas
-//   if (!dataRealizacao || selectStatus) {
-//     alert(
-//       "Todas as datas (Solicitação, Previsão e Liberação) devem estar preenchidas."
-//     );
-//     return; // Interrompe a execução se as datas não forem válidas
-//   }
+  // Verifica se o campo de status está preenchido
+  if (!selectStatus || selectStatus === "") {
+    alert("Por favor, selecione algum parecer (Viável ou Inviável).");
+    return; // Interrompe a execução se o status não for selecionado
+  }
 
-//   // Monta o payload
-//   const payload = {
-//     status: "Concluído",
-//   };
+  // Monta o payload
+  const payload = {
+    status: "Concluído",
+    resultado: selectStatus, // Adiciona o status selecionado ao payload
+  };
 
-//   // Realiza a requisição
-//   fetch(`${host}/cadastroEndIds/agendamento-parcial/${endId}`, {
-//     method: "PATCH",
-//     headers: {
-//       Authorization: `Bearer ${token}`,
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify(payload),
-//   })
-//     .then((response) => {
-//       console.log("Resposta da requisição recebida:", response);
-//       if (!response.ok) {
-//         throw new Error(`Erro ao atualizar os dados: ${response.statusText}`);
-//       }
-//       return response.json();
-//     })
-//     .then((data) => {
-//       console.log("Dados retornados pelo servidor:", data);
+  // Realiza a requisição
+  fetch(`${host}/vistorias/${endId}`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  })
+    .then((response) => {
+      console.log("Resposta da requisição recebida:", response);
+      if (!response.ok) {
+        throw new Error(`Erro ao atualizar os dados: ${response.statusText}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Dados retornados pelo servidor:", data);
 
-//       // Atualiza a tabela na página atual
-//       const paginacao = document.getElementById(
-//         "pagination-controls-agendamento"
-//       );
-//       const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
-//       preencherTabelaAcesso(paginaAtual - 1);
-//     })
-//     .catch((error) => {
-//       console.error("Erro durante a atualização dos dados:", error);
-//       alert("Erro ao iniciar.");
-//     });
-// }
+      // Atualiza a tabela na página atual
+      const paginacao = document.getElementById("pagination-controls-vistoria");
+      const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
+      preencherTabelaVistoria(paginaAtual - 1);
+    })
+    .catch((error) => {
+      console.error("Erro durante a atualização dos dados:", error);
+      alert("Erro ao finalizar a vistoria.");
+    });
+}
+
 
 // Delegação de eventos para os botões na tabela
 
