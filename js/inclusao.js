@@ -79,7 +79,7 @@ function preencherTabelaSciInclusao(page = 0) {
                             class="form-control text-center" 
                             value="${dataAprovacao}" 
                             disabled
-                            id="data-prevista-${item.endId}"
+                            id="data-aprovacao-${item.endId}"
                           />`
                         : renderInputDate("dataAprovacao", item.endId, item.status)
                     }
@@ -248,6 +248,34 @@ function preencherTabelaSciInclusao(page = 0) {
     }
   });
   
+
+// Delegação de eventos para os ícones de enviar data
+document
+  .querySelector("#tabelaHistoricoInclusao")
+  .addEventListener("click", (event) => {
+    const target = event.target;
+
+    if (target.classList.contains("fa-square-arrow-up-right")) {
+      const action = target.getAttribute("data-action");
+      const endId = target.getAttribute("data-id"); // Identifica o End ID
+      const dateInput = target.previousElementSibling.value; // Obtém o valor da data
+      const dataFormatada = formataData(dateInput.split("-"));
+
+      // Verifica se a data foi preenchida
+      if (!dateInput) {
+        alert("Por favor, preencha a data antes de enviá-la.");
+        return;
+      }
+
+      // Exibe a confirmação antes de enviar
+      exibirConfirmacao(
+        `Tem certeza que deseja enviar a data ${dataFormatada}?`,
+        () => enviarData(endId, dateInput, action, "sci-inclusao")
+      );
+    }
+  });
+
+
   document.querySelector("#tabelaHistoricoInclusao").addEventListener("click", (event) => {
     const loadingOverlay = document.getElementById("loading-overlay");
     
@@ -369,3 +397,4 @@ const historicoLinkInclusao = document.querySelector("a[href='#sci-inclusao']");
 historicoLinkInclusao.addEventListener("click", function (event) {
     preencherTabelaSciInclusao(); // Função chamada ao clicar no link
 });
+

@@ -618,47 +618,6 @@ document
     }
   });
 
-// Função para exibir uma confirmação
-function exibirConfirmacao(mensagem, onConfirm) {
-  // Remove alertas existentes antes de criar um novo
-  dismissAlert();
-
-  const alertDiv = document.createElement("div");
-  alertDiv.className = "custom-alert";
-  Object.assign(alertDiv.style, {
-    position: "fixed",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: "300px",
-    padding: "15px",
-    backgroundColor: "rgba(1, 41, 112, 0.9)",
-    color: "#ffffff",
-    borderRadius: "5px",
-    boxShadow: "0 4px 20px rgba(0, 0, 0, 0.15)",
-    zIndex: "1000",
-    textAlign: "center",
-  });
-
-  alertDiv.innerHTML = `
-    <h6 style="font-size: 1.3rem;">${mensagem}</h6>
-    <button class="btn btn-light mt-2" id="cancel-button">Cancelar</button>
-    <button class="btn btn-warning text-white mt-2" id="confirm-button">Confirmar</button>
-  `;
-  document.body.appendChild(alertDiv);
-
-  // Evento para cancelar
-  document
-    .getElementById("cancel-button")
-    .addEventListener("click", dismissAlert);
-
-  // Evento para confirmar
-  document.getElementById("confirm-button").addEventListener("click", () => {
-    onConfirm();
-    dismissAlert();
-  });
-}
-
 // Selecione o link "Histórico de cadastros" e "Editar Cadastro"
 const historicoLinkAgendamento = document.querySelector(
   "a[href='#todos-agendamentos']"
