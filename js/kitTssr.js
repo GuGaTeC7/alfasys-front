@@ -25,6 +25,7 @@ function preencherTabelaKitTssr(page = 0) {
             const dataRealizacao = item.dataRealizacao
               ? formatarDataParaInput(item.dataRealizacao)
               : "";
+
   
           // Monta a linha da tabela
           const row = `
@@ -136,7 +137,7 @@ function preencherTabelaKitTssr(page = 0) {
   
         renderizarBotoesPaginacao(
           "pagination-controls-Tssr",
-          preencherTabelaAcesso,
+          preencherTabelaKitTssr,
           dados.pageable.pageNumber,
           dados.totalPages
         );

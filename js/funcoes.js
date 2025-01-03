@@ -587,6 +587,14 @@ function enviarData(endId, dateInput, action, etapa) {
       payloadKey: "dataRealizacao",
       url: `${host}/vistorias/${endId}`,
     },
+    "data-prevista": {
+      payloadKey: "dataPrevista",
+      url: `${host}/tssrs/${endId}`,
+    },
+    "data-realizada": {
+      payloadKey: "dataRealizacao",
+      url: `${host}/tssrs/${endId}`,
+    },
   };
 
   // Valida se a ação está mapeada
@@ -633,21 +641,35 @@ function enviarData(endId, dateInput, action, etapa) {
       } else {
         console.warn("Botão não encontrado! Mas a operação continua.");
       }
-      
-      const paginacaoAgendamento = "pagination-controls-agendamento"
-      const paginacaoVistoria = "pagination-controls-vistoria"
 
-      // Atualiza a tabela ou controla a paginação
+      // Controle de paginação com base na etapa
+      const paginacaoAgendamento = "pagination-controls-agendamento";
+      const paginacaoVistoria = "pagination-controls-vistoria";
+      const paginacaoTssr = "pagination-controls-Tssr";
+
       const paginacao = document.getElementById(
-        etapa === "agendamento" ? paginacaoAgendamento : paginacaoVistoria
+        etapa === "agendamento"
+          ? paginacaoAgendamento
+          : etapa === "vistoria"
+          ? paginacaoVistoria
+          : etapa === "kit-tssr"
+          ? paginacaoTssr
+          : null
       );
+
       if (paginacao) {
         const paginaAtual = parseInt(
           paginacao.querySelector(".btn-primary").textContent,
           10
         );
         if (!isNaN(paginaAtual)) {
-          if (etapa === "agendamento") preencherTabelaAcesso(paginaAtual - 1); else preencherTabelaVistoria(paginaAtual - 1);
+          if (etapa === "agendamento") {
+            preencherTabelaAcesso(paginaAtual - 1);
+          } else if (etapa === "vistoria") {
+            preencherTabelaVistoria(paginaAtual - 1);
+          } else if (etapa === "Kit-Tssr") {
+            preencherTabelaKitTssr(paginaAtual - 1);
+          }
         } else {
           console.error("Erro ao obter a página atual.");
         }
@@ -663,6 +685,7 @@ function enviarData(endId, dateInput, action, etapa) {
       alert("Erro ao enviar a data. Tente novamente.");
     });
 }
+
 
 function buscaEnId(secao) {
   const botaoBuscar = event.target;
