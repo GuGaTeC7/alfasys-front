@@ -11,11 +11,14 @@ function confirmAlert(action, endId, etapa) {
     if (etapa === "agendamento") {
       finalizaAgendamento(endId);
     }
-  } else if (action === "iniciar") {
+    } else if (action === "iniciar") {
     if (etapa === "agendamento") {
       iniciaAgendamento(endId);
     } else if (etapa === "vistoria") {
       iniciaVistoria(endId);
+    }
+    else if (etapa === "Kit-Tssr") {
+      iniciaTssr(endId);
     }
   }
   dismissAlert();
