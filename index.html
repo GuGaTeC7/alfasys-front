@@ -233,7 +233,7 @@
                   <i class="fa-solid fa-unlock-keyhole"></i>
                 </span>
                 <div class="ml-4">
-                  <span class=""> LIBERAÇÃO DE ACESSO </span>
+                  <span class=""> ACESSO VISTORIA</span>
                 </div>
               </div>
               <span><i class="bx bx-chevron-down"></i></span>
@@ -312,6 +312,48 @@
               </div>
             </a>
           </li>
+
+          <!------------------------------------------- ACESSO A OBRA ------------------------------------------------>
+
+          <li
+            class="rounded active mb-1 list nav-item"
+            data-toggle="collapse"
+            data-target="#acessoObra"
+          >
+            <a href="#" class="text-decoration-none sub-menu">
+              <div class="text d-flex">
+                <span>
+                  <i class="fa-solid fa-unlock-keyhole"></i>
+                </span>
+                <div class="ml-4">
+                  <span class=""> ACESSO OBRA </span>
+                </div>
+              </div>
+              <span><i class="bx bx-chevron-down"></i></span>
+            </a>
+          </li>
+          <div class="collapse" id="acessoObra">
+            <ul class="unstyled pl-5 ml-4 submenu nav nav-pills flex-column">
+              <li class="py-2 nav-item">
+                <a
+                  data-toggle="pill"
+                  href="#editar-agendamentos-obra"
+                  class="text-decoration-none"
+                >
+                  Editar agendamento
+                </a>
+              </li>
+              <li class="py-2 nav-item">
+                <a
+                  data-toggle="pill"
+                  href="#todos-agendamentos-obra"
+                  class="text-decoration-none"
+                >
+                  Histórico de agendamentos
+                </a>
+              </li>
+            </ul>
+          </div>
 
           <!------------------------------------------- OBRA ------------------------------------------------>
 
@@ -1475,6 +1517,280 @@
           </div>
         </div>
 
+          
+          <!-- ============================== PÁGINA DE ACESSO A OBRA ============================== -->
+
+          <!-- editar agendamento -->
+
+          <div class="tab-pane fade px-4" id="editar-agendamentos-obra">
+            <div class="container-fluid">
+              <div class="row justify-content-between my-4">
+                <div class="col shadow bg-white p-4 rounded">
+                  <h4 class="mb-3">Editar agendamento:</h4>
+                  <form>
+                    <div class="row form-desing my-4">
+                      <div class="col-md-4 mt-2 mt-md-0">
+                        <label for="editarEndIdAcesso">END ID *</label>
+                        <input
+                          type="text"
+                          class="form-control editarEndIdAcesso"
+                          placeholder="Informe o END ID"
+                          autofocus
+                        />
+                      </div>
+                      <div class="col-md-2 mt-2 mt-md-0 d-flex align-items-end">
+                        <button
+                          type="button"
+                          class="btn btn-primary w-100"
+                          id="button-buscar-agendamento"
+                          onclick="buscaAcesso('editar-agendamento')"
+                        >
+                          <i class="fa-solid fa-magnifying-glass"></i> Buscar
+                        </button>
+                      </div>
+                    </div>
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarSiteIdAcesso">Site ID *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="editarSiteIdAcesso"
+                        />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarDemandaAcesso">Demanda *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="editarDemandaAcesso"
+                        />
+                      </div>
+                    </div>
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarDetentoraAcesso">Detentora *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="editarDetentoraAcesso"
+                        />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarIdDetentoraAcesso"
+                          >ID Detentora *</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="editarIdDetentoraAcesso"
+                        />
+                      </div>
+                    </div>
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarOperadoraAcesso"
+                          >Operadora cedente *</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="editarOperadoraAcesso"
+                        />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarIdOperadoraAcesso"
+                          >ID Operadora *</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="editarIdOperadoraAcesso"
+                        />
+                      </div>
+                    </div>
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarLogradouroAcesso">Logradouro *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="editarLogradouroAcesso"
+                        />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarNumeroAcesso">Número *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="editarNumeroAcesso"
+                        />
+                      </div>
+                    </div>
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarBairroAcesso">Bairro *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="editarBairroAcesso"
+                        />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarMunicipioAcesso">Município *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="editarMunicipioAcesso"
+                        />
+                      </div>
+                    </div>
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarEstadoAcesso">Estado *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="editarEstadoAcesso"
+                        />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarCepAcesso">CEP *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="editarCepAcesso"
+                        />
+                      </div>
+                    </div>
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarLatitudeAcesso">Latitude *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="editarLatitudeAcesso"
+                        />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarLongitudeAcesso">Longitude *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="editarLongitudeAcesso"
+                        />
+                      </div>
+                    </div>
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarLocalizacaoAcesso"
+                          >Localizacão Maps *</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="editarLocalizacaoAcesso"
+                        />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarObservacoesAcesso">Observações</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="editarObservacoesAcesso"
+                        />
+                      </div>
+                    </div>
+                    <div class="row form-desing my-4">
+                      <div class="col">
+                        <button
+                          class="btn btn-primary text-white py-2 px-5"
+                          type="button"
+                          id="salvarAcessoNovo"
+                          onclick="atualizarNovoAcesso('editar-agendamentos-obra')"
+                        >
+                          Atualizar
+                        </button>
+                        <button
+                          class="btn btn-secondary text-white py-2 px-5"
+                          type="reset"
+                        >
+                          Resetar
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- todos agendamentos -->
+
+          <div class="tab-pane fade px-4" id="todos-agendamentos-obra">
+            <div class="container-fluid">
+              <div class="row justify-content-between my-4">
+                <div class="col shadow bg-white p-4 rounded">
+                  <h4 class="mb-3">Histórico de Agendamentos:</h4>
+                  <div class="header-result mb-3">
+                    <input
+                      type="search"
+                      class="border-0 bg-light p-2 w-40"
+                      placeholder="Pesquisar por END ID"
+                      id="pesquisaEndId"
+                    />
+                    <input
+                      type="search"
+                      class="border-0 bg-light p-2"
+                      placeholder="Pesquisar por Status"
+                      id="pesquisaStatusAgendamento"
+                    />
+                    <input
+                      type="search"
+                      class="border-0 bg-light p-2"
+                      placeholder="Pesquisar por Município"
+                      id="pesquisaMunicipio"
+                    />
+                    <button
+                      class="btn btn-warning text-white"
+                      onclick="filtrarTabela(0, 'todos-agendamentos-obra', 'tabelaHistoricoAgendamento-obra')"
+                    >
+                      BUSCAR
+                    </button>
+                  </div>
+                  <div class="table-responsive text-nowrap">
+                    <table
+                      class="table table-hover table-striped w-100"
+                      id="tabelaHistoricoAgendamento-obra"
+                    >
+                      <thead class="bg-light">
+                        <tr>
+                          <th>END ID</th>
+                          <th>Status Agendamento</th>
+                          <th>Data Solicitação</th>
+                          <th>Data Previsão</th>
+                          <th>Data de Liberação</th>
+                          <th>Ação</th>
+                          <th>Observações</th>
+                        </tr>
+                      </thead>
+                      <tbody></tbody>
+                    </table>
+                    <div id="total-pesquisa-agendamento-obra"></div>
+                    <!-- Controles de Paginação -->
+                    <div
+                      id="pagination-controls-agendamento-obra"
+                      class="d-flex justify-content-center my-2"
+                    >
+                      <!-- Botões serão gerados dinamicamente -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
 
           <!-- ============================== PÁGINA DE OBRA ============================== -->
 
@@ -2057,6 +2373,7 @@
     <script src="js/obra.js"></script>
     <script src="js/projetos.js"></script>
     <script src="js/exclusao.js"></script>
+    <script src="js/acessoObra.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"></script>

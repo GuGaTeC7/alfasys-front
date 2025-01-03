@@ -225,9 +225,6 @@ function preencherTabelaSciInclusao(page = 0) {
       });
   }
 
-
-
-
   document.querySelector("#sci-inclusao tbody").addEventListener("click", (event) => {
     const button = event.target.closest("[data-id-botao]");
     if (!button) return; // Se não clicar em um botão relevante, retorna
