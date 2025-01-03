@@ -50,13 +50,21 @@ function preencherTabelaVistoria(page = 0) {
               </button>
             </td>
             <td>
-            <input 
-              type="date" 
-              class="form-control text-center" 
-              value="${dataRealizacao}" 
-              id="data-realizacao-${item.endId}"
-              ${item.status !== "Em andamento" ? "disabled" : ""}
-            />
+            ${
+              dataRealizacao
+                ? `<input 
+                    type="date" 
+                    class="form-control text-center" 
+                    value="${dataRealizacao}" 
+                    id="data-realizacao-${item.endId}"
+                    ${item.status !== "Em andamento" ? "disabled" : ""}
+                  />`
+                : renderInputDate1(
+                    "data-realizacao",
+                    item.endId,
+                    item.status
+                  )
+            }
           </td>
           <td>
             <select class="form-select border-0 bg-light p-2" id="select-status-${
@@ -210,6 +218,33 @@ function finalizaVistoria(endId) {
       console.error("Erro durante a atualização dos dados:", error);
       alert("Erro ao finalizar a vistoria.");
     });
+}
+
+// Função para renderizar o input de data com ícone de envio
+function renderInputDate1(action, endId, status) {
+  if (status === "Não iniciado") {
+    return `
+      <div class="input-icon-group">
+        <input 
+          type="date" 
+          class="form-control" 
+          disabled
+        />
+        <i class="fa-sharp-duotone fa-solid fa-square-arrow-up-right" 
+          data-action="${action}" 
+          data-id="${endId}"></i>
+      </div>`;
+  }
+  return `
+      <div class="input-icon-group">
+        <input 
+          type="date" 
+          class="form-control" 
+        />
+        <i class="fa-sharp-duotone fa-solid fa-square-arrow-up-right" 
+          data-action="${action}" 
+          data-id="${endId}"></i>
+      </div>`;
 }
 
 // Delegação de eventos para os botões na tabela
@@ -444,3 +479,29 @@ function resetarVistoria(endId) {
       alert("Erro ao resetar o processo.");
     });
 }
+
+// Delegação de eventos para os ícones de enviar data
+document
+  .querySelector("#tabelaVistoria")
+  .addEventListener("click", (event) => {
+    const target = event.target;
+
+    if (target.classList.contains("fa-square-arrow-up-right")) {
+      const action = target.getAttribute("data-action");
+      const endId = target.getAttribute("data-id"); // Identifica o End ID
+      const dateInput = target.previousElementSibling.value; // Obtém o valor da data
+      const dataFormatada = formataData(dateInput.split("-"));
+
+      // Verifica se a data foi preenchida
+      if (!dateInput) {
+        alert("Por favor, preencha a data antes de enviá-la.");
+        return;
+      }
+
+      // Exibe a confirmação antes de enviar
+      exibirConfirmacao(
+        `Tem certeza que deseja enviar a data ${dataFormatada}?`,
+        () => enviarData(endId, dateInput, action, "vistoria")
+      );
+    }
+  });

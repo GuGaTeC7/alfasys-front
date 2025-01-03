@@ -61,10 +61,10 @@ function preencherTabelaKitTssr(page = 0) {
                           class="form-control text-center" 
                           value="${dataRealizacao}" 
                           disabled
-                          id="data-realizacao-${item.endId}"
+                          id="data-realizada-${item.endId}"
                         />`
                       : renderInputDate(
-                          "data-readata-realizacao",
+                          "data-readata-realizada",
                           item.endId,
                           item.status
                         )
@@ -189,7 +189,7 @@ function preencherTabelaKitTssr(page = 0) {
   //FINALIZAR KIT TSSR//
 function finalizaKitTssr(endId) {
   // Obtém os valores das datas e do status
-  const dataRealizacao = document.getElementById(`data-realizacao-${endId}`)?.value;
+  const dataRealizacao = document.getElementById(`data-realizada-${endId}`)?.value;
   const dataPrevista = document.getElementById(`data-prevista-${endId}`)?.value;
   const selectStatus = document.getElementById(`select-status-${endId}`)?.value;
 
@@ -386,3 +386,31 @@ const historicoLinkKitTssr = document.querySelector("a[href='#kit-tssr']");
 historicoLinkKitTssr.addEventListener("click", function (event) {
     preencherTabelaKitTssr(); // Função chamada ao clicar no link
 });
+
+
+// Delegação de eventos para os ícones de enviar data
+document
+  .querySelector("#tabelaHistoricoKitTssr")
+  .addEventListener("click", (event) => {
+    const target = event.target;
+
+    if (target.classList.contains("fa-square-arrow-up-right")) {
+      const action = target.getAttribute("data-action");
+      const endId = target.getAttribute("data-id"); // Identifica o End ID
+      const dateInput = target.previousElementSibling.value; // Obtém o valor da data
+      const dataFormatada = formataData(dateInput.split("-"));
+
+      // Verifica se a data foi preenchida
+      if (!dateInput) {
+        alert("Por favor, preencha a data antes de enviá-la.");
+        return;
+      }
+
+      // Exibe a confirmação antes de enviar
+      exibirConfirmacao(
+        `Tem certeza que deseja enviar a data ${dataFormatada}?`,
+        () => enviarData(endId, dateInput, action, "vistoria")
+      );
+    }
+  });
+
