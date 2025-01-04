@@ -691,7 +691,6 @@ function enviarData(endId, dateInput, action, etapa) {
       } else {
         console.warn("Controle de paginação não encontrado.");
       }
-
       alert("Data enviada com sucesso!");
       console.log("Resposta do servidor:", dados);
     })
