@@ -117,41 +117,45 @@ function preencherTabelaKitTssr(page = 0) {
         tbody.insertAdjacentHTML("beforeend", row);
       });
 
-      // Adicionar eventListener para cada botão "Copiar Texto"
-      document.querySelectorAll(".btnCopiar").forEach((button) => {
-        button.addEventListener("click", function () {
-          const endId = this.getAttribute("data-id");
-          const textoParaCopiarPuro = document.querySelector(
-            `button[data-id="${endId}"]`
-          ).textContent;
-          const textoParaCopiar = textoParaCopiarPuro.trim();
 
-          navigator.clipboard
-            .writeText(textoParaCopiar)
-            .then(function () {})
-            .catch(function (err) {
-              console.error("Erro ao tentar copiar o texto: ", err);
-            });
-        });
+// Adicionar eventListener para cada botão "Copiar Texto"
+document.querySelectorAll(".btnCopiar").forEach((button) => {
+  button.addEventListener("click", function () {
+    const endId = this.getAttribute("data-id");
+    const textoParaCopiarPuro = document.querySelector(
+      `button[data-id="${endId}"]`
+    ).textContent;
+    const textoParaCopiar = textoParaCopiarPuro.trim();
+
+    navigator.clipboard
+      .writeText(textoParaCopiar)
+      .then(function () {})
+      .catch(function (err) {
+        console.error("Erro ao tentar copiar o texto: ", err);
       });
+  });
+});
 
-      renderizarBotoesPaginacao(
-        "pagination-controls-Tssr",
-        preencherTabelaKitTssr,
-        dados.pageable.pageNumber,
-        dados.totalPages
-      );
-    })
-    .catch((error) => {
-      console.error("Erro ao buscar dados:", error);
-      alert("Erro ao carregar os dados. Tente novamente.");
-    })
-    .finally(() => {
-      loadingOverlay.style.display = "none";
-    });
+
+// Renderiza botões de paginação
+renderizarBotoesPaginacao(
+  "pagination-controls-Tssr",
+  preencherTabelaKitTssr,
+  dados.pageable.pageNumber,
+  dados.totalPages
+);
+})
+.catch((error) => {
+console.error("Erro ao buscar dados:", error);
+alert("Erro ao carregar os dados. Tente novamente.");
+})
+.finally(() => {
+loadingOverlay.style.display = "none";
+});
 }
 
-//FUNÇÃO PARA INICIAR TSSR//
+
+//Iniciar Kit Tssr
 function iniciaTssr(endId) {
   const payload = {
     status: "Em andamento",
@@ -187,7 +191,7 @@ function iniciaTssr(endId) {
 }
 
 
-//FINALIZAR KIT TSSR//
+//Finalizar Kit Tssr
 function finalizaKitTssr(endId) {
 // Obtém os valores das datas e do status
 const dataPrevista = document.getElementById(`data-prevista-${endId}`)?.value;
@@ -242,8 +246,8 @@ fetch(`${host}/tssrs/${endId}`, {
   });
 }
 
-// Delegação de eventos para os botões na tabela
 
+// Delegação de eventos para os botões na tabela
 document.querySelector("#kit-tssr tbody").addEventListener("click", (event) => {
   const button = event.target.closest("[data-id-botao]");
   if (!button) return; // Se não clicar em um botão relevante, retorna
@@ -265,7 +269,7 @@ document.querySelector("#kit-tssr tbody").addEventListener("click", (event) => {
 });
 
 
-
+// Delegação de evento para ver end ID na tabela
 document.querySelector("#tabelaHistoricoKitTssr").addEventListener("click", (event) => {
   const loadingOverlay = document.getElementById("loading-overlay");
   
@@ -380,19 +384,19 @@ document.querySelector("#tabelaHistoricoKitTssr").addEventListener("click", (eve
   }
 });
 
-// Selecione o link "Histórico de cadastros" e "Editar Cadastro"
+
+// Selecione o link "Kit Tssr"
 const historicoLinkKitTssr = document.querySelector("a[href='#kit-tssr']");
 
-// Adicione o evento de clique ao link de "Histórico de cadastros"
+
+// Adicione o evento de clique ao link de "Kit Tssr"
 historicoLinkKitTssr.addEventListener("click", function (event) {
   preencherTabelaKitTssr(); // Função chamada ao clicar no link
 });
 
 
 // Delegação de eventos para os ícones de enviar data
-document
-.querySelector("#tabelaHistoricoKitTssr")
-.addEventListener("click", (event) => {
+document.querySelector("#tabelaHistoricoKitTssr").addEventListener("click", (event) => {
   const target = event.target;
 
   if (target.classList.contains("fa-square-arrow-up-right")) {
@@ -410,9 +414,38 @@ document
     // Exibe a confirmação antes de enviar
     exibirConfirmacao(
       `Tem certeza que deseja enviar a data ${dataFormatada}?`,
-      () => enviarData(endId, dateInput, action, "vistoria")
+      () => enviarData(endId, dateInput, action, "kit-tssr")
     );
   }
 });
+
+
+// Função para renderizar o input de data com ícone de envio
+function renderInputDate(action, endId, status) {
+  if (status === "Não iniciado") {
+    return `
+      <div class="input-icon-group">
+        <input 
+          type="date" 
+          class="form-control" 
+          disabled
+        />
+        <i class="fa-sharp-duotone fa-solid fa-square-arrow-up-right" 
+          data-action="${action}" 
+          data-id="${endId}"></i>
+      </div>`;
+  }
+  return `
+      <div class="input-icon-group">
+        <input 
+          type="date" 
+          class="form-control" 
+        />
+        <i class="fa-sharp-duotone fa-solid fa-square-arrow-up-right" 
+          data-action="${action}" 
+          data-id="${endId}"></i>
+      </div>`;
+}
+
 
 
