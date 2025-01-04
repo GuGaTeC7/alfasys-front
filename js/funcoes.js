@@ -679,7 +679,7 @@ function enviarData(endId, dateInput, action, etapa) {
             preencherTabelaAcesso(paginaAtual - 1);
           } else if (etapa === "vistoria") {
             preencherTabelaVistoria(paginaAtual - 1);
-          } else if (etapa === "Kit-Tssr") {
+          } else if (etapa === "kit-tssr") {
             preencherTabelaKitTssr(paginaAtual - 1);
           } else if (etapa === "sci-inclusao") {
             preencherTabelaSciInclusao(paginaAtual - 1);

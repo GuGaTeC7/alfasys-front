@@ -190,8 +190,8 @@ function iniciaTssr(endId) {
 //FINALIZAR KIT TSSR//
 function finalizaKitTssr(endId) {
 // Obtém os valores das datas e do status
-const dataRealizacao = document.getElementById(`data-realizada-${endId}`)?.value;
 const dataPrevista = document.getElementById(`data-prevista-${endId}`)?.value;
+const dataRealizacao = document.getElementById(`data-realizada-${endId}`)?.value;
 const selectStatus = document.getElementById(`select-status-${endId}`)?.value;
 
 // Verifica se todas as datas estão preenchidas
@@ -414,3 +414,5 @@ document
     );
   }
 });
+
+
