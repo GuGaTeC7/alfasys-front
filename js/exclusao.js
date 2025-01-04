@@ -1,3 +1,5 @@
+
+/*
 function preencherTabelaSciExclusao(page = 0) {
     const loadingOverlay = document.getElementById("loading-overlay");
     const tbody = document.querySelector("#sci-exclusão tbody");
