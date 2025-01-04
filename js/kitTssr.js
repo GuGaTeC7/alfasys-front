@@ -79,10 +79,10 @@ function preencherTabelaKitTssr(page = 0) {
                         class="form-control text-center" 
                         value="${dataRealizacao}" 
                         disabled
-                        id="data-realizada-${item.endId}"
+                        id="data-realizacao-${item.endId}"
                       />`
                     : renderInputDate(
-                        "data-readata-realizada",
+                        "data-readata-realizacao",
                         item.endId,
                         item.status
                       )

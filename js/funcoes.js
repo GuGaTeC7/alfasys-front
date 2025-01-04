@@ -322,7 +322,6 @@ function filtrarTabela(page = 0, secao, idTabela) {
     municipio: secaoId.querySelector("#pesquisaMunicipio").value.trim(),
   };
 
-
   // Monta os parâmetros da URL
   const params = montarParametros(pesquisaCampos, page);
 
@@ -372,6 +371,8 @@ function filtrarTabela(page = 0, secao, idTabela) {
       loadingOverlay.style.display = "none";
     });
 }
+
+
 
 function exibirTotalResultados(elementoId, total) {
   const totalPesquisaElement = document.getElementById(`${elementoId}`);
@@ -591,7 +592,15 @@ function enviarData(endId, dateInput, action, etapa) {
       payloadKey: "dataPrevista",
       url: `${host}/tssrs/${endId}`,
     },
-    "data-realizada": {
+    "data-envio": {
+      payloadKey: "dataEnvio",
+      url: `${host}/sciInclusao/${endId}`,
+    },
+    "data-aprovacao": {
+      payloadKey: "dataAprovacao",
+      url: `${host}/sciInclusao/${endId}`,
+    },
+    "data-realizacao": {
       payloadKey: "dataRealizacao",
       url: `${host}/tssrs/${endId}`,
     },
@@ -646,6 +655,7 @@ function enviarData(endId, dateInput, action, etapa) {
       const paginacaoAgendamento = "pagination-controls-agendamento";
       const paginacaoVistoria = "pagination-controls-vistoria";
       const paginacaoTssr = "pagination-controls-Tssr";
+      const paginacaoInclusao= "pagination-controls-inclusao";
 
       const paginacao = document.getElementById(
         etapa === "agendamento"
@@ -654,6 +664,8 @@ function enviarData(endId, dateInput, action, etapa) {
           ? paginacaoVistoria
           : etapa === "kit-tssr"
           ? paginacaoTssr
+          : etapa === "sci-inclusao"
+          ? paginacaoInclusao
           : null
       );
 
@@ -669,7 +681,10 @@ function enviarData(endId, dateInput, action, etapa) {
             preencherTabelaVistoria(paginaAtual - 1);
           } else if (etapa === "Kit-Tssr") {
             preencherTabelaKitTssr(paginaAtual - 1);
+          } else if (etapa === "sci-inclusao") {
+            preencherTabelaSciInclusao(paginaAtual - 1);
           }
+          
         } else {
           console.error("Erro ao obter a página atual.");
         }
