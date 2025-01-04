@@ -559,7 +559,6 @@ function configurarEventosCopiar() {
   });
 }
 
-// Função para enviar a data ao backend
 function enviarData(endId, dateInput, action, etapa) {
   console.log(`Data enviada: ${dateInput} (End ID: ${endId}, Ação: ${action})`);
 
@@ -641,6 +640,13 @@ function enviarData(endId, dateInput, action, etapa) {
       return response.json();
     })
     .then((dados) => {
+      // Atualiza diretamente o valor do input correspondente
+      const inputField = document.getElementById(`data-${action}-${endId}`);
+      if (inputField) {
+        inputField.value = dateInput;
+        inputField.setAttribute("disabled", "true"); // Desativa o campo após envio
+      }
+
       // Oculta o botão correspondente
       const button = document.querySelector(
         `i[data-action="${action}"][data-id="${endId}"]`
@@ -651,46 +657,6 @@ function enviarData(endId, dateInput, action, etapa) {
         console.warn("Botão não encontrado! Mas a operação continua.");
       }
 
-      // Controle de paginação com base na etapa
-      const paginacaoAgendamento = "pagination-controls-agendamento";
-      const paginacaoVistoria = "pagination-controls-vistoria";
-      const paginacaoTssr = "pagination-controls-Tssr";
-      const paginacaoInclusao= "pagination-controls-inclusao";
-
-      const paginacao = document.getElementById(
-        etapa === "agendamento"
-          ? paginacaoAgendamento
-          : etapa === "vistoria"
-          ? paginacaoVistoria
-          : etapa === "kit-tssr"
-          ? paginacaoTssr
-          : etapa === "sci-inclusao"
-          ? paginacaoInclusao
-          : null
-      );
-
-      if (paginacao) {
-        const paginaAtual = parseInt(
-          paginacao.querySelector(".btn-primary").textContent,
-          10
-        );
-        if (!isNaN(paginaAtual)) {
-          if (etapa === "agendamento") {
-            preencherTabelaAcesso(paginaAtual - 1);
-          } else if (etapa === "vistoria") {
-            preencherTabelaVistoria(paginaAtual - 1);
-          } else if (etapa === "kit-tssr") {
-            preencherTabelaKitTssr(paginaAtual - 1);
-          } else if (etapa === "sci-inclusao") {
-            preencherTabelaSciInclusao(paginaAtual - 1);
-          }
-          
-        } else {
-          console.error("Erro ao obter a página atual.");
-        }
-      } else {
-        console.warn("Controle de paginação não encontrado.");
-      }
       alert("Data enviada com sucesso!");
       console.log("Resposta do servidor:", dados);
     })
@@ -699,6 +665,7 @@ function enviarData(endId, dateInput, action, etapa) {
       alert("Erro ao enviar a data. Tente novamente.");
     });
 }
+
 
 
 function buscaEnId(secao) {
