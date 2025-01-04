@@ -167,39 +167,42 @@ function preencherTabelaAcesso(page = 0) {
         tbody.insertAdjacentHTML("beforeend", row);
       });
 
-      // Adicionar eventListener para cada botão "Copiar Texto"
-      document.querySelectorAll(".btnCopiar").forEach((button) => {
-        button.addEventListener("click", function () {
-          const endId = this.getAttribute("data-id");
-          const textoParaCopiarPuro = document.querySelector(
-            `button[data-id="${endId}"]`
-          ).textContent;
-          const textoParaCopiar = textoParaCopiarPuro.trim();
+// Adicionar eventListener para cada botão "Copiar Texto"
+document.querySelectorAll(".btnCopiar").forEach((button) => {
+  button.addEventListener("click", function () {
+    const endId = this.getAttribute("data-id");
+    const textoParaCopiarPuro = document.querySelector(
+      `button[data-id="${endId}"]`
+    ).textContent;
+    const textoParaCopiar = textoParaCopiarPuro.trim();
 
-          navigator.clipboard
-            .writeText(textoParaCopiar)
-            .then(function () {})
-            .catch(function (err) {
-              console.error("Erro ao tentar copiar o texto: ", err);
-            });
-        });
+    navigator.clipboard
+      .writeText(textoParaCopiar)
+      .then(function () {})
+      .catch(function (err) {
+        console.error("Erro ao tentar copiar o texto: ", err);
       });
+  });
+});
 
-      renderizarBotoesPaginacao(
-        "pagination-controls-agendamento",
-        preencherTabelaAcesso,
-        dados.pageable.pageNumber,
-        dados.totalPages
-      );
-    })
-    .catch((error) => {
-      console.error("Erro ao buscar dados:", error);
-      alert("Erro ao carregar os dados. Tente novamente.");
-    })
-    .finally(() => {
-      loadingOverlay.style.display = "none";
-    });
+
+// Função para renderizar botões de páginação
+renderizarBotoesPaginacao(
+  "pagination-controls-agendamento",
+  preencherTabelaAcesso,
+  dados.pageable.pageNumber,
+  dados.totalPages
+);
+})
+.catch((error) => {
+console.error("Erro ao buscar dados:", error);
+alert("Erro ao carregar os dados. Tente novamente.");
+})
+.finally(() => {
+loadingOverlay.style.display = "none";
+});
 }
+
 
 // Função para renderizar o input de data com ícone de envio
 function renderInputDate(action, endId, status) {
@@ -227,6 +230,7 @@ function renderInputDate(action, endId, status) {
           data-id="${endId}"></i>
       </div>`;
 }
+
 
 // Função para exibir uma confirmação
 function exibirConfirmacao(mensagem, onConfirm) {
@@ -265,6 +269,8 @@ function exibirConfirmacao(mensagem, onConfirm) {
   });
 }
 
+
+// Função para iniciar um agendamento
 function iniciaAgendamento(endId) {
   const payload = {
     statusAgendamento: "Em andamento",
@@ -300,6 +306,8 @@ function iniciaAgendamento(endId) {
     });
 }
 
+
+// Função para finalizar um agendamento
 function finalizaAgendamento(endId) {
   // Obtém os valores das datas
   const dataSolicitacao = document.getElementById(
@@ -355,7 +363,8 @@ function finalizaAgendamento(endId) {
     });
 }
 
-// Atualiza END ID
+
+// Função para atualizar um end ID
 function atualizarNovoAcesso(secao) {
   const secaoId = document.querySelector(`#${secao}`);
 
@@ -454,12 +463,11 @@ function atualizarNovoAcesso(secao) {
     });
 }
 
-// Delegação de eventos para os ícones de enviar data
-document
-  .querySelector("#tabelaHistoricoAgendamento")
-  .addEventListener("click", (event) => {
-    const target = event.target;
 
+// Delegação de eventos para os ícones de enviar data
+document.querySelector("#tabelaHistoricoAgendamento").addEventListener("click", (event) => {
+    const target = event.target;
+    
     if (target.classList.contains("fa-square-arrow-up-right")) {
       const action = target.getAttribute("data-action");
       const endId = target.getAttribute("data-id"); // Identifica o End ID
@@ -480,11 +488,9 @@ document
     }
   });
 
-// Busca rápida de informações do END ID
-// Delegação de eventos no contêiner pai (exemplo: o `tbody` da tabela)
-document
-  .querySelector("#tabelaHistoricoAgendamento")
-  .addEventListener("click", (event) => {
+
+// // Busca rápida de informações do END ID
+document.querySelector("#tabelaHistoricoAgendamento").addEventListener("click", (event) => {
     const loadingOverlay = document.getElementById("loading-overlay");
     if (event.target.classList.contains("end-id")) {
       const endId = event.target.getAttribute("data-id");
@@ -597,9 +603,7 @@ document
   });
 
 // Delegação de eventos para os botões na tabela
-document
-  .querySelector("#tabelaHistoricoAgendamento tbody")
-  .addEventListener("click", (event) => {
+document.querySelector("#tabelaHistoricoAgendamento tbody").addEventListener("click", (event) => {
     const button = event.target.closest("[data-id-botao]");
     if (!button) return; // Se não clicar em um botão relevante, retorna
 
@@ -620,17 +624,13 @@ document
     }
   });
 
-// Selecione o link "Histórico de cadastros" e "Editar Cadastro"
-const historicoLinkAgendamento = document.querySelector(
-  "a[href='#todos-agendamentos']"
-);
+// Selecione o link "Histórico de agendamentos" e "Editar agendamento"
+const historicoLinkAgendamento = document.querySelector("a[href='#todos-agendamentos']");
 
-// Adicione o evento de clique ao link de "Histórico de cadastros"
+// Adicione o evento de clique ao link de "Histórico de agendamentos"
 historicoLinkAgendamento.addEventListener("click", function (event) {
   preencherTabelaAcesso(); // Função chamada ao clicar no link
 });
 
 // Adiciona o evento ao botão resetar
-document
-  .getElementById("botaoResetar")
-  .addEventListener("click", resetarCampos("cadastro-fazer"));
+document.getElementById("botaoResetar").addEventListener("click", resetarCampos("cadastro-fazer"));

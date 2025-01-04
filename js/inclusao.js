@@ -97,45 +97,45 @@ function preencherTabelaSciInclusao(page = 0) {
             
             tbody.insertAdjacentHTML("beforeend", row);
           });
+     
           
-  
-        // Adicionar eventListener para cada botão "Copiar Texto"
-        document.querySelectorAll(".btnCopiar").forEach((button) => {
-          button.addEventListener("click", function () {
-            const endId = this.getAttribute("data-id");
-            const textoParaCopiarPuro = document.querySelector(
-              `button[data-id="${endId}"]`
-            ).textContent;
-            const textoParaCopiar = textoParaCopiarPuro.trim();
-  
-            navigator.clipboard
-              .writeText(textoParaCopiar)
-              .then(function () {})
-              .catch(function (err) {
-                console.error("Erro ao tentar copiar o texto: ", err);
-              });
-          });
-        });
-  
-        renderizarBotoesPaginacao(
-          "pagination-controls-inclusao",
-          preencherTabelaSciInclusao,
-          dados.pageable.pageNumber,
-          dados.totalPages
-        );
-      })
-      .catch((error) => {
-        console.error("Erro ao buscar dados:", error);
-        alert("Erro ao carregar os dados. Tente novamente.");
-      })
-      .finally(() => {
-        loadingOverlay.style.display = "none";
+// Adicionar eventListener para cada botão "Copiar Texto"
+document.querySelectorAll(".btnCopiar").forEach((button) => {
+  button.addEventListener("click", function () {
+    const endId = this.getAttribute("data-id");
+    const textoParaCopiarPuro = document.querySelector(
+      `button[data-id="${endId}"]`
+    ).textContent;
+    const textoParaCopiar = textoParaCopiarPuro.trim();
+
+    navigator.clipboard
+      .writeText(textoParaCopiar)
+      .then(function () {})
+      .catch(function (err) {
+        console.error("Erro ao tentar copiar o texto: ", err);
       });
-  }
+  });
+});
+
+// Renderizar botões de paginação
+renderizarBotoesPaginacao(
+  "pagination-controls-inclusao",
+  preencherTabelaSciInclusao,
+  dados.pageable.pageNumber,
+  dados.totalPages
+);
+})
+.catch((error) => {
+console.error("Erro ao buscar dados:", error);
+alert("Erro ao carregar os dados. Tente novamente.");
+})
+.finally(() => {
+loadingOverlay.style.display = "none";
+});
+}
 
 
-
-//FUNÇÃO PARA INICIAR INCLUSÃO//
+// Função para iniciar Inclusão
   function iniciaInclusao(endId) {
     const payload = {
       status: "Em andamento",
@@ -170,7 +170,8 @@ function preencherTabelaSciInclusao(page = 0) {
       });
   }
 
-  //FINALIZAR SCI INCLUSÃO//
+
+// Função para finalizar Inclusão
   function finalizaSciInclusao(endId) {
     // Obtém os valores das datas e do status
     const codInclusao = document.getElementById(`cod-inclusao-${endId}`)?.value;
@@ -225,6 +226,8 @@ function preencherTabelaSciInclusao(page = 0) {
       });
   }
 
+
+// Botões de alert para Finalizar e Iniciar
   document.querySelector("#sci-inclusao tbody").addEventListener("click", (event) => {
     const button = event.target.closest("[data-id-botao]");
     if (!button) return; // Se não clicar em um botão relevante, retorna
@@ -247,9 +250,7 @@ function preencherTabelaSciInclusao(page = 0) {
   
 
 // Delegação de eventos para os ícones de enviar data
-document
-  .querySelector("#tabelaHistoricoInclusao")
-  .addEventListener("click", (event) => {
+document.querySelector("#tabelaHistoricoInclusao").addEventListener("click", (event) => {
     const target = event.target;
 
     if (target.classList.contains("fa-square-arrow-up-right")) {
@@ -273,6 +274,7 @@ document
   });
 
 
+// Função para mostrar mais do end ID
   document.querySelector("#tabelaHistoricoInclusao").addEventListener("click", (event) => {
     const loadingOverlay = document.getElementById("loading-overlay");
     
@@ -387,11 +389,40 @@ document
     }
   });
 
-// Selecione o link "Histórico de cadastros" e "Editar Cadastro"
+
+// Selecione o link "Sci Inclusao"
 const historicoLinkInclusao = document.querySelector("a[href='#sci-inclusao']");
 
-// Adicione o evento de clique ao link de "Histórico de cadastros"
+
+// Adicione o evento de clique ao link de "Sci Inclusao"
 historicoLinkInclusao.addEventListener("click", function (event) {
     preencherTabelaSciInclusao(); // Função chamada ao clicar no link
 });
 
+
+// Função para renderizar o input de data com ícone de envio
+function renderInputDate(action, endId, status) {
+  if (status === "Não iniciado") {
+    return `
+      <div class="input-icon-group">
+        <input 
+          type="date" 
+          class="form-control" 
+          disabled
+        />
+        <i class="fa-sharp-duotone fa-solid fa-square-arrow-up-right" 
+          data-action="${action}" 
+          data-id="${endId}"></i>
+      </div>`;
+  }
+  return `
+      <div class="input-icon-group">
+        <input 
+          type="date" 
+          class="form-control" 
+        />
+        <i class="fa-sharp-duotone fa-solid fa-square-arrow-up-right" 
+          data-action="${action}" 
+          data-id="${endId}"></i>
+      </div>`;
+}

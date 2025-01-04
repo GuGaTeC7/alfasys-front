@@ -591,6 +591,10 @@ function enviarData(endId, dateInput, action, etapa) {
       payloadKey: "dataPrevista",
       url: `${host}/tssrs/${endId}`,
     },
+    "data-realizada": {
+      payloadKey: "dataRealizacao",
+      url: `${host}/tssrs/${endId}`,
+    },
     "data-envio": {
       payloadKey: "dataEnvio",
       url: `${host}/sciInclusao/${endId}`,
@@ -598,10 +602,6 @@ function enviarData(endId, dateInput, action, etapa) {
     "data-aprovacao": {
       payloadKey: "dataAprovacao",
       url: `${host}/sciInclusao/${endId}`,
-    },
-    "data-realizada": {
-      payloadKey: "dataRealizacao",
-      url: `${host}/tssrs/${endId}`,
     },
   };
 
