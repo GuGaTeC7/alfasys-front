@@ -68,7 +68,7 @@ function preencherTabelaSciInclusao(page = 0) {
                             disabled
                             id="data-envio${item.endId}"
                           />`
-                        : renderInputDate("dataEnvio", item.endId, item.status)
+                        : renderInputDate("data-envio", item.endId, item.status)
                     }
                   </td>
                   <td>
@@ -81,7 +81,7 @@ function preencherTabelaSciInclusao(page = 0) {
                             disabled
                             id="data-aprovacao-${item.endId}"
                           />`
-                        : renderInputDate("dataAprovacao", item.endId, item.status)
+                        : renderInputDate("data-aprovacao", item.endId, item.status)
                     }
                   </td>
                   <td>

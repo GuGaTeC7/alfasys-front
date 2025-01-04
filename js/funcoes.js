@@ -600,7 +600,7 @@ function enviarData(endId, dateInput, action, etapa) {
       payloadKey: "dataAprovacao",
       url: `${host}/sciInclusao/${endId}`,
     },
-    "data-realizacao": {
+    "data-realizada": {
       payloadKey: "dataRealizacao",
       url: `${host}/tssrs/${endId}`,
     },
