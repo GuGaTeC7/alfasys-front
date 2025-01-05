@@ -19,6 +19,12 @@ function confirmAlert(action, endId, etapa) {
     else if (etapa === "sci-inclusao") {
       finalizaSciInclusao(endId);
     }
+    else if (etapa === "obra") {
+      finalizaObra(endId);
+    }
+    else if (etapa === "sci-exclusão") {
+      finalizaSciExclusao(endId);
+    }
 
     } else if (action === "iniciar") {
     if (etapa === "agendamento") {
@@ -31,6 +37,12 @@ function confirmAlert(action, endId, etapa) {
     }
     else if (etapa === "sci-inclusao") {
       iniciaInclusao(endId);
+    }
+    else if (etapa === "obra") {
+      iniciaObra(endId);
+    }
+    else if (etapa === "sci-exclusão") {
+      iniciaExclusao(endId);
     }
   }
   dismissAlert();
@@ -602,6 +614,26 @@ function enviarData(endId, dateInput, action, etapa) {
     "data-aprovacao": {
       payloadKey: "dataAprovacao",
       url: `${host}/sciInclusao/${endId}`,
+    },
+    "inicio-previsto": {
+      payloadKey: "dataInicio",
+      url: `${host}/obras/${endId}`,
+    },
+    "data-final": {
+      payloadKey: "dataFinalizacao",
+      url: `${host}/obras/${endId}`,
+    },
+    "data-envio": {
+      payloadKey: "dataEnvio",
+      url: `${host}/sciExclusao/${endId}`,
+    },
+    "data-aprovacao": {
+      payloadKey: "dataAprovacao",
+      url: `${host}/sciExclusao/${endId}`,
+    },
+    "ultima-cobranca": {
+      payloadKey: "ultimaCobranca",
+      url: `${host}/sciExclusao/${endId}`,
     },
   };
 

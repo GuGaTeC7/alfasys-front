@@ -1,5 +1,3 @@
-
-/*
 function preencherTabelaSciExclusao(page = 0) {
     const loadingOverlay = document.getElementById("loading-overlay");
     const tbody = document.querySelector("#sci-exclusão tbody");
@@ -199,7 +197,7 @@ loadingOverlay.style.display = "none";
       });
   }
 
-/*
+
 
 // Função para finalizar Inclusão
   function finalizaSciExclusao(endId) {
@@ -259,7 +257,7 @@ loadingOverlay.style.display = "none";
 
 
 // Botões de alert para Finalizar e Iniciar
-  document.querySelector("#sci-inclusao tbody").addEventListener("click", (event) => {
+  document.querySelector("#sci-exclusão tbody").addEventListener("click", (event) => {
     const button = event.target.closest("[data-id-botao]");
     if (!button) return; // Se não clicar em um botão relevante, retorna
   
@@ -268,20 +266,20 @@ loadingOverlay.style.display = "none";
     if (button.classList.contains("iniciar-btn")) {
       // Lógica para o botão "Iniciar"
       exibirConfirmacao("Tem certeza que deseja <b>iniciar</b> essa etapa?", () =>
-        confirmAlert("iniciar", endId, "sci-inclusao")
+        confirmAlert("iniciar", endId, "sci-exclusão")
       );
     } else if (button.classList.contains("finalizar-btn")) {
       // Lógica para o botão "Finalizar"
       exibirConfirmacao(
         `Tem certeza que deseja concluir o END ID <strong>${endId}</strong>?`,
-        () => confirmAlert("finalizar", endId, "sci-inclusao")
+        () => confirmAlert("finalizar", endId, "sci-exclusão")
       );
     }
   });
   
 
 // Delegação de eventos para os ícones de enviar data
-document.querySelector("#tabelaHistoricoInclusao").addEventListener("click", (event) => {
+document.querySelector("#tabelaHistoricoExclusao").addEventListener("click", (event) => {
     const target = event.target;
 
     if (target.classList.contains("fa-square-arrow-up-right")) {
@@ -299,14 +297,14 @@ document.querySelector("#tabelaHistoricoInclusao").addEventListener("click", (ev
       // Exibe a confirmação antes de enviar
       exibirConfirmacao(
         `Tem certeza que deseja enviar a data ${dataFormatada}?`,
-        () => enviarData(endId, dateInput, action, "sci-inclusao")
+        () => enviarData(endId, dateInput, action, "sci-exclusão")
       );
     }
   });
 
 
 // Função para mostrar mais do end ID
-  document.querySelector("#tabelaHistoricoInclusao").addEventListener("click", (event) => {
+  document.querySelector("#tabelaHistoricoExclusao").addEventListener("click", (event) => {
     const loadingOverlay = document.getElementById("loading-overlay");
     
     // Verifica se o elemento clicado possui a classe `end-id`
@@ -422,12 +420,12 @@ document.querySelector("#tabelaHistoricoInclusao").addEventListener("click", (ev
 
 
 // Selecione o link "Sci Inclusao"
-const historicoLinkInclusao = document.querySelector("a[href='#sci-inclusao']");
+const historicoLinkExclusao = document.querySelector("a[href='#sci-exclusão']");
 
 
 // Adicione o evento de clique ao link de "Sci Inclusao"
-historicoLinkInclusao.addEventListener("click", function (event) {
-    preencherTabelaSciInclusao(); // Função chamada ao clicar no link
+historicoLinkExclusao.addEventListener("click", function (event) {
+    preencherTabelaSciExclusao(); // Função chamada ao clicar no link
 });
 
 
@@ -457,5 +455,3 @@ function renderInputDate(action, endId, status) {
           data-id="${endId}"></i>
       </div>`;
 }
-
-\*/

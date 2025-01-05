@@ -1,4 +1,3 @@
-/*
 function preencherTabelaObra(page = 0) {
     const loadingOverlay = document.getElementById("loading-overlay");
     const tbody = document.querySelector("#obra tbody");
@@ -19,12 +18,12 @@ function preencherTabelaObra(page = 0) {
         totalPesquisado.innerHTML = ""; // Limpa a tabela
         
         dados.content.forEach((item) => {
-            const inicioPrevisto = item.inicioPrevisto
-              ? formatarDataParaInput(item.inicioPrevisto)
+            const dataInicio = item.dataInicio
+              ? formatarDataParaInput(item.dataInicio)
               : "";
           
-            const dataFinal = item.dataFinal
-              ? formatarDataParaInput(item.dataFinal)
+            const dataFinalizacao = item.dataFinalizacao
+              ? formatarDataParaInput(item.dataFinalizacao)
               : "";
           
             // Monta a linha da tabela
@@ -54,11 +53,11 @@ function preencherTabelaObra(page = 0) {
                   </td>
                   <td>
                     ${
-                        inicioPrevisto
+                        dataInicio
                         ? `<input 
                             type="date" 
                             class="form-control text-center" 
-                            value="${inicioPrevisto}" 
+                            value="${dataInicio}" 
                             disabled
                             id="inicio-previsto-${item.endId}"
                           />`
@@ -67,11 +66,11 @@ function preencherTabelaObra(page = 0) {
                   </td>
                   <td>
                     ${
-                        dataFinal
+                        dataFinalizacao
                         ? `<input 
                             type="date" 
                             class="form-control text-center" 
-                            value="${dataFinal}" 
+                            value="${dataFinalizacao}" 
                             disabled
                             id="data-final-${item.endId}"
                           />`
@@ -129,8 +128,8 @@ loadingOverlay.style.display = "none";
 }
 
 
-// Função para iniciar Obra
-  function iniciaObra(endId) {
+//FUNÇÃO PARA INICIAR OBRA//
+function iniciaObra(endId) {
     const payload = {
       status: "Em andamento",
     };
@@ -165,16 +164,17 @@ loadingOverlay.style.display = "none";
   }
 
 
-// Função para finalizar Obra
   function finalizaObra(endId) {
-    // Obtém os valores das datas e do status
-    const inicioPrevisto = document.getElementById(`inicio-previsto-${endId}`)?.value;
-    const dataFinal = document.getElementById(`data-final-${endId}`)?.value;
+    const dataInicio = document.getElementById(`inicio-previsto-${endId}`)?.value;
+    const dataFinalizacao = document.getElementById(`data-final-${endId}`)?.value;
   
-    // Verifica se todas as datas estão preenchidas
-    if (!inicioPrevisto || !dataFinal ) {
+    // Selecionar o status do dropdown (ou outro elemento que fornece o status)
+    const selectElement = document.querySelector(`select[data-id-botao="${endId}"]`);
+    const selectStatus = selectElement?.value; // Obtém o valor selecionado
+  
+    if (!dataInicio || !dataFinalizacao) {
       alert("A data de envio e data de aprovação devem estar preenchidas.");
-      return; // Interrompe a execução se a data não for válida
+      return;
     }
   
     // Monta o payload
@@ -183,7 +183,6 @@ loadingOverlay.style.display = "none";
       resultado: selectStatus, // Adiciona o status selecionado ao payload
     };
   
-    // Realiza a requisição
     fetch(`${host}/obras/${endId}`, {
       method: "PATCH",
       headers: {
@@ -202,16 +201,16 @@ loadingOverlay.style.display = "none";
       .then((data) => {
         console.log("Dados retornados pelo servidor:", data);
   
-        // Atualiza a tabela na página atual
         const paginacao = document.getElementById("pagination-controls-obra");
         const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
         preencherTabelaObra(paginaAtual - 1);
       })
       .catch((error) => {
         console.error("Erro durante a atualização dos dados:", error);
-        alert("Erro ao finalizar a Inclusão.");
+        alert("Erro ao finalizar a Obra.");
       });
   }
+  
 
 
 // Botões de alert para Finalizar e Iniciar
@@ -224,13 +223,13 @@ loadingOverlay.style.display = "none";
     if (button.classList.contains("iniciar-btn")) {
       // Lógica para o botão "Iniciar"
       exibirConfirmacao("Tem certeza que deseja <b>iniciar</b> essa etapa?", () =>
-        confirmAlert("iniciar", endId, "sci-inclusao")
+        confirmAlert("iniciar", endId, "obra")
       );
     } else if (button.classList.contains("finalizar-btn")) {
       // Lógica para o botão "Finalizar"
       exibirConfirmacao(
         `Tem certeza que deseja concluir o END ID <strong>${endId}</strong>?`,
-        () => confirmAlert("finalizar", endId, "sci-inclusao")
+        () => confirmAlert("finalizar", endId, "obra")
       );
     }
   });
@@ -255,7 +254,7 @@ document.querySelector("#tabelaHistoricoObra").addEventListener("click", (event)
       // Exibe a confirmação antes de enviar
       exibirConfirmacao(
         `Tem certeza que deseja enviar a data ${dataFormatada}?`,
-        () => enviarData(endId, dateInput, action, "sci-inclusao")
+        () => enviarData(endId, dateInput, action, "obra")
       );
     }
   });
@@ -305,7 +304,7 @@ document.querySelector("#tabelaHistoricoObra").addEventListener("click", (event)
         return;
       }
   
-      fetch(`${host}/obras/${endId}`, {
+      fetch(`${host}/cadastroEndIds/${endId}`, {
         method: "GET",
         headers: { Authorization: `Bearer ${token}` },
       })
@@ -414,4 +413,3 @@ function renderInputDate(action, endId, status) {
       </div>`;
 }
 
-\*/
