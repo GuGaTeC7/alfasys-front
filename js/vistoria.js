@@ -56,10 +56,10 @@ function preencherTabelaVistoria(page = 0) {
                     type="date" 
                     class="form-control text-center" 
                     value="${dataRealizacao}" 
+                    disabled
                     id="data-realizacao-${item.endId}"
-                    ${item.status !== "Em andamento" ? "disabled" : ""}
                   />`
-                : renderInputDate1(
+                : renderInputDate(
                     "data-realizacao",
                     item.endId,
                     item.status
@@ -221,7 +221,7 @@ function finalizaVistoria(endId) {
 }
 
 // Função para renderizar o input de data com ícone de envio
-function renderInputDate1(action, endId, status) {
+function renderInputDate(action, endId, status) {
   if (status === "Não iniciado") {
     return `
       <div class="input-icon-group">
