@@ -459,7 +459,7 @@ function filtrarTabelaSciInclusao(page = 0, secao, idTabela) {
       return response.json();
     })
     .then((dados) => {
-      renderizarTabela(dados, idTabela, tbody); // Chama a função adaptada
+      renderizarTabelaInclusao(dados, idTabela, tbody); // Chama a função adaptada
       renderizarBotoesPaginacao(
         "pagination-controls-inclusao",
         filtrarTabelaSciInclusao,
@@ -492,7 +492,7 @@ function montarParametrosInclusao(pesquisaCampos, page) {
 }
 
 
-function renderizarTabela(dados, idTabela, tbody) {
+function renderizarTabelaInclusao(dados, idTabela, tbody) {
   tbody.innerHTML = ""; // Limpa a tabela antes de preencher
 
   if (!dados.content || dados.content.length === 0) {

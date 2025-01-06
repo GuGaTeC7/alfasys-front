@@ -449,3 +449,151 @@ function renderInputDate(action, endId, status) {
 
 
 
+function filtrarTabelaKitTssr(page = 0, secao, idTabela) {
+  const loadingOverlay = document.getElementById("loading-overlay");
+  const tbody = document.querySelector(`#${idTabela} tbody`);
+  const secaoId = document.getElementById(secao);
+
+  // Obtém os valores dos campos de pesquisa
+  const pesquisaCampos = {
+    endId: secaoId.querySelector("#pesquisaEndIdKitTssr").value.trim(),
+    status: secaoId.querySelector("#pesquisaStatusKitTssr").value.trim(),
+    parecer: secaoId.querySelector("#pesquisaParecerKitTssr").value.trim(),
+  };
+
+  // Monta os parâmetros da URL
+  const params = montarParametrosKitTssr(pesquisaCampos, page);
+
+  // Define o endpoint base
+  const endpoint = `${host}/tssrs/buscar`;
+
+  loadingOverlay.style.display = "block";
+
+  // Realiza a requisição e manipula a resposta
+  fetch(`${endpoint}?${params.toString()}`, {
+    method: "GET",
+    headers: { Authorization: `Bearer ${token}` },
+  })
+    .then((response) => {
+      if (!response.ok) throw new Error("Erro ao buscar dados.");
+      return response.json();
+    })
+    .then((dados) => {
+      renderizarTabelaKitTssr(dados, idTabela, tbody); // Chama a função adaptada
+      renderizarBotoesPaginacao(
+        "pagination-controls-Tssr",
+        filtrarTabelaKitTssr,
+        dados.pageable.pageNumber,
+        dados.totalPages
+      );
+      exibirTotalResultados("total-pesquisa-Tssr", dados.totalElements);
+    })
+    .catch((error) => {
+      console.error("Erro ao buscar dados:", error);
+      alert("Erro ao carregar os dados. Atualize a tela apertando 'F5'.");
+    })
+    .finally(() => {
+      loadingOverlay.style.display = "none";
+    });
+}
+
+function montarParametrosKitTssr(pesquisaCampos, page) {
+  const params = new URLSearchParams();
+  if (pesquisaCampos.endId)
+    params.append("endId", pesquisaCampos.endId.toUpperCase());
+  if (pesquisaCampos.status)
+    params.append("status", pesquisaCampos.status.toUpperCase());
+  if (pesquisaCampos.parecer)
+    params.append("parecer", pesquisaCampos.parecer.toUpperCase());
+  params.append("page", page);
+  params.append("size", pageSize);
+  return params;
+}
+
+function renderizarTabelaKitTssr(dados, idTabela, tbody) {
+  tbody.innerHTML = ""; // Limpa a tabela antes de preencher
+
+  if (!dados.content || dados.content.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8" class="text-center">Nenhum dado encontrado.</td></tr>`;
+    return;
+  }
+
+  dados.content.forEach((item, i) => {
+    const row =
+      idTabela === "tabelaHistoricoKitTssr"
+        ? criarLinhaKitTssr(item, i)
+        : idTabela === "tabelaHistoricoInclusao"
+        ? criarLinhaHistoricoInclusao(item, i)
+        : idTabela === "tabelaHistoricoAgendamento"
+        ? criarLinhaHistoricoAgendamento(item, i)
+        : criarLinhaCadastroEndId(item, i);
+
+    tbody.insertAdjacentHTML("beforeend", row);
+  });
+
+  configurarEventosCopiar();
+}
+
+function criarLinhaKitTssr(item, i) {
+  const dataPrevista = item.dataPrevista ? formatarDataParaInput(item.dataPrevista) : "";
+  const dataRealizacao = item.dataRealizacao ? formatarDataParaInput(item.dataRealizacao) : "";
+
+  return `
+    <tr>
+      <td>
+        <button class="btn btn-link p-0 text-decoration-none end-id" id="textoParaCopiar" data-id="${item.endId}">
+          ${item.endId}
+        </button>
+        <i class="fa-regular fa-copy btnCopiar" title="Copiar" data-id="${item.endId}"></i>
+      </td>
+      <td>
+        <select disabled class="form-select border-0 bg-light p-2">
+          <option value="status">${item.status}</option>
+        </select>
+        <button class="btn iniciar-btn p-0 border-0 bg-transparent ml-2" 
+          style="display:${["Em andamento", "Concluído"].includes(item.status) ? "none" : ""};" 
+          data-id-botao="${item.endId}">
+          <i class="fa-solid fa-circle-play"></i>
+        </button>
+      </td>
+      <td>
+        ${dataPrevista
+          ? `<input 
+              type="date" 
+              class="form-control text-center" 
+              value="${dataPrevista}" 
+              disabled
+              id="data-prevista-${item.endId}"
+            />`
+          : renderInputDate("data-prevista", item.endId, item.status)
+        }
+      </td>
+      <td>
+        ${dataRealizacao
+          ? `<input 
+              type="date" 
+              class="form-control text-center" 
+              value="${dataRealizacao}" 
+              disabled
+              id="data-realizada-${item.endId}"
+            />`
+          : renderInputDate("data-realizada", item.endId, item.status)
+        }
+      </td>
+      <td>
+        <select class="form-select border-0 bg-light p-2" id="select-status-${item.endId}" 
+          ${item.status === "Não iniciado" || item.status === "Concluído" ? "disabled" : ""}>
+          <option value="" selected>Selecione uma opção</option>
+          <option value="viavel">Viável</option>
+          <option value="inviavel">Inviável</option>
+        </select>
+      </td>
+      <td>
+        <button class="btn btn-primary finalizar-btn" data-id-botao="${item.endId}" 
+          ${item.status === "Não iniciado" || item.status === "Concluído" ? "disabled" : ""}>
+          Finalizar
+        </button>
+      </td>
+    </tr>
+  `;
+}
