@@ -63,6 +63,7 @@ function preencherTabelaVistoria(page = 0) {
                     "data-realizacao",
                     item.endId,
                     item.status
+                    
                   )
             }
           </td>
