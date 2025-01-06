@@ -678,7 +678,7 @@ function enviarData(endId, dateInput, action, etapa) {
         inputField.value = dateInput;
         inputField.setAttribute("disabled", "true"); // Desativa o campo após envio
       }
-
+    
       // Oculta o botão correspondente
       const button = document.querySelector(
         `i[data-action="${action}"][data-id="${endId}"]`
@@ -688,15 +688,32 @@ function enviarData(endId, dateInput, action, etapa) {
       } else {
         console.warn("Botão não encontrado! Mas a operação continua.");
       }
-
+    
       alert("Data enviada com sucesso!");
       console.log("Resposta do servidor:", dados);
-    })
-    .catch((error) => {
-      console.error("Erro ao enviar a data:", error);
-      alert("Erro ao enviar a data. Tente novamente.");
-    });
-}
+    
+      // Atualiza a tabela correspondente à etapa
+      if (etapa === "obra") {
+        preencherTabelaObra(); // Atualiza a tabela de obras
+      } else if (etapa === "vistoria") {
+        preencherTabelaVistoria(); // Atualiza a tabela de vistorias
+      } else if (etapa === "kit-tssr") {
+        preencherTabelaKitTssr(); // Atualiza a tabela de Kit TSSR
+      } else if (etapa === "cadastro-feito") {
+        preencherTabela(); // Atualiza a tabela geral
+      } else if (etapa === "sci-exclusão") {
+        preencherTabelaSciExclusao(); // Atualiza a tabela de SCI Exclusão
+      } else if (etapa === "sci-inclusao") {
+        preencherTabelaSciInclusao(); // Atualiza a tabela de SCI Inclusão
+      } else if (etapa === "projetos") {
+        preencherTabelaProjetos(); // Atualiza a tabela de projetos
+      } else if (etapa === "agendamento") {
+        preencherTabelaAcesso(); // Atualiza a tabela de acesso
+      } else {
+        console.warn(`Nenhuma ação definida para a etapa: ${etapa}`);
+      }
+    })    
+  }    
 
 
 
