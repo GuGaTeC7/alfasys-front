@@ -25,6 +25,9 @@ function confirmAlert(action, endId, etapa) {
     else if (etapa === "sci-exclusão") {
       finalizaSciExclusao(endId);
     }
+    else if (etapa === "agendamento-obra") {
+      finalizaAgendamentoObra(endId);
+    }
 
     } else if (action === "iniciar") {
     if (etapa === "agendamento") {
@@ -43,6 +46,9 @@ function confirmAlert(action, endId, etapa) {
     }
     else if (etapa === "sci-exclusão") {
       iniciaExclusao(endId);
+    }
+    else if (etapa === "agendamento-obra") {
+      iniciaAgendamentoObra(endId);
     }
   }
   dismissAlert();
@@ -635,6 +641,18 @@ function enviarData(endId, dateInput, action, etapa) {
       payloadKey: "ultimaCobranca",
       url: `${host}/sciExclusao/${endId}`,
     },
+    "data-solicitacao": {
+      payloadKey: "dataSolicitacao",
+      url: `${host}/obras/agendamento/${endId}`,
+    },
+    "data-previsao": {
+      payloadKey: "dataPrevisao",
+      url: `${host}/obras/agendamento/${endId}`,
+    },
+    "data-liberacao": {
+      payloadKey: "dataLiberacao",
+      url: `${host}/obras/agendamento/${endId}`,
+    },
   };
 
   // Valida se a ação está mapeada
@@ -709,6 +727,8 @@ function enviarData(endId, dateInput, action, etapa) {
         preencherTabelaProjetos(); // Atualiza a tabela de projetos
       } else if (etapa === "agendamento") {
         preencherTabelaAcesso(); // Atualiza a tabela de acesso
+      } else if (etapa === "agendamento-obra") {
+        preencherTabelaAcessoObra(); // Atualiza a tabela de acesso 
       } else {
         console.warn(`Nenhuma ação definida para a etapa: ${etapa}`);
       }
