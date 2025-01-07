@@ -455,3 +455,177 @@ function renderInputDate(action, endId, status) {
           data-id="${endId}"></i>
       </div>`;
 }
+
+function filtrarTabelaExclusao(page = 0, secao = 'sci-exclusão', idTabela = 'tabelaHistoricoExclusao') {
+  const loadingOverlay = document.getElementById("loading-overlay");
+  const tbody = document.querySelector(`#${idTabela} tbody`);
+  const secaoId = document.getElementById(secao);
+
+  // Obtém os valores dos campos de pesquisa
+  const pesquisaCampos = {
+    endId: secaoId.querySelector("#pesquisaEndIdExclusao").value.trim(),
+    status: secaoId.querySelector("#pesquisaStatusExclusao").value.trim(),
+    codigoSci: secaoId.querySelector("#pesquisaCodigoSciExclusao").value.trim(),
+  };
+
+  // Monta os parâmetros da URL
+  const params = montarParametrosExclusao(pesquisaCampos, page);
+
+  // Define a URL para buscar dados de exclusão
+  const endpoint = `${host}/sciExclusao/buscar`;
+
+  loadingOverlay.style.display = "block";
+
+  // Realiza a requisição e manipula a resposta
+  fetch(`${endpoint}?${params.toString()}`, {
+    method: "GET",
+    headers: { Authorization: `Bearer ${token}` },
+  })
+    .then((response) => {
+      if (!response.ok) throw new Error("Erro ao buscar dados.");
+      return response.json();
+    })
+    .then((dados) => {
+      renderizarTabelaExclusao(dados, idTabela, tbody);
+      renderizarBotoesPaginacao(
+        "pagination-controls-exclusao",
+        filtrarTabelaExclusao,
+        dados.pageable.pageNumber,
+        dados.totalPages
+      );
+      exibirTotalResultados("total-pesquisa-exclusao", dados.totalElements);
+    })
+    .catch((error) => {
+      console.error("Erro ao buscar dados:", error);
+      alert("Erro ao carregar os dados. Atualize a tela apertando 'F5'.");
+    })
+    .finally(() => {
+      loadingOverlay.style.display = "none";
+    });
+}
+
+function montarParametrosExclusao(pesquisaCampos, page) {
+  const params = new URLSearchParams();
+  if (pesquisaCampos.endId)
+    params.append("endId", pesquisaCampos.endId.toUpperCase());
+  if (pesquisaCampos.status)
+    params.append("status", pesquisaCampos.status.toUpperCase());
+  if (pesquisaCampos.codigoSci)
+    params.append("codigoSci", pesquisaCampos.codigoSci.toUpperCase());
+  params.append("page", page);
+  params.append("size", pageSize);
+  return params;
+}
+
+function renderizarTabelaExclusao(dados, idTabela, tbody) {
+  tbody.innerHTML = ""; // Limpa a tabela antes de preencher
+
+  if (!dados.content || dados.content.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="7" class="text-center">Nenhum dado encontrado.</td></tr>`;
+    return;
+  }
+
+  dados.content.forEach((item) => {
+    const dataEnvio = item.dataEnvio ? formatarDataParaInput(item.dataEnvio) : "";
+    const dataAprovacao = item.dataAprovacao ? formatarDataParaInput(item.dataAprovacao) : "";
+    const ultimaCobranca = item.ultimaCobranca ? formatarDataParaInput(item.ultimaCobranca) : "";
+
+    const row = `
+      <tr>
+                  <td>
+                    <button class="btn btn-link p-0 text-decoration-none end-id" id="textoParaCopiar" data-id="${
+                      item.endId
+                    }">
+                      ${item.endId}
+                    </button>
+                    <i class="fa-regular fa-copy btnCopiar" title="Copiar" data-id="${
+                      item.endId
+                    }"></i>
+                  </td>
+                  <td>
+                    <select disabled class="form-select border-0 bg-light p-2">
+                      <option value="status">${item.status}</option>
+                    </select>
+                    <button class="btn iniciar-btn p-0 border-0 bg-transparent ml-2" 
+                      style="display:${
+                        ["Em andamento", "Concluído"].includes(item.status) ? "none" : ""
+                      };" 
+                      data-id-botao="${item.endId}">
+                      <i class="fa-solid fa-circle-play"></i>
+                    </button>
+                  </td>
+                  <td>
+                    ${
+                      item.codInclusao
+                        ? item.codInclusao
+                        : `<input type="text" class="form-control" id="codInclusao-${item.endId}" placeholder="Código SCI" />`
+                    }
+                  </td>
+                  <td>
+                    ${
+                      dataEnvio
+                        ? `<input 
+                            type="date" 
+                            class="form-control text-center" 
+                            value="${dataEnvio}" 
+                            disabled
+                            id="data-envio${item.endId}"
+                          />`
+                        : renderInputDate("data-envio", item.endId, item.status)
+                    }
+                  </td>
+                  <td>
+                    ${
+                      dataAprovacao
+                        ? `<input 
+                            type="date" 
+                            class="form-control text-center" 
+                            value="${dataAprovacao}" 
+                            disabled
+                            id="data-aprovacao-${item.endId}"
+                          />`
+                        : renderInputDate("data-aprovacao", item.endId, item.status)
+                    }
+                  </td>
+                  <td>
+                    ${
+                      ultimaCobranca
+                        ? `<input 
+                            type="date" 
+                            class="form-control text-center" 
+                            value="${ultimaCobranca}" 
+                            disabled
+                            id="ultima-cobranca-${item.endId}"
+                          />`
+                        : renderInputDate("ultima-cobranca", item.endId, item.status)
+                    }
+                  </td>
+                  <td>
+                    <select class="form-select border-0 bg-light p-2" id="select-status-${
+                        item.endId
+                    }" 
+                    ${item.status !== "Em andamento" ? "disabled" : ""}>
+                        <option value="" selected>Selecione uma opção</option>
+                        <option value="nao-iniciado">Não Iniciado</option>
+                        <option value="concluido">Concluído</option>
+                    </select>
+                  </td>
+                  <td>
+                    <button class="btn btn-primary finalizar-btn" data-id-botao="${item.endId}" ${
+                      item.status === "Não iniciado" || item.status === "Concluído"
+                        ? "disabled"
+                        : ""
+                    }>
+                      Finalizar
+                    </button>
+                  </td>
+                </tr>`;
+
+    tbody.insertAdjacentHTML("beforeend", row);
+  });
+
+  configurarEventosCopiar();
+}
+
+
+

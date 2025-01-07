@@ -426,7 +426,7 @@ return `
     </div>`;
 }
 
-/*
+
 
 function filtrarTabelaObra(page = 0, secao = 'obra', idTabela = 'tabelaHistoricoObra') {
   const loadingOverlay = document.getElementById("loading-overlay");
@@ -437,14 +437,14 @@ function filtrarTabelaObra(page = 0, secao = 'obra', idTabela = 'tabelaHistorico
   const pesquisaCampos = {
     endId: secaoId.querySelector("#pesquisaEndIdObra").value.trim(),
     status: secaoId.querySelector("#pesquisaStatusObra").value.trim(),
-    dataFinal: secaoId.querySelector("#pesquisaInicioPrevisto").value.trim(),
+    dataInicio: secaoId.querySelector("#pesquisaInicioPrevisto").value.trim(),
   };
 
   // Monta os parâmetros da URL
   const params = montarParametrosObra(pesquisaCampos, page);
 
   // Define a URL para buscar obras
-  const endpoint = `${host}/cadastroObras/buscar-obras`;
+  const endpoint = `${host}/obras/buscar`;
 
   loadingOverlay.style.display = "block";
 
@@ -458,7 +458,7 @@ function filtrarTabelaObra(page = 0, secao = 'obra', idTabela = 'tabelaHistorico
       return response.json();
     })
     .then((dados) => {
-      renderizarTabela(dados, idTabela, tbody);
+      renderizarTabelaObra(dados, idTabela, tbody);
       renderizarBotoesPaginacao(
         "pagination-controls-obra",
         preencherTabelaObra,
@@ -489,4 +489,86 @@ function montarParametrosObra(pesquisaCampos, page) {
   return params;
 }
 
-\*/
+function renderizarTabelaObra(dados, idTabela, tbody) {
+  tbody.innerHTML = ""; // Limpa a tabela antes de preencher
+
+  if (!dados.content || dados.content.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8" class="text-center">Nenhum dado encontrado.</td></tr>`;
+    return;
+  }
+
+  dados.content.forEach((item, i) => {
+    const row =
+      idTabela === "tabelaHistoricoObra"
+        ? criarLinhaHistoricoObra(item, i)
+        : criarLinhaCadastroEndId(item, i); // Caso genérico
+
+    tbody.insertAdjacentHTML("beforeend", row);
+  });
+
+  configurarEventosCopiar();
+}
+
+
+function criarLinhaHistoricoObra(item, i) {
+  const dataInicio = item.dataInicio ? formatarDataParaInput(item.dataInicio) : "";
+  const dataFinalizacao = item.dataFinalizacao
+    ? formatarDataParaInput(item.dataFinalizacao)
+    : "";
+
+  return `
+    <tr>
+      <td>
+        <button class="btn btn-link p-0 text-decoration-none end-id" id="textoParaCopiar" data-id="${item.endId}">
+          ${item.endId}
+        </button>
+        <i class="fa-regular fa-copy btnCopiar" title="Copiar" data-id="${item.endId}"></i>
+      </td>
+      <td>
+        <select disabled class="form-select border-0 bg-light p-2">
+          <option value="status">${item.status}</option>
+        </select>
+        <button class="btn iniciar-btn p-0 border-0 bg-transparent ml-2" 
+          style="display:${["Em andamento", "Concluído"].includes(item.status) ? "none" : ""};" 
+          data-id-botao="${item.endId}">
+          <i class="fa-solid fa-circle-play"></i>
+        </button>
+      </td>
+      <td>
+        ${
+          dataInicio
+            ? `<input 
+                type="date" 
+                class="form-control text-center" 
+                value="${dataInicio}" 
+                disabled
+                id="inicio-previsto-${item.endId}"
+              />`
+            : renderInputDate("inicio-previsto", item.endId, item.status)
+        }
+      </td>
+      <td>
+        ${
+          dataFinalizacao
+            ? `<input 
+                type="date" 
+                class="form-control text-center" 
+                value="${dataFinalizacao}" 
+                disabled
+                id="data-final-${item.endId}"
+              />`
+            : renderInputDate("data-final", item.endId, item.status)
+        }
+      </td>
+      <td>
+        <button class="btn btn-primary finalizar-btn" data-id-botao="${item.endId}" ${
+          item.status === "Não iniciado" || item.status === "Concluído"
+            ? "disabled"
+            : ""
+        }>
+          Finalizar
+        </button>
+      </td>
+    </tr>
+  `;
+}
