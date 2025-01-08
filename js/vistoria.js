@@ -22,6 +22,9 @@ function preencherTabelaVistoria(page = 0) {
           ? formatarDataParaInput(item.dataRealizacao)
           : "";
 
+        // Verifica se o parecer está definido
+        const parecerDisabled = item.status !== "Em andamento" || item.parecer;
+
         // Monta a linha da tabela
         const row = `
           <tr>
@@ -68,13 +71,15 @@ function preencherTabelaVistoria(page = 0) {
             }
           </td>
           <td>
-            <select class="form-select border-0 bg-light p-2" id="select-status-${
-              item.endId
-            }" 
-              ${item.status !== "Em andamento" ? "disabled" : ""}>
-              <option value="" selected>Selecione uma opção</option>
-              <option value="viavel">Viável</option>
-              <option value="inviavel">Inviável</option>
+            <select class="form-select border-0 bg-light p-2" id="select-parecer-${item.endId}" 
+              ${parecerDisabled ? "disabled" : ""}>
+              <option value="" selected>Selecione um parecer</option>
+              <option value="viavel" ${
+                item.parecer === "viavel" ? "selected" : ""
+              }>Viável</option>
+              <option value="inviavel" ${
+                item.parecer === "inviavel" ? "selected" : ""
+              }>Inviável</option>
             </select>
           </td>
           <td>
@@ -130,6 +135,7 @@ function preencherTabelaVistoria(page = 0) {
     });
 }
 
+
 //FUNÇÃO PARA INICIAR VISTORIA//
 function iniciaVistoria(endId) {
   const payload = {
@@ -165,30 +171,29 @@ function iniciaVistoria(endId) {
     });
 }
 
-//FINALIZAR VISTORIA//
 function finalizaVistoria(endId) {
-  // Obtém os valores das datas e do status
+  // Obtém os valores das datas e do parecer
   const dataRealizacao = document.getElementById(
     `data-realizacao-${endId}`
   )?.value;
-  const selectStatus = document.getElementById(`select-status-${endId}`)?.value;
+  const parecer = document.getElementById(`select-parecer-${endId}`)?.value;
 
-  // Verifica se todas as datas estão preenchidas
+  // Verifica se a data de realização está preenchida
   if (!dataRealizacao) {
     alert("A data de realização deve estar preenchida.");
     return; // Interrompe a execução se a data não for válida
   }
 
-  // Verifica se o campo de status está preenchido
-  if (!selectStatus || selectStatus === "") {
+  // Verifica se o campo de parecer está preenchido
+  if (!parecer || parecer === "") {
     alert("Por favor, selecione algum parecer (Viável ou Inviável).");
-    return; // Interrompe a execução se o status não for selecionado
+    return; // Interrompe a execução se o parecer não for selecionado
   }
 
   // Monta o payload
   const payload = {
     status: "Concluído",
-    resultado: selectStatus, // Adiciona o status selecionado ao payload
+    resultado: parecer, // Usa o valor do parecer selecionado
   };
 
   // Realiza a requisição
@@ -220,6 +225,7 @@ function finalizaVistoria(endId) {
       alert("Erro ao finalizar a vistoria.");
     });
 }
+
 
 // Função para renderizar o input de data com ícone de envio
 function renderInputDate(action, endId, status) {
@@ -524,7 +530,7 @@ document
     const params = montarParametrosVistoria(pesquisaCampos, page);
   
     // Define o endpoint base
-    const endpoint = `${host}/vistorias/buscar`;
+    const endpoint = `${host}/vistoria/buscar`;
   
     loadingOverlay.style.display = "block";
   
@@ -642,4 +648,83 @@ document
     `;
   }
   
+  
+  document
+  .querySelector("#tabelaVistoria")
+  .addEventListener("change", (event) => {
+    const target = event.target;
+
+    if (target.tagName === "SELECT" && target.id.startsWith("select-parecer-")) {
+      const endId = target.id.split("-")[2]; // Obtém o End ID
+      const parecerSelecionado = target.value; // Obtém o valor selecionado
+
+      if (!parecerSelecionado) {
+        alert("Por favor, selecione um parecer válido.");
+        return;
+      }
+
+      // Exibe a confirmação antes de enviar
+      exibirConfirmacao(
+        `Tem certeza que deseja definir o parecer como "${parecerSelecionado}"?`,
+        () => enviarParecer(endId, parecerSelecionado, "vistoria")
+      );
+    }
+  });
+
+
+
+  function enviarParecer(endId, parecerSelecionado) {
+    console.log(`Parecer enviado: ${parecerSelecionado} (End ID: ${endId})`);
+  
+    // Endpoint para envio do parecer
+    const url = `${host}/vistorias/${endId}`;
+  
+    // Cria o payload dinamicamente
+    const payload = { parecer: parecerSelecionado };
+  
+    // Realiza o fetch para o backend
+    fetch(url, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          return response.json().then((err) => {
+            throw new Error(
+              `${response.status} - ${response.statusText}: ${
+                err.message || "Erro desconhecido"
+              }`
+            );
+          });
+        }
+        return response.json();
+      })
+      .then((dados) => {
+        // Atualiza o campo correspondente
+        const selectField = document.getElementById(`select-parecer-${endId}`);
+        if (selectField) {
+          selectField.value = parecerSelecionado;
+          selectField.setAttribute("disabled", "true"); // Desativa o campo após envio
+        }
+  
+        // Oculta ou desativa os botões relacionados (se necessário)
+        const button = document.querySelector(
+          `button[data-id-botao="${endId}"]`
+        );
+        if (button) {
+          button.style.display = "none";
+        }
+  
+        alert("Parecer enviado com sucesso!");
+        console.log("Resposta do servidor:", dados);
+      })
+      .catch((erro) => {
+        console.error("Erro ao enviar parecer:", erro);
+        alert(`Erro ao enviar parecer: ${erro.message}`);
+      });
+  }
   
