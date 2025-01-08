@@ -279,27 +279,25 @@ document.querySelector("#tabelaHistoricoInclusao").addEventListener("click", (ev
   });
 
 
-// Delegação de eventos para o envio do Código de Inclusão
-document.querySelector("#tabelaHistoricoInclusao").addEventListener("click", (event) => {
-  const target = event.target;
-
-  if (target.classList.contains("btnEnviarCodInclusao")) {
-    const endId = target.getAttribute("data-id"); // Identifica o End ID
-    const codInclusaoInput = document.getElementById(`codInclusao-${endId}`); // Campo de entrada
-    const codInclusao = codInclusaoInput ? codInclusaoInput.value.trim() : "";
-
-    // Valida se o código foi preenchido
-    if (!codInclusao) {
-      return;
+  document.querySelector("#tabelaHistoricoInclusao").addEventListener("click", (event) => {
+    const target = event.target;
+  
+    if (target.classList.contains("btnEnviarCodInclusao")) {
+      const endId = target.getAttribute("data-id");
+      const codInclusaoInput = document.getElementById(`codInclusao-${endId}`);
+      const codInclusao = codInclusaoInput ? codInclusaoInput.value.trim() : "";
+  
+      if (!codInclusao) {
+        return;
+      }
+  
+      exibirConfirmacao(
+        `Tem certeza que deseja enviar o código de inclusão: ${codInclusao}?`,
+        () => enviarCodigoSCI(endId, codInclusao, "sci-inclusao")
+      );
     }
-
-    // Exibe a confirmação antes de enviar
-    exibirConfirmacao(
-      `Tem certeza que deseja enviar o código de inclusão: ${codInclusao}?`,
-      () => enviarCodigoInclusao(endId, codInclusao, "sci-inclusao")
-    );
-  }
-});
+  });
+  
 
 
 // Função para mostrar mais do end ID
@@ -591,14 +589,45 @@ function criarLinhaHistoricoInclusao(item, i) {
 }
 
 
-function enviarCodigoInclusao(endId, codInclusao) {
-  fetch(`${host}/sciInclusao/${endId}`, {
+function enviarCodigoSCI(endId, codigo, etapa) {
+  console.log(`Código enviado: ${codigo} (End ID: ${endId}, etapa: ${etapa})`);
+
+  if (!codigo) {
+    alert("Por favor, forneça um código válido.");
+    return;
+  }
+
+  // Mapeamento dinâmico de etapas para endpoints e chaves de payload
+  const endpointMap = {
+    "sci-exclusao": {
+      payloadKey: "codExclusao",
+      url: `${host}/sciExclusao/${endId}`,
+    },
+    "sci-inclusao": {
+      payloadKey: "codInclusao",
+      url: `${host}/sciInclusao/${endId}`,
+    },
+  };
+
+  // Valida se o etapa está mapeado
+  const endpointConfig = endpointMap[etapa];
+  if (!endpointConfig) {
+    console.error("etapa inválido ou não mapeado.");
+    alert("etapa inválido. Verifique o código.");
+    return;
+  }
+
+  // Cria o payload dinamicamente
+  const payload = { [endpointConfig.payloadKey]: codigo };
+
+  // Realiza o fetch para o endpoint correto
+  fetch(endpointConfig.url, {
     method: "PATCH",
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ codInclusao }),
+    body: JSON.stringify(payload),
   })
     .then((response) => {
       if (!response.ok) {
@@ -611,28 +640,34 @@ function enviarCodigoInclusao(endId, codInclusao) {
       return response.json();
     })
     .then((dados) => {
-      // Atualiza diretamente o valor do campo correspondente
-      const inputField = document.getElementById(`codInclusao-${endId}`);
+      // Atualiza o campo correspondente
+      const inputField = document.getElementById(`${endpointConfig.payloadKey}-${endId}`);
       if (inputField) {
         inputField.setAttribute("disabled", "true"); // Desativa o campo após envio
       }
 
-      // Oculta o botão correspondente
+      // Oculta ou desativa os botões relacionados
       const button = document.querySelector(
-        `i.btnEnviarCodInclusao[data-id="${endId}"]`
+        `i.btnEnviarCodInclusao[data-id="${endId}"], i.btnEnviarCodExclusao[data-id="${endId}"]`
       );
       if (button) {
         button.style.display = "none";
-      } else {
-        console.warn("Botão não encontrado! Mas a operação continua.");
       }
 
-      alert("Código de inclusão enviado com sucesso!");
+      alert(`Código de ${etapa === "sci-exclusao" ? "exclusão" : "inclusão"} enviado com sucesso!`);
       console.log("Resposta do servidor:", dados);
+
+      // Atualiza elementos específicos do etapa
+      if (etapa === "sci-exclusao") {
+        preencherTabelaSciExclusao();
+      } else if (etapa === "sci-inclusao") {
+        preencherTabelaSciInclusao();
+      } else {
+        console.warn(`Nenhuma ação definida para o etapa: ${etapa}`);
+      }
     })
-    .catch((err) => {
-      console.error("Erro ao enviar código de inclusão:", err);
-      alert("Erro ao enviar o código de inclusão. Tente novamente.");
+    .catch((erro) => {
+      console.error(`Erro ao enviar código de ${etapa === "sci-exclusao" ? "exclusão" : "inclusão"}:`, erro);
+      alert(`Erro ao enviar o código de ${etapa === "sci-exclusao" ? "exclusão" : "inclusão"}. Tente novamente.`);
     });
 }
-

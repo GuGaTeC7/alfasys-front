@@ -59,12 +59,17 @@ function preencherTabelaSciExclusao(page = 0) {
                   </button>
                 </td>
                 <td>
-                  ${
-                    item.codExclusao
-                      ? item.codExclusao
-                      : `<input type="text" class="form-control" id="codExclusao-${item.endId}" placeholder="Código SCI" />`
-                  }
-                </td>
+  ${
+    item.codExclusao
+      ? item.codExclusao
+      : `<div class="input-icon-group">
+           <input type="text" class="form-control" id="codExclusao-${item.endId}" placeholder="Código SCI" />
+           <i class="fa-sharp-duotone fa-solid fa-square-arrow-up-right btnEnviarCodExclusao" 
+              data-id="${item.endId}">
+           </i>
+         </div>`
+  }
+</td>
                 <td>
                   ${
                     dataEnvio
@@ -631,6 +636,27 @@ dados.content.forEach((item) => {
 
 configurarEventosCopiar();
 }
+
+
+document.querySelector("#tabelaHistoricoExclusao").addEventListener("click", (event) => {
+  const target = event.target;
+
+  if (target.classList.contains("btnEnviarCodExclusao")) {
+    const endId = target.getAttribute("data-id");
+    const codExclusaoInput = document.getElementById(`codExclusao-${endId}`);
+    const codExclusao = codExclusaoInput ? codExclusaoInput.value.trim() : "";
+
+    if (!codExclusao) {
+      alert("Por favor, preencha o código de exclusão.");
+      return;
+    }
+
+    exibirConfirmacao(
+      `Tem certeza que deseja enviar o código de exclusão: ${codExclusao}?`,
+      () => enviarCodigoSCI(endId, codExclusao, "sci-exclusao")
+    );
+  }
+});
 
 
 document
