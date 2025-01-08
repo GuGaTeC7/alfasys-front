@@ -26,6 +26,8 @@ function preencherTabelaKitTssr(page = 0) {
             ? formatarDataParaInput(item.dataRealizacao)
             : "";
 
+          // Verifica se o parecer está definido
+          const parecerDisabled = item.status !== "Em andamento" || item.parecer;
 
         // Monta a linha da tabela
         const row = `
@@ -89,28 +91,24 @@ function preencherTabelaKitTssr(page = 0) {
                 }
               </td>
               <td>
-                <select class="form-select border-0 bg-light p-2" id="select-status-${
-                item.endId
-                        }" ${
-                item.status === "Não iniciado" || item.status === "Concluído"
-                    ? "disabled"
-                    : ""
-                }>
-                    <option value="" selected>
-                    Selecione uma opção
-                    </option>
-                    <option value="viavel">Viável</option>
-                    <option value="inviavel">Inviável</option>
-                </select>
+                <select class="form-select border-0 bg-light p-2" id="select-parecer-${item.endId}" 
+              ${parecerDisabled ? "disabled" : ""}>
+              <option value="" selected>Selecione um parecer</option>
+              <option value="viavel" ${
+                item.parecer === "viavel" ? "selected" : ""
+              }>Viável</option>
+              <option value="inviavel" ${
+                item.parecer === "inviavel" ? "selected" : ""
+              }>Inviável</option>
+            </select>
               </td>
               <td>
-                <button class="btn btn-primary finalizar-btn" data-id-botao="${item.endId}" ${
-                  item.status === "Não iniciado" || item.status === "Concluído"
-                    ? "disabled"
-                    : ""
-                }>
-                  Finalizar
-                </button>
+                <button class="btn btn-primary finalizar-btn" data-id-botao="${
+              item.endId
+            }" 
+            ${item.status !== "Em andamento" ? "disabled" : ""}>
+            Finalizar
+          </button>
               </td>
             </tr>`;
 
@@ -196,7 +194,7 @@ function finalizaKitTssr(endId) {
 // Obtém os valores das datas e do status
 const dataPrevista = document.getElementById(`data-prevista-${endId}`)?.value;
 const dataRealizacao = document.getElementById(`data-realizada-${endId}`)?.value;
-const selectStatus = document.getElementById(`select-status-${endId}`)?.value;
+const parecer = document.getElementById(`select-parecer-${endId}`)?.value;
 
 // Verifica se todas as datas estão preenchidas
 if (!dataRealizacao || !dataPrevista ) {
@@ -205,7 +203,7 @@ if (!dataRealizacao || !dataPrevista ) {
 }
 
 // Verifica se o campo de status está preenchido
-if (!selectStatus || selectStatus === "") {
+if (!parecer || parecer === "") {
   alert("Por favor, selecione algum parecer (Viável ou Inviável).");
   return; // Interrompe a execução se o status não for selecionado
 }
@@ -213,7 +211,7 @@ if (!selectStatus || selectStatus === "") {
 // Monta o payload
 const payload = {
   status: "Concluído",
-  resultado: selectStatus, // Adiciona o status selecionado ao payload
+  resultado: parecer, // Adiciona o status selecionado ao payload
 };
 
 // Realiza a requisição
@@ -597,3 +595,28 @@ function criarLinhaKitTssr(item, i) {
     </tr>
   `;
 }
+
+
+
+  
+document
+.querySelector("#tabelaHistoricoKitTssr")
+.addEventListener("change", (event) => {
+  const target = event.target;
+
+  if (target.tagName === "SELECT" && target.id.startsWith("select-parecer-")) {
+    const endId = target.id.split("-")[2]; // Obtém o End ID
+    const parecerSelecionado = target.value; // Obtém o valor selecionado
+
+    if (!parecerSelecionado) {
+      alert("Por favor, selecione um parecer válido.");
+      return;
+    }
+
+    // Exibe a confirmação antes de enviar
+    exibirConfirmacao(
+      `Tem certeza que deseja definir o parecer como "${parecerSelecionado}"?`,
+      () => enviarParecer(endId, parecerSelecionado, "kit-tssr")
+    );
+  }
+});

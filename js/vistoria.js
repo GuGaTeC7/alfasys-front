@@ -670,61 +670,6 @@ document
       );
     }
   });
-
-
-
-  function enviarParecer(endId, parecerSelecionado) {
-    console.log(`Parecer enviado: ${parecerSelecionado} (End ID: ${endId})`);
   
-    // Endpoint para envio do parecer
-    const url = `${host}/vistorias/${endId}`;
   
-    // Cria o payload dinamicamente
-    const payload = { parecer: parecerSelecionado };
-  
-    // Realiza o fetch para o backend
-    fetch(url, {
-      method: "PATCH",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          return response.json().then((err) => {
-            throw new Error(
-              `${response.status} - ${response.statusText}: ${
-                err.message || "Erro desconhecido"
-              }`
-            );
-          });
-        }
-        return response.json();
-      })
-      .then((dados) => {
-        // Atualiza o campo correspondente
-        const selectField = document.getElementById(`select-parecer-${endId}`);
-        if (selectField) {
-          selectField.value = parecerSelecionado;
-          selectField.setAttribute("disabled", "true"); // Desativa o campo após envio
-        }
-  
-        // Oculta ou desativa os botões relacionados (se necessário)
-        const button = document.querySelector(
-          `button[data-id-botao="${endId}"]`
-        );
-        if (button) {
-          button.style.display = "none";
-        }
-  
-        alert("Parecer enviado com sucesso!");
-        console.log("Resposta do servidor:", dados);
-      })
-      .catch((erro) => {
-        console.error("Erro ao enviar parecer:", erro);
-        alert(`Erro ao enviar parecer: ${erro.message}`);
-      });
-  }
   

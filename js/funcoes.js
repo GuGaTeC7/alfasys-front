@@ -892,3 +892,94 @@ function buscaAcesso(secao) {
         '<i class="fa-solid fa-magnifying-glass"></i>⠀Buscar';
     });
 }
+
+
+
+function enviarParecer(endId, parecerSelecionado, etapa) {
+  console.log(
+    `Parecer enviado: ${parecerSelecionado} (End ID: ${endId}, Etapa: ${etapa})`
+  );
+
+  if (!parecerSelecionado) {
+    alert("Por favor, selecione um parecer válido.");
+    return;
+  }
+
+  // Mapeamento dinâmico de etapas para endpoints
+  const endpointMap = {
+    "vistoria": {
+      payloadKey: "parecer",
+      url: `${host}/vistorias/${endId}`,
+    },
+    "kit-tssr": {
+      payloadKey: "parecer",
+      url: `${host}/tssrs/${endId}`,
+    },
+    // Outros tipos de etapa podem ser adicionados aqui
+  };
+
+  // Valida se a etapa está mapeada
+  const endpointConfig = endpointMap[etapa];
+  if (!endpointConfig) {
+    console.error("Etapa inválida ou não mapeada.");
+    alert("Etapa inválida. Verifique o código.");
+    return;
+  }
+
+  // Cria o payload dinamicamente
+  const payload = { [endpointConfig.payloadKey]: parecerSelecionado };
+
+  // Realiza o fetch para o endpoint correto
+  fetch(endpointConfig.url, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        return response.json().then((err) => {
+          throw new Error(
+            `${response.status} - ${response.statusText}: ${
+              err.message || "Erro desconhecido"
+            }`
+          );
+        });
+      }
+      return response.json();
+    })
+    .then((dados) => {
+      // Atualiza o campo correspondente
+      const selectField = document.getElementById(`select-parecer-${endId}`);
+      if (selectField) {
+        selectField.value = parecerSelecionado;
+        selectField.setAttribute("disabled", "true"); // Desativa o campo após envio
+      }
+
+      // Oculta ou desativa os botões relacionados (se necessário)
+      const button = document.querySelector(
+        `button[data-id-botao="${endId}"]`
+      );
+      if (button) {
+        button.style.display = "none";
+      }
+
+      alert("Parecer enviado com sucesso!");
+      console.log("Resposta do servidor:", dados);
+
+      // Atualiza a tabela correspondente à etapa
+      if (etapa === "vistoria") {
+        preencherTabelaVistoria();
+      } else if (etapa === "kit-tssr") {
+        preencherTabelaKitTssr();
+      } else {
+        console.warn(`Nenhuma ação definida para a etapa: ${etapa}`);
+      }
+    })
+    .catch((erro) => {
+      console.error("Erro ao enviar parecer:", erro);
+      alert(`Erro ao enviar parecer: ${erro.message}`);
+    });
+}
