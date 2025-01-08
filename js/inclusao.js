@@ -85,13 +85,12 @@ function preencherTabelaSciInclusao(page = 0) {
                     }
                   </td>
                   <td>
-                    <button class="btn btn-primary finalizar-btn" data-id-botao="${item.endId}" ${
-                      item.status === "Não iniciado" || item.status === "Concluído"
-                        ? "disabled"
-                        : ""
-                    }>
-                      Finalizar
-                    </button>
+                    <button class="btn btn-primary finalizar-btn" data-id-botao="${
+              item.endId
+            }" 
+            ${item.status !== "Em andamento" ? "disabled" : ""}>
+            Finalizar
+          </button>
                   </td>
                 </tr>`;
             
