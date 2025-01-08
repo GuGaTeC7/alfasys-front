@@ -613,11 +613,11 @@ function enviarData(endId, dateInput, action, etapa) {
       payloadKey: "dataRealizacao",
       url: `${host}/tssrs/${endId}`,
     },
-    "data-envio": {
+    "data-envio-inclusao": {
       payloadKey: "dataEnvio",
       url: `${host}/sciInclusao/${endId}`,
     },
-    "data-aprovacao": {
+    "data-aprovacao-inclusao": {
       payloadKey: "dataAprovacao",
       url: `${host}/sciInclusao/${endId}`,
     },

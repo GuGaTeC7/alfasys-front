@@ -57,9 +57,9 @@ function preencherTabelaSciExclusao(page = 0) {
                 </td>
                 <td>
                   ${
-                    item.codInclusao
-                      ? item.codInclusao
-                      : `<input type="text" class="form-control" id="codInclusao-${item.endId}" placeholder="Código SCI" />`
+                    item.codExclusao
+                      ? item.codExclusao
+                      : `<input type="text" class="form-control" id="codExclusao-${item.endId}" placeholder="Código SCI" />`
                   }
                 </td>
                 <td>
@@ -202,7 +202,7 @@ function iniciaExclusao(endId) {
 // Função para finalizar Inclusão
 function finalizaSciExclusao(endId) {
   // Obtém os valores das datas e do status
-  const codInclusao = document.getElementById(`cod-inclusao-${endId}`)?.value;
+  const codExclusao = document.getElementById(`cod-inclusao-${endId}`)?.value;
   const dataEnvio = document.getElementById(`data-envio-${endId}`)?.value;
   const dataAprovacao = document.getElementById(`data-aprovacao-${endId}`)?.value;
   const ultimaCobranca = document.getElementById(`ultima-cobranca-${endId}`)?.value;
@@ -214,7 +214,7 @@ function finalizaSciExclusao(endId) {
   }
 
   // Verifica se o campo de status está preenchido
-  if (!codInclusao || codInclusao === "") {
+  if (!codExclusao || codExclusao === "") {
     alert("Por favor, informe algum código.");
     return; // Interrompe a execução se o status não for selecionado
   }
@@ -556,9 +556,9 @@ dados.content.forEach((item) => {
                 </td>
                 <td>
                   ${
-                    item.codInclusao
-                      ? item.codInclusao
-                      : `<input type="text" class="form-control" id="codInclusao-${item.endId}" placeholder="Código SCI" />`
+                    item.codExclusao
+                      ? item.codExclusao
+                      : `<input type="text" class="form-control" id="codExclusao-${item.endId}" placeholder="Código SCI" />`
                   }
                 </td>
                 <td>

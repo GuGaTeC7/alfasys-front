@@ -78,7 +78,7 @@ function preencherTabelaObra(page = 0) {
                   }
                 </td>
                 <td>
-                  <button class="btn btn-primary finalizar-btn" data-id-botao="${
+                   <button class="btn btn-primary finalizar-btn" data-id-botao="${
               item.endId
             }" 
             ${item.status !== "Em andamento" ? "disabled" : ""}>

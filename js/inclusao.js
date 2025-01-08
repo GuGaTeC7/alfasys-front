@@ -51,13 +51,19 @@ function preencherTabelaSciInclusao(page = 0) {
                       <i class="fa-solid fa-circle-play"></i>
                     </button>
                   </td>
-                  <td>
-                    ${
-                      item.codInclusao
-                        ? item.codInclusao
-                        : `<input type="text" class="form-control" id="codInclusao-${item.endId}" placeholder="Código SCI" />`
-                    }
-                  </td>
+                 <td>
+  ${
+    item.codInclusao
+      ? item.codInclusao
+      : `<div class="input-icon-group">
+           <input type="text" class="form-control" id="codInclusao-${item.endId}" placeholder="Código SCI" />
+           <i class="fa-sharp-duotone fa-solid fa-square-arrow-up-right btnEnviarCodInclusao" 
+              data-id="${item.endId}">
+           </i>
+         </div>`
+  }
+</td>
+
                   <td>
                     ${
                       dataEnvio
@@ -66,9 +72,9 @@ function preencherTabelaSciInclusao(page = 0) {
                             class="form-control text-center" 
                             value="${dataEnvio}" 
                             disabled
-                            id="data-envio${item.endId}"
+                            id="data-envio-inclusao-${item.endId}"
                           />`
-                        : renderInputDate("data-envio", item.endId, item.status)
+                        : renderInputDate("data-envio-inclusao", item.endId, item.status)
                     }
                   </td>
                   <td>
@@ -79,9 +85,9 @@ function preencherTabelaSciInclusao(page = 0) {
                             class="form-control text-center" 
                             value="${dataAprovacao}" 
                             disabled
-                            id="data-aprovacao-${item.endId}"
+                            id="data-aprovacao-inclusao-${item.endId}"
                           />`
-                        : renderInputDate("data-aprovacao", item.endId, item.status)
+                        : renderInputDate("data-aprovacao-inclusao", item.endId, item.status)
                     }
                   </td>
                   <td>
@@ -173,9 +179,9 @@ loadingOverlay.style.display = "none";
 // Função para finalizar Inclusão
   function finalizaSciInclusao(endId) {
     // Obtém os valores das datas e do status
-    const codInclusao = document.getElementById(`cod-inclusao-${endId}`)?.value;
-    const dataEnvio = document.getElementById(`data-envio-${endId}`)?.value;
-    const dataAprovacao = document.getElementById(`data-aprovacao-${endId}`)?.value;
+    const codInclusao = document.getElementById(`codInclusao-${endId}`)?.value.trim();
+    const dataEnvio = document.getElementById(`data-envio-inclusao-${endId}`)?.value;
+    const dataAprovacao = document.getElementById(`data-aprovacao-inclusao-${endId}`)?.value;
   
     // Verifica se todas as datas estão preenchidas
     if (!dataEnvio || !dataAprovacao ) {
@@ -184,9 +190,9 @@ loadingOverlay.style.display = "none";
     }
   
     // Verifica se o campo de status está preenchido
-    if (!codInclusao || codInclusao === "") {
+    if (!codInclusao) {
       alert("Por favor, informe algum código.");
-      return; // Interrompe a execução se o status não for selecionado
+      return; // Interrompe a execução se o código não for preenchido
     }
   
     // Monta o payload
@@ -260,7 +266,7 @@ document.querySelector("#tabelaHistoricoInclusao").addEventListener("click", (ev
 
       // Verifica se a data foi preenchida
       if (!dateInput) {
-        alert("Por favor, preencha a data antes de enviá-la.");
+        alert("Por favor, preencha os campos antes de enviar");
         return;
       }
 
@@ -271,6 +277,29 @@ document.querySelector("#tabelaHistoricoInclusao").addEventListener("click", (ev
       );
     }
   });
+
+
+// Delegação de eventos para o envio do Código de Inclusão
+document.querySelector("#tabelaHistoricoInclusao").addEventListener("click", (event) => {
+  const target = event.target;
+
+  if (target.classList.contains("btnEnviarCodInclusao")) {
+    const endId = target.getAttribute("data-id"); // Identifica o End ID
+    const codInclusaoInput = document.getElementById(`codInclusao-${endId}`); // Campo de entrada
+    const codInclusao = codInclusaoInput ? codInclusaoInput.value.trim() : "";
+
+    // Valida se o código foi preenchido
+    if (!codInclusao) {
+      return;
+    }
+
+    // Exibe a confirmação antes de enviar
+    exibirConfirmacao(
+      `Tem certeza que deseja enviar o código de inclusão: ${codInclusao}?`,
+      () => enviarCodigoInclusao(endId, codInclusao, "sci-inclusao")
+    );
+  }
+});
 
 
 // Função para mostrar mais do end ID
@@ -549,8 +578,8 @@ function criarLinhaHistoricoInclusao(item, i) {
             : `<input type="text" class="form-control" id="codInclusao-${item.endId}" placeholder="Código SCI" />`
         }
       </td>
-      <td>${renderInputDate("data-envio", item.endId, item.status, dataEnvio)}</td>
-      <td>${renderInputDate("data-aprovacao", item.endId, item.status, dataAprovacao)}</td>
+      <td>${renderInputDate("data-envio-inclusao", item.endId, item.status, dataEnvio)}</td>
+      <td>${renderInputDate("data-aprovacao-inclusao", item.endId, item.status, dataAprovacao)}</td>
       <td>
         <button class="btn btn-primary finalizar-btn" data-id-botao="${item.endId}" 
           ${item.status === "Não iniciado" || item.status === "Concluído" ? "disabled" : ""}>
@@ -560,3 +589,50 @@ function criarLinhaHistoricoInclusao(item, i) {
     </tr>
   `;
 }
+
+
+function enviarCodigoInclusao(endId, codInclusao) {
+  fetch(`${host}/sciInclusao/${endId}`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ codInclusao }),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        return response.json().then((err) => {
+          throw new Error(
+            `${response.status} - ${response.statusText}: ${err.message || "Erro desconhecido"}`
+          );
+        });
+      }
+      return response.json();
+    })
+    .then((dados) => {
+      // Atualiza diretamente o valor do campo correspondente
+      const inputField = document.getElementById(`codInclusao-${endId}`);
+      if (inputField) {
+        inputField.setAttribute("disabled", "true"); // Desativa o campo após envio
+      }
+
+      // Oculta o botão correspondente
+      const button = document.querySelector(
+        `i.btnEnviarCodInclusao[data-id="${endId}"]`
+      );
+      if (button) {
+        button.style.display = "none";
+      } else {
+        console.warn("Botão não encontrado! Mas a operação continua.");
+      }
+
+      alert("Código de inclusão enviado com sucesso!");
+      console.log("Resposta do servidor:", dados);
+    })
+    .catch((err) => {
+      console.error("Erro ao enviar código de inclusão:", err);
+      alert("Erro ao enviar o código de inclusão. Tente novamente.");
+    });
+}
+
