@@ -61,7 +61,7 @@ function preencherTabelaObra(page = 0) {
                           disabled
                           id="inicio-previsto-${item.endId}"
                         />`
-                      : renderInputDate("inicio-previsto", item.endId, item.status)
+                      : renderInputDateObra("inicio-previsto", item.endId, item.status)
                   }
                 </td>
                 <td>
@@ -74,7 +74,7 @@ function preencherTabelaObra(page = 0) {
                           disabled
                           id="data-final-${item.endId}"
                         />`
-                      : renderInputDate("data-final", item.endId, item.status)
+                      : renderInputDateObra("data-final", item.endId, item.status)
                   }
                 </td>
                 <td>
@@ -399,8 +399,8 @@ historicoLinkObra.addEventListener("click", function (event) {
 
 
 // Função para renderizar o input de data com ícone de envio
-function renderInputDate(action, endId, status) {
-if (status === "Não iniciado") {
+function renderInputDateObra(action, endId, status) {
+  if (status === "Em andamento" ? "" : "disabled") {
   return `
     <div class="input-icon-group">
       <input 
@@ -426,7 +426,6 @@ return `
 }
 
 
-
 function filtrarTabelaObra(page = 0, secao = 'obra', idTabela = 'tabelaHistoricoObra') {
   const loadingOverlay = document.getElementById("loading-overlay");
   const tbody = document.querySelector(`#${idTabela} tbody`);
@@ -436,8 +435,14 @@ function filtrarTabelaObra(page = 0, secao = 'obra', idTabela = 'tabelaHistorico
   const pesquisaCampos = {
     endId: secaoId.querySelector("#pesquisaEndIdObra").value.trim(),
     status: secaoId.querySelector("#pesquisaStatusObra").value.trim(),
-    dataInicio: secaoId.querySelector("#pesquisaInicioPrevisto").value.trim(),
+    dataFinalizacao: secaoId.querySelector("#pesquisaDataFinal").value.trim(),
   };
+
+  // Formata a dataFinalizacao, se presente, usando a função formataData
+  if (pesquisaCampos.dataFinalizacao) {
+    // Supondo que o formato desejado seja 'YYYY-MM-DD' no backend
+    pesquisaCampos.dataFinalizacao = formataData(pesquisaCampos.dataFinalizacao.split("-"));
+  }
 
   // Monta os parâmetros da URL
   const params = montarParametrosObra(pesquisaCampos, page);
@@ -483,12 +488,13 @@ function montarParametrosObra(pesquisaCampos, page) {
     params.append("endId", pesquisaCampos.endId.toUpperCase());
   if (pesquisaCampos.status)
     params.append("status", pesquisaCampos.status.toUpperCase());
-  if (pesquisaCampos.dataFinal)
-    params.append("dataFinal", pesquisaCampos.dataFinal);
+  if (pesquisaCampos.dataFinalizacao) // Aqui é garantido que a data foi formatada corretamente
+    params.append("dataFinal", pesquisaCampos.dataFinalizacao); // Passa a data formatada
   params.append("page", page);
   params.append("size", pageSize);
   return params;
 }
+
 
 function renderizarTabelaObra(dados, idTabela, tbody) {
   tbody.innerHTML = ""; // Limpa a tabela antes de preencher
@@ -545,7 +551,7 @@ function criarLinhaHistoricoObra(item) {
                 disabled
                 id="inicio-previsto-${item.endId}"
               />`
-            : renderInputDate("inicio-previsto", item.endId, item.status)
+            : renderInputDateObra("inicio-previsto", item.endId, item.status)
         }
       </td>
       <td>
@@ -558,7 +564,7 @@ function criarLinhaHistoricoObra(item) {
                 disabled
                 id="data-final-${item.endId}"
               />`
-            : renderInputDate("data-final", item.endId, item.status)
+            : renderInputDateObra("data-final", item.endId, item.status)
         }
       </td>
       <td>

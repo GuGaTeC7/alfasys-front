@@ -28,6 +28,9 @@ function confirmAlert(action, endId, etapa) {
     else if (etapa === "agendamento-obra") {
       finalizaAgendamentoObra(endId);
     }
+    else if (etapa === "todos-projetos") {
+      finalizaProjeto(endId);
+    }
 
     } else if (action === "iniciar") {
     if (etapa === "agendamento") {
@@ -49,6 +52,9 @@ function confirmAlert(action, endId, etapa) {
     }
     else if (etapa === "agendamento-obra") {
       iniciaAgendamentoObra(endId);
+    }
+    else if (etapa === "todos-projetos") {
+      iniciaProjeto(endId);
     }
   }
   dismissAlert();
@@ -655,6 +661,15 @@ function enviarData(endId, dateInput, action, etapa) {
       payloadKey: "dataLiberacao",
       url: `${host}/obras/agendamento/${endId}`,
     },
+    "data-entrada": {
+      payloadKey: "dataEntrada",
+      url: `${host}/projetos/${endId}`,
+    },
+    "data-aprovacao-projeto": {
+      payloadKey: "dataAprovacao",
+      url: `${host}/projetos/${endId}`,
+    },
+    
   };
 
   // Valida se a ação está mapeada
@@ -731,6 +746,8 @@ function enviarData(endId, dateInput, action, etapa) {
         preencherTabelaAcesso(); // Atualiza a tabela de acesso
       } else if (etapa === "agendamento-obra") {
         preencherTabelaAcessoObra(); // Atualiza a tabela de acesso 
+      } else if (etapa === "todos-projetos") {
+        preencherTabelaProjetos(); // Atualiza a tabela de acesso 
       } else {
         console.warn(`Nenhuma ação definida para a etapa: ${etapa}`);
       }
@@ -1067,5 +1084,90 @@ function enviarWorkflow(endId, cadastroWorkflowSelecionado, etapa) {
     .catch((erro) => {
       console.error("Erro ao enviar Cadastro Workflow:", erro);
       alert(`Erro ao enviar Cadastro Workflow: ${erro.message}`);
+    });
+}
+
+
+
+function enviarCodigoSCI(endId, codigo, etapa) {
+  console.log(`Código enviado: ${codigo} (End ID: ${endId}, etapa: ${etapa})`);
+
+  if (!codigo) {
+    alert("Por favor, forneça um código válido.");
+    return;
+  }
+
+  // Mapeamento dinâmico de etapas para endpoints e chaves de payload
+  const endpointMap = {
+    "sci-exclusao": {
+      payloadKey: "codExclusao",
+      url: `${host}/sciExclusao/${endId}`,
+    },
+    "sci-inclusao": {
+      payloadKey: "codInclusao",
+      url: `${host}/sciInclusao/${endId}`,
+    },
+  };
+
+  // Valida se o etapa está mapeado
+  const endpointConfig = endpointMap[etapa];
+  if (!endpointConfig) {
+    console.error("etapa inválido ou não mapeado.");
+    alert("etapa inválido. Verifique o código.");
+    return;
+  }
+
+  // Cria o payload dinamicamente
+  const payload = { [endpointConfig.payloadKey]: codigo };
+
+  // Realiza o fetch para o endpoint correto
+  fetch(endpointConfig.url, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        return response.json().then((err) => {
+          throw new Error(
+            `${response.status} - ${response.statusText}: ${err.message || "Erro desconhecido"}`
+          );
+        });
+      }
+      return response.json();
+    })
+    .then((dados) => {
+      // Atualiza o campo correspondente
+      const inputField = document.getElementById(`${endpointConfig.payloadKey}-${endId}`);
+      if (inputField) {
+        inputField.setAttribute("disabled", "true"); // Desativa o campo após envio
+      }
+
+      // Oculta ou desativa os botões relacionados
+      const button = document.querySelector(
+        `i.btnEnviarCodInclusao[data-id="${endId}"], i.btnEnviarCodExclusao[data-id="${endId}"]`
+      );
+      if (button) {
+        button.style.display = "none";
+      }
+
+      alert(`Código de ${etapa === "sci-exclusao" ? "exclusão" : "inclusão"} enviado com sucesso!`);
+      console.log("Resposta do servidor:", dados);
+
+      // Atualiza elementos específicos do etapa
+      if (etapa === "sci-exclusao") {
+        preencherTabelaSciExclusao();
+      } else if (etapa === "sci-inclusao") {
+        preencherTabelaSciInclusao();
+      } else {
+        console.warn(`Nenhuma ação definida para o etapa: ${etapa}`);
+      }
+    })
+    .catch((erro) => {
+      console.error(`Erro ao enviar código de ${etapa === "sci-exclusao" ? "exclusão" : "inclusão"}:`, erro);
+      alert(`Erro ao enviar o código de ${etapa === "sci-exclusao" ? "exclusão" : "inclusão"}. Tente novamente.`);
     });
 }

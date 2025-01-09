@@ -12,10 +12,10 @@ document.getElementById("button-buscar-projeto").addEventListener("click", funct
     }, 3000);
   });
 
-/*
+
   function preencherTabelaProjetos(page = 0) {
     const loadingOverlay = document.getElementById("loading-overlay");
-    const tbody = document.querySelector("#todos-projetos tbody");
+    const tbody = document.querySelector("#tabelaHistoricoProjetos tbody");
     const totalPesquisado = document.getElementById("total-pesquisa-projeto");
   
     loadingOverlay.style.display = "block";
@@ -41,9 +41,6 @@ document.getElementById("button-buscar-projeto").addEventListener("click", funct
               ? formatarDataParaInput(item.dataAprovacao)
               : "";
 
-            const dataLigacao = item.dataLigacao
-            ? formatarDataParaInput(item.dataLigacao)
-            : "";   
   
   
           // Monta a linha da tabela
@@ -58,6 +55,11 @@ document.getElementById("button-buscar-projeto").addEventListener("click", funct
                   <i class="fa-regular fa-copy btnCopiar" title="Copiar" data-id="${
                     item.endId
                   }"></i>
+                </td>
+                <td>
+                  <button class="btn btn-link p-0 text-decoration-none ver-mais" data-id="${item.endId}">
+                    Ver mais
+                  </button>
                 </td>
                 <td>
                   <select disabled class="form-select border-0 bg-light p-2">
@@ -98,27 +100,10 @@ document.getElementById("button-buscar-projeto").addEventListener("click", funct
                           class="form-control text-center" 
                           value="${dataAprovacao}" 
                           disabled
-                          id="data-aprovacao-${item.endId}"
+                          id="data-aprovacao-projeto-${item.endId}"
                         />`
                       : renderInputDate(
-                          "data-aprovacao",
-                          item.endId,
-                          item.status
-                        )
-                  }
-                </td>
-                <td>
-                  ${
-                    dataLigacao
-                      ? `<input 
-                          type="date" 
-                          class="form-control text-center" 
-                          value="${dataLigacao}" 
-                          disabled
-                          id="data-ligacao-${item.endId}"
-                        />`
-                      : renderInputDate(
-                          "data-ligacao",
+                          "data-aprovacao-projeto",
                           item.endId,
                           item.status
                         )
@@ -216,11 +201,11 @@ document.getElementById("button-buscar-projeto").addEventListener("click", funct
   function finalizaProjeto(endId) {
   // Obtém os valores das datas e do status
   const dataEntrada = document.getElementById(`data-entrada-${endId}`)?.value;
-  const dataAprovacao = document.getElementById(`data-aprovacao-${endId}`)?.value;
-  const dataLigacao = document.getElementById(`data-ligacao-${endId}`)?.value;
+  const dataAprovacao = document.getElementById(`data-aprovacao-projeto-${endId}`)?.value;
+ 
   
   // Verifica se todas as datas estão preenchidas
-  if (!dataEntrada || !dataAprovacao || !dataLigacao) {
+  if (!dataEntrada || !dataAprovacao ) {
     alert("A data de realização e data prevista devem estar preenchidas.");
     return; // Interrompe a execução se a data não for válida
   }
@@ -263,7 +248,7 @@ document.getElementById("button-buscar-projeto").addEventListener("click", funct
   
   
   // Delegação de eventos para os botões na tabela
-  document.querySelector("#todos-projetos tbody").addEventListener("click", (event) => {
+  document.querySelector("#tabelaHistoricoProjetos tbody").addEventListener("click", (event) => {
     const button = event.target.closest("[data-id-botao]");
     if (!button) return; // Se não clicar em um botão relevante, retorna
   
@@ -463,5 +448,195 @@ document.getElementById("button-buscar-projeto").addEventListener("click", funct
   }
   
   
-  \*/
+
+  // Delegação de evento para o botão "Ver mais" na tabela
+document.querySelector("#tabelaHistoricoProjetos").addEventListener("click", (event) => {
+  const loadingOverlay = document.getElementById("loading-overlay");
   
+  // Verifica se o elemento clicado possui a classe `ver-mais`
+  if (event.target.classList.contains("ver-mais")) {
+    const endId = event.target.getAttribute("data-id");
+
+    if (!loadingOverlay) {
+      console.error("Elemento de loadingOverlay não encontrado!");
+      return;
+    }
+
+    loadingOverlay.style.display = "block";
+
+    // Exibição do popup com detalhes (similar ao botão end-id)
+    const alertDiv = document.createElement("div");
+    alertDiv.className = "alert-container";
+    alertDiv.style.position = "fixed";
+    alertDiv.style.top = "50%";
+    alertDiv.style.left = "50%";
+    alertDiv.style.transform = "translate(-50%, -50%)";
+    alertDiv.style.width = "86%";
+    alertDiv.style.maxWidth = "900px";
+    alertDiv.style.padding = "30px";
+    alertDiv.style.backgroundColor = "#012970";
+    alertDiv.style.color = "#ffffff";
+    alertDiv.style.border = "2px solid #012970";
+    alertDiv.style.borderRadius = "15px";
+    alertDiv.style.boxShadow = "0 4px 20px rgba(0, 0, 0, 0.15)";
+    alertDiv.style.zIndex = "1000";
+    alertDiv.style.overflow = "hidden";
+    alertDiv.style.display = "flex";
+    alertDiv.style.justifyContent = "center";
+    alertDiv.style.alignItems = "center";
+    alertDiv.style.flexDirection = "column";
+
+    if (!token) {
+      console.error("Token de autenticação não encontrado!");
+      loadingOverlay.style.display = "none";
+      return;
+    }
+
+    fetch(`${host}/projetos/${endId}`, {
+      method: "GET",
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error("Erro ao buscar dados.");
+        return response.json();
+      })
+      .then((dados) => {
+        alertDiv.innerHTML = `
+          <h1 style="margin-bottom: 25px; font-size: 1.5em;">
+            Detalhes do Projeto: <b>${endId}</b>
+          </h1>
+          <ul style="list-style: none; padding: 0; font-size: 1em;">
+            <li><strong>Nome do Projeto:</strong> ${dados.nomeProjeto}</li>
+            <li><strong>Descrição:</strong> ${dados.descricao}</li>
+            <li><strong>Status:</strong> ${dados.status}</li>
+            <li><strong>Data de Criação:</strong> ${formatarDataParaInput(dados.dataCriacao)}</li>
+          </ul>
+        `;
+
+        const closeButton = document.createElement("button");
+        closeButton.innerText = "Fechar";
+        closeButton.style.marginTop = "20px";
+        closeButton.style.padding = "12px 20px";
+        closeButton.style.backgroundColor = "#ffffff";
+        closeButton.style.border = "2px solid #ffffff";
+        closeButton.style.color = "#012970";
+        closeButton.style.cursor = "pointer";
+        closeButton.style.borderRadius = "10px";
+        closeButton.addEventListener("click", () => {
+          alertDiv.remove();
+        });
+
+        alertDiv.appendChild(closeButton);
+        document.body.appendChild(alertDiv);
+      })
+      .catch((error) => {
+        console.error("Erro ao buscar dados:", error);
+        alert("Erro ao carregar os dados. Atualize a tela apertando 'F5'.");
+      })
+      .finally(() => {
+        loadingOverlay.style.display = "none";
+      });
+  }
+});
+
+
+// Função para realizar o cadastro de projeto
+function realizarCadastroProjeto() {
+  // Coleta os valores dos campos
+  const endId = document.getElementById("endIdProjeto").value;
+  const concessionaria = document.getElementById("concessionária").value;
+  const regional = document.getElementById("regional").value;
+  const unidade = document.getElementById("unidade").value;
+  const cnpjUc = document.getElementById("cnpjuc").value;
+  const tipoTensao = document.getElementById("tipoTensao").value;
+  const previsaoLigacao = document.getElementById("previsaoLigacao").value;
+  const numeroMedidor = document.getElementById("numeroMedidor").value;
+  const numeroInstalacao = document.getElementById("numeroInstalacao").value;
+  const numeroDeFases = document.getElementById("numeroDeFases").value;
+  const leituraInicial = document.getElementById("leituraInicial").value;
+  const dataLigacao = document.getElementById("dataLigacao").value;
+
+// Validação dos campos obrigatórios
+const camposObrigatorios = [
+  { id: "endIdProjeto", nome: "End ID" },
+  { id: "concessionária", nome: "Concessionária" },
+  { id: "regional", nome: "Regional" },
+  { id: "unidade", nome: "Unidade" },
+  { id: "tipoTensao", nome: "Tipo Tensão" },
+  { id: "numeroMedidor", nome: "Número do Medidor" },
+  { id: "numeroInstalacao", nome: "Número de Instalação" },
+  { id: "numeroDeFases", nome: "Número de Fases" },
+  { id: "leituraInicial", nome: "Leitura Inicial" },
+  { id: "dataLigacao", nome: "Data de Ligação" },
+];
+
+const camposFaltando = camposObrigatorios.filter(
+  (campo) => !document.getElementById(campo.id).value
+);
+
+if (camposFaltando.length > 0) {
+  const nomesCampos = camposFaltando.map((campo) => campo.nome).join(", ");
+  alert(`Por favor, preencha os campos obrigatórios: ${nomesCampos}`);
+  return;
+}
+
+
+  // Referência ao botão
+  const botaoSalvar = document.querySelector(
+    'button[onclick="realizarCadastroProjeto()"]'
+  );
+  botaoSalvar.disabled = true; // Desabilita o botão
+  botaoSalvar.textContent = "Cadastrando..."; // Altera o texto do botão
+
+  // Estrutura do payload
+  const payload = {
+    endId: endId,
+    status: "Não iniciado",
+    informacoesLigacao: {
+      concessionaria: concessionaria,
+      regional: regional,
+      unidade: unidade,
+      cnpjUc: cnpjUc || null,
+      tipoTensao: tipoTensao,
+      previsaoLigacao: previsaoLigacao || null,
+      numeroMedidor: numeroMedidor,
+      numeroInstalacao: numeroInstalacao,
+      numeroDeFases: numeroDeFases,
+      leituraInicial: leituraInicial,
+      dataLigacao: dataLigacao,
+    },
+    operadora: {
+      id: null, // Pode ser preenchido posteriormente, se necessário
+      nome: null, // Campo opcional
+    },
+  };
+
+  // Envia a requisição para o servidor
+  fetch(`${host}/projetos`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Erro ao cadastrar projeto");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Cadastro de projeto realizado com sucesso:", data);
+      alert("Projeto cadastrado com sucesso!");
+      resetarCampos("cadastrar-projeto"); // Reseta os campos após o sucesso
+    })
+    .catch((error) => {
+      console.error("Erro ao realizar cadastro de projeto:", error);
+      alert("Erro ao cadastrar o projeto. Tente novamente.");
+    })
+    .finally(() => {
+      botaoSalvar.disabled = false; // Reabilita o botão
+      botaoSalvar.textContent = "Salvar"; // Restaura o texto original do botão
+    });
+}

@@ -66,7 +66,7 @@ function preencherTabelaKitTssr(page = 0) {
                         disabled
                         id="data-prevista-${item.endId}"
                       />`
-                    : renderInputDate(
+                    : renderInputDateTssr(
                         "data-prevista",
                         item.endId,
                         item.status
@@ -83,7 +83,7 @@ function preencherTabelaKitTssr(page = 0) {
                         disabled
                         id="data-realizada-${item.endId}"
                       />`
-                    : renderInputDate(
+                    : renderInputDateTssr(
                         "data-realizada",
                         item.endId,
                         item.status
@@ -419,8 +419,8 @@ document.querySelector("#tabelaHistoricoKitTssr").addEventListener("click", (eve
 
 
 // Função para renderizar o input de data com ícone de envio
-function renderInputDate(action, endId, status) {
-  if (status === "Não iniciado") {
+function renderInputDateTssr(action, endId, status) {
+  if (status === "Em andamento" ? "" : "disabled") {
     return `
       <div class="input-icon-group">
         <input 
@@ -568,7 +568,7 @@ function criarLinhaKitTssr(item, i) {
               disabled
               id="data-prevista-${item.endId}"
             />`
-          : renderInputDate("data-prevista", item.endId, item.status)
+          : renderInputDateTssr("data-prevista", item.endId, item.status)
         }
       </td>
       <td>
@@ -580,7 +580,7 @@ function criarLinhaKitTssr(item, i) {
               disabled
               id="data-realizada-${item.endId}"
             />`
-          : renderInputDate("data-realizada", item.endId, item.status)
+          : renderInputDateTssr("data-realizada", item.endId, item.status)
         }
       </td>
       <td>

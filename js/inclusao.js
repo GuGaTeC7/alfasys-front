@@ -56,7 +56,7 @@ function preencherTabelaSciInclusao(page = 0) {
                     item.codInclusao
                       ? item.codInclusao
                       : `<div class="input-icon-group">
-                          <input type="text" class="form-control" id="codInclusao-${item.endId}" placeholder="Código SCI" />
+                          <input type="text" class="form-control" id="codInclusao-${item.endId}" placeholder="Código SCI"  ${item.status !== "Em andamento" ? "disabled" : ""}/>
                           <i class="fa-sharp-duotone fa-solid fa-square-arrow-up-right btnEnviarCodInclusao" 
                             data-id="${item.endId}">
                           </i>
@@ -73,7 +73,7 @@ function preencherTabelaSciInclusao(page = 0) {
                             disabled
                             id="data-envio-inclusao-${item.endId}"
                           />`
-                        : renderInputDate("data-envio-inclusao", item.endId, item.status)
+                        : renderInputDateInclusao("data-envio-inclusao", item.endId, item.status)
                     }
                   </td>
                   <td>
@@ -86,7 +86,7 @@ function preencherTabelaSciInclusao(page = 0) {
                             disabled
                             id="data-aprovacao-inclusao-${item.endId}"
                           />`
-                        : renderInputDate("data-aprovacao-inclusao", item.endId, item.status)
+                        : renderInputDateInclusao("data-aprovacao-inclusao", item.endId, item.status)
                     }
                   </td>
                   <td>
@@ -278,6 +278,7 @@ document.querySelector("#tabelaHistoricoInclusao").addEventListener("click", (ev
   });
 
 
+  // Delegação de eventos para os ícones de enviar código inclusão
   document.querySelector("#tabelaHistoricoInclusao").addEventListener("click", (event) => {
     const target = event.target;
   
@@ -426,8 +427,8 @@ historicoLinkInclusao.addEventListener("click", function (event) {
 
 
 // Função para renderizar o input de data com ícone de envio
-function renderInputDate(action, endId, status) {
-  if (status === "Não iniciado") {
+function renderInputDateInclusao(action, endId, status) {
+  if (status === "Em andamento" ? "" : "disabled") {
     return `
       <div class="input-icon-group">
         <input 
@@ -573,7 +574,7 @@ function criarLinhaHistoricoInclusao(item, i) {
           item.codInclusao
             ? item.codInclusao
             : `<div class="input-icon-group">
-                <input type="text" class="form-control" id="codInclusao-${item.endId}" placeholder="Código SCI" />
+                <input type="text" class="form-control" id="codInclusao-${item.endId}" placeholder="Código SCI" ${item.status !== "Em andamento" ? "disabled" : ""}/>
                 <i class="fa-solid fa-square-arrow-up-right btnEnviarCodInclusao" 
                   data-id="${item.endId}" 
                   title="Enviar Código"></i>
@@ -590,7 +591,7 @@ function criarLinhaHistoricoInclusao(item, i) {
                 disabled
                 id="data-envio-inclusao-${item.endId}"
               />`
-            : renderInputDate("data-envio-inclusao", item.endId, item.status)
+            : renderInputDateInclusao("data-envio-inclusao", item.endId, item.status)
         }
       </td>
       <td>
@@ -603,7 +604,7 @@ function criarLinhaHistoricoInclusao(item, i) {
                 disabled
                 id="data-aprovacao-inclusao-${item.endId}"
               />`
-            : renderInputDate("data-aprovacao-inclusao", item.endId, item.status)
+            : renderInputDateInclusao("data-aprovacao-inclusao", item.endId, item.status)
         }
       </td>
       <td>
@@ -614,89 +615,4 @@ function criarLinhaHistoricoInclusao(item, i) {
       </td>
     </tr>
   `;
-}
-
-
-
-function enviarCodigoSCI(endId, codigo, etapa) {
-  console.log(`Código enviado: ${codigo} (End ID: ${endId}, etapa: ${etapa})`);
-
-  if (!codigo) {
-    alert("Por favor, forneça um código válido.");
-    return;
-  }
-
-  // Mapeamento dinâmico de etapas para endpoints e chaves de payload
-  const endpointMap = {
-    "sci-exclusao": {
-      payloadKey: "codExclusao",
-      url: `${host}/sciExclusao/${endId}`,
-    },
-    "sci-inclusao": {
-      payloadKey: "codInclusao",
-      url: `${host}/sciInclusao/${endId}`,
-    },
-  };
-
-  // Valida se o etapa está mapeado
-  const endpointConfig = endpointMap[etapa];
-  if (!endpointConfig) {
-    console.error("etapa inválido ou não mapeado.");
-    alert("etapa inválido. Verifique o código.");
-    return;
-  }
-
-  // Cria o payload dinamicamente
-  const payload = { [endpointConfig.payloadKey]: codigo };
-
-  // Realiza o fetch para o endpoint correto
-  fetch(endpointConfig.url, {
-    method: "PATCH",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(payload),
-  })
-    .then((response) => {
-      if (!response.ok) {
-        return response.json().then((err) => {
-          throw new Error(
-            `${response.status} - ${response.statusText}: ${err.message || "Erro desconhecido"}`
-          );
-        });
-      }
-      return response.json();
-    })
-    .then((dados) => {
-      // Atualiza o campo correspondente
-      const inputField = document.getElementById(`${endpointConfig.payloadKey}-${endId}`);
-      if (inputField) {
-        inputField.setAttribute("disabled", "true"); // Desativa o campo após envio
-      }
-
-      // Oculta ou desativa os botões relacionados
-      const button = document.querySelector(
-        `i.btnEnviarCodInclusao[data-id="${endId}"], i.btnEnviarCodExclusao[data-id="${endId}"]`
-      );
-      if (button) {
-        button.style.display = "none";
-      }
-
-      alert(`Código de ${etapa === "sci-exclusao" ? "exclusão" : "inclusão"} enviado com sucesso!`);
-      console.log("Resposta do servidor:", dados);
-
-      // Atualiza elementos específicos do etapa
-      if (etapa === "sci-exclusao") {
-        preencherTabelaSciExclusao();
-      } else if (etapa === "sci-inclusao") {
-        preencherTabelaSciInclusao();
-      } else {
-        console.warn(`Nenhuma ação definida para o etapa: ${etapa}`);
-      }
-    })
-    .catch((erro) => {
-      console.error(`Erro ao enviar código de ${etapa === "sci-exclusao" ? "exclusão" : "inclusão"}:`, erro);
-      alert(`Erro ao enviar o código de ${etapa === "sci-exclusao" ? "exclusão" : "inclusão"}. Tente novamente.`);
-    });
 }

@@ -61,14 +61,14 @@ function preencherTabelaSciExclusao(page = 0) {
                 <td>
                 ${
                 item.codExclusao
-                  ? item.codExclusao
+                  ? `<span id="codExclusao-${item.endId}">${item.codExclusao}</span>`
                   : `<div class="input-icon-group">
-                      <input type="text" class="form-control" id="codExclusao-${item.endId}" placeholder="Código SCI" />
+                      <input type="text" class="form-control" id="codExclusao-${item.endId}" placeholder="Código SCI" ${item.status !== "Em andamento" ? "disabled" : ""}/>
                         <i class="fa-sharp-duotone fa-solid fa-square-arrow-up-right btnEnviarCodExclusao" 
-                          data-id="${item.endId}">
+                        data-id="${item.endId}">
                         </i>
                     </div>`
-                  }
+                    }
                 </td>
                 <td>
                   ${
@@ -209,30 +209,43 @@ function iniciaExclusao(endId) {
 
 
 
-// Função para finalizar Inclusão
 function finalizaSciExclusao(endId) {
-  // Obtém os valores das datas e do status
-  const codExclusao = document.getElementById(`cod-inclusao-${endId}`)?.value;
+  // Captura o valor do codExclusao
+  let codExclusao;
+
+  // Verifica se há um input ou texto direto no DOM
+  const codExclusaoInput = document.getElementById(`codExclusao-${endId}`);
+  if (codExclusaoInput) {
+    codExclusao = codExclusaoInput.value.trim(); // Caso seja um input
+  } else {
+    const codExclusaoText = document.querySelector(`td span#codExclusao-${endId}`);
+    codExclusao = codExclusaoText ? codExclusaoText.textContent.trim() : null; // Caso seja texto
+  }
+
+  // Verifica se o codExclusao está vazio
+  if (!codExclusao || codExclusao === "") {
+    alert("Por favor, informe o código SCI antes de finalizar.");
+    return;
+  }
+
+  // Captura as datas
   const dataEnvio = document.getElementById(`data-envio-${endId}`)?.value;
   const dataAprovacao = document.getElementById(`data-aprovacao-${endId}`)?.value;
   const ultimaCobranca = document.getElementById(`ultima-cobranca-${endId}`)?.value;
 
-  // Verifica se todas as datas estão preenchidas
+  // Verifica se as datas estão preenchidas
   if (!dataEnvio || !dataAprovacao || !ultimaCobranca) {
     alert("A data de envio, data de aprovação e última cobrança devem estar preenchidas.");
-    return; // Interrompe a execução se a data não for válida
-  }
-
-  // Verifica se o campo de status está preenchido
-  if (!codExclusao || codExclusao === "") {
-    alert("Por favor, informe algum código.");
-    return; // Interrompe a execução se o status não for selecionado
+    return;
   }
 
   // Monta o payload
   const payload = {
     status: "Concluído",
-    resultado: selectStatus, // Adiciona o status selecionado ao payload
+    codExclusao,
+    dataEnvio,
+    dataAprovacao,
+    ultimaCobranca,
   };
 
   // Realiza a requisição
@@ -245,7 +258,6 @@ function finalizaSciExclusao(endId) {
     body: JSON.stringify(payload),
   })
     .then((response) => {
-      console.log("Resposta da requisição recebida:", response);
       if (!response.ok) {
         throw new Error(`Erro ao atualizar os dados: ${response.statusText}`);
       }
@@ -607,7 +619,7 @@ function criarLinhaSciExclusao(item) {
           item.codExclusao
             ? item.codExclusao
             : `<div class="input-icon-group">
-                <input type="text" class="form-control" id="codExclusao-${item.endId}" placeholder="Código SCI" />
+                <input type="text" class="form-control" id="codExclusao-${item.endId}" placeholder="Código SCI" ${item.status !== "Em andamento" ? "disabled" : ""}/>
                 <i class="fa-sharp-duotone fa-solid fa-square-arrow-up-right btnEnviarCodExclusao" data-id="${item.endId}"></i>
               </div>`
         }

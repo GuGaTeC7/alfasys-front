@@ -44,9 +44,7 @@ function preencherTabelaVistoria(page = 0) {
               </select>
               <button class="btn iniciar-btn p-0 border-0 bg-transparent ml-2" 
                 style="display:${
-                  ["Em andamento", "Concluído"].includes(item.status)
-                    ? "none"
-                    : ""
+                  ["Em andamento", "Concluído"].includes(item.status) ? "none" : ""
                 };" 
                 data-id-botao="${item.endId}">
                 <i class="fa-solid fa-circle-play"></i>
@@ -62,7 +60,7 @@ function preencherTabelaVistoria(page = 0) {
                     disabled
                     id="data-realizacao-${item.endId}"
                   />`
-                : renderInputDate(
+                : renderInputDateVistoria(
                     "data-realizacao",
                     item.endId,
                     item.status
@@ -228,8 +226,8 @@ function finalizaVistoria(endId) {
 
 
 // Função para renderizar o input de data com ícone de envio
-function renderInputDate(action, endId, status) {
-  if (status === "Não iniciado") {
+function renderInputDateVistoria(action, endId, status) {
+  if (status === "Em andamento" ? "" : "disabled") {
     return `
       <div class="input-icon-group">
         <input 
@@ -625,7 +623,7 @@ document
                   disabled
                   id="data-realizacao-${item.endId}"
                 />`
-              : renderInputDate("data-realizacao", item.endId, item.status)
+              : renderInputDateVistoria("data-realizacao", item.endId, item.status)
           }
         </td>
         <td>
