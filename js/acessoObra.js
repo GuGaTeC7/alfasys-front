@@ -89,10 +89,10 @@ function preencherTabelaAcessoObra(page = 0) {
                       class="form-control text-center" 
                       value="${dataSolicitacao}" 
                       disabled
-                      id="data-solicitacao-${item.endId}"
+                      id="data-solicitacao-obra-${item.endId}"
                     />`
                   : renderInputDate(
-                      "data-solicitacao",
+                      "data-solicitacao-obra",
                       item.endId,
                       item.statusAgendamento
                     )
@@ -106,10 +106,10 @@ function preencherTabelaAcessoObra(page = 0) {
                       class="form-control text-center" 
                       value="${dataPrevisao}" 
                       disabled
-                      id="data-previsao-${item.endId}"
+                      id="data-previsao-obra-${item.endId}"
                     />`
                   : renderInputDate(
-                      "data-previsao",
+                      "data-previsao-obra",
                       item.endId,
                       item.statusAgendamento
                     )
@@ -123,10 +123,10 @@ function preencherTabelaAcessoObra(page = 0) {
                       class="form-control text-center" 
                       value="${dataLiberacao}" 
                       disabled
-                      id="data-liberacao-${item.endId}"
+                      id="data-liberacao-obra-${item.endId}"
                     />`
                   : renderInputDate(
-                      "data-liberacao",
+                      "data-liberacao-obra",
                       item.endId,
                       item.statusAgendamento
                     )
@@ -311,11 +311,11 @@ function iniciaAgendamentoObra(endId) {
 function finalizaAgendamentoObra(endId) {
   // Obtém os valores das datas
   const dataSolicitacao = document.getElementById(
-    `data-solicitacao-${endId}`
+    `data-solicitacao-obra-${endId}`
   )?.value;
-  const dataPrevisao = document.getElementById(`data-previsao-${endId}`)?.value;
+  const dataPrevisao = document.getElementById(`data-previsao-obra-${endId}`)?.value;
   const dataLiberacao = document.getElementById(
-    `data-liberacao-${endId}`
+    `data-liberacao-obra-${endId}`
   )?.value;
 
   // Verifica se todas as datas estão preenchidas
@@ -843,9 +843,9 @@ function buscaAcessoObra(secao) {
                   class="form-control text-center" 
                   value="${dataSolicitacao}" 
                   disabled
-                  id="data-solicitacao-${item.endId}"
+                  id="data-solicitacao-obra-${item.endId}"
                 />`
-              : renderInputDate("data-solicitacao", item.endId, item.statusAgendamento)
+              : renderInputDate("data-solicitacao-obra", item.endId, item.statusAgendamento)
           }
         </td>
         <td>
@@ -856,9 +856,9 @@ function buscaAcessoObra(secao) {
                   class="form-control text-center" 
                   value="${dataPrevisao}" 
                   disabled
-                  id="data-previsao-${item.endId}"
+                  id="data-previsao-obra-${item.endId}"
                 />`
-              : renderInputDate("data-previsao", item.endId, item.statusAgendamento)
+              : renderInputDate("data-previsao-obra", item.endId, item.statusAgendamento)
           }
         </td>
         <td>
@@ -869,9 +869,9 @@ function buscaAcessoObra(secao) {
                   class="form-control text-center" 
                   value="${dataLiberacao}" 
                   disabled
-                  id="data-liberacao-${item.endId}"
+                  id="data-liberacao-obra-${item.endId}"
                 />`
-              : renderInputDate("data-liberacao", item.endId, item.statusAgendamento)
+              : renderInputDate("data-liberacao-obra", item.endId, item.statusAgendamento)
           }
         </td>
         <td>

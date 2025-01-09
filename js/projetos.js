@@ -213,7 +213,6 @@ document.getElementById("button-buscar-projeto").addEventListener("click", funct
   // Monta o payload
   const payload = {
     status: "Concluído",
-    resultado: selectStatus, // Adiciona o status selecionado ao payload
   };
   
   // Realiza a requisição
@@ -639,4 +638,136 @@ if (camposFaltando.length > 0) {
       botaoSalvar.disabled = false; // Reabilita o botão
       botaoSalvar.textContent = "Salvar"; // Restaura o texto original do botão
     });
+}
+
+
+function filtrarTabelaProjeto(page = 0, secao, idTabela) {
+  const loadingOverlay = document.getElementById("loading-overlay");
+  const tbody = document.querySelector(`#${idTabela} tbody`);
+  const secaoId = document.getElementById(secao);
+
+  // Obtém os valores dos campos de pesquisa
+  const pesquisaCampos = {
+    endId: secaoId.querySelector("#pesquisaEndIdProjeto").value.trim(),
+    status: secaoId.querySelector("#pesquisaStatusProjeto").value.trim(),
+  };
+
+  // Monta os parâmetros da URL
+  const params = montarParametrosProjetos(pesquisaCampos, page);
+
+  // Define o endpoint base
+  const endpoint = `${host}/projetos/buscar`;
+
+  loadingOverlay.style.display = "block";
+
+  // Realiza a requisição e manipula a resposta
+  fetch(`${endpoint}?${params.toString()}`, {
+    method: "GET",
+    headers: { Authorization: `Bearer ${token}` },
+  })
+    .then((response) => {
+      if (!response.ok) throw new Error("Erro ao buscar dados.");
+      return response.json();
+    })
+    .then((dados) => {
+      renderizarTabelaProjetos(dados, idTabela, tbody); // Chama a função adaptada
+      renderizarBotoesPaginacao(
+        "pagination-controls-projeto",
+        filtrarTabelaProjeto,
+        dados.pageable.pageNumber,
+        dados.totalPages,
+        secao, // Argumento extra
+        idTabela // Argumento extra
+      );
+      exibirTotalResultados("total-pesquisa-projeto", dados.totalElements);
+    })
+    .catch((error) => {
+      console.error("Erro ao buscar dados:", error);
+      alert("Erro ao carregar os dados. Atualize a tela apertando 'F5'.");
+    })
+    .finally(() => {
+      loadingOverlay.style.display = "none";
+    });
+}
+
+function montarParametrosProjetos(pesquisaCampos, page) {
+  const params = new URLSearchParams();
+  if (pesquisaCampos.endId) params.append("endId", pesquisaCampos.endId.toUpperCase());
+  if (pesquisaCampos.status) params.append("status", pesquisaCampos.status.toUpperCase());
+  params.append("page", page);
+  params.append("size", pageSize); // Certifique-se de que a variável `pageSize` está definida corretamente
+  return params;
+}
+
+function renderizarTabelaProjetos(dados, idTabela, tbody) {
+  tbody.innerHTML = ""; // Limpa a tabela antes de preencher
+
+  if (!dados.content || dados.content.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="6" class="text-center">Nenhum dado encontrado.</td></tr>`;
+    return;
+  }
+
+  dados.content.forEach((item, i) => {
+    const row = criarLinhaProjeto(item, i); // Chama a função para criar a linha
+    tbody.insertAdjacentHTML("beforeend", row);
+  });
+
+  configurarEventosCopiar(); // Chama a função para configurar os eventos de copiar
+}
+
+function criarLinhaProjeto(item, i) {
+  const dataEntrada = item.dataEntrada ? formatarDataParaInput(item.dataEntrada) : "";
+  const dataAprovacao = item.dataAprovacao ? formatarDataParaInput(item.dataAprovacao) : "";
+
+  return `
+    <tr>
+      <td>
+        <button class="btn btn-link p-0 text-decoration-none end-id" id="textoParaCopiar" data-id="${item.endId}">
+          ${item.endId}
+        </button>
+        <i class="fa-regular fa-copy btnCopiar" title="Copiar" data-id="${item.endId}"></i>
+      </td>
+      <td>
+        <button class="btn btn-link p-0 text-decoration-none ver-mais" data-id="${item.endId}">
+          Ver mais
+        </button>
+      </td>
+      <td>
+        <select disabled class="form-select border-0 bg-light p-2">
+          <option value="status">${item.status}</option>
+        </select>
+      </td>
+      <td>
+        ${
+          dataEntrada
+            ? `<input 
+                type="date" 
+                class="form-control text-center" 
+                value="${dataEntrada}" 
+                disabled
+                id="data-entrada-${item.endId}"
+              />`
+            : renderInputDate("data-entrada", item.endId, item.status)
+        }
+      </td>
+      <td>
+        ${
+          dataAprovacao
+            ? `<input 
+                type="date" 
+                class="form-control text-center" 
+                value="${dataAprovacao}" 
+                disabled
+                id="data-aprovacao-projeto-${item.endId}"
+              />`
+            : renderInputDate("data-aprovacao-projeto", item.endId, item.status)
+        }
+      </td>
+      <td>
+        <button class="btn btn-primary finalizar-btn" data-id-botao="${item.endId}" 
+          ${item.status === "Não iniciado" || item.status === "Concluído" ? "disabled" : ""}>
+          Finalizar
+        </button>
+      </td>
+    </tr>`;
 }

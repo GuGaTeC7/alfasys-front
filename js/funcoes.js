@@ -649,15 +649,15 @@ function enviarData(endId, dateInput, action, etapa) {
       payloadKey: "ultimaCobranca",
       url: `${host}/sciExclusao/${endId}`,
     },
-    "data-solicitacao": {
+    "data-solicitacao-obra": {
       payloadKey: "dataSolicitacao",
       url: `${host}/obras/agendamento/${endId}`,
     },
-    "data-previsao": {
+    "data-previsao-obra": {
       payloadKey: "dataPrevisao",
       url: `${host}/obras/agendamento/${endId}`,
     },
-    "data-liberacao": {
+    "data-liberacao-obra": {
       payloadKey: "dataLiberacao",
       url: `${host}/obras/agendamento/${endId}`,
     },
