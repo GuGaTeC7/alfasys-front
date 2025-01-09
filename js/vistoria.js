@@ -530,7 +530,7 @@ document
     const params = montarParametrosVistoria(pesquisaCampos, page);
   
     // Define o endpoint base
-    const endpoint = `${host}/vistoria/buscar`;
+    const endpoint = `${host}/vistorias/buscar`;
   
     loadingOverlay.style.display = "block";
   
@@ -549,8 +549,10 @@ document
           "pagination-controls-vistoria",
           filtrarTabelaVistoria,
           dados.pageable.pageNumber,
-          dados.totalPages
-        );
+          dados.totalPages,
+          secao, // Argumento extra
+          idTabela // Argumento extra
+        );        
         exibirTotalResultados("total-pesquisa-vistoria", dados.totalElements);
       })
       .catch((error) => {
@@ -593,9 +595,10 @@ document
 
   function criarLinhaVistoria(item, i) {
     const dataRealizacao = item.dataRealizacao ? formatarDataParaInput(item.dataRealizacao) : "";
+    const parecerDisabled = item.status !== "Em andamento";
   
     return `
-      <tr style="${item.status === "Não iniciado" && item.reset === true ? "background-color: #f75c577d;" : ""}">
+      <tr>
         <td>
           <button class="btn btn-link p-0 text-decoration-none end-id" id="textoParaCopiar" data-id="${item.endId}">
             ${item.endId}
@@ -613,23 +616,24 @@ document
           </button>
         </td>
         <td>
-          ${dataRealizacao
-            ? `<input 
-                type="date" 
-                class="form-control text-center" 
-                value="${dataRealizacao}" 
-                disabled
-                id="data-realizacao-${item.endId}"
-              />`
-            : renderInputDate("data-realizacao", item.endId, item.status)
+          ${
+            dataRealizacao
+              ? `<input 
+                  type="date" 
+                  class="form-control text-center" 
+                  value="${dataRealizacao}" 
+                  disabled
+                  id="data-realizacao-${item.endId}"
+                />`
+              : renderInputDate("data-realizacao", item.endId, item.status)
           }
         </td>
         <td>
-          <select class="form-select border-0 bg-light p-2" id="select-status-${item.endId}" 
-            ${item.status !== "Em andamento" ? "disabled" : ""}>
-            <option value="" selected>Selecione uma opção</option>
-            <option value="viavel">Viável</option>
-            <option value="inviavel">Inviável</option>
+          <select class="form-select border-0 bg-light p-2" id="select-parecer-${item.endId}" 
+            ${parecerDisabled ? "disabled" : ""}>
+            <option value="" selected>Selecione um parecer</option>
+            <option value="viavel" ${item.parecer === "viavel" ? "selected" : ""}>Viável</option>
+            <option value="inviavel" ${item.parecer === "inviavel" ? "selected" : ""}>Inviável</option>
           </select>
         </td>
         <td>
@@ -644,9 +648,9 @@ document
             style="cursor: pointer; margin-left: 8px;">
           </i>
         </td>
-      </tr>
-    `;
+      </tr>`;
   }
+  
   
   
   document

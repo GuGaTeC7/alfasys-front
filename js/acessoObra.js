@@ -752,7 +752,9 @@ function buscaAcessoObra(secao) {
           "pagination-controls-agendamento-obra",
           filtrarTabelaAcessoObra,
           dados.pageable.pageNumber,
-          dados.totalPages
+          dados.totalPages,
+          secao, // Argumento extra
+          idTabela // Argumento extra
         );
         exibirTotalResultados("total-pesquisa-agendamento-obra", dados.totalElements);
       })

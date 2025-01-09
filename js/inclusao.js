@@ -52,18 +52,17 @@ function preencherTabelaSciInclusao(page = 0) {
                     </button>
                   </td>
                  <td>
-  ${
-    item.codInclusao
-      ? item.codInclusao
-      : `<div class="input-icon-group">
-           <input type="text" class="form-control" id="codInclusao-${item.endId}" placeholder="Código SCI" />
-           <i class="fa-sharp-duotone fa-solid fa-square-arrow-up-right btnEnviarCodInclusao" 
-              data-id="${item.endId}">
-           </i>
-         </div>`
-  }
-</td>
-
+                  ${
+                    item.codInclusao
+                      ? item.codInclusao
+                      : `<div class="input-icon-group">
+                          <input type="text" class="form-control" id="codInclusao-${item.endId}" placeholder="Código SCI" />
+                          <i class="fa-sharp-duotone fa-solid fa-square-arrow-up-right btnEnviarCodInclusao" 
+                            data-id="${item.endId}">
+                          </i>
+                        </div>`
+                      }
+                  </td>
                   <td>
                     ${
                       dataEnvio
@@ -490,8 +489,10 @@ function filtrarTabelaSciInclusao(page = 0, secao, idTabela) {
         "pagination-controls-inclusao",
         filtrarTabelaSciInclusao,
         dados.pageable.pageNumber,
-        dados.totalPages
-      );
+        dados.totalPages,
+        secao, // Argumento extra
+        idTabela // Argumento extra
+        );
       exibirTotalResultados("total-pesquisa-inclusao", dados.totalElements);
     })
     .catch((error) => {
@@ -540,8 +541,6 @@ function renderizarTabelaInclusao(dados, idTabela, tbody) {
   configurarEventosCopiar();
 }
 
-
-
 // Função para criar uma linha da tabela de histórico de inclusão
 function criarLinhaHistoricoInclusao(item, i) {
   const dataEnvio = item.dataEnvio ? formatarDataParaInput(item.dataEnvio) : "";
@@ -573,20 +572,50 @@ function criarLinhaHistoricoInclusao(item, i) {
         ${
           item.codInclusao
             ? item.codInclusao
-            : `<input type="text" class="form-control" id="codInclusao-${item.endId}" placeholder="Código SCI" />`
+            : `<div class="input-icon-group">
+                <input type="text" class="form-control" id="codInclusao-${item.endId}" placeholder="Código SCI" />
+                <i class="fa-solid fa-square-arrow-up-right btnEnviarCodInclusao" 
+                  data-id="${item.endId}" 
+                  title="Enviar Código"></i>
+              </div>`
         }
       </td>
-      <td>${renderInputDate("data-envio-inclusao", item.endId, item.status, dataEnvio)}</td>
-      <td>${renderInputDate("data-aprovacao-inclusao", item.endId, item.status, dataAprovacao)}</td>
+      <td>
+        ${
+          dataEnvio
+            ? `<input 
+                type="date" 
+                class="form-control text-center" 
+                value="${dataEnvio}" 
+                disabled
+                id="data-envio-inclusao-${item.endId}"
+              />`
+            : renderInputDate("data-envio-inclusao", item.endId, item.status)
+        }
+      </td>
+      <td>
+        ${
+          dataAprovacao
+            ? `<input 
+                type="date" 
+                class="form-control text-center" 
+                value="${dataAprovacao}" 
+                disabled
+                id="data-aprovacao-inclusao-${item.endId}"
+              />`
+            : renderInputDate("data-aprovacao-inclusao", item.endId, item.status)
+        }
+      </td>
       <td>
         <button class="btn btn-primary finalizar-btn" data-id-botao="${item.endId}" 
-          ${item.status === "Não iniciado" || item.status === "Concluído" ? "disabled" : ""}>
+          ${item.status !== "Em andamento" ? "disabled" : ""}>
           Finalizar
         </button>
       </td>
     </tr>
   `;
 }
+
 
 
 function enviarCodigoSCI(endId, codigo, etapa) {

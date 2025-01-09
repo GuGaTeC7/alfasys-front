@@ -462,8 +462,10 @@ function filtrarTabelaObra(page = 0, secao = 'obra', idTabela = 'tabelaHistorico
         "pagination-controls-obra",
         preencherTabelaObra,
         dados.pageable.pageNumber,
-        dados.totalPages
-      );
+        dados.totalPages,
+        secao, // Argumento extra
+        idTabela // Argumento extra
+        );
       exibirTotalResultados("total-pesquisa-obra", dados.totalElements);
     })
     .catch((error) => {
@@ -509,7 +511,7 @@ function renderizarTabelaObra(dados, idTabela, tbody) {
 }
 
 
-function criarLinhaHistoricoObra(item, i) {
+function criarLinhaHistoricoObra(item) {
   const dataInicio = item.dataInicio ? formatarDataParaInput(item.dataInicio) : "";
   const dataFinalizacao = item.dataFinalizacao
     ? formatarDataParaInput(item.dataFinalizacao)
@@ -560,11 +562,8 @@ function criarLinhaHistoricoObra(item, i) {
         }
       </td>
       <td>
-        <button class="btn btn-primary finalizar-btn" data-id-botao="${item.endId}" ${
-          item.status === "Não iniciado" || item.status === "Concluído"
-            ? "disabled"
-            : ""
-        }>
+        <button class="btn btn-primary finalizar-btn" data-id-botao="${item.endId}" 
+          ${item.status !== "Em andamento" ? "disabled" : ""}>
           Finalizar
         </button>
       </td>

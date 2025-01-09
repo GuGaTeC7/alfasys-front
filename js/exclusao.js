@@ -59,17 +59,17 @@ function preencherTabelaSciExclusao(page = 0) {
                   </button>
                 </td>
                 <td>
-  ${
-    item.codExclusao
-      ? item.codExclusao
-      : `<div class="input-icon-group">
-           <input type="text" class="form-control" id="codExclusao-${item.endId}" placeholder="Código SCI" />
-           <i class="fa-sharp-duotone fa-solid fa-square-arrow-up-right btnEnviarCodExclusao" 
-              data-id="${item.endId}">
-           </i>
-         </div>`
-  }
-</td>
+                ${
+                item.codExclusao
+                  ? item.codExclusao
+                  : `<div class="input-icon-group">
+                      <input type="text" class="form-control" id="codExclusao-${item.endId}" placeholder="Código SCI" />
+                        <i class="fa-sharp-duotone fa-solid fa-square-arrow-up-right btnEnviarCodExclusao" 
+                          data-id="${item.endId}">
+                        </i>
+                    </div>`
+                  }
+                </td>
                 <td>
                   ${
                     dataEnvio
@@ -467,301 +467,233 @@ return `
 }
 
 function filtrarTabelaExclusao(page = 0, secao = 'sci-exclusão', idTabela = 'tabelaHistoricoExclusao') {
-const loadingOverlay = document.getElementById("loading-overlay");
-const tbody = document.querySelector(`#${idTabela} tbody`);
-const secaoId = document.getElementById(secao);
+  const loadingOverlay = document.getElementById("loading-overlay");
+  const tbody = document.querySelector(`#${idTabela} tbody`);
+  const secaoId = document.getElementById(secao);
 
-// Obtém os valores dos campos de pesquisa
-const pesquisaCampos = {
-  endId: secaoId.querySelector("#pesquisaEndIdExclusao").value.trim(),
-  status: secaoId.querySelector("#pesquisaStatusExclusao").value.trim(),
-  codigoSci: secaoId.querySelector("#pesquisaCodigoSciExclusao").value.trim(),
-};
-
-// Monta os parâmetros da URL
-const params = montarParametrosExclusao(pesquisaCampos, page);
-
-// Define a URL para buscar dados de exclusão
-const endpoint = `${host}/sciExclusao/buscar`;
-
-loadingOverlay.style.display = "block";
-
-// Realiza a requisição e manipula a resposta
-fetch(`${endpoint}?${params.toString()}`, {
-  method: "GET",
-  headers: { Authorization: `Bearer ${token}` },
-})
-  .then((response) => {
-    if (!response.ok) throw new Error("Erro ao buscar dados.");
-    return response.json();
-  })
-  .then((dados) => {
-    renderizarTabelaExclusao(dados, idTabela, tbody);
-    renderizarBotoesPaginacao(
-      "pagination-controls-exclusao",
-      filtrarTabelaExclusao,
-      dados.pageable.pageNumber,
-      dados.totalPages
-    );
-    exibirTotalResultados("total-pesquisa-exclusao", dados.totalElements);
-  })
-  .catch((error) => {
-    console.error("Erro ao buscar dados:", error);
-    alert("Erro ao carregar os dados. Atualize a tela apertando 'F5'.");
-  })
-  .finally(() => {
-    loadingOverlay.style.display = "none";
-  });
-}
-
-function montarParametrosExclusao(pesquisaCampos, page) {
-const params = new URLSearchParams();
-if (pesquisaCampos.endId)
-  params.append("endId", pesquisaCampos.endId.toUpperCase());
-if (pesquisaCampos.status)
-  params.append("status", pesquisaCampos.status.toUpperCase());
-if (pesquisaCampos.codigoSci)
-  params.append("codigoSci", pesquisaCampos.codigoSci.toUpperCase());
-params.append("page", page);
-params.append("size", pageSize);
-return params;
-}
-
-function renderizarTabelaExclusao(dados, idTabela, tbody) {
-tbody.innerHTML = ""; // Limpa a tabela antes de preencher
-
-if (!dados.content || dados.content.length === 0) {
-  tbody.innerHTML = `<tr><td colspan="7" class="text-center">Nenhum dado encontrado.</td></tr>`;
-  return;
-}
-
-dados.content.forEach((item) => {
-  const dataEnvio = item.dataEnvio ? formatarDataParaInput(item.dataEnvio) : "";
-  const dataAprovacao = item.dataAprovacao ? formatarDataParaInput(item.dataAprovacao) : "";
-  const ultimaCobranca = item.ultimaCobranca ? formatarDataParaInput(item.ultimaCobranca) : "";
-
-  const row = `
-    <tr>
-                <td>
-                  <button class="btn btn-link p-0 text-decoration-none end-id" id="textoParaCopiar" data-id="${
-                    item.endId
-                  }">
-                    ${item.endId}
-                  </button>
-                  <i class="fa-regular fa-copy btnCopiar" title="Copiar" data-id="${
-                    item.endId
-                  }"></i>
-                </td>
-                <td>
-                  <select disabled class="form-select border-0 bg-light p-2">
-                    <option value="status">${item.status}</option>
-                  </select>
-                  <button class="btn iniciar-btn p-0 border-0 bg-transparent ml-2" 
-                    style="display:${
-                      ["Em andamento", "Concluído"].includes(item.status) ? "none" : ""
-                    };" 
-                    data-id-botao="${item.endId}">
-                    <i class="fa-solid fa-circle-play"></i>
-                  </button>
-                </td>
-                <td>
-                  ${
-                    item.codExclusao
-                      ? item.codExclusao
-                      : `<input type="text" class="form-control" id="codExclusao-${item.endId}" placeholder="Código SCI" />`
-                  }
-                </td>
-                <td>
-                  ${
-                    dataEnvio
-                      ? `<input 
-                          type="date" 
-                          class="form-control text-center" 
-                          value="${dataEnvio}" 
-                          disabled
-                          id="data-envio${item.endId}"
-                        />`
-                      : renderInputDate("data-envio", item.endId, item.status)
-                  }
-                </td>
-                <td>
-                  ${
-                    dataAprovacao
-                      ? `<input 
-                          type="date" 
-                          class="form-control text-center" 
-                          value="${dataAprovacao}" 
-                          disabled
-                          id="data-aprovacao-${item.endId}"
-                        />`
-                      : renderInputDate("data-aprovacao", item.endId, item.status)
-                  }
-                </td>
-                <td>
-                  ${
-                    ultimaCobranca
-                      ? `<input 
-                          type="date" 
-                          class="form-control text-center" 
-                          value="${ultimaCobranca}" 
-                          disabled
-                          id="ultima-cobranca-${item.endId}"
-                        />`
-                      : renderInputDate("ultima-cobranca", item.endId, item.status)
-                  }
-                </td>
-                <td>
-                  <select class="form-select border-0 bg-light p-2" id="select-status-${
-                      item.endId
-                  }" 
-                  ${item.status !== "Em andamento" ? "disabled" : ""}>
-                      <option value="" selected>Selecione uma opção</option>
-                      <option value="nao-iniciado">Não Iniciado</option>
-                      <option value="concluido">Concluído</option>
-                  </select>
-                </td>
-                <td>
-                  <button class="btn btn-primary finalizar-btn" data-id-botao="${item.endId}" ${
-                    item.status === "Não iniciado" || item.status === "Concluído"
-                      ? "disabled"
-                      : ""
-                  }>
-                    Finalizar
-                  </button>
-                </td>
-              </tr>`;
-
-  tbody.insertAdjacentHTML("beforeend", row);
-});
-
-configurarEventosCopiar();
-}
-
-
-document.querySelector("#tabelaHistoricoExclusao").addEventListener("click", (event) => {
-  const target = event.target;
-
-  if (target.classList.contains("btnEnviarCodExclusao")) {
-    const endId = target.getAttribute("data-id");
-    const codExclusaoInput = document.getElementById(`codExclusao-${endId}`);
-    const codExclusao = codExclusaoInput ? codExclusaoInput.value.trim() : "";
-
-    if (!codExclusao) {
-      alert("Por favor, preencha o código de exclusão.");
-      return;
-    }
-
-    exibirConfirmacao(
-      `Tem certeza que deseja enviar o código de exclusão: ${codExclusao}?`,
-      () => enviarCodigoSCI(endId, codExclusao, "sci-exclusao")
-    );
-  }
-});
-
-
-document
-  .querySelector("#tabelaHistoricoExclusao")
-  .addEventListener("change", (event) => {
-    const target = event.target;
-
-    if (target.tagName === "SELECT" && target.id.startsWith("select-workflow-")) {
-      const endId = target.id.split("-")[2]; // Obtém o End ID
-      const cadastroWorkflowSelecionado = target.value; // Obtém o valor selecionado
-
-      if (!cadastroWorkflowSelecionado) {
-        alert("Por favor, selecione um parecer válido.");
-        return;
-      }
-
-      // Exibe a confirmação antes de enviar
-      exibirConfirmacao(
-        `Tem certeza que deseja definir o parecer como "${cadastroWorkflowSelecionado}"?`,
-        () => enviarWorkflow(endId, cadastroWorkflowSelecionado, "sci-exclusão")
-      );
-    }
-  });
-
-
-
-function enviarWorkflow(endId, cadastroWorkflowSelecionado, etapa) {
-  console.log(
-    `Cadastro Workflow enviado: ${cadastroWorkflowSelecionado} (End ID: ${endId}, Etapa: ${etapa})`
-  );
-
-  if (!cadastroWorkflowSelecionado) {
-    alert("Por favor, selecione um cadastro workflow válido.");
-    return;
-  }
-
-  // Mapeamento dinâmico de etapas para endpoints
-  const endpointMap = {
-    "sci-exclusão": {
-      payloadKey: "cadastroWorkflow",
-      url: `${host}/sciExclusao/${endId}`,
-    },
-    // Outros tipos de etapa podem ser adicionados aqui
+  // Obtém os valores dos campos de pesquisa
+  const pesquisaCampos = {
+    endId: secaoId.querySelector("#pesquisaEndIdExclusao").value.trim(),
+    status: secaoId.querySelector("#pesquisaStatusExclusao").value.trim(),
+    codigoSci: secaoId.querySelector("#pesquisaCodigoSciExclusao").value.trim(),
   };
 
-  // Valida se a etapa está mapeada
-  const endpointConfig = endpointMap[etapa];
-  if (!endpointConfig) {
-    console.error("Etapa inválida ou não mapeada.");
-    alert("Etapa inválida. Verifique o código.");
-    return;
-  }
+  // Monta os parâmetros da URL
+  const params = montarParametrosExclusao(pesquisaCampos, page);
 
-  // Cria o payload dinamicamente
-  const payload = { [endpointConfig.payloadKey]: cadastroWorkflowSelecionado };
+  // Define a URL para buscar dados de exclusão
+  const endpoint = `${host}/sciExclusao/buscar`;
 
-  // Realiza o fetch para o endpoint correto
-  fetch(endpointConfig.url, {
-    method: "PATCH",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(payload),
+  loadingOverlay.style.display = "block";
+
+  // Realiza a requisição e manipula a resposta
+  fetch(`${endpoint}?${params.toString()}`, {
+    method: "GET",
+    headers: { Authorization: `Bearer ${token}` },
   })
     .then((response) => {
-      if (!response.ok) {
-        return response.json().then((err) => {
-          throw new Error(
-            `${response.status} - ${response.statusText}: ${
-              err.message || "Erro desconhecido"
-            }`
-          );
-        });
-      }
+      if (!response.ok) throw new Error("Erro ao buscar dados.");
       return response.json();
     })
     .then((dados) => {
-      // Atualiza o campo correspondente
-      const selectField = document.getElementById(`select-workflow-${endId}`);
-      if (selectField) {
-        selectField.value = cadastroWorkflowSelecionado;
-        selectField.setAttribute("disabled", "true"); // Desativa o campo após envio
-      }
-
-      // Oculta ou desativa os botões relacionados (se necessário)
-      const button = document.querySelector(
-        `button[data-id-botao="${endId}"]`
+      renderizarTabelaExclusao(dados, idTabela, tbody);
+      renderizarBotoesPaginacao(
+        "pagination-controls-exclusao",
+        filtrarTabelaExclusao,
+        dados.pageable.pageNumber,
+        dados.totalPages,
+        secao, // Argumento extra
+        idTabela // Argumento extra
       );
-      if (button) {
-        button.style.display = "none";
-      }
-
-      alert("Cadastro Workflow enviado com sucesso!");
-      console.log("Resposta do servidor:", dados);
-
-      // Atualiza a tabela correspondente à etapa
-      if (etapa === "sci-exclusão") {
-        preencherTabelaSciExclusao();
-      } else {
-        console.warn(`Nenhuma ação definida para a etapa: ${etapa}`);
-      }
+      exibirTotalResultados("total-pesquisa-exclusao", dados.totalElements);
     })
-    .catch((erro) => {
-      console.error("Erro ao enviar Cadastro Workflow:", erro);
-      alert(`Erro ao enviar Cadastro Workflow: ${erro.message}`);
+    .catch((error) => {
+      console.error("Erro ao buscar dados:", error);
+      alert("Erro ao carregar os dados. Atualize a tela apertando 'F5'.");
+    })
+    .finally(() => {
+      loadingOverlay.style.display = "none";
     });
 }
+
+function montarParametrosExclusao(pesquisaCampos, page) {
+  const params = new URLSearchParams();
+  if (pesquisaCampos.endId)
+    params.append("endId", pesquisaCampos.endId.toUpperCase());
+  if (pesquisaCampos.status)
+    params.append("status", pesquisaCampos.status.toUpperCase());
+  if (pesquisaCampos.codigoSci)
+    params.append("codigoSci", pesquisaCampos.codigoSci.toUpperCase());
+  params.append("page", page);
+  params.append("size", pageSize);
+  return params;
+}
+
+function renderizarTabelaExclusao(dados, idTabela, tbody) {
+  tbody.innerHTML = ""; // Limpa a tabela antes de preencher
+
+  if (!dados.content || dados.content.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="7" class="text-center">Nenhum dado encontrado.</td></tr>`;
+    return;
+  }
+
+  dados.content.forEach((item) => {
+    const row = criarLinhaSciExclusao(item);
+    tbody.insertAdjacentHTML("beforeend", row);
+  });
+
+  configurarEventosCopiar();
+}
+
+function preencherTabelaSciExclusao(page = 0) {
+  const loadingOverlay = document.getElementById("loading-overlay");
+  const tbody = document.querySelector("#sci-exclusão tbody");
+  const totalPesquisado = document.getElementById("total-pesquisa-exclusao");
+
+  loadingOverlay.style.display = "block";
+
+  fetch(`${host}/sciExclusao?page=${page}&size=${pageSize}`, {
+    method: "GET",
+    headers: { Authorization: `Bearer ${token}` },
+  })
+    .then((response) => {
+      if (!response.ok) throw new Error("Erro ao buscar dados.");
+      return response.json();
+    })
+    .then((dados) => {
+      tbody.innerHTML = ""; // Limpa a tabela
+      totalPesquisado.innerHTML = ""; // Limpa os resultados totais
+
+      dados.content.forEach((item) => {
+        const row = criarLinhaSciExclusao(item);
+        tbody.insertAdjacentHTML("beforeend", row);
+      });
+    })
+    .catch((error) => {
+      console.error("Erro ao buscar dados:", error);
+      alert("Erro ao carregar os dados. Atualize a tela apertando 'F5'.");
+    })
+    .finally(() => {
+      loadingOverlay.style.display = "none";
+    });
+}
+
+function criarLinhaSciExclusao(item) {
+  const dataEnvio = item.dataEnvio ? formatarDataParaInput(item.dataEnvio) : "";
+  const dataAprovacao = item.dataAprovacao ? formatarDataParaInput(item.dataAprovacao) : "";
+  const ultimaCobranca = item.ultimaCobranca ? formatarDataParaInput(item.ultimaCobranca) : "";
+  const cadastroWorkflowDisabled = item.status !== "Em andamento" || item.cadastroWorkflow;
+
+  return `
+    <tr>
+      <td>
+        <button class="btn btn-link p-0 text-decoration-none end-id" id="textoParaCopiar" data-id="${item.endId}">
+          ${item.endId}
+        </button>
+        <i class="fa-regular fa-copy btnCopiar" title="Copiar" data-id="${item.endId}"></i>
+      </td>
+      <td>
+        <select disabled class="form-select border-0 bg-light p-2">
+          <option value="status">${item.status}</option>
+        </select>
+        <button class="btn iniciar-btn p-0 border-0 bg-transparent ml-2" 
+          style="display:${["Em andamento", "Concluído"].includes(item.status) ? "none" : ""};" 
+          data-id-botao="${item.endId}">
+          <i class="fa-solid fa-circle-play"></i>
+        </button>
+      </td>
+      <td>
+        ${
+          item.codExclusao
+            ? item.codExclusao
+            : `<div class="input-icon-group">
+                <input type="text" class="form-control" id="codExclusao-${item.endId}" placeholder="Código SCI" />
+                <i class="fa-sharp-duotone fa-solid fa-square-arrow-up-right btnEnviarCodExclusao" data-id="${item.endId}"></i>
+              </div>`
+        }
+      </td>
+      <td>
+        ${
+          dataEnvio
+            ? `<input type="date" class="form-control text-center" value="${dataEnvio}" disabled id="data-envio${item.endId}" />`
+            : renderInputDate("data-envio", item.endId, item.status)
+        }
+      </td>
+      <td>
+        ${
+          dataAprovacao
+            ? `<input type="date" class="form-control text-center" value="${dataAprovacao}" disabled id="data-aprovacao-${item.endId}" />`
+            : renderInputDate("data-aprovacao", item.endId, item.status)
+        }
+      </td>
+      <td>
+        ${
+          ultimaCobranca
+            ? `<input type="date" class="form-control text-center" value="${ultimaCobranca}" disabled id="ultima-cobranca-${item.endId}" />`
+            : renderInputDate("ultima-cobranca", item.endId, item.status)
+        }
+      </td>
+      <td>
+        <select class="form-select border-0 bg-light p-2" id="select-workflow-${item.endId}" 
+          ${cadastroWorkflowDisabled ? "disabled" : ""}>
+          <option value="" selected>Selecione uma opção</option>
+          <option value="Não iniciado" ${item.cadastroWorkflow === "Não iniciado" ? "selected" : ""}>Não iniciado</option>
+          <option value="Concluído" ${item.cadastroWorkflow === "Concluído" ? "selected" : ""}>Concluído</option>
+        </select>
+      </td>
+      <td>
+        <button class="btn btn-primary finalizar-btn" data-id-botao="${item.endId}" ${
+          item.status === "Não iniciado" || item.status === "Concluído" ? "disabled" : ""
+        }>
+          Finalizar
+        </button>
+      </td>
+    </tr>
+  `;
+}
+
+  
+  
+  document.querySelector("#tabelaHistoricoExclusao").addEventListener("click", (event) => {
+    const target = event.target;
+  
+    if (target.classList.contains("btnEnviarCodExclusao")) {
+      const endId = target.getAttribute("data-id");
+      const codExclusaoInput = document.getElementById(`codExclusao-${endId}`);
+      const codExclusao = codExclusaoInput ? codExclusaoInput.value.trim() : "";
+  
+      if (!codExclusao) {
+        alert("Por favor, preencha o código de exclusão.");
+        return;
+      }
+  
+      exibirConfirmacao(
+        `Tem certeza que deseja enviar o código de exclusão: ${codExclusao}?`,
+        () => enviarCodigoSCI(endId, codExclusao, "sci-exclusao")
+      );
+    }
+  });
+  
+  
+  document
+    .querySelector("#tabelaHistoricoExclusao")
+    .addEventListener("change", (event) => {
+      const target = event.target;
+  
+      if (target.tagName === "SELECT" && target.id.startsWith("select-workflow-")) {
+        const endId = target.id.split("-")[2]; // Obtém o End ID
+        const cadastroWorkflowSelecionado = target.value; // Obtém o valor selecionado
+  
+        if (!cadastroWorkflowSelecionado) {
+          alert("Por favor, selecione um parecer válido.");
+          return;
+        }
+  
+        // Exibe a confirmação antes de enviar
+        exibirConfirmacao(
+          `Tem certeza que deseja definir o parecer como "${cadastroWorkflowSelecionado}"?`,
+          () => enviarWorkflow(endId, cadastroWorkflowSelecionado, "sci-exclusão")
+        );
+      }
+    });
+  

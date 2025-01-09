@@ -482,8 +482,10 @@ function filtrarTabelaKitTssr(page = 0, secao, idTabela) {
         "pagination-controls-Tssr",
         filtrarTabelaKitTssr,
         dados.pageable.pageNumber,
-        dados.totalPages
-      );
+        dados.totalPages,
+        secao, // Argumento extra
+        idTabela // Argumento extra
+        );
       exibirTotalResultados("total-pesquisa-Tssr", dados.totalElements);
     })
     .catch((error) => {
@@ -535,6 +537,9 @@ function renderizarTabelaKitTssr(dados, idTabela, tbody) {
 function criarLinhaKitTssr(item, i) {
   const dataPrevista = item.dataPrevista ? formatarDataParaInput(item.dataPrevista) : "";
   const dataRealizacao = item.dataRealizacao ? formatarDataParaInput(item.dataRealizacao) : "";
+  
+  // Verifica se o parecer está definido
+  const parecerDisabled = item.status !== "Em andamento" || item.parecer;
 
   return `
     <tr>
@@ -579,22 +584,23 @@ function criarLinhaKitTssr(item, i) {
         }
       </td>
       <td>
-        <select class="form-select border-0 bg-light p-2" id="select-status-${item.endId}" 
-          ${item.status === "Não iniciado" || item.status === "Concluído" ? "disabled" : ""}>
-          <option value="" selected>Selecione uma opção</option>
-          <option value="viavel">Viável</option>
-          <option value="inviavel">Inviável</option>
+        <select class="form-select border-0 bg-light p-2" id="select-parecer-${item.endId}" 
+          ${parecerDisabled ? "disabled" : ""}>
+          <option value="" selected>Selecione um parecer</option>
+          <option value="viavel" ${item.parecer === "viavel" ? "selected" : ""}>Viável</option>
+          <option value="inviavel" ${item.parecer === "inviavel" ? "selected" : ""}>Inviável</option>
         </select>
       </td>
       <td>
         <button class="btn btn-primary finalizar-btn" data-id-botao="${item.endId}" 
-          ${item.status === "Não iniciado" || item.status === "Concluído" ? "disabled" : ""}>
+          ${item.status !== "Em andamento" ? "disabled" : ""}>
           Finalizar
         </button>
       </td>
     </tr>
   `;
 }
+
 
 
 

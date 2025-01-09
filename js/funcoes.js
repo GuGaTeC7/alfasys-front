@@ -302,7 +302,8 @@ function renderizarBotoesPaginacao(
   idPaginationControls,
   tabelaFunction,
   currentPage,
-  totalPages
+  totalPages,
+  ...args // Permite passar argumentos extras
 ) {
   const paginationControls = document.getElementById(`${idPaginationControls}`);
   paginationControls.innerHTML = ""; // Limpa botões antigos
@@ -314,11 +315,12 @@ function renderizarBotoesPaginacao(
     } mx-1`;
     button.textContent = i + 1;
 
-    // Passa a página como argumento para a função
-    button.addEventListener("click", () => tabelaFunction(i));
+    // Passa a página e argumentos extras para a função
+    button.addEventListener("click", () => tabelaFunction(i, ...args));
     paginationControls.appendChild(button);
   }
 }
+
 
 function filtrarTabela(page = 0, secao, idTabela) {
   const loadingOverlay = document.getElementById("loading-overlay");
@@ -981,5 +983,89 @@ function enviarParecer(endId, parecerSelecionado, etapa) {
     .catch((erro) => {
       console.error("Erro ao enviar parecer:", erro);
       alert(`Erro ao enviar parecer: ${erro.message}`);
+    });
+}
+
+
+function enviarWorkflow(endId, cadastroWorkflowSelecionado, etapa) {
+  console.log(
+    `Cadastro Workflow enviado: ${cadastroWorkflowSelecionado} (End ID: ${endId}, Etapa: ${etapa})`
+  );
+
+  if (!cadastroWorkflowSelecionado) {
+    alert("Por favor, selecione um cadastro workflow válido.");
+    return;
+  }
+
+  // Mapeamento dinâmico de etapas para endpoints
+  const endpointMap = {
+    "sci-exclusão": {
+      payloadKey: "cadastroWorkflow",
+      url: `${host}/sciExclusao/${endId}`,
+    },
+    // Outros tipos de etapa podem ser adicionados aqui
+  };
+
+  // Valida se a etapa está mapeada
+  const endpointConfig = endpointMap[etapa];
+  if (!endpointConfig) {
+    console.error("Etapa inválida ou não mapeada.");
+    alert("Etapa inválida. Verifique o código.");
+    return;
+  }
+
+  // Cria o payload dinamicamente
+  const payload = { [endpointConfig.payloadKey]: cadastroWorkflowSelecionado };
+
+  // Realiza o fetch para o endpoint correto
+  fetch(endpointConfig.url, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        return response.json().then((err) => {
+          throw new Error(
+            `${response.status} - ${response.statusText}: ${
+              err.message || "Erro desconhecido"
+            }`
+          );
+        });
+      }
+      return response.json();
+    })
+    .then((dados) => {
+      // Atualiza o campo correspondente
+      const selectField = document.getElementById(`select-workflow-${endId}`);
+      if (selectField) {
+        selectField.value = cadastroWorkflowSelecionado;
+        selectField.setAttribute("disabled", "true"); // Desativa o campo após envio
+      }
+
+      // Oculta ou desativa os botões relacionados (se necessário)
+      const button = document.querySelector(
+        `button[data-id-botao="${endId}"]`
+      );
+      if (button) {
+        button.style.display = "none";
+      }
+
+      alert("Cadastro Workflow enviado com sucesso!");
+      console.log("Resposta do servidor:", dados);
+
+      // Atualiza a tabela correspondente à etapa
+      if (etapa === "sci-exclusão") {
+        preencherTabelaSciExclusao();
+      } else {
+        console.warn(`Nenhuma ação definida para a etapa: ${etapa}`);
+      }
+    })
+    .catch((erro) => {
+      console.error("Erro ao enviar Cadastro Workflow:", erro);
+      alert(`Erro ao enviar Cadastro Workflow: ${erro.message}`);
     });
 }
