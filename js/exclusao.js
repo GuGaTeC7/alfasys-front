@@ -209,43 +209,10 @@ function iniciaExclusao(endId) {
 
 
 
-function finalizaSciExclusao(endId) {
-  // Captura o valor do codExclusao
-  let codExclusao;
-
-  // Verifica se há um input ou texto direto no DOM
-  const codExclusaoInput = document.getElementById(`codExclusao-${endId}`);
-  if (codExclusaoInput) {
-    codExclusao = codExclusaoInput.value.trim(); // Caso seja um input
-  } else {
-    const codExclusaoText = document.querySelector(`td span#codExclusao-${endId}`);
-    codExclusao = codExclusaoText ? codExclusaoText.textContent.trim() : null; // Caso seja texto
-  }
-
-  // Verifica se o codExclusao está vazio
-  if (!codExclusao || codExclusao === "") {
-    alert("Por favor, informe o código SCI antes de finalizar.");
-    return;
-  }
-
-  // Captura as datas
-  const dataEnvio = document.getElementById(`data-envio-${endId}`)?.value;
-  const dataAprovacao = document.getElementById(`data-aprovacao-${endId}`)?.value;
-  const ultimaCobranca = document.getElementById(`ultima-cobranca-${endId}`)?.value;
-
-  // Verifica se as datas estão preenchidas
-  if (!dataEnvio || !dataAprovacao || !ultimaCobranca) {
-    alert("A data de envio, data de aprovação e última cobrança devem estar preenchidas.");
-    return;
-  }
-
+function finalizaSciExclusao(endId) { 
   // Monta o payload
   const payload = {
     status: "Concluído",
-    codExclusao,
-    dataEnvio,
-    dataAprovacao,
-    ultimaCobranca,
   };
 
   // Realiza a requisição

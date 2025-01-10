@@ -402,7 +402,7 @@ document.getElementById("button-buscar-projeto").addEventListener("click", funct
         </div>`;
   }
   
-  /*
+ 
 
   // Delegação de evento para o botão "Ver mais" na tabela
 document.querySelector("#tabelaHistoricoProjetos").addEventListener("click", (event) => {
@@ -493,108 +493,6 @@ document.querySelector("#tabelaHistoricoProjetos").addEventListener("click", (ev
       });
   }
 });
-
-
-// Função para realizar o cadastro de projeto
-function realizarCadastroProjeto() {
-  // Coleta os valores dos campos
-  const endId = document.getElementById("endIdProjeto").value;
-  const concessionaria = document.getElementById("concessionária").value;
-  const regional = document.getElementById("regional").value;
-  const unidade = document.getElementById("unidade").value;
-  const cnpjUc = document.getElementById("cnpjuc").value;
-  const tipoTensao = document.getElementById("tipoTensao").value;
-  const previsaoLigacao = document.getElementById("previsaoLigacao").value;
-  const numeroMedidor = document.getElementById("numeroMedidor").value;
-  const numeroInstalacao = document.getElementById("numeroInstalacao").value;
-  const numeroDeFases = document.getElementById("numeroDeFases").value;
-  const leituraInicial = document.getElementById("leituraInicial").value;
-  const dataLigacao = document.getElementById("dataLigacao").value;
-
-// Validação dos campos obrigatórios
-const camposObrigatorios = [
-  { id: "endIdProjeto", nome: "End ID" },
-  { id: "concessionária", nome: "Concessionária" },
-  { id: "regional", nome: "Regional" },
-  { id: "unidade", nome: "Unidade" },
-  { id: "tipoTensao", nome: "Tipo Tensão" },
-  { id: "numeroMedidor", nome: "Número do Medidor" },
-  { id: "numeroInstalacao", nome: "Número de Instalação" },
-  { id: "numeroDeFases", nome: "Número de Fases" },
-  { id: "leituraInicial", nome: "Leitura Inicial" },
-  { id: "dataLigacao", nome: "Data de Ligação" },
-];
-
-const camposFaltando = camposObrigatorios.filter(
-  (campo) => !document.getElementById(campo.id).value
-);
-
-if (camposFaltando.length > 0) {
-  const nomesCampos = camposFaltando.map((campo) => campo.nome).join(", ");
-  alert(`Por favor, preencha os campos obrigatórios: ${nomesCampos}`);
-  return;
-}
-
-
-  // Referência ao botão
-  const botaoSalvar = document.querySelector(
-    'button[onclick="realizarCadastroProjeto()"]'
-  );
-  botaoSalvar.disabled = true; // Desabilita o botão
-  botaoSalvar.textContent = "Cadastrando..."; // Altera o texto do botão
-
-  // Estrutura do payload
-  const payload = {
-    endId: endId,
-    status: "Não iniciado",
-    informacoesLigacao: {
-      concessionaria: concessionaria,
-      regional: regional,
-      unidade: unidade,
-      cnpjUc: cnpjUc || null,
-      tipoTensao: tipoTensao,
-      previsaoLigacao: previsaoLigacao || null,
-      numeroMedidor: numeroMedidor,
-      numeroInstalacao: numeroInstalacao,
-      numeroDeFases: numeroDeFases,
-      leituraInicial: leituraInicial,
-      dataLigacao: dataLigacao,
-    },
-    operadora: {
-      id: null, // Pode ser preenchido posteriormente, se necessário
-      nome: null, // Campo opcional
-    },
-  };
-
-  // Envia a requisição para o servidor
-  fetch(`${host}/projetos`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(payload),
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Erro ao cadastrar projeto");
-      }
-      return response.json();
-    })
-    .then((data) => {
-      console.log("Cadastro de projeto realizado com sucesso:", data);
-      alert("Projeto cadastrado com sucesso!");
-      resetarCampos("cadastrar-projeto"); // Reseta os campos após o sucesso
-    })
-    .catch((error) => {
-      console.error("Erro ao realizar cadastro de projeto:", error);
-      alert("Erro ao cadastrar o projeto. Tente novamente.");
-    })
-    .finally(() => {
-      botaoSalvar.disabled = false; // Reabilita o botão
-      botaoSalvar.textContent = "Salvar"; // Restaura o texto original do botão
-    });
-}
 
 
 function filtrarTabelaProjeto(page = 0, secao, idTabela) {
@@ -728,6 +626,7 @@ function criarLinhaProjeto(item, i) {
     </tr>`;
 }
 
+/*
 function realizarCadastroProjeto() {
   // Coleta os valores dos campos
   const endId = document.getElementById("cadastrarEndIdProjeto").value;

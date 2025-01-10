@@ -188,11 +188,7 @@ loadingOverlay.style.display = "none";
       return; // Interrompe a execução se a data não for válida
     }
   
-    // Verifica se o campo de status está preenchido
-    if (!codInclusao) {
-      alert("Por favor, informe algum código.");
-      return; // Interrompe a execução se o código não for preenchido
-    }
+    
   
     // Monta o payload
     const payload = {
