@@ -57,6 +57,8 @@ function realizarCadastro() {
   const payload = {
     endId: endId,
     siteId: siteId,
+    statusAgendamento: "Não iniciado",
+    reset: 0,
     demanda: demanda,
     observacoes: observacoes || null,
     localizacao: localizacao || null,

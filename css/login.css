@@ -421,3 +421,9 @@ input.error::placeholder {
     padding-right: 35px; /* Espaço para o olho */
   }
   
+  .login-logo {
+    max-width: 80px;
+    margin-bottom: 80px; /* Reduz o espaço abaixo da logo */
+    margin-top: -20px;   /* Move a logo mais para cima */
+  }
+  

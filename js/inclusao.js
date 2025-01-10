@@ -178,7 +178,7 @@ loadingOverlay.style.display = "none";
 // Função para finalizar Inclusão
   function finalizaSciInclusao(endId) {
     // Obtém os valores das datas e do status
-    const codInclusao = document.getElementById(`codInclusao-${endId}`)?.value.trim();
+    const codInclusao = document.getElementById(`codInclusao-${endId}`)?.value;
     const dataEnvio = document.getElementById(`data-envio-inclusao-${endId}`)?.value;
     const dataAprovacao = document.getElementById(`data-aprovacao-inclusao-${endId}`)?.value;
   
@@ -197,7 +197,6 @@ loadingOverlay.style.display = "none";
     // Monta o payload
     const payload = {
       status: "Concluído",
-      resultado: selectStatus, // Adiciona o status selecionado ao payload
     };
   
     // Realiza a requisição
