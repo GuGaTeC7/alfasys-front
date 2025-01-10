@@ -557,39 +557,6 @@ function renderizarTabelaExclusao(dados, idTabela, tbody) {
   configurarEventosCopiar();
 }
 
-function preencherTabelaSciExclusao(page = 0) {
-  const loadingOverlay = document.getElementById("loading-overlay");
-  const tbody = document.querySelector("#sci-exclusão tbody");
-  const totalPesquisado = document.getElementById("total-pesquisa-exclusao");
-
-  loadingOverlay.style.display = "block";
-
-  fetch(`${host}/sciExclusao?page=${page}&size=${pageSize}`, {
-    method: "GET",
-    headers: { Authorization: `Bearer ${token}` },
-  })
-    .then((response) => {
-      if (!response.ok) throw new Error("Erro ao buscar dados.");
-      return response.json();
-    })
-    .then((dados) => {
-      tbody.innerHTML = ""; // Limpa a tabela
-      totalPesquisado.innerHTML = ""; // Limpa os resultados totais
-
-      dados.content.forEach((item) => {
-        const row = criarLinhaSciExclusao(item);
-        tbody.insertAdjacentHTML("beforeend", row);
-      });
-    })
-    .catch((error) => {
-      console.error("Erro ao buscar dados:", error);
-      alert("Erro ao carregar os dados. Atualize a tela apertando 'F5'.");
-    })
-    .finally(() => {
-      loadingOverlay.style.display = "none";
-    });
-}
-
 function criarLinhaSciExclusao(item) {
   const dataEnvio = item.dataEnvio ? formatarDataParaInput(item.dataEnvio) : "";
   const dataAprovacao = item.dataAprovacao ? formatarDataParaInput(item.dataAprovacao) : "";

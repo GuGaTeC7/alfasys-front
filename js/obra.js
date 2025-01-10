@@ -84,6 +84,12 @@ function preencherTabelaObra(page = 0) {
             ${item.status !== "Em andamento" ? "disabled" : ""}>
             Finalizar
           </button>
+           <i 
+            class="fa-solid fa-rotate-left btnResetar" 
+            title="Resetar End ID" 
+            data-id="${item.endId}" 
+            style="cursor: pointer; margin-left: 8px;">
+          </i>
                 </td>
               </tr>`;
           
@@ -572,7 +578,109 @@ function criarLinhaHistoricoObra(item) {
           ${item.status !== "Em andamento" ? "disabled" : ""}>
           Finalizar
         </button>
+        <i 
+            class="fa-solid fa-rotate-left btnResetar" 
+            title="Resetar End ID" 
+            data-id="${item.endId}" 
+            style="cursor: pointer; margin-left: 8px;">
+          </i>
       </td>
     </tr>
   `;
+}
+
+
+
+
+// Função de Reset para Obra
+document.querySelector("#tabelaHistoricoObra").addEventListener("click", (event) => {
+  const button = event.target.closest(".btnResetar");
+  if (!button) return; // Se não clicar em um botão relevante, retorna
+
+  const endId = button.getAttribute("data-id");
+
+  // Criação do alerta personalizado
+  const alertDiv = document.createElement("div");
+  alertDiv.className = "alert-container";
+  alertDiv.style.position = "fixed";
+  alertDiv.style.top = "50%";
+  alertDiv.style.left = "50%";
+  alertDiv.style.transform = "translate(-50%, -50%)";
+  alertDiv.style.width = "300px";
+  alertDiv.style.padding = "15px";
+  alertDiv.style.backgroundColor = "rgba(1, 41, 112, 0.9)";
+  alertDiv.style.color = "#ffffff";
+  alertDiv.style.borderRadius = "5px";
+  alertDiv.style.boxShadow = "0 4px 20px rgba(0, 0, 0, 0.15)";
+  alertDiv.style.zIndex = "1000";
+  alertDiv.style.textAlign = "center";
+
+  alertDiv.innerHTML = `
+    <h3 style="font-size: 1.3rem;">Tem certeza que deseja resetar a Obra ID <strong>${endId}</strong>?</h3>
+    <button class="btn btn-light mt-2" id="cancelReset">
+      Cancelar
+    </button>
+    <button class="btn btn-warning text-white mt-2" id="confirmReset">
+      Confirmar
+    </button>
+  `;
+
+  document.body.appendChild(alertDiv);
+
+  // Event Listener para o botão "Confirmar"
+  document.getElementById("confirmReset").addEventListener("click", () => {
+    resetarObra(endId); // Chama a função para resetar a obra
+    alertDiv.remove(); // Remove o alerta de confirmação
+  });
+
+  // Event Listener para o botão "Cancelar"
+  document.getElementById("cancelReset").addEventListener("click", () => {
+    alertDiv.remove(); // Remove o alerta de confirmação
+  });
+});
+
+function resetarObra(endId) {
+  const observacao = prompt("Deixe uma observação para o reset da obra:");
+
+  const payload = {
+    statusAgendamento: "Não iniciado",
+    dataSolicitacao: null,
+    dataPrevisao: null,
+    dataLiberacao: null,
+    reset: 1, 
+    observacoesAgendamento: observacao,
+  };
+  
+  console.log("Payload enviado:", payload);
+
+  // Verifique se o método correto é PATCH ou PUT no seu backend
+  fetch(`${host}/obras/agendamento/${endId}`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload), // Enviar um objeto vazio, caso o backend exija um corpo
+  })
+    .then((response) => {
+      if (!response.ok) {
+        return response.json().then((errorData) => {
+          throw new Error(
+            `Erro ao resetar os dados: ${
+              errorData.message || response.statusText
+            }`
+          );
+        });
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Resposta do servidor:", data);
+      alert("A Obra foi resetada com sucesso!"); // Alerta de sucesso
+      preencherTabelaObra(); // Atualiza a tabela de obras
+    })    
+    .catch((error) => {
+      console.error("Erro ao resetar os dados:", error);
+      alert("Erro ao resetar a obra.");
+    });
 }

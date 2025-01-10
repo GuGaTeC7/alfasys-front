@@ -1,12 +1,19 @@
-<h1>página inicio: iniciar </h1>
-<h1>página cadastro end id: pronta</h1>
-<h1>página status: iniciar</h1>
-<h1>página acesso vistoria: pronta</h1>
-<h1>página vistoria: pronta</h1>
-<h1>página kit-tssr: pronta</h1>
-<h1>página sci inclusão: validação para finalizar</h1>
-<h1>página acesso obra: reset</h1>
-<h1>página obra: reset e filtro de data</h1>
-<h1>página projetos: 1/3 feita</h1>
-<h1>pagina exclusão: validação para finalizar </h1>
+<h1>Situação Atual: </h1>
+
+<h3>inicio: desenvolver</h3>
+<h3>cadastro end id: pronto</h3>
+<h3>status: desenvolver</h3>
+<h3>acesso vistoria: pronto</h3>
+<h3>vistoria: pronto</h3>
+<h3>kit tssr: pronto</h3>
+<h3>sci de inclusão: validação para finalizar do cod </h3>
+<h3>acesso obra: reset</h3>
+<h3>obra: reset</h3>
+<h3>projetos: 1/2 feita</h3>
+<h3>sci de exclusao: validação para finalizar do cod </h3>
+
+<h3> - fazer sumir depois de dar reset </h3>
+
+<h3> - adicionar id em todas tabelas</h3>
+
 

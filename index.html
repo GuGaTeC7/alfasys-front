@@ -310,6 +310,48 @@
             </a>
           </li>
 
+          <!------------------------------------------- PROJETOS ------------------------------------------------>
+
+          <li
+            class="rounded active mb-1 list nav-item"
+            data-toggle="collapse"
+            data-target="#projeto"
+          >
+            <a href="#" class="text-decoration-none sub-menu">
+              <div class="text d-flex">
+                <span>
+                  <i class="fa-solid fa-clipboard ml-1"></i>
+                </span>
+                <div class="ml-4">
+                  <span class=""> PROJETOS </span>
+                </div>
+              </div>
+              <span><i class="bx bx-chevron-down"></i></span>
+            </a>
+          </li>
+          <div class="collapse" id="projeto">
+            <ul class="unstyled pl-5 ml-4 submenu nav nav-pills flex-column">
+              <li class="py-2 nav-item">
+                <a
+                  href="#editar-projeto"
+                  class="text-decoration-none"
+                  data-toggle="pill"
+                >
+                  Informações de ligação
+                </a>
+              </li>
+              <li class="py-2 nav-item">
+                <a
+                  data-toggle="pill"
+                  href="#todos-projetos"
+                  class="text-decoration-none"
+                >
+                  Todos projetos
+                </a>
+              </li>
+            </ul>
+          </div>
+
           <!------------------------------------------- ACESSO A OBRA ------------------------------------------------>
 
           <li
@@ -369,57 +411,6 @@
             </a>
           </li>
 
-          <!------------------------------------------- PROJETOS ------------------------------------------------>
-
-          <li
-            class="rounded active mb-1 list nav-item"
-            data-toggle="collapse"
-            data-target="#projeto"
-          >
-            <a href="#" class="text-decoration-none sub-menu">
-              <div class="text d-flex">
-                <span>
-                  <i class="fa-solid fa-clipboard ml-1"></i>
-                </span>
-                <div class="ml-4">
-                  <span class=""> PROJETOS </span>
-                </div>
-              </div>
-              <span><i class="bx bx-chevron-down"></i></span>
-            </a>
-          </li>
-          <div class="collapse" id="projeto">
-            <ul class="unstyled pl-5 ml-4 submenu nav nav-pills flex-column">
-              <li class="py-2 nav-item">
-                <a
-                  href="#cadastrar-projeto"
-                  class="text-decoration-none"
-                  data-toggle="pill"
-                >
-                  Cadastrar projeto
-                </a>
-              </li>
-              <li class="py-2 nav-item">
-                <a
-                  href="#editar-projeto"
-                  class="text-decoration-none"
-                  data-toggle="pill"
-                >
-                  Editar projeto
-                </a>
-              </li>
-              <li class="py-2 nav-item">
-                <a
-                  data-toggle="pill"
-                  href="#todos-projetos"
-                  class="text-decoration-none"
-                >
-                  Todos projetos
-                </a>
-              </li>
-            </ul>
-          </div>
-
           <!------------------------------------------- SCI DE EXCLUSÃO ------------------------------------------------>
 
           <li class="rounded mt-1 list nav-item">
@@ -437,6 +428,7 @@
         </ul>
       </div>
 
+      
       <!-- ============================== Main ============================== -->
 
       <div class="main">
@@ -978,77 +970,61 @@
                       type="search"
                       class="border-0 bg-light p-2 w-40"
                       placeholder="Pesquisar por END ID"
+                      id="pesquisaEndIdStatus"
                     />
                     <input
                       type="search"
                       class="border-0 bg-light p-2"
-                      placeholder="Pesquisar por Data de Cadastro"
+                      placeholder="Pesquisar por Etapa"
+                      id="pesquisaEtapaStatus"
                     />
                     <input
                       type="search"
                       class="border-0 bg-light p-2"
-                      placeholder="Pesquisar por Situação"
+                      placeholder="Pesquisar por Status"
+                      id="pesquisaSituacaoStatus"
                     />
-                    <button class="btn btn-warning text-white">
+                    <button 
+                      class="btn btn-warning text-white"
+                      onclick="filtrarTabelaStatus(0, 'status', 'tabelaStatus')"
+                      >
                       Pesquisar
                     </button>
                   </div>
                   <div class="table-responsive text-nowrap">
-                    <table class="table my-4 table-hover table-striped w-100">
+                    <table 
+                      class="table my-4 table-hover table-striped w-100"
+                      id="tabelaStatus"
+                      >
                       <thead>
                         <tr>
                           <th>END ID</th>
                           <th>Data de Cadastro</th>
                           <th>Etapa</th>
-                          <th>Situação</th>
+                          <th>Status</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <td>
-                            <button
-                              class="btn btn-link p-0 text-decoration-none end-id"
-                              data-id="#001"
-                            >
-                              #001
-                            </button>
-                          </td>
-                          <td>01/12/2024</td>
-                          <td>Agendamento</td>
-                          <td>Em andamento</td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <button
-                              class="btn btn-link p-0 text-decoration-none end-id"
-                              data-id="#002"
-                            >
-                              #002
-                            </button>
-                          </td>
-                          <td>05/12/2024</td>
-                          <td>Vistoria</td>
-                          <td>Não iniciado</td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <button
-                              class="btn btn-link p-0 text-decoration-none end-id"
-                              data-id="#003"
-                            >
-                              #003
-                            </button>
-                          </td>
-                          <td>07/12/2024</td>
-                          <td>Obra</td>
-                          <td>Em andamento</td>
-                        </tr>
+                        <!-- Dados preenchidos dinamicamente por JavaScript -->
                       </tbody>
                     </table>
                   </div>
+                  <div id="total-pesquisa-status"></div>
+
+                  <!-- Controles de Paginação -->
+                  <div
+                    id="pagination-controls-status"
+                    class="d-flex justify-content-center my-2"
+                  >
                 </div>
               </div>
             </div>
+          </div>
+          <div class="row mt-5 mb-3">
+            <div class="col">
+                <p class="lead">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</p>
+            </div>
+          </div>
           </div>
 
           <!-- ============================== PÁGINA DE LIBERAÇÃO DE ACESSO ============================== -->
@@ -1264,7 +1240,7 @@
             <div class="container-fluid">
               <div class="row justify-content-between my-4">
                 <div class="col shadow bg-white p-4 rounded">
-                  <h4 class="mb-3">Histórico de Agendamentos:</h4>
+                  <h4 class="mb-3">Agendamentos de Vistorias:</h4>
                   <div class="header-result mb-3">
                     <input
                       type="search"
@@ -1548,471 +1524,8 @@
         </div>
         </div>
 
-          
-          <!-- ============================== PÁGINA DE ACESSO A OBRA ============================== -->
+        <!-- ============================== PÁGINA DE PROJETO ============================== -->
 
-          <!-- editar agendamento de obra -->
-
-          <div class="tab-pane fade px-4" id="editar-agendamentos-obra">
-            <div class="container-fluid">
-              <div class="row justify-content-between my-4">
-                <div class="col shadow bg-white p-4 rounded">
-                  <h4 class="mb-3">Editar agendamento:</h4>
-                  <form>
-                    <div class="row form-desing my-4">
-                      <div class="col-md-4 mt-2 mt-md-0">
-                        <label for="editarEndIdAcessoObra">END ID *</label>
-                        <input
-                          type="text"
-                          class="form-control editarEndIdAcessoObra"
-                          placeholder="Informe o END ID"
-                          autofocus
-                        />
-                      </div>
-                      <div class="col-md-2 mt-2 mt-md-0 d-flex align-items-end">
-                        <button
-                          type="button"
-                          class="btn btn-primary w-100"
-                          id="button-buscar-agendamento"
-                          onclick="buscaAcessoObra('editar-agendamentos-obra')"
-                        >
-                          <i class="fa-solid fa-magnifying-glass"></i> Buscar
-                        </button>
-                      </div>
-                    </div>
-                    <div class="row form-desing my-4">
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label for="editarSiteIdAcessoObra">Site ID *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="editarSiteIdAcessoObra"
-                        />
-                      </div>
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label for="editarDemandaAcessoObra">Demanda *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="editarDemandaAcessoObra"
-                        />
-                      </div>
-                    </div>
-                    <div class="row form-desing my-4">
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label for="editarDetentoraAcessoObra">Detentora *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="editarDetentoraAcessoObra"
-                        />
-                      </div>
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label for="editarIdDetentoraAcessoObra"
-                          >ID Detentora *</label
-                        >
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="editarIdDetentoraAcessoObra"
-                        />
-                      </div>
-                    </div>
-                    <div class="row form-desing my-4">
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label for="editarOperadoraAcessoObra"
-                          >Operadora cedente *</label
-                        >
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="editarOperadoraAcessoObra"
-                        />
-                      </div>
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label for="editarIdOperadoraAcessoObra"
-                          >ID Operadora *</label
-                        >
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="editarIdOperadoraAcessoObra"
-                        />
-                      </div>
-                    </div>
-                    <div class="row form-desing my-4">
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label for="editarLogradouroAcessoObra">Logradouro *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="editarLogradouroAcessoObra"
-                        />
-                      </div>
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label for="editarNumeroAcessoObra">Número *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="editarNumeroAcessoObra"
-                        />
-                      </div>
-                    </div>
-                    <div class="row form-desing my-4">
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label for="editarBairroAcessoObra">Bairro *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="editarBairroAcessoObra"
-                        />
-                      </div>
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label for="editarMunicipioAcessoObra">Município *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="editarMunicipioAcessoObra"
-                        />
-                      </div>
-                    </div>
-                    <div class="row form-desing my-4">
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label for="editarEstadoAcessoObra">Estado *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="editarEstadoAcessoObra"
-                        />
-                      </div>
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label for="editarCepAcessoObra">CEP *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="editarCepAcessoObra"
-                        />
-                      </div>
-                    </div>
-                    <div class="row form-desing my-4">
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label for="editarLatitudeAcessoObra">Latitude *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="editarLatitudeAcessoObra"
-                        />
-                      </div>
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label for="editarLongitudeAcessoObra">Longitude *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="editarLongitudeAcessoObra"
-                        />
-                      </div>
-                    </div>
-                    <div class="row form-desing my-4">
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label for="editarLocalizacaoAcessoObra"
-                          >Localizacão Maps *</label
-                        >
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="editarLocalizacaoAcessoObra"
-                        />
-                      </div>
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label for="editarObservacoesAcessoObra">Observações</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="editarObservacoesAcessoObra"
-                        />
-                      </div>
-                    </div>
-                    <div class="row form-desing my-4">
-                      <div class="col">
-                        <button
-                          class="btn btn-primary text-white py-2 px-5"
-                          type="button"
-                          id="salvarAcessoNovoObra"
-                          onclick="atualizarNovoAcessoObra('editar-agendamentos-obra')"
-                        >
-                          Atualizar
-                        </button>
-                        <button
-                          class="btn btn-secondary text-white py-2 px-5"
-                          type="reset"
-                        >
-                          Resetar
-                        </button>
-                      </div>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- todos agendamentos de obra-->
-
-          <div class="tab-pane fade px-4" id="todos-agendamentos-obra">
-            <div class="container-fluid">
-              <div class="row justify-content-between my-4">
-                <div class="col shadow bg-white p-4 rounded">
-                  <h4 class="mb-3">Histórico de Agendamentos:</h4>
-                  <div class="header-result mb-3">
-                    <input
-                      type="search"
-                      class="border-0 bg-light p-2 w-40"
-                      placeholder="Pesquisar por END ID"
-                      id="pesquisaEndIdAcessoObra"
-                    />
-                    <input
-                      type="search"
-                      class="border-0 bg-light p-2"
-                      placeholder="Pesquisar por Status"
-                      id="pesquisaStatusAgendamentoAcessoObra"
-                    />
-                    <input
-                      type="search"
-                      class="border-0 bg-light p-2"
-                      placeholder="Pesquisar por Município"
-                      id="pesquisaMunicipioAcessoObra"
-                    />
-                    <button
-                      class="btn btn-warning text-white"
-                      onclick="filtrarTabelaAcessoObra(0, 'todos-agendamentos-obra', 'tabelaHistoricoAgendamento-obra')"
-                    >
-                      BUSCAR
-                    </button>
-                  </div>
-                  <div class="table-responsive text-nowrap">
-                    <table
-                      class="table table-hover table-striped w-100"
-                      id="tabelaHistoricoAgendamento-obra"
-                    >
-                      <thead class="bg-light">
-                        <tr>
-                          <th>END ID</th>
-                          <th>Status Agendamento</th>
-                          <th>Data Solicitação</th>
-                          <th>Data Previsão</th>
-                          <th>Data de Liberação</th>
-                          <th>Ação</th>
-                          <th>Observações</th>
-                        </tr>
-                      </thead>
-                      <tbody></tbody>
-                    </table>
-                    <div id="total-pesquisa-agendamento-obra"></div>
-                    <!-- Controles de Paginação -->
-                    <div
-                      id="pagination-controls-agendamento-obra"
-                      class="d-flex justify-content-center my-2"
-                    >
-                      <!-- Botões serão gerados dinamicamente -->
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="row mt-5 mb-3">
-              <div class="col">
-                  <p class="lead">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</p>
-              </div>
-          </div>
-          </div>
-
-          <!-- ============================== PÁGINA DE OBRA ============================== -->
-
-          <div class="tab-pane fade px-4" id="obra">
-            <div class="container-fluid">
-              <div class="row justify-content-between my-4">
-                <div class="col-12 shadow bg-white p-4 rounded">
-                  <h4 class="mb-3">Todas obras</h4>
-                  <div
-                    class="header-result d-flex justify-content-start gap-3 mb-3"
-                  >
-                    <input
-                      type="search"
-                      class="border-0 bg-light p-2 w-15"
-                      placeholder="Procurar por End ID"
-                      id="pesquisaEndIdObra"
-                    />
-                    <input
-                      type="search"
-                      class="border-0 bg-light p-2 w-15"
-                      placeholder="Procurar por Status"
-                      id="pesquisaStatusObra"
-                    />
-                    <input
-                      type="search"
-                      class="border-0 bg-light p-2 w-15"
-                      placeholder="Procurar por Data Final"
-                      id="pesquisaDataFinal"
-                    />
-                    <button class="btn btn-warning text-white"
-                    onclick="filtrarTabelaObra(0, 'obra', 'tabelaHistoricoObra')"
-                    >
-                      Pesquisar
-                    </button>
-                  </div>
-                  <div class="table-responsive text-nowrap">
-                    <table 
-                      class="table my-4 table-hover table-striped w-100"
-                      id="tabelaHistoricoObra"
-                      >
-                      <thead>
-                        <tr>
-                          <th>END ID</th>
-                          <th>Status Obra</th>
-                          <th>Início Previsto</th>
-                          <th>Data Final</th>
-                          <th>Ação</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <!-- Conteudo dinamico -->
-                      </tbody>
-                    </table>
-                    <div id="total-pesquisa-obra"></div>
-
-                    <!-- Controles de Paginação -->
-                    <div
-                      id="pagination-controls-obra"
-                      class="d-flex justify-content-center my-2"
-                    >
-                  </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="row mt-5 mb-3">
-              <div class="col">
-                  <p class="lead">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</p>
-              </div>
-          </div>
-          </div>
-
-
-          <!-- ============================== PÁGINA DE PROJETO ============================== -->
-
-          <!-- realizar cadastro -->
-
-          <div class="tab-pane fade px-4" id="cadastrar-projeto">
-            <div class="container-fluid">
-              <div class="row justify-content-between my-4">
-                <div class="col shadow bg-white p-4 rounded">
-                  <h4 class="mb-3">Realizar cadastro:</h4>
-                  <div class="row form-desing my-4">
-                    <div class="col-md-6 mt-2 mt-md-0">
-                      <label>End ID *</label><br />
-                      <input type="text" class="form-control" id="endIdProjeto" />
-                    </div>
-                  </div>  
-
-                  <div class="row form-desing my-4">
-                    <div class="col-md-6 mt-2 mt-md-0">
-                      <label>Concessionária *</label><br />
-                      <input type="text" class="form-control" id="concessionária" />
-                    </div>
-                    <div class="col-md-6 mt-2 mt-md-0">
-                      <label>Regional *</label><br />
-                      <input type="text" class="form-control" id="regional" />
-                    </div>
-                  </div>
-
-                  <div class="row form-desing my-4">
-                    <div class="col-md-6 mt-2 mt-md-0">
-                      <label>Unidade *</label><br />
-                      <input type="text" class="form-control" id="unidade" />
-                    </div>
-                    <div class="col-md-6 mt-2 mt-md-0">
-                      <label>CNPJ UC</label><br />
-                      <input
-                        type="text"
-                        class="form-control"
-                        id="cnpjuc"
-                      />
-                    </div>
-                  </div>
-
-                  <div class="row form-desing my-4">
-                    <div class="col-md-6 mt-2 mt-md-0">
-                      <label>Tipo tensão*</label><br />
-                      <input
-                        type="text"
-                        class="form-control"
-                        id="tipoTensao"
-                      />
-                    </div>
-                    <div class="col-md-6 mt-2 mt-md-0">
-                      <label>Previsão ligação</label><br />
-                      <input
-                        type="date"
-                        class="form-control"
-                        id="previsaoLigacao"
-                      />
-                    </div>
-                  </div>
-
-                  <div class="row form-desing my-4">
-                    <div class="col-md-6 mt-2 mt-md-0">
-                      <label>Número do medidor *</label><br />
-                      <input type="text" class="form-control" id="numeroMedidor" />
-                    </div>
-                    <div class="col-md-6 mt-2 mt-md-0">
-                      <label>Número de instalação *</label><br />
-                      <input type="text" class="form-control" id="numeroInstalacao" />
-                    </div>
-                  </div>
-
-                  <div class="row form-desing my-4">
-                    <div class="col-md-6 mt-2 mt-md-0">
-                      <label>Número de fases *</label><br />
-                      <input type="text" class="form-control" id="numeroDeFases" />
-                    </div>
-                    <div class="col-md-6 mt-2 mt-md-0">
-                      <label>Leitura Inicial *</label><br />
-                      <input type="text" class="form-control" id="leituraInicial" />
-                    </div>
-                  </div>
-
-                  <div class="row form-desing my-4">
-                    <div class="col-md-6 mt-2 mt-md-0">
-                      <label>Data de ligação *</label><br />
-                      <input type="date" class="form-control" id="dataLigacao" />
-                    </div>
-                  </div>
-                    
-
-                  <div class="row form-desing my-4">
-                    <div class="col">
-                      <button
-                        class="btn save text-white py-2 px-5"
-                        type="button"
-                        onclick="realizarCadastroProjeto()"
-                      >
-                        Salvar
-                      </button>
-                      <button
-                        class="btn reset text-white py-2 px-5"
-                        type="button"
-                        id="botaoResetar"
-                      >
-                        Resetar
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        
           <!--  editar projeto-->
 
           <div class="tab-pane fade px-4" id="editar-projeto">
@@ -2257,6 +1770,354 @@
                 <p class="lead">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</p>
             </div>
         </div>
+          </div>     
+          
+          <!-- ============================== PÁGINA DE ACESSO A OBRA ============================== -->
+
+          <!-- editar agendamento de obra -->
+
+          <div class="tab-pane fade px-4" id="editar-agendamentos-obra">
+            <div class="container-fluid">
+              <div class="row justify-content-between my-4">
+                <div class="col shadow bg-white p-4 rounded">
+                  <h4 class="mb-3">Editar agendamento:</h4>
+                  <form>
+                    <div class="row form-desing my-4">
+                      <div class="col-md-4 mt-2 mt-md-0">
+                        <label for="editarEndIdAcessoObra">END ID *</label>
+                        <input
+                          type="text"
+                          class="form-control editarEndIdAcessoObra"
+                          placeholder="Informe o END ID"
+                          autofocus
+                        />
+                      </div>
+                      <div class="col-md-2 mt-2 mt-md-0 d-flex align-items-end">
+                        <button
+                          type="button"
+                          class="btn btn-primary w-100"
+                          id="button-buscar-agendamento"
+                          onclick="buscaAcessoObra('editar-agendamentos-obra')"
+                        >
+                          <i class="fa-solid fa-magnifying-glass"></i> Buscar
+                        </button>
+                      </div>
+                    </div>
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarSiteIdAcessoObra">Site ID *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="editarSiteIdAcessoObra"
+                        />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarDemandaAcessoObra">Demanda *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="editarDemandaAcessoObra"
+                        />
+                      </div>
+                    </div>
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarDetentoraAcessoObra">Detentora *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="editarDetentoraAcessoObra"
+                        />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarIdDetentoraAcessoObra"
+                          >ID Detentora *</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="editarIdDetentoraAcessoObra"
+                        />
+                      </div>
+                    </div>
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarOperadoraAcessoObra"
+                          >Operadora cedente *</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="editarOperadoraAcessoObra"
+                        />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarIdOperadoraAcessoObra"
+                          >ID Operadora *</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="editarIdOperadoraAcessoObra"
+                        />
+                      </div>
+                    </div>
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarLogradouroAcessoObra">Logradouro *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="editarLogradouroAcessoObra"
+                        />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarNumeroAcessoObra">Número *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="editarNumeroAcessoObra"
+                        />
+                      </div>
+                    </div>
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarBairroAcessoObra">Bairro *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="editarBairroAcessoObra"
+                        />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarMunicipioAcessoObra">Município *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="editarMunicipioAcessoObra"
+                        />
+                      </div>
+                    </div>
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarEstadoAcessoObra">Estado *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="editarEstadoAcessoObra"
+                        />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarCepAcessoObra">CEP *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="editarCepAcessoObra"
+                        />
+                      </div>
+                    </div>
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarLatitudeAcessoObra">Latitude *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="editarLatitudeAcessoObra"
+                        />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarLongitudeAcessoObra">Longitude *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="editarLongitudeAcessoObra"
+                        />
+                      </div>
+                    </div>
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarLocalizacaoAcessoObra"
+                          >Localizacão Maps *</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="editarLocalizacaoAcessoObra"
+                        />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarObservacoesAcessoObra">Observações</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="editarObservacoesAcessoObra"
+                        />
+                      </div>
+                    </div>
+                    <div class="row form-desing my-4">
+                      <div class="col">
+                        <button
+                          class="btn btn-primary text-white py-2 px-5"
+                          type="button"
+                          id="salvarAcessoNovoObra"
+                          onclick="atualizarNovoAcessoObra('editar-agendamentos-obra')"
+                        >
+                          Atualizar
+                        </button>
+                        <button
+                          class="btn btn-secondary text-white py-2 px-5"
+                          type="reset"
+                        >
+                          Resetar
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- todos agendamentos de obra-->
+
+          <div class="tab-pane fade px-4" id="todos-agendamentos-obra">
+            <div class="container-fluid">
+              <div class="row justify-content-between my-4">
+                <div class="col shadow bg-white p-4 rounded">
+                  <h4 class="mb-3">Agendamentos de Obras:</h4>
+                  <div class="header-result mb-3">
+                    <input
+                      type="search"
+                      class="border-0 bg-light p-2 w-40"
+                      placeholder="Pesquisar por END ID"
+                      id="pesquisaEndIdAcessoObra"
+                    />
+                    <input
+                      type="search"
+                      class="border-0 bg-light p-2"
+                      placeholder="Pesquisar por Status"
+                      id="pesquisaStatusAgendamentoAcessoObra"
+                    />
+                    <input
+                      type="search"
+                      class="border-0 bg-light p-2"
+                      placeholder="Pesquisar por Município"
+                      id="pesquisaMunicipioAcessoObra"
+                    />
+                    <button
+                      class="btn btn-warning text-white"
+                      onclick="filtrarTabelaAcessoObra(0, 'todos-agendamentos-obra', 'tabelaHistoricoAgendamento-obra')"
+                    >
+                      BUSCAR
+                    </button>
+                  </div>
+                  <div class="table-responsive text-nowrap">
+                    <table
+                      class="table table-hover table-striped w-100"
+                      id="tabelaHistoricoAgendamento-obra"
+                    >
+                      <thead class="bg-light">
+                        <tr>
+                          <th>END ID</th>
+                          <th>Status Agendamento</th>
+                          <th>Data Solicitação</th>
+                          <th>Data Previsão</th>
+                          <th>Data de Liberação</th>
+                          <th>Ação</th>
+                          <th>Observações</th>
+                        </tr>
+                      </thead>
+                      <tbody></tbody>
+                    </table>
+                    <div id="total-pesquisa-agendamento-obra"></div>
+                    <!-- Controles de Paginação -->
+                    <div
+                      id="pagination-controls-agendamento-obra"
+                      class="d-flex justify-content-center my-2"
+                    >
+                      <!-- Botões serão gerados dinamicamente -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row mt-5 mb-3">
+              <div class="col">
+                  <p class="lead">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</p>
+              </div>
+          </div>
+          </div>
+
+          <!-- ============================== PÁGINA DE OBRA ============================== -->
+
+          <div class="tab-pane fade px-4" id="obra">
+            <div class="container-fluid">
+              <div class="row justify-content-between my-4">
+                <div class="col-12 shadow bg-white p-4 rounded">
+                  <h4 class="mb-3">Todas obras</h4>
+                  <div
+                    class="header-result d-flex justify-content-start gap-3 mb-3"
+                  >
+                    <input
+                      type="search"
+                      class="border-0 bg-light p-2 w-15"
+                      placeholder="Procurar por End ID"
+                      id="pesquisaEndIdObra"
+                    />
+                    <input
+                      type="search"
+                      class="border-0 bg-light p-2 w-15"
+                      placeholder="Procurar por Status"
+                      id="pesquisaStatusObra"
+                    />
+                    <input
+                      type="search"
+                      class="border-0 bg-light p-2 w-15"
+                      placeholder="Procurar por Data Final"
+                      id="pesquisaDataFinal"
+                    />
+                    <button class="btn btn-warning text-white"
+                    onclick="filtrarTabelaObra(0, 'obra', 'tabelaHistoricoObra')"
+                    >
+                      Pesquisar
+                    </button>
+                  </div>
+                  <div class="table-responsive text-nowrap">
+                    <table 
+                      class="table my-4 table-hover table-striped w-100"
+                      id="tabelaHistoricoObra"
+                      >
+                      <thead>
+                        <tr>
+                          <th>END ID</th>
+                          <th>Status Obra</th>
+                          <th>Início Previsto</th>
+                          <th>Data Final</th>
+                          <th>Ação</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <!-- Conteudo dinamico -->
+                      </tbody>
+                    </table>
+                    <div id="total-pesquisa-obra"></div>
+
+                    <!-- Controles de Paginação -->
+                    <div
+                      id="pagination-controls-obra"
+                      class="d-flex justify-content-center my-2"
+                    >
+                  </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row mt-5 mb-3">
+              <div class="col">
+                  <p class="lead">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</p>
+              </div>
+          </div>
           </div>
 
           <!-- ============================== PÁGINA DE SCI EXCLUSÃO ============================== -->
@@ -2313,6 +2174,7 @@
                         <!-- Conteudo dinamico -->
                       </tbody>
                     </table>
+                  </div>
                     <div id="total-pesquisa-exclusao"></div>
 
                     <!-- Controles de Paginação -->
@@ -2320,7 +2182,7 @@
                       id="pagination-controls-exclusao"
                       class="d-flex justify-content-center my-2"
                     >
-                  </div>
+                  
                 </div>
               </div>
             </div>
@@ -2331,6 +2193,8 @@
             </div>
         </div>
         </div>
+      
+      
       </div>
     </div>
       

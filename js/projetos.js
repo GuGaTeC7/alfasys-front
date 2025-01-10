@@ -39,87 +39,43 @@ document.getElementById("button-buscar-projeto").addEventListener("click", funct
   
             const dataAprovacao = item.dataAprovacao
               ? formatarDataParaInput(item.dataAprovacao)
-              : "";
-
-  
-  
-          // Monta a linha da tabela
-          const row = `
-              <tr>
-                <td>
-                  <button class="btn btn-link p-0 text-decoration-none end-id" id="textoParaCopiar" data-id="${
-                    item.endId
-                  }">
-                    ${item.endId}
-                  </button>
-                  <i class="fa-regular fa-copy btnCopiar" title="Copiar" data-id="${
-                    item.endId
-                  }"></i>
-                </td>
-                <td>
-                  <button class="btn btn-link p-0 text-decoration-none ver-mais" data-id="${item.endId}">
-                    Ver mais
-                  </button>
-                </td>
-                <td>
-                  <select disabled class="form-select border-0 bg-light p-2">
-                    <option value="status">${item.status}</option>
-                  </select>
-                  <button class="btn iniciar-btn p-0 border-0 bg-transparent ml-2" 
-                    style="display:${
-                      ["Em andamento", "Concluído"].includes(item.status)
-                        ? "none"
-                        : ""
-                    };" 
-                    data-id-botao="${item.endId}">
-                    <i class="fa-solid fa-circle-play"></i>
-                  </button>
-                </td>
-                <td>
-                  ${
-                    dataEntrada
-                      ? `<input 
-                          type="date" 
-                          class="form-control text-center" 
-                          value="${dataEntrada}" 
-                          disabled
-                          id="data-entrada-${item.endId}"
-                        />`
-                      : renderInputDate(
-                          "data-entrada",
-                          item.endId,
-                          item.status
-                        )
-                  }
-                </td>
-                <td>
-                  ${
-                    dataAprovacao
-                      ? `<input 
-                          type="date" 
-                          class="form-control text-center" 
-                          value="${dataAprovacao}" 
-                          disabled
-                          id="data-aprovacao-projeto-${item.endId}"
-                        />`
-                      : renderInputDate(
-                          "data-aprovacao-projeto",
-                          item.endId,
-                          item.status
-                        )
-                  }
-                </td>
-                <td>
-                  <button class="btn btn-primary finalizar-btn" data-id-botao="${item.endId}" ${
-                    item.status === "Não iniciado" || item.status === "Concluído"
-                      ? "disabled"
-                      : ""
-                  }>
-                    Finalizar
-                  </button>
-                </td>
-              </tr>`;
-  
+              : "";  
+  // Monta a linha da tabela
+  const row = `
+    <tr>
+      <td>
+        <button class="btn btn-link p-0 text-decoration-none end-id" id="textoParaCopiar" data-id="${item.endId}">
+          ${item.endId}
+        </button>
+        <i class="fa-regular fa-copy btnCopiar" title="Copiar" data-id="${item.endId}"></i>
+      </td>
+      <td>
+        <button class="btn btn-link p-0 text-decoration-none ver-mais" data-id="${item.endId}">
+          <i class="fa-solid fa-book"></i> <!-- Ícone de livro -->
+        </button>
+      </td>
+      <td>
+        <select disabled class="form-select border-0 bg-light p-2">
+          <option value="status">${item.status}</option>
+        </select>
+        <button class="btn iniciar-btn p-0 border-0 bg-transparent ml-2" 
+          style="display:${["Em andamento", "Concluído"].includes(item.status) ? "none" : ""};" 
+          data-id-botao="${item.endId}">
+          <i class="fa-solid fa-circle-play"></i>
+        </button>
+      </td>
+      <td>
+        ${dataEntrada ? `<input type="date" class="form-control text-center" value="${dataEntrada}" disabled id="data-entrada-${item.endId}" />` : renderInputDate("data-entrada", item.endId, item.status)}
+      </td>
+      <td>
+        ${dataAprovacao ? `<input type="date" class="form-control text-center" value="${dataAprovacao}" disabled id="data-aprovacao-projeto-${item.endId}" />` : renderInputDate("data-aprovacao-projeto", item.endId, item.status)}
+      </td>
+      <td>
+        <button class="btn btn-primary finalizar-btn" data-id-botao="${item.endId}" ${item.status === "Não iniciado" || item.status === "Concluído" ? "disabled" : ""}>
+          Finalizar
+        </button>
+      </td>
+    </tr>`;
           tbody.insertAdjacentHTML("beforeend", row);
         });
   
@@ -453,8 +409,8 @@ document.querySelector("#tabelaHistoricoProjetos").addEventListener("click", (ev
   const loadingOverlay = document.getElementById("loading-overlay");
   
   // Verifica se o elemento clicado possui a classe `ver-mais`
-  if (event.target.classList.contains("ver-mais")) {
-    const endId = event.target.getAttribute("data-id");
+  if (event.target.closest(".ver-mais")) { // Certifique-se de que o clique no ícone também seja capturado
+    const endId = event.target.closest(".ver-mais").getAttribute("data-id");
 
     if (!loadingOverlay) {
       console.error("Elemento de loadingOverlay não encontrado!");
