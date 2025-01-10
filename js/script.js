@@ -74,4 +74,3 @@ navbarBrand.addEventListener("click", (e) => {
   location.reload();
 });
 
-

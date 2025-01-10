@@ -52,75 +52,61 @@ document
   });
 
   function login(event) {
-    event.preventDefault(); // Previne o comportamento padrão do formulário
-  
-    // Seleciona os campos de entrada de email e senha
-    const iemail = document.querySelector("#login-email");
-    const ipassword = document.querySelector("#login-password");
-    const emailError = document.getElementById("email-error");
-    const passwordError = document.getElementById("password-error");
-    const alertError = document.querySelector(".alert-error");
-    const loginButton = event.target.querySelector("button[type='submit']");
-  
-    // Limpa erros anteriores
-    iemail.classList.remove("error");
-    ipassword.classList.remove("error");
-    emailError.style.display = "none";
-    passwordError.style.display = "none";
-    alertError.classList.remove("show");
-    alertError.textContent = "";
-  
-    // Ativa estado de carregamento no botão
-    loginButton.textContent = "Carregando...";
-    loginButton.disabled = true;
-  
-    fetch("https://alfasys-back-production.up.railway.app/users/login", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: iemail.value,
-        senha: ipassword.value,
-      }),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Verifique suas credenciais");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        if (data.token) {
-          const token = data.token;
-  
-          // Armazena o token no localStorage
-          localStorage.setItem("token", token);
-  
-          // Redireciona para a página inicial
-          window.location.href = "/index.html";
-        } else {
-          throw new Error("Token não encontrado.");
-        }
-      })
-      .catch((error) => {
-        // Exibe mensagem de erro e aplica estilos
-        iemail.classList.add("error");
-        ipassword.classList.add("error");
-  
-        // Exibe alerta estilizado
-        alertError.classList.add("show");
-        alertError.textContent =
-          "Erro: " + error.message || "Credenciais incorretas.";
-  
-        // Restaura o estado do botão
-        loginButton.textContent = "Entrar";
-        loginButton.disabled = false;
-      });
-  }
+  event.preventDefault();
 
-  
+  const iemail = document.querySelector("#login-email");
+  const ipassword = document.querySelector("#login-password");
+  const alertError = document.querySelector(".alert-error");
+  const loginButton = event.target.querySelector("button[type='submit']");
+
+  // Limpa erros anteriores
+  iemail.classList.remove("error");
+  ipassword.classList.remove("error");
+  alertError.classList.remove("show");
+  alertError.textContent = "";
+
+  // Ativa estado de carregamento no botão
+  loginButton.textContent = "Carregando...";
+  loginButton.disabled = true;
+
+  fetch("https://alfasys-back-production.up.railway.app/users/login", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email: iemail.value,
+      senha: ipassword.value,
+    }),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Verifique suas credenciais");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("userType", "tim");
+
+        window.location.href = "/index.html";
+      } else {
+        throw new Error("Token não encontrado.");
+      }
+    })
+    .catch((error) => {
+      alertError.classList.add("show");
+      alertError.textContent = "Erro: " + error.message;
+
+      loginButton.textContent = "Entrar";
+      loginButton.disabled = false;
+    });
+}
+
+
+
   function togglePasswordVisibility(passwordId, toggleIconId) {
     const passwordInput = document.getElementById(passwordId);
     const toggleIcon = document.getElementById(toggleIconId);
@@ -138,63 +124,53 @@ document
   
     
   
-      function signup(event) {
-        event.preventDefault(); // Previne o comportamento padrão do formulário
-      
-        // Seleciona os campos de entrada de email e senha
-        const email = document.querySelector("#register-email").value;
-        const password = document.querySelector("#register-password").value;
-        const alertError = document.querySelector(".alert-error");
-        const signupButton = event.target.querySelector("button[type='submit']");
-      
-        // Limpa mensagens de erro anteriores
-        alertError.classList.remove("show");
-        alertError.textContent = "";
-      
-        // Ativa estado de carregamento no botão
-        signupButton.textContent = "Carregando...";
-        signupButton.disabled = true;
-      
-        // Faz a requisição para o backend
-        fetch("https://alfasys-back-production.up.railway.app/users/login", {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: email,
-            senha: password,
-          }),
-        })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error("Verifique suas credenciais.");
-            }
-            return response.json();
-          })
-          .then((data) => {
-            if (data.token) {
-              const token = data.token;
-      
-              // Armazena o token no localStorage
-              localStorage.setItem("token", token);
-      
-              // Redireciona para a página inicial
-              window.location.href = "/index.html";
-            } else {
-              throw new Error("Token não encontrado.");
-            }
-          })
-          .catch((error) => {
-            // Exibe mensagem de erro
-            alertError.classList.add("show");
-            alertError.textContent =
-              "Erro: " + error.message || "Erro ao fazer login.";
-      
-            // Restaura o estado do botão
-            signupButton.textContent = "Entrar";
-            signupButton.disabled = false;
-          });
-      }
-      
+  function signup(event) {
+    event.preventDefault();
+  
+    const iemail = document.querySelector("#register-email");
+    const ipassword = document.querySelector("#register-password");
+    const alertError = document.querySelector(".alert-error");
+    const signupButton = event.target.querySelector("button[type='submit']");
+  
+    alertError.classList.remove("show");
+    alertError.textContent = "";
+  
+    signupButton.textContent = "Carregando...";
+    signupButton.disabled = true;
+  
+    fetch("https://alfasys-back-production.up.railway.app/users/login", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: iemail.value,
+        senha: ipassword.value,
+      }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Verifique suas credenciais.");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (data.token) {
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("userType", "claro");
+  
+          window.location.href = "/index.html";
+        } else {
+          throw new Error("Token não encontrado.");
+        }
+      })
+      .catch((error) => {
+        alertError.classList.add("show");
+        alertError.textContent = "Erro: " + error.message;
+  
+        signupButton.textContent = "Entrar";
+        signupButton.disabled = false;
+      });
+  }
+  

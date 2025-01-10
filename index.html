@@ -34,9 +34,12 @@
     <div class="container-fluid px-0">
       <!-- ========================= header ========================= -->
       <div class="navbar fixed-top">
-        <a href="#" class="navbar-brand">
-          <span>AlfaSys</span>
-        </a>
+        <a href="#" class="navbar-brand d-flex align-items-center">
+          <span class="mr-2">AlfaSys</span>
+          <div id="logo-container">
+            <img src="img/logo.png" alt="Logo" id="navbar-logo" />
+          </div>
+        </a>              
         <div class="actions mr-auto d-flex align-items-center">
           <span><i class="bx bx-menu menu mr-3" id="menu"></i></span>
           <div class="input">
@@ -2380,3 +2383,17 @@
     </div>
   </body>
 </html>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const userType = localStorage.getItem("userType");
+  const logoContainer = document.getElementById("logo-container");
+
+  if (userType === "tim") {
+    logoContainer.innerHTML = '<img src="img/logotim.png" alt="Logo TIM" />';
+  } else if (userType === "claro") {
+    logoContainer.innerHTML = '<img src="img/logoclaro.png" alt="Logo Claro" />';
+  } else {
+    console.warn("Tipo de usuário não definido. Usando logo padrão.");
+  }
+});
+</script>
