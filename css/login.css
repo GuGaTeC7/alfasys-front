@@ -50,6 +50,23 @@ body {
     margin: 15px 0 10px;
 }
 
+/* Botão */
+button[type="submit"] {
+    background-color: blue;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+  
+  button[type="submit"].btn-tim {
+    background-color: blue;
+  }
+  
+  button[type="submit"].btn-claro {
+    background-color: red;
+  }
+
 .container button {
     background-color: #012970;
     color: #fff;
@@ -164,8 +181,16 @@ body {
     border-radius: 20px;
 }
 
+.toggle.active-tim {
+    background-color: blue;
+  }
+  
+  .toggle.active-claro {
+    background-color: red;
+  }
+
 .toggle {
-    background-color: #012970;
+    background-color: blue;
     height: 100%;
     color: #fff;
     position: relative;
@@ -341,7 +366,7 @@ input.error::placeholder {
     }
 }
 
-
+    
   button:disabled {
     background-color: #ccc;
     cursor: not-allowed;
