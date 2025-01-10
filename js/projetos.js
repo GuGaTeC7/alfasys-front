@@ -402,7 +402,7 @@ document.getElementById("button-buscar-projeto").addEventListener("click", funct
         </div>`;
   }
   
-  
+  /*
 
   // Delegação de evento para o botão "Ver mais" na tabela
 document.querySelector("#tabelaHistoricoProjetos").addEventListener("click", (event) => {
@@ -827,3 +827,4 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+\*/

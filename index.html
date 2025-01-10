@@ -1532,80 +1532,165 @@
             <div class="container-fluid">
               <div class="row justify-content-between my-4">
                 <div class="col shadow bg-white p-4 rounded">
-                  <h4 class="mb-3">Cadastro de Projeto</h4>
+                  <h4 class="mb-3">Informações de ligação</h4>
                   <form>
-                    <!-- END ID -->
                     <div class="row form-desing my-4">
                       <div class="col-md-4 mt-2 mt-md-0">
-                        <label for="cadastrarEndIdProjeto">END ID *</label>
-                        <input type="text" class="form-control cadastrarEndIdProjeto" id="cadastrarEndIdProjeto" placeholder="Informe o END ID" autofocus />
+                        <label>END ID *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Informe o END ID"
+                        />
                       </div>
                       <div class="col-md-2 mt-2 mt-md-0 d-flex align-items-end">
-                        <button 
-                          class="btn btn-primary w-100" 
-                          type="button"
-                          id="button-buscar-projeto">
+                        <button
+                          class="btn btn-primary w-100"
+                          id="button-buscar-projeto"
+                        >
                           <i class="fa-solid fa-magnifying-glass"></i> Buscar
                         </button>
                       </div>
                     </div>
-          
-                    <!-- Informações de Ligação -->
+
                     <div class="row form-desing my-4">
                       <div class="col-md-6 mt-2 mt-md-0">
-                        <label for="statusLigacaoProjeto">Status ligação *</label>
-                        <select class="form-select border-0 bg-light p-2" id="statusLigacaoProjeto">
-                          <option value="" selected disabled>Selecione uma opção</option>
+                        <label class="">Endereço ID *</label>
+                        <input type="text" class="form-control" />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label class="">Site ID *</label>
+                        <input type="text" class="form-control" />
+                      </div>
+                    </div>
+
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label class="">Leitura inicial *</label>
+                        <input type="text" class="form-control" />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label class="">Concessionária *</label>
+                        <input type="text" class="form-control" />
+                      </div>
+                    </div>
+
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label class="">Regional *</label>
+                        <input type="text" class="form-control" />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label class="">CEP *</label>
+                        <input type="text" class="form-control" />
+                      </div>
+                    </div>
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label class="">UF *</label>
+                        <input type="text" class="form-control" />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label class="">Cidade *</label>
+                        <input type="text" class="form-control" />
+                      </div>
+                    </div>
+
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label class="">Endereço *</label>
+                        <input type="text" class="form-control" />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label class="">Número *</label>
+                        <input type="text" class="form-control" />
+                      </div>
+                    </div>
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label class="">Bairro *</label>
+                        <input type="text" class="form-control" />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label class="">Complemento</label>
+                        <input type="text" class="form-control" />
+                      </div>
+                    </div>
+
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label class="">CNPJ *</label>
+                        <input type="text" class="form-control" />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label class="">CNPJ da UC solicitada *</label>
+                        <input type="text" class="form-control" />
+                      </div>
+                    </div>
+
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label class="">Tipo de tensão *</label>
+                        <input type="text" class="form-control" />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label class="">Unidade *</label>
+                        <input type="text" class="form-control" />
+                      </div>
+                    </div>
+
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label class="">Número de instalação *</label>
+                        <input type="text" class="form-control" />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label class="">Número de fases *</label>
+                        <input type="text" class="form-control" />
+                      </div>
+                    </div>
+
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label class="">Previsão de ligação *</label>
+                        <input type="date" class="form-control" />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label class="">Número Medidor *</label>
+                        <input type="text" class="form-control" />
+                      </div>
+                    </div>
+
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label class="">Status ligação *</label>
+                        <select class="form-select border-0 bg-light p-2">
+                          <option value="" selected disabled>
+                            Selecione uma opção
+                          </option>
                           <option value="pendente">Pendente</option>
                           <option value="nao-iniciado">Não Iniciado</option>
                           <option value="concluido">Concluído</option>
                         </select>
                       </div>
                       <div class="col-md-6 mt-2 mt-md-0">
-                        <label for="concessionariaProjeto">Concessionária *</label>
-                        <input type="text" class="form-control" id="concessionariaProjeto" placeholder="Informe a concessionária" />
+                        <label class="">Observações</label>
+                        <input type="text" class="form-control" />
                       </div>
                     </div>
-          
-                    <div class="row form-desing my-4">
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label for="previsaoLigacaoProjeto">Previsão de ligação *</label>
-                        <input type="date" class="form-control" id="previsaoLigacaoProjeto" />
-                      </div>
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label for="numeroMedidorProjeto">Número do Medidor *</label>
-                        <input type="text" class="form-control" id="numeroMedidorProjeto" placeholder="Informe o número do medidor" />
-                      </div>
-                    </div>
-          
-                    <div class="row form-desing my-4">
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label for="numeroInstalacaoProjeto">Número de Instalação *</label>
-                        <input type="text" class="form-control" id="numeroInstalacaoProjeto" placeholder="Informe o número de instalação" />
-                      </div>
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label for="numeroFasesProjeto">Número de Fases *</label>
-                        <input type="text" class="form-control" id="numeroFasesProjeto" placeholder="Informe o número de fases" />
-                      </div>
-                    </div>
-          
-                    <div class="row form-desing my-4">
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label for="leituraInicialProjeto">Leitura Inicial *</label>
-                        <input type="text" class="form-control" id="leituraInicialProjeto" placeholder="Informe a leitura inicial" />
-                      </div>
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label for="dataLigacaoProjeto">Data da Ligação *</label>
-                        <input type="date" class="form-control" id="dataLigacaoProjeto" />
-                    </div>
-          
-                    <!-- Botões -->
+
                     <div class="row form-desing my-4">
                       <div class="col">
-                        <button class="btn btn-primary text-white py-2 px-5" type="submit" onclick="realizarCadastroProjeto()">
-                          Cadastrar
+                        <button
+                          class="btn btn-primary text-white py-2 px-5"
+                          type="button"
+                        >
+                          Atualizar
                         </button>
-                        <button class="btn btn-secondary text-white py-2 px-5" type="reset">
+                        <button
+                          class="btn btn-secondary text-white py-2 px-5"
+                          type="reset"
+                        >
                           Resetar
                         </button>
                       </div>
@@ -1615,7 +1700,7 @@
               </div>
             </div>
           </div>
-          
+
           <!-- todos projetos-->
 
           <div class="tab-pane fade px-4" id="todos-projetos">
