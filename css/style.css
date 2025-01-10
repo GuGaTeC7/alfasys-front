@@ -792,6 +792,6 @@ table th {
 
 
 #logo-container img {
-  max-width: 40px; /* Tamanho máximo da logo */
+  max-width: 70px; /* Tamanho máximo da logo */
   height: auto; /* Mantém a proporção da imagem */
 }
