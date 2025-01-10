@@ -51,7 +51,7 @@ document.getElementById("button-buscar-projeto").addEventListener("click", funct
       </td>
       <td>
         <button class="btn btn-link p-0 text-decoration-none ver-mais" data-id="${item.endId}">
-          <i class="fa-solid fa-book"></i> <!-- Ícone de livro -->
+          <i class="fa-solid fa-book"></i> 
         </button>
       </td>
       <td>
@@ -404,13 +404,14 @@ document.getElementById("button-buscar-projeto").addEventListener("click", funct
   
  
 
-  // Delegação de evento para o botão "Ver mais" na tabela
+  // Delegação de evento para o botão "ver mais" (fa-book)
 document.querySelector("#tabelaHistoricoProjetos").addEventListener("click", (event) => {
   const loadingOverlay = document.getElementById("loading-overlay");
-  
+
   // Verifica se o elemento clicado possui a classe `ver-mais`
-  if (event.target.closest(".ver-mais")) { // Certifique-se de que o clique no ícone também seja capturado
-    const endId = event.target.closest(".ver-mais").getAttribute("data-id");
+  if (event.target.closest(".ver-mais")) {
+    const button = event.target.closest(".ver-mais");
+    const endId = button.getAttribute("data-id");
 
     if (!loadingOverlay) {
       console.error("Elemento de loadingOverlay não encontrado!");
@@ -419,7 +420,7 @@ document.querySelector("#tabelaHistoricoProjetos").addEventListener("click", (ev
 
     loadingOverlay.style.display = "block";
 
-    // Exibição do popup com detalhes (similar ao botão end-id)
+    // Criação do elemento de alerta
     const alertDiv = document.createElement("div");
     alertDiv.className = "alert-container";
     alertDiv.style.position = "fixed";
@@ -441,13 +442,14 @@ document.querySelector("#tabelaHistoricoProjetos").addEventListener("click", (ev
     alertDiv.style.alignItems = "center";
     alertDiv.style.flexDirection = "column";
 
+    // Verificação do token de autenticação
     if (!token) {
       console.error("Token de autenticação não encontrado!");
       loadingOverlay.style.display = "none";
       return;
     }
 
-    fetch(`${host}/projetos/${endId}`, {
+    fetch(`${host}/cadastroEndIds/${endId}`, {
       method: "GET",
       headers: { Authorization: `Bearer ${token}` },
     })
@@ -457,15 +459,23 @@ document.querySelector("#tabelaHistoricoProjetos").addEventListener("click", (ev
       })
       .then((dados) => {
         alertDiv.innerHTML = `
-          <h1 style="margin-bottom: 25px; font-size: 1.5em;">
-            Detalhes do Projeto: <b>${endId}</b>
+          <h1 style="display: block; text-align: center; margin-bottom: 25px; font-size: 1.5em; width: 100%;">
+            Informações de ligação: <b>${endId}</b>
           </h1>
-          <ul style="list-style: none; padding: 0; font-size: 1em;">
-            <li><strong>Nome do Projeto:</strong> ${dados.nomeProjeto}</li>
-            <li><strong>Descrição:</strong> ${dados.descricao}</li>
-            <li><strong>Status:</strong> ${dados.status}</li>
-            <li><strong>Data de Criação:</strong> ${formatarDataParaInput(dados.dataCriacao)}</li>
-          </ul>
+          <div style="display: flex; flex-wrap: wrap; gap: 70px;">
+              <ul style="flex: 1; padding-left: 20px; font-size: 1em; list-style: none;">
+                  <li><strong>Status ligação: </strong></li>
+                  <li><strong>Concessionária: </strong></li>
+                  <li><strong>Previsão de ligação: <strong> </li>
+                  <li><strong>Número medidor: </strong> </li>
+              </ul>
+              <ul style="flex: 1; padding-right: 20px; font-size: 1em; list-style: none;">
+                  <li><strong>Número de instalação: </strong> </li>
+                  <li><strong>Número de fases: </strong> </li>
+                  <li><strong>Leitura inicial: </strong> </li>
+                  <li><strong>Data ligação: </strong> </li>
+              </ul>
+          </div>
         `;
 
         const closeButton = document.createElement("button");
@@ -477,12 +487,21 @@ document.querySelector("#tabelaHistoricoProjetos").addEventListener("click", (ev
         closeButton.style.color = "#012970";
         closeButton.style.cursor = "pointer";
         closeButton.style.borderRadius = "10px";
+        closeButton.style.display = "block";
+        closeButton.style.marginLeft = "auto";
+        closeButton.style.marginRight = "auto";
+
         closeButton.addEventListener("click", () => {
           alertDiv.remove();
         });
 
         alertDiv.appendChild(closeButton);
         document.body.appendChild(alertDiv);
+
+        window.scrollTo(
+          0,
+          alertDiv.getBoundingClientRect().top + window.scrollY - 100
+        );
       })
       .catch((error) => {
         console.error("Erro ao buscar dados:", error);
@@ -493,6 +512,7 @@ document.querySelector("#tabelaHistoricoProjetos").addEventListener("click", (ev
       });
   }
 });
+
 
 
 function filtrarTabelaProjeto(page = 0, secao, idTabela) {
@@ -583,8 +603,9 @@ function criarLinhaProjeto(item, i) {
       </td>
       <td>
         <button class="btn btn-link p-0 text-decoration-none ver-mais" data-id="${item.endId}">
-          Ver mais
+          <i class="fa-solid fa-book"></i> 
         </button>
+      </td>
       </td>
       <td>
         <select disabled class="form-select border-0 bg-light p-2">
