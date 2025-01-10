@@ -727,3 +727,103 @@ function criarLinhaProjeto(item, i) {
       </td>
     </tr>`;
 }
+
+function realizarCadastroProjeto() {
+  // Coleta os valores dos campos
+  const endId = document.getElementById("cadastrarEndIdProjeto").value;
+  const statusLigacao = document.getElementById("statusLigacaoProjeto").value;
+  const concessionaria = document.getElementById("concessionariaProjeto").value;
+  const previsaoLigacao = document.getElementById("previsaoLigacaoProjeto").value;
+  const numeroMedidor = document.getElementById("numeroMedidorProjeto").value;
+  const numeroInstalacao = document.getElementById("numeroInstalacaoProjeto").value;
+  const numeroDeFases = document.getElementById("numeroFasesProjeto").value;
+  const leituraInicial = document.getElementById("leituraInicialProjeto").value;
+  const dataLigacao = document.getElementById("dataLigacaoProjeto").value || null;
+
+  // Validação dos campos obrigatórios
+  if (
+    !endId ||
+    !statusLigacao ||
+    !concessionaria ||
+    !previsaoLigacao ||
+    !numeroMedidor ||
+    !numeroInstalacao ||
+    !numeroDeFases ||
+    !leituraInicial
+  ) {
+    alert("Por favor, preencha todos os campos obrigatórios.");
+    return;
+  }
+
+  // Referência ao botão
+  const botaoSalvar = document.querySelector(
+    'button[onclick="realizarCadastroProjeto()"]'
+  );
+  botaoSalvar.disabled = true; // Desabilita o botão
+  botaoSalvar.textContent = "Cadastrando..."; // Altera o texto do botão
+
+  // Estrutura do payload
+  const payload = {
+    informacoesLigacao: {
+      statusLigacao: statusLigacao,
+      concessionaria: concessionaria,
+      previsaoLigacao: previsaoLigacao,
+      numeroMedidor: numeroMedidor,
+      numeroInstalacao: numeroInstalacao,
+      numeroDeFases: numeroDeFases,
+      leituraInicial: leituraInicial,
+      dataLigacao: dataLigacao,
+    },
+  };
+
+  // Envia a requisição para o servidor
+  fetch(`${host}/projetos/${endId}`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`, // Verifique se o token está correto
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  })
+    .then((response) => {
+      // Verifica se a resposta foi bem-sucedida
+      if (!response.ok) {
+        // Se o código de status não for 2xx, lança um erro
+        throw new Error(`Erro HTTP: ${response.status} - ${response.statusText}`);
+      }
+      // Tenta obter o JSON da resposta
+      return response.text(); // Use `text()` primeiro para depuração
+    })
+    .then((data) => {
+      try {
+        // Tenta converter o texto para JSON
+        const jsonResponse = JSON.parse(data);
+        console.log("Cadastro do projeto realizado com sucesso:", jsonResponse);
+        alert("Cadastro realizado com sucesso!");
+        resetarCampos("editar-projeto"); // Reseta os campos após o sucesso
+      } catch (error) {
+        // Se a resposta não for JSON válido, exibe o conteúdo
+        console.error("Erro ao analisar JSON:", error);
+        console.log("Resposta do servidor:", data);
+        alert("Erro ao processar a resposta do servidor. Verifique o formato da resposta.");
+      }
+    })
+    .catch((error) => {
+      console.error("Erro ao realizar cadastro do projeto:", error);
+      alert("Erro ao cadastrar o projeto. Tente novamente.");
+    })
+    .finally(() => {
+      botaoSalvar.disabled = false; // Reabilita o botão
+      botaoSalvar.textContent = "Salvar"; // Restaura o texto original do botão
+    });
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  // Atribui o evento de clique ao botão de buscar
+  document
+    .getElementById("button-buscar-projeto")
+    .addEventListener("click", function () {
+      realizarCadastroProjeto();
+    });
+});
+
