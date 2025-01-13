@@ -160,7 +160,6 @@ function iniciaVistoria(endId) {
       botaoIniciar.style.display = "none";
       const paginacao = document.getElementById("pagination-controls-vistoria");
       const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
-
       preencherTabelaVistoria(paginaAtual - 1);
     })
     .catch((error) => {
@@ -188,19 +187,19 @@ function finalizaVistoria(endId) {
     return; // Interrompe a execução se o parecer não for selecionado
   }
 
-  // Monta o payload
-  const payload = {
+  // Monta o payload para finalizar a vistoria
+  const payloadVistoria = {
     status: "Concluído"
   };
 
-  // Realiza a requisição
+  // Realiza a requisição para finalizar a vistoria
   fetch(`${host}/vistorias/${endId}`, {
     method: "PATCH",
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(payload),
+    body: JSON.stringify(payloadVistoria),
   })
     .then((response) => {
       console.log("Resposta da requisição recebida:", response);
@@ -212,14 +211,36 @@ function finalizaVistoria(endId) {
     .then((data) => {
       console.log("Dados retornados pelo servidor:", data);
 
-      // Atualiza a tabela na página atual
+      // Após finalizar a vistoria, envia o endId para o kit-tssr com status "Não iniciado"
+      const payloadKitTssr = {
+        endId: endId,
+        status: "Não iniciado"
+      };
+
+      // Envia para o kit-tssr
+      return fetch(`${host}/tssrs/${endId}`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payloadKitTssr),
+      });
+    })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Erro ao enviar para Kit-TSSR: ${response.statusText}`);
+      }
+      alert("Vistoria finalizada e enviada para Kit-TSSR com sucesso!");
+
+      // Atualiza a tabela na página atual (caso necessário)
       const paginacao = document.getElementById("pagination-controls-vistoria");
       const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
       preencherTabelaVistoria(paginaAtual - 1);
     })
     .catch((error) => {
       console.error("Erro durante a atualização dos dados:", error);
-      alert("Erro ao finalizar a vistoria.");
+      alert("Erro ao finalizar a vistoria e enviar para Kit-TSSR.");
     });
 }
 

@@ -730,30 +730,54 @@ function enviarData(endId, dateInput, action, etapa) {
       
       // Atualiza a tabela correspondente à etapa
       if (etapa === "obra") {
+        const paginacao = document.getElementById("pagination-controls-obra");
+        const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
         preencherTabelaObra(paginaAtual - 1); // Atualiza a tabela de obras
+
       } else if 
         (etapa === "vistoria") {
         const paginacao = document.getElementById("pagination-controls-vistoria");
         const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
         preencherTabelaVistoria(paginaAtual - 1); // Atualiza a tabela de vistorias
+
       } else if (etapa === "kit-tssr") {
+        const paginacao = document.getElementById("pagination-controls-Tssr");
+        const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
         preencherTabelaKitTssr(paginaAtual - 1); // Atualiza a tabela de Kit TSSR
+
       } else if (etapa === "cadastro-feito") {
+        const paginacao = document.getElementById("pagination-controls");
+        const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
         preencherTabela(paginaAtual - 1); // Atualiza a tabela geral
+
       } else if (etapa === "sci-exclusão") {
+        const paginacao = document.getElementById("pagination-controls-exclusão");
+        const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
         preencherTabelaSciExclusao(paginaAtual - 1); // Atualiza a tabela de SCI Exclusão
+
       } else if (etapa === "sci-inclusao") {
+        const paginacao = document.getElementById("pagination-controls-inclusao");
+        const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
         preencherTabelaSciInclusao(paginaAtual - 1); // Atualiza a tabela de SCI Inclusão
+
       } else if (etapa === "projetos") {
+        const paginacao = document.getElementById("pagination-controls-projeto");
+        const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
         preencherTabelaProjetos(paginaAtual - 1); // Atualiza a tabela de projetos
+
       } else if (etapa === "agendamento") {
-        const paginacao = document.getElementById("pagination-controls-agendamento"
-        );
+        const paginacao = document.getElementById("pagination-controls-agendamento");
         const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
         preencherTabelaAcesso(paginaAtual - 1); // Atualiza a tabela de acesso
+
       } else if (etapa === "agendamento-obra") {
+        const paginacao = document.getElementById("pagination-controls-agendamento-obra");
+        const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
         preencherTabelaAcessoObra(paginaAtual - 1); // Atualiza a tabela de acesso 
+
       } else if (etapa === "todos-projetos") {
+        const paginacao = document.getElementById("pagination-controls-projeto");
+        const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
         preencherTabelaProjetos(paginaAtual - 1); // Atualiza a tabela de acesso 
       } else {
         console.warn(`Nenhuma ação definida para a etapa: ${etapa}`);
@@ -997,9 +1021,14 @@ function enviarParecer(endId, parecerSelecionado, etapa) {
 
       // Atualiza a tabela correspondente à etapa
       if (etapa === "vistoria") {
-        preencherTabelaVistoria();
+        const paginacao = document.getElementById("pagination-controls-vistoria");
+        const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
+        preencherTabelaVistoria(paginaAtual - 1); // Atualiza a tabela de vistorias
+      
       } else if (etapa === "kit-tssr") {
-        preencherTabelaKitTssr();
+        const paginacao = document.getElementById("pagination-controls-Tssr");
+        const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
+        preencherTabelaKitTssr(paginaAtual - 1); // Atualiza a tabela de Kit TSSR
       } else {
         console.warn(`Nenhuma ação definida para a etapa: ${etapa}`);
       }
@@ -1083,6 +1112,8 @@ function enviarWorkflow(endId, cadastroWorkflowSelecionado, etapa) {
 
       // Atualiza a tabela correspondente à etapa
       if (etapa === "sci-exclusão") {
+        const paginacao = document.getElementById("pagination-controls-exclusão");
+        const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
         preencherTabelaSciExclusao();
       } else {
         console.warn(`Nenhuma ação definida para a etapa: ${etapa}`);
@@ -1166,8 +1197,13 @@ function enviarCodigoSCI(endId, codigo, etapa) {
 
       // Atualiza elementos específicos do etapa
       if (etapa === "sci-exclusao") {
-        preencherTabelaSciExclusao();
+        const paginacao = document.getElementById("pagination-controls-exclusão");
+        const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
+        preencherTabelaSciExclusao(paginaAtual - 1); // Atualiza a tabela de SCI Exclusão
+      
       } else if (etapa === "sci-inclusao") {
+        const paginacao = document.getElementById("pagination-controls-inclusao");
+        const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
         preencherTabelaSciInclusao();
       } else {
         console.warn(`Nenhuma ação definida para o etapa: ${etapa}`);

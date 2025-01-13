@@ -602,12 +602,7 @@ function criarLinhaKitTssr(item, i) {
 }
 
 
-
-
-  
-document
-.querySelector("#tabelaHistoricoKitTssr")
-.addEventListener("change", (event) => {
+document.querySelector("#tabelaHistoricoKitTssr").addEventListener("change", (event) => {
   const target = event.target;
 
   if (target.tagName === "SELECT" && target.id.startsWith("select-parecer-")) {
@@ -625,4 +620,17 @@ document
       () => enviarParecer(endId, parecerSelecionado, "kit-tssr")
     );
   }
+});
+
+
+// Adiciona o End ID diretamente na tabela ou processa de outra forma
+function processarEndIdParaKitTssr(endId) {
+  console.log(`End ID recebido para Kit-Tssr: ${endId}`);
+  // Lógica adicional para tratar ou exibir o End ID
+}
+
+// Atualize a lógica da página conforme necessário
+document.addEventListener("DOMContentLoaded", () => {
+  // Essa lógica é executada quando a página é carregada
+  console.log("Página de Kit-Tssr carregada. Aguardando novos End IDs.");
 });
