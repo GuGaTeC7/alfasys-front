@@ -189,6 +189,27 @@ document.getElementById("button-buscar-projeto").addEventListener("click", funct
     })
     .then((data) => {
       console.log("Dados retornados pelo servidor:", data);
+
+       // Após finalizar o Kit-TSSR, envia o endId para o Sci-Inclusão com status "Não iniciado"
+    const payloaAcessoObra = {
+      status: null,
+      statusAgendamento: "Não iniciado"
+    };
+    // Envia para o Sci-Inclusão
+    return fetch(`${host}/obras/${endId}`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payloaAcessoObra),
+    });
+  })
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error(`Erro ao enviar para Sci-Inclusão: ${response.statusText}`);
+    }
+    alert("Kit-TSSR finalizada e enviada para Sci-Inclusão com sucesso!");
   
       // Atualiza a tabela na página atual
       const paginacao = document.getElementById("pagination-controls-projeto");
@@ -656,5 +677,5 @@ function processarEndIdParaProjetos(endId) {
 // Atualize a lógica da página conforme necessário
 document.addEventListener("DOMContentLoaded", () => {
   // Essa lógica é executada quando a página é carregada
-  console.log("Página de Sci-Inclusão carregada. Aguardando novos End IDs.");
+  console.log("Página de Projetos carregada. Aguardando novos End IDs.");
 });

@@ -332,7 +332,7 @@ function finalizaAgendamentoObra(endId) {
   };
 
   // Realiza a requisição
-  fetch(`${host}/obras/agendamento/${endId}`, {
+  fetch(`${host}/obras/${endId}`, {
     method: "PATCH",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -349,6 +349,27 @@ function finalizaAgendamentoObra(endId) {
     })
     .then((data) => {
       console.log("Dados retornados pelo servidor:", data);
+
+      // Após finalizar o Kit-TSSR, envia o endId para o Sci-Inclusão com status "Não iniciado"
+    const payloadObra = {
+      status: "Não iniciado",
+      statusAgendamento: "Concluído"
+    };
+    // Envia para o Sci-Inclusão
+    return fetch(`${host}/obras/${endId}`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payloadObra),
+    });
+  })
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error(`Erro ao enviar para Sci-Inclusão: ${response.statusText}`);
+    }
+    alert("Kit-TSSR finalizada e enviada para Sci-Inclusão com sucesso!");
       
       // Atualiza a tabela na página atual
       const paginacao = document.getElementById(

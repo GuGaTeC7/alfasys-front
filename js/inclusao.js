@@ -207,7 +207,6 @@ loadingOverlay.style.display = "none";
             // Envia o endId para a página de projetos com o status "Não Iniciado"
             const payloadProjetos = {
                 status: "Não Iniciado",
-                operadora: {"id": 2},
                 informacoesLigacao: {
                 statusLigacao: null,
                 concessionaria: null,

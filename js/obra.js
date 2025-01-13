@@ -18,83 +18,88 @@ function preencherTabelaObra(page = 0) {
       totalPesquisado.innerHTML = ""; // Limpa a tabela
       
       dados.content.forEach((item) => {
-          const dataInicio = item.dataInicio
-            ? formatarDataParaInput(item.dataInicio)
-            : "";
+        if (item.status === null) {
+          return; // Ignora itens com status "null"
+        }
+      
+        const dataInicio = item.dataInicio
+          ? formatarDataParaInput(item.dataInicio)
+          : "";
+      
+        const dataFinalizacao = item.dataFinalizacao
+          ? formatarDataParaInput(item.dataFinalizacao)
+          : "";
+      
+        // Monta a linha da tabela
+        const row = `
+            <tr>
+              <td>
+                <button class="btn btn-link p-0 text-decoration-none end-id" id="textoParaCopiar" data-id="${
+                  item.endId
+                }">
+                  ${item.endId}
+                </button>
+                <i class="fa-regular fa-copy btnCopiar" title="Copiar" data-id="${
+                  item.endId
+                }"></i>
+              </td>
+              <td>
+                <select disabled class="form-select border-0 bg-light p-2">
+                  <option value="status">${item.status}</option>
+                </select>
+                <button class="btn iniciar-btn p-0 border-0 bg-transparent ml-2" 
+                  style="display:${
+                    ["Em andamento", "Concluído"].includes(item.status) ? "none" : ""
+                  };" 
+                  data-id-botao="${item.endId}">
+                  <i class="fa-solid fa-circle-play"></i>
+                </button>
+              </td>
+              <td>
+                ${
+                  dataInicio
+                  ? `<input 
+                      type="date" 
+                      class="form-control text-center" 
+                      value="${dataInicio}" 
+                      disabled
+                      id="inicio-previsto-${item.endId}"
+                    />`
+                  : renderInputDateObra("inicio-previsto", item.endId, item.status)
+                }
+              </td>
+              <td>
+                ${
+                  dataFinalizacao
+                  ? `<input 
+                      type="date" 
+                      class="form-control text-center" 
+                      value="${dataFinalizacao}" 
+                      disabled
+                      id="data-final-${item.endId}"
+                    />`
+                  : renderInputDateObra("data-final", item.endId, item.status)
+                }
+              </td>
+              <td>
+                <button class="btn btn-primary finalizar-btn" data-id-botao="${
+                  item.endId
+                }" 
+                ${item.status !== "Em andamento" ? "disabled" : ""}>
+                Finalizar
+              </button>
+               <i 
+                class="fa-solid fa-rotate-left btnResetar" 
+                title="Resetar End ID" 
+                data-id="${item.endId}" 
+                style="cursor: pointer; margin-left: 8px;">
+              </i>
+              </td>
+            </tr>`;
         
-          const dataFinalizacao = item.dataFinalizacao
-            ? formatarDataParaInput(item.dataFinalizacao)
-            : "";
-        
-          // Monta a linha da tabela
-          const row = `
-              <tr>
-                <td>
-                  <button class="btn btn-link p-0 text-decoration-none end-id" id="textoParaCopiar" data-id="${
-                    item.endId
-                  }">
-                    ${item.endId}
-                  </button>
-                  <i class="fa-regular fa-copy btnCopiar" title="Copiar" data-id="${
-                    item.endId
-                  }"></i>
-                </td>
-                <td>
-                  <select disabled class="form-select border-0 bg-light p-2">
-                    <option value="status">${item.status}</option>
-                  </select>
-                  <button class="btn iniciar-btn p-0 border-0 bg-transparent ml-2" 
-                    style="display:${
-                      ["Em andamento", "Concluído"].includes(item.status) ? "none" : ""
-                    };" 
-                    data-id-botao="${item.endId}">
-                    <i class="fa-solid fa-circle-play"></i>
-                  </button>
-                </td>
-                <td>
-                  ${
-                      dataInicio
-                      ? `<input 
-                          type="date" 
-                          class="form-control text-center" 
-                          value="${dataInicio}" 
-                          disabled
-                          id="inicio-previsto-${item.endId}"
-                        />`
-                      : renderInputDateObra("inicio-previsto", item.endId, item.status)
-                  }
-                </td>
-                <td>
-                  ${
-                      dataFinalizacao
-                      ? `<input 
-                          type="date" 
-                          class="form-control text-center" 
-                          value="${dataFinalizacao}" 
-                          disabled
-                          id="data-final-${item.endId}"
-                        />`
-                      : renderInputDateObra("data-final", item.endId, item.status)
-                  }
-                </td>
-                <td>
-                   <button class="btn btn-primary finalizar-btn" data-id-botao="${
-              item.endId
-            }" 
-            ${item.status !== "Em andamento" ? "disabled" : ""}>
-            Finalizar
-          </button>
-           <i 
-            class="fa-solid fa-rotate-left btnResetar" 
-            title="Resetar End ID" 
-            data-id="${item.endId}" 
-            style="cursor: pointer; margin-left: 8px;">
-          </i>
-                </td>
-              </tr>`;
-          
-          tbody.insertAdjacentHTML("beforeend", row);
-        });
+        tbody.insertAdjacentHTML("beforeend", row);
+      });
+      
    
         
 // Adicionar eventListener para cada botão "Copiar Texto"
@@ -529,6 +534,9 @@ function renderizarTabelaObra(dados, idTabela, tbody) {
   }
 
   dados.content.forEach((item, i) => {
+    if (item.status === null) {
+      return; // Ignora itens com status "null"
+    }
     const row =
       idTabela === "tabelaHistoricoObra"
         ? criarLinhaHistoricoObra(item, i)
