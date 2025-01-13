@@ -703,5 +703,5 @@ function processarEndIdParaVistoria(endId) {
 // Atualize a lógica da página conforme necessário
 document.addEventListener("DOMContentLoaded", () => {
   // Essa lógica é executada quando a página é carregada
-  console.log("Página de Vistoria carregada. Aguardando novos End IDs.");
+  console.log("Página de Vistoria carregada. Aguardando novos End IDs");
 });
