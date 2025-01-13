@@ -307,7 +307,6 @@ function iniciaAgendamento(endId) {
 }
 
 
-// Função para finalizar um agendamento e enviar o endId para a página de vistoria
 function finalizaAgendamento(endId) {
   // Obtém os valores das datas
   const dataSolicitacao = document.getElementById(
@@ -347,8 +346,12 @@ function finalizaAgendamento(endId) {
       return response.json();
     })
     .then(() => {
-      // Após finalizar o agendamento, envia o endId diretamente para a página "Vistoria"
-      const vistoriaPayload = { endId };
+      // Após finalizar o agendamento, envia o endId para a página "Vistoria"
+      const vistoriaPayload = {
+        endId: endId, // Inclui o ID
+        status: "Não iniciado", // Define o status explicitamente
+      };
+
       return fetch(`${host}/vistorias/${endId}`, {
         method: "POST",
         headers: {
@@ -376,6 +379,7 @@ function finalizaAgendamento(endId) {
       alert("Erro ao finalizar e enviar o End ID para vistoria.");
     });
 }
+
 
 
 
