@@ -173,11 +173,6 @@ function finalizaObra(endId) {
   const dataInicio = document.getElementById(`inicio-previsto-${endId}`)?.value;
   const dataFinalizacao = document.getElementById(`data-final-${endId}`)?.value;
 
-  // Debugging logs
-  console.log("Verificando campos de data:");
-  console.log("Data início:", dataInicio);
-  console.log("Data finalização:", dataFinalizacao);
-
   if (!dataInicio || !dataFinalizacao) {
     alert("A data de envio e data de aprovação devem estar preenchidas.");
     return;
@@ -217,6 +212,29 @@ function finalizaObra(endId) {
     })
     .then((data) => {
       console.log("Dados retornados pelo servidor:", data);
+
+      // Após finalizar Obra, envia o endId para o Sci-Exclusão com status "Não iniciado"
+    const payloadExclusao = {
+      endId: endId,
+      status: "Não iniciado"
+    };
+    // Envia para o Sci-Inclusão
+    return fetch(`${host}/sciExclusao/${endId}`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payloadExclusao),
+    });
+  })
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error(`Erro ao enviar para Sci-Exclusão: ${response.statusText}`);
+    }
+    alert("Obra finalizada e enviada para Sci-Exclusão com sucesso!");
+    
+    // Atualiza a tabela na página atual (caso necessário)
       const paginacao = document.getElementById("pagination-controls-obra");
       const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
       preencherTabelaObra(paginaAtual - 1);
