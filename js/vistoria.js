@@ -190,8 +190,7 @@ function finalizaVistoria(endId) {
 
   // Monta o payload
   const payload = {
-    status: "Concluído",
-    resultado: parecer, // Usa o valor do parecer selecionado
+    status: "Concluído"
   };
 
   // Realiza a requisição

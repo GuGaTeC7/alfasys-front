@@ -726,28 +726,35 @@ function enviarData(endId, dateInput, action, etapa) {
     
       alert("Data enviada com sucesso!");
       console.log("Resposta do servidor:", dados);
-    
+      
+      
       // Atualiza a tabela correspondente à etapa
       if (etapa === "obra") {
-        preencherTabelaObra(); // Atualiza a tabela de obras
-      } else if (etapa === "vistoria") {
-        preencherTabelaVistoria(); // Atualiza a tabela de vistorias
+        preencherTabelaObra(paginaAtual - 1); // Atualiza a tabela de obras
+      } else if 
+        (etapa === "vistoria") {
+        const paginacao = document.getElementById("pagination-controls-vistoria");
+        const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
+        preencherTabelaVistoria(paginaAtual - 1); // Atualiza a tabela de vistorias
       } else if (etapa === "kit-tssr") {
-        preencherTabelaKitTssr(); // Atualiza a tabela de Kit TSSR
+        preencherTabelaKitTssr(paginaAtual - 1); // Atualiza a tabela de Kit TSSR
       } else if (etapa === "cadastro-feito") {
-        preencherTabela(); // Atualiza a tabela geral
+        preencherTabela(paginaAtual - 1); // Atualiza a tabela geral
       } else if (etapa === "sci-exclusão") {
-        preencherTabelaSciExclusao(); // Atualiza a tabela de SCI Exclusão
+        preencherTabelaSciExclusao(paginaAtual - 1); // Atualiza a tabela de SCI Exclusão
       } else if (etapa === "sci-inclusao") {
-        preencherTabelaSciInclusao(); // Atualiza a tabela de SCI Inclusão
+        preencherTabelaSciInclusao(paginaAtual - 1); // Atualiza a tabela de SCI Inclusão
       } else if (etapa === "projetos") {
-        preencherTabelaProjetos(); // Atualiza a tabela de projetos
+        preencherTabelaProjetos(paginaAtual - 1); // Atualiza a tabela de projetos
       } else if (etapa === "agendamento") {
-        preencherTabelaAcesso(); // Atualiza a tabela de acesso
+        const paginacao = document.getElementById("pagination-controls-agendamento"
+        );
+        const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
+        preencherTabelaAcesso(paginaAtual - 1); // Atualiza a tabela de acesso
       } else if (etapa === "agendamento-obra") {
-        preencherTabelaAcessoObra(); // Atualiza a tabela de acesso 
+        preencherTabelaAcessoObra(paginaAtual - 1); // Atualiza a tabela de acesso 
       } else if (etapa === "todos-projetos") {
-        preencherTabelaProjetos(); // Atualiza a tabela de acesso 
+        preencherTabelaProjetos(paginaAtual - 1); // Atualiza a tabela de acesso 
       } else {
         console.warn(`Nenhuma ação definida para a etapa: ${etapa}`);
       }

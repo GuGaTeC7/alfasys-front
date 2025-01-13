@@ -380,9 +380,6 @@ function finalizaAgendamento(endId) {
     });
 }
 
-
-
-
 // Função para atualizar um end ID
 function atualizarNovoAcesso(secao) {
   const secaoId = document.querySelector(`#${secao}`);
