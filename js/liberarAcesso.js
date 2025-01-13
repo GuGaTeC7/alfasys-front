@@ -307,7 +307,7 @@ function iniciaAgendamento(endId) {
 }
 
 
-// Função para finalizar um agendamento
+// Função para finalizar um agendamento e enviar o endId para a página de vistoria
 function finalizaAgendamento(endId) {
   // Obtém os valores das datas
   const dataSolicitacao = document.getElementById(
@@ -326,12 +326,12 @@ function finalizaAgendamento(endId) {
     return; // Interrompe a execução se as datas não forem válidas
   }
 
-  // Monta o payload
+  // Monta o payload para finalizar o agendamento
   const payload = {
     statusAgendamento: "Concluído",
   };
 
-  // Realiza a requisição
+  // Realiza a requisição para finalizar o agendamento
   fetch(`${host}/cadastroEndIds/agendamento-parcial/${endId}`, {
     method: "PATCH",
     headers: {
@@ -341,14 +341,28 @@ function finalizaAgendamento(endId) {
     body: JSON.stringify(payload),
   })
     .then((response) => {
-      console.log("Resposta da requisição recebida:", response);
       if (!response.ok) {
         throw new Error(`Erro ao atualizar os dados: ${response.statusText}`);
       }
       return response.json();
     })
-    .then((data) => {
-      console.log("Dados retornados pelo servidor:", data);
+    .then(() => {
+      // Após finalizar o agendamento, envia o endId diretamente para a página "Vistoria"
+      const vistoriaPayload = { endId };
+      return fetch(`${host}/vistorias/${endId}`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(vistoriaPayload),
+      });
+    })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Erro ao enviar o End ID para vistoria: ${response.statusText}`);
+      }
+      alert("Agendamento finalizado e enviado para vistoria com sucesso!");
 
       // Atualiza a tabela na página atual
       const paginacao = document.getElementById(
@@ -358,10 +372,11 @@ function finalizaAgendamento(endId) {
       preencherTabelaAcesso(paginaAtual - 1);
     })
     .catch((error) => {
-      console.error("Erro durante a atualização dos dados:", error);
-      alert("Erro ao iniciar.");
+      console.error("Erro durante a finalização e envio para vistoria:", error);
+      alert("Erro ao finalizar e enviar o End ID para vistoria.");
     });
 }
+
 
 
 // Função para atualizar um end ID

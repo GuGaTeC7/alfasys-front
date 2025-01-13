@@ -674,4 +674,14 @@ document
   });
   
 
-  
+// Adiciona o End ID diretamente na tabela ou processa de outra forma
+function processarEndIdParaVistoria(endId) {
+  console.log(`End ID recebido para vistoria: ${endId}`);
+  // Lógica adicional para tratar ou exibir o End ID
+}
+
+// Atualize a lógica da página conforme necessário
+document.addEventListener("DOMContentLoaded", () => {
+  // Essa lógica é executada quando a página é carregada
+  console.log("Página de vistoria carregada. Aguardando novos End IDs.");
+});
