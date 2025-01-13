@@ -65,10 +65,10 @@ document.getElementById("button-buscar-projeto").addEventListener("click", funct
         </button>
       </td>
       <td>
-        ${dataEntrada ? `<input type="date" class="form-control text-center" value="${dataEntrada}" disabled id="data-entrada-${item.endId}" />` : renderInputDate("data-entrada", item.endId, item.status)}
+        ${dataEntrada ? `<input type="date" class="form-control text-center" value="${dataEntrada}" disabled id="data-entrada-${item.endId}" />` : renderInputDateProjetos("data-entrada", item.endId, item.status)}
       </td>
       <td>
-        ${dataAprovacao ? `<input type="date" class="form-control text-center" value="${dataAprovacao}" disabled id="data-aprovacao-projeto-${item.endId}" />` : renderInputDate("data-aprovacao-projeto", item.endId, item.status)}
+        ${dataAprovacao ? `<input type="date" class="form-control text-center" value="${dataAprovacao}" disabled id="data-aprovacao-projeto-${item.endId}" />` : renderInputDateProjetos("data-aprovacao-projeto", item.endId, item.status)}
       </td>
       <td>
         <button class="btn btn-primary finalizar-btn" data-id-botao="${item.endId}" ${item.status === "Não iniciado" || item.status === "Concluído" ? "disabled" : ""}>
@@ -376,8 +376,8 @@ document.getElementById("button-buscar-projeto").addEventListener("click", funct
   
   
   // Função para renderizar o input de data com ícone de envio
-  function renderInputDate(action, endId, status) {
-    if (status === "Não iniciado") {
+  function renderInputDateProjetos(action, endId, status) {
+    if (status === "Em andamento" ? "" : "disabled") {
       return `
         <div class="input-icon-group">
           <input 
@@ -622,7 +622,7 @@ function criarLinhaProjeto(item, i) {
                 disabled
                 id="data-entrada-${item.endId}"
               />`
-            : renderInputDate("data-entrada", item.endId, item.status)
+            : renderInputDateProjetos("data-entrada", item.endId, item.status)
         }
       </td>
       <td>
@@ -635,7 +635,7 @@ function criarLinhaProjeto(item, i) {
                 disabled
                 id="data-aprovacao-projeto-${item.endId}"
               />`
-            : renderInputDate("data-aprovacao-projeto", item.endId, item.status)
+            : renderInputDateProjetos("data-aprovacao-projeto", item.endId, item.status)
         }
       </td>
       <td>
