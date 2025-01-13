@@ -233,14 +233,35 @@ fetch(`${host}/tssrs/${endId}`, {
   .then((data) => {
     console.log("Dados retornados pelo servidor:", data);
 
-    // Atualiza a tabela na página atual
+  // Após finalizar o Kit-TSSR, envia o endId para o Sci-Inclusão com status "Não iniciado"
+    const payloadInclusao = {
+      endId: endId,
+      status: "Não iniciado"
+    };
+    // Envia para o Sci-Inclusão
+    return fetch(`${host}/sciInclusao/${endId}`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payloadInclusao),
+    });
+  })
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error(`Erro ao enviar para Sci-Inclusão: ${response.statusText}`);
+    }
+    alert("Kit-TSSR finalizada e enviada para Sci-Inclusão com sucesso!");
+    // Atualiza a tabela na página atual (caso necessário)
     const paginacao = document.getElementById("pagination-controls-Tssr");
     const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
     preencherTabelaKitTssr(paginaAtual - 1);
   })
   .catch((error) => {
     console.error("Erro durante a atualização dos dados:", error);
-    alert("Erro ao finalizar o Kit Tssr.");
+    alert("Erro ao finalizar Kit-TSSR..");
+    alert("Erro ao finalizar Kit-TSSR e enviar para Sci-Inclusão.");
   });
 }
 

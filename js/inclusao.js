@@ -611,3 +611,16 @@ function criarLinhaHistoricoInclusao(item, i) {
     </tr>
   `;
 }
+
+
+// Adiciona o End ID diretamente na tabela ou processa de outra forma
+function processarEndIdParaInclusao(endId) {
+  console.log(`End ID recebido para Sci-Inclusão: ${endId}`);
+  // Lógica adicional para tratar ou exibir o End ID
+}
+
+// Atualize a lógica da página conforme necessário
+document.addEventListener("DOMContentLoaded", () => {
+  // Essa lógica é executada quando a página é carregada
+  console.log("Página de Sci-Inclusão carregada. Aguardando novos End IDs.");
+});
