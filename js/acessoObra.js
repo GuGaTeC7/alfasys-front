@@ -349,7 +349,7 @@ function finalizaAgendamentoObra(endId) {
     })
     .then((data) => {
       console.log("Dados retornados pelo servidor:", data);
-
+      
       // Atualiza a tabela na página atual
       const paginacao = document.getElementById(
         "pagination-controls-agendamento-obra"

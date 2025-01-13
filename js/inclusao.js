@@ -175,55 +175,82 @@ loadingOverlay.style.display = "none";
   }
 
 
-// Função para finalizar Inclusão
   function finalizaSciInclusao(endId) {
-    // Obtém os valores das datas e do status
-    const codInclusao = document.getElementById(`codInclusao-${endId}`)?.value;
     const dataEnvio = document.getElementById(`data-envio-inclusao-${endId}`)?.value;
     const dataAprovacao = document.getElementById(`data-aprovacao-inclusao-${endId}`)?.value;
-  
-    // Verifica se todas as datas estão preenchidas
-    if (!dataEnvio || !dataAprovacao ) {
-      alert("A data de envio e data de aprovação devem estar preenchidas.");
-      return; // Interrompe a execução se a data não for válida
+
+    if (!dataEnvio || !dataAprovacao) {
+        alert("A data de envio e data de aprovação devem estar preenchidas.");
+        return;
     }
-  
-    
-  
-    // Monta o payload
-    const payload = {
-      status: "Concluído",
+
+    const payloadInclusao = {
+        status: "Concluído",
     };
-  
-    // Realiza a requisição
+
+    // Atualiza o status para "Concluído"
     fetch(`${host}/sciInclusao/${endId}`, {
-      method: "PATCH",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
+        method: "PATCH",
+        headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payloadInclusao),
     })
-      .then((response) => {
-        console.log("Resposta da requisição recebida:", response);
-        if (!response.ok) {
-          throw new Error(`Erro ao atualizar os dados: ${response.statusText}`);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("Dados retornados pelo servidor:", data);
-  
-        // Atualiza a tabela na página atual
-        const paginacao = document.getElementById("pagination-controls-inclusao");
-        const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
-        preencherTabelaSciInclusao(paginaAtual - 1);
-      })
-      .catch((error) => {
-        console.error("Erro durante a atualização dos dados:", error);
-        alert("Erro ao finalizar a Inclusão.");
-      });
-  }
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error(`Erro ao atualizar os dados: ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then(() => {
+            // Envia o endId para a página de projetos com o status "Não Iniciado"
+            const payloadProjetos = {
+                status: "Não Iniciado",
+                operadora: {"id": 2},
+                informacoesLigacao: {
+                statusLigacao: null,
+                concessionaria: null,
+                previsaoLigacao: null,
+                numeroMedidor: null,
+                numeroInstalacao: null,
+                numeroDeFases: null,
+                leituraInicial: null,
+                dataLigacao: null
+              }
+            };
+
+            return fetch(`${host}/projetos/${endId}`, {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(payloadProjetos),
+            });
+        })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error(`Erro ao enviar o endId para projetos: ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then((data) => {
+            console.log("End ID enviado com sucesso para projetos com status 'Não Iniciado':", data);
+            alert("Sci-Inclusão finalizada e enviada para Projetos com sucesso!");
+
+            // Atualiza a tabela na página atual
+            const paginacao = document.getElementById("pagination-controls-inclusao");
+            const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
+            preencherTabelaSciInclusao(paginaAtual - 1);
+        })
+        .catch((error) => {
+            console.error("Erro durante o processo de finalização:", error);
+            alert("Erro ao finalizar a Inclusão.");
+        });
+}
+
+
 
 
 // Botões de alert para Finalizar e Iniciar
