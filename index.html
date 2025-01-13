@@ -241,15 +241,6 @@
               <li class="py-2 nav-item">
                 <a
                   data-toggle="pill"
-                  href="#editar-agendamento"
-                  class="text-decoration-none"
-                >
-                  Editar agendamento
-                </a>
-              </li>
-              <li class="py-2 nav-item">
-                <a
-                  data-toggle="pill"
                   href="#todos-agendamentos"
                   class="text-decoration-none"
                 >
@@ -312,45 +303,20 @@
 
           <!------------------------------------------- PROJETOS ------------------------------------------------>
 
-          <li
-            class="rounded active mb-1 list nav-item"
-            data-toggle="collapse"
-            data-target="#projeto"
-          >
-            <a href="#" class="text-decoration-none sub-menu">
-              <div class="text d-flex">
-                <span>
-                  <i class="fa-solid fa-clipboard ml-1"></i>
-                </span>
-                <div class="ml-4">
-                  <span class=""> PROJETOS </span>
-                </div>
+          <li class="rounded mt-1 list nav-item">
+            <a
+              href="#todos-projetos"
+              class="text-decoration-none d-flex"
+              data-toggle="pill"
+            >
+              <span>
+                <i class="fa-solid fa-clipboard ml-1"></i>
+              </span>
+              <div class="ml-4">
+                <span class=""> PROJETOS </span>
               </div>
-              <span><i class="bx bx-chevron-down"></i></span>
             </a>
           </li>
-          <div class="collapse" id="projeto">
-            <ul class="unstyled pl-5 ml-4 submenu nav nav-pills flex-column">
-              <li class="py-2 nav-item">
-                <a
-                  href="#editar-projeto"
-                  class="text-decoration-none"
-                  data-toggle="pill"
-                >
-                  Informações de ligação
-                </a>
-              </li>
-              <li class="py-2 nav-item">
-                <a
-                  data-toggle="pill"
-                  href="#todos-projetos"
-                  class="text-decoration-none"
-                >
-                  Todos projetos
-                </a>
-              </li>
-            </ul>
-          </div>
 
           <!------------------------------------------- ACESSO A OBRA ------------------------------------------------>
 
@@ -376,10 +342,10 @@
               <li class="py-2 nav-item">
                 <a
                   data-toggle="pill"
-                  href="#editar-agendamentos-obra"
+                  href="#informações-de-ligacao"
                   class="text-decoration-none"
                 >
-                  Editar agendamento
+                  Informações de ligação
                 </a>
               </li>
               <li class="py-2 nav-item">
@@ -1526,9 +1492,80 @@
 
         <!-- ============================== PÁGINA DE PROJETO ============================== -->
 
-          <!--  editar projeto-->
+          <div class="tab-pane fade px-4" id="todos-projetos">
+            <div class="container-fluid">
+              <div class="row justify-content-between my-4">
+                <div class="col shadow bg-white p-4 rounded">
+                  <h4 class="mb-3">Todos projetos:</h4>
+                  <div class="header-result mb-3">
+                    <input
+                      type="search"
+                      class="border-0 bg-light p-2 w-40"
+                      placeholder="Pesquisar por END ID"
+                      id="pesquisaEndIdProjeto"
+                    />
+                    <input
+                      type="search"
+                      class="border-0 bg-light p-2"
+                      placeholder="Pesquisar por Status"
+                      id="pesquisaStatusProjeto"
+                    />
+                    <input
+                      type="search"
+                      class="border-0 bg-light p-2"
+                      placeholder="Pesquisar por Data Entrada"
+                      id="pesquisaDataEntradaProjeto"
+                    />
+                    <button 
+                      class="btn btn-warning text-white"
+                      onclick="filtrarTabelaProjeto(0, 'todos-projetos', 'tabelaHistoricoProjetos')"
+                    >
+                    PESQUISAR
+                  </button>
+                  </div>
+                  <div class="table-responsive text-nowrap">
+                    <table 
+                      class="table table-hover table-striped w-100"
+                      id="tabelaHistoricoProjetos"
+                      >
+                      <thead class="bg-light">
+                        <tr>
+                          <th>End ID</th>
+                          <th>Ver mais</th>
+                          <th>Status Projeto</th>
+                          <th>Data Entrada</th>
+                          <th>Data Aprovação</th>
+                          <th>Ação</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <!-- Conteudo dinamico -->
+                      </tbody>
+                    </table>
+                    <div id="total-pesquisa-projeto"></div>
 
-          <div class="tab-pane fade px-4" id="editar-projeto">
+                    <!-- Controles de Paginação -->
+                    <div
+                      id="pagination-controls-projeto"
+                      class="d-flex justify-content-center my-2"
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-5 mb-3">
+            <div class="col">
+                <p class="lead">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</p>
+            </div>
+        </div>
+          </div>     
+          
+          <!-- ============================== PÁGINA DE ACESSO A OBRA ============================== -->
+
+          <!--  editar informações de ligação-->
+
+          <div class="tab-pane fade px-4" id="informações-de-ligacao">
             <div class="container-fluid">
               <div class="row justify-content-between my-4">
                 <div class="col shadow bg-white p-4 rounded">
@@ -1684,284 +1721,6 @@
                         <button
                           class="btn btn-primary text-white py-2 px-5"
                           type="button"
-                        >
-                          Atualizar
-                        </button>
-                        <button
-                          class="btn btn-secondary text-white py-2 px-5"
-                          type="reset"
-                        >
-                          Resetar
-                        </button>
-                      </div>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- todos projetos-->
-
-          <div class="tab-pane fade px-4" id="todos-projetos">
-            <div class="container-fluid">
-              <div class="row justify-content-between my-4">
-                <div class="col shadow bg-white p-4 rounded">
-                  <h4 class="mb-3">Todos projetos:</h4>
-                  <div class="header-result mb-3">
-                    <input
-                      type="search"
-                      class="border-0 bg-light p-2 w-40"
-                      placeholder="Pesquisar por END ID"
-                      id="pesquisaEndIdProjeto"
-                    />
-                    <input
-                      type="search"
-                      class="border-0 bg-light p-2"
-                      placeholder="Pesquisar por Status"
-                      id="pesquisaStatusProjeto"
-                    />
-                    <input
-                      type="search"
-                      class="border-0 bg-light p-2"
-                      placeholder="Pesquisar por Data Entrada"
-                      id="pesquisaDataEntradaProjeto"
-                    />
-                    <button 
-                      class="btn btn-warning text-white"
-                      onclick="filtrarTabelaProjeto(0, 'todos-projetos', 'tabelaHistoricoProjetos')"
-                    >
-                    PESQUISAR
-                  </button>
-                  </div>
-                  <div class="table-responsive text-nowrap">
-                    <table 
-                      class="table table-hover table-striped w-100"
-                      id="tabelaHistoricoProjetos"
-                      >
-                      <thead class="bg-light">
-                        <tr>
-                          <th>End ID</th>
-                          <th>Ver mais</th>
-                          <th>Status Projeto</th>
-                          <th>Data Entrada</th>
-                          <th>Data Aprovação</th>
-                          <th>Ação</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <!-- Conteudo dinamico -->
-                      </tbody>
-                    </table>
-                    <div id="total-pesquisa-projeto"></div>
-
-                    <!-- Controles de Paginação -->
-                    <div
-                      id="pagination-controls-projeto"
-                      class="d-flex justify-content-center my-2"
-                    >
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row mt-5 mb-3">
-            <div class="col">
-                <p class="lead">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</p>
-            </div>
-        </div>
-          </div>     
-          
-          <!-- ============================== PÁGINA DE ACESSO A OBRA ============================== -->
-
-          <!-- editar agendamento de obra -->
-
-          <div class="tab-pane fade px-4" id="editar-agendamentos-obra">
-            <div class="container-fluid">
-              <div class="row justify-content-between my-4">
-                <div class="col shadow bg-white p-4 rounded">
-                  <h4 class="mb-3">Editar agendamento:</h4>
-                  <form>
-                    <div class="row form-desing my-4">
-                      <div class="col-md-4 mt-2 mt-md-0">
-                        <label for="editarEndIdAcessoObra">END ID *</label>
-                        <input
-                          type="text"
-                          class="form-control editarEndIdAcessoObra"
-                          placeholder="Informe o END ID"
-                          autofocus
-                        />
-                      </div>
-                      <div class="col-md-2 mt-2 mt-md-0 d-flex align-items-end">
-                        <button
-                          type="button"
-                          class="btn btn-primary w-100"
-                          id="button-buscar-agendamento"
-                          onclick="buscaAcessoObra('editar-agendamentos-obra')"
-                        >
-                          <i class="fa-solid fa-magnifying-glass"></i> Buscar
-                        </button>
-                      </div>
-                    </div>
-                    <div class="row form-desing my-4">
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label for="editarSiteIdAcessoObra">Site ID *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="editarSiteIdAcessoObra"
-                        />
-                      </div>
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label for="editarDemandaAcessoObra">Demanda *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="editarDemandaAcessoObra"
-                        />
-                      </div>
-                    </div>
-                    <div class="row form-desing my-4">
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label for="editarDetentoraAcessoObra">Detentora *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="editarDetentoraAcessoObra"
-                        />
-                      </div>
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label for="editarIdDetentoraAcessoObra"
-                          >ID Detentora *</label
-                        >
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="editarIdDetentoraAcessoObra"
-                        />
-                      </div>
-                    </div>
-                    <div class="row form-desing my-4">
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label for="editarOperadoraAcessoObra"
-                          >Operadora cedente *</label
-                        >
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="editarOperadoraAcessoObra"
-                        />
-                      </div>
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label for="editarIdOperadoraAcessoObra"
-                          >ID Operadora *</label
-                        >
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="editarIdOperadoraAcessoObra"
-                        />
-                      </div>
-                    </div>
-                    <div class="row form-desing my-4">
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label for="editarLogradouroAcessoObra">Logradouro *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="editarLogradouroAcessoObra"
-                        />
-                      </div>
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label for="editarNumeroAcessoObra">Número *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="editarNumeroAcessoObra"
-                        />
-                      </div>
-                    </div>
-                    <div class="row form-desing my-4">
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label for="editarBairroAcessoObra">Bairro *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="editarBairroAcessoObra"
-                        />
-                      </div>
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label for="editarMunicipioAcessoObra">Município *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="editarMunicipioAcessoObra"
-                        />
-                      </div>
-                    </div>
-                    <div class="row form-desing my-4">
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label for="editarEstadoAcessoObra">Estado *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="editarEstadoAcessoObra"
-                        />
-                      </div>
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label for="editarCepAcessoObra">CEP *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="editarCepAcessoObra"
-                        />
-                      </div>
-                    </div>
-                    <div class="row form-desing my-4">
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label for="editarLatitudeAcessoObra">Latitude *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="editarLatitudeAcessoObra"
-                        />
-                      </div>
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label for="editarLongitudeAcessoObra">Longitude *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="editarLongitudeAcessoObra"
-                        />
-                      </div>
-                    </div>
-                    <div class="row form-desing my-4">
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label for="editarLocalizacaoAcessoObra"
-                          >Localizacão Maps *</label
-                        >
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="editarLocalizacaoAcessoObra"
-                        />
-                      </div>
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label for="editarObservacoesAcessoObra">Observações</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="editarObservacoesAcessoObra"
-                        />
-                      </div>
-                    </div>
-                    <div class="row form-desing my-4">
-                      <div class="col">
-                        <button
-                          class="btn btn-primary text-white py-2 px-5"
-                          type="button"
-                          id="salvarAcessoNovoObra"
-                          onclick="atualizarNovoAcessoObra('editar-agendamentos-obra')"
                         >
                           Atualizar
                         </button>

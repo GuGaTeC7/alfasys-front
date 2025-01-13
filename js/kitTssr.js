@@ -94,11 +94,11 @@ function preencherTabelaKitTssr(page = 0) {
                 <select class="form-select border-0 bg-light p-2" id="select-parecer-${item.endId}" 
               ${parecerDisabled ? "disabled" : ""}>
               <option value="" selected>Selecione um parecer</option>
-              <option value="viavel" ${
-                item.parecer === "viavel" ? "selected" : ""
+              <option value="Viável" ${
+                item.parecer === "Viável" ? "selected" : ""
               }>Viável</option>
-              <option value="inviavel" ${
-                item.parecer === "inviavel" ? "selected" : ""
+              <option value="Inviável" ${
+                item.parecer === "Inviável" ? "selected" : ""
               }>Inviável</option>
             </select>
               </td>
@@ -587,8 +587,8 @@ function criarLinhaKitTssr(item, i) {
         <select class="form-select border-0 bg-light p-2" id="select-parecer-${item.endId}" 
           ${parecerDisabled ? "disabled" : ""}>
           <option value="" selected>Selecione um parecer</option>
-          <option value="viavel" ${item.parecer === "viavel" ? "selected" : ""}>Viável</option>
-          <option value="inviavel" ${item.parecer === "inviavel" ? "selected" : ""}>Inviável</option>
+          <option value="Viável" ${item.parecer === "Viável" ? "selected" : ""}>Viável</option>
+          <option value="Inviável" ${item.parecer === "Inviável" ? "selected" : ""}>Inviável</option>
         </select>
       </td>
       <td>
