@@ -50,11 +50,6 @@ document.getElementById("button-buscar-projeto").addEventListener("click", funct
         <i class="fa-regular fa-copy btnCopiar" title="Copiar" data-id="${item.endId}"></i>
       </td>
       <td>
-        <button class="btn btn-link p-0 text-decoration-none ver-mais" data-id="${item.endId}">
-          <i class="fa-solid fa-book"></i> 
-        </button>
-      </td>
-      <td>
         <select disabled class="form-select border-0 bg-light p-2">
           <option value="status">${item.status}</option>
         </select>
@@ -424,117 +419,6 @@ document.getElementById("button-buscar-projeto").addEventListener("click", funct
         </div>`;
   }
   
- 
-
-  // Delegação de evento para o botão "ver mais" (fa-book)
-document.querySelector("#tabelaHistoricoProjetos").addEventListener("click", (event) => {
-  const loadingOverlay = document.getElementById("loading-overlay");
-
-  // Verifica se o elemento clicado possui a classe `ver-mais`
-  if (event.target.closest(".ver-mais")) {
-    const button = event.target.closest(".ver-mais");
-    const endId = button.getAttribute("data-id");
-
-    if (!loadingOverlay) {
-      console.error("Elemento de loadingOverlay não encontrado!");
-      return;
-    }
-
-    loadingOverlay.style.display = "block";
-
-    // Criação do elemento de alerta
-    const alertDiv = document.createElement("div");
-    alertDiv.className = "alert-container";
-    alertDiv.style.position = "fixed";
-    alertDiv.style.top = "50%";
-    alertDiv.style.left = "50%";
-    alertDiv.style.transform = "translate(-50%, -50%)";
-    alertDiv.style.width = "86%";
-    alertDiv.style.maxWidth = "900px";
-    alertDiv.style.padding = "30px";
-    alertDiv.style.backgroundColor = "#012970";
-    alertDiv.style.color = "#ffffff";
-    alertDiv.style.border = "2px solid #012970";
-    alertDiv.style.borderRadius = "15px";
-    alertDiv.style.boxShadow = "0 4px 20px rgba(0, 0, 0, 0.15)";
-    alertDiv.style.zIndex = "1000";
-    alertDiv.style.overflow = "hidden";
-    alertDiv.style.display = "flex";
-    alertDiv.style.justifyContent = "center";
-    alertDiv.style.alignItems = "center";
-    alertDiv.style.flexDirection = "column";
-
-    // Verificação do token de autenticação
-    if (!token) {
-      console.error("Token de autenticação não encontrado!");
-      loadingOverlay.style.display = "none";
-      return;
-    }
-
-    fetch(`${host}/cadastroEndIds/${endId}`, {
-      method: "GET",
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((response) => {
-        if (!response.ok) throw new Error("Erro ao buscar dados.");
-        return response.json();
-      })
-      .then((dados) => {
-        alertDiv.innerHTML = `
-          <h1 style="display: block; text-align: center; margin-bottom: 25px; font-size: 1.5em; width: 100%;">
-            Informações de ligação: <b>${endId}</b>
-          </h1>
-          <div style="display: flex; flex-wrap: wrap; gap: 70px;">
-              <ul style="flex: 1; padding-left: 20px; font-size: 1em; list-style: none;">
-                  <li><strong>Status ligação: </strong></li>
-                  <li><strong>Concessionária: </strong></li>
-                  <li><strong>Previsão de ligação: <strong> </li>
-                  <li><strong>Número medidor: </strong> </li>
-              </ul>
-              <ul style="flex: 1; padding-right: 20px; font-size: 1em; list-style: none;">
-                  <li><strong>Número de instalação: </strong> </li>
-                  <li><strong>Número de fases: </strong> </li>
-                  <li><strong>Leitura inicial: </strong> </li>
-                  <li><strong>Data ligação: </strong> </li>
-              </ul>
-          </div>
-        `;
-
-        const closeButton = document.createElement("button");
-        closeButton.innerText = "Fechar";
-        closeButton.style.marginTop = "20px";
-        closeButton.style.padding = "12px 20px";
-        closeButton.style.backgroundColor = "#ffffff";
-        closeButton.style.border = "2px solid #ffffff";
-        closeButton.style.color = "#012970";
-        closeButton.style.cursor = "pointer";
-        closeButton.style.borderRadius = "10px";
-        closeButton.style.display = "block";
-        closeButton.style.marginLeft = "auto";
-        closeButton.style.marginRight = "auto";
-
-        closeButton.addEventListener("click", () => {
-          alertDiv.remove();
-        });
-
-        alertDiv.appendChild(closeButton);
-        document.body.appendChild(alertDiv);
-
-        window.scrollTo(
-          0,
-          alertDiv.getBoundingClientRect().top + window.scrollY - 100
-        );
-      })
-      .catch((error) => {
-        console.error("Erro ao buscar dados:", error);
-        alert("Erro ao carregar os dados. Atualize a tela apertando 'F5'.");
-      })
-      .finally(() => {
-        loadingOverlay.style.display = "none";
-      });
-  }
-});
-
 
 
 function filtrarTabelaProjeto(page = 0, secao, idTabela) {
@@ -622,11 +506,6 @@ function criarLinhaProjeto(item, i) {
           ${item.endId}
         </button>
         <i class="fa-regular fa-copy btnCopiar" title="Copiar" data-id="${item.endId}"></i>
-      </td>
-      <td>
-        <button class="btn btn-link p-0 text-decoration-none ver-mais" data-id="${item.endId}">
-          <i class="fa-solid fa-book"></i> 
-        </button>
       </td>
       </td>
       <td>
