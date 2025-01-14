@@ -207,8 +207,12 @@ document.getElementById("button-buscar-projeto").addEventListener("click", funct
     if (!response.ok) {
       throw new Error(`Erro ao enviar para Acesso Obra: ${response.statusText}`);
     }
-    alert("Projeto finalizado e enviada para Acesso Obra com sucesso!");
-  
+    return atualizarEtapa(endId, 6 );
+  })
+  .then((data) => {
+      console.log("End ID enviado com sucesso, com status 'Não Iniciado':", data);
+      alert("Projeto finalizado, enviada para Acesso Obra e etapa atualizada com sucesso!");
+
       // Atualiza a tabela na página atual
       const paginacao = document.getElementById("pagination-controls-projeto");
       const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
@@ -219,6 +223,34 @@ document.getElementById("button-buscar-projeto").addEventListener("click", funct
       alert("Erro ao finalizar o Projeto.");
     });
   }
+
+// Função para atualizar a etapa
+function atualizarEtapa(endId, novaEtapaId) {
+  const payloadEtapa = {
+    etapa: {
+      id: novaEtapaId,
+    },
+  };
+
+  return fetch(`${host}/cadastroEndIds/etapa/${endId}`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payloadEtapa),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Erro ao atualizar a etapa: ${response.statusText}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Etapa atualizada com sucesso:", data);
+    });
+}
+
   
   
   // Delegação de eventos para os botões na tabela

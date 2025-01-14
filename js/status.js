@@ -34,15 +34,11 @@ function preencherTabelaStatus(page = 0) {
                 </button>
                 <i class="fa-regular fa-copy btnCopiar" title="Copiar" data-id="${item.endId}"></i>
               </td>
-              <td>
-                
+              <td>                
                   <option value="etapa">${item.etapa}</option>
-                
               </td>
               <td>
-                
                   <option value="status">${item.status}</option>
-                
               </td>
             </tr>`;
   

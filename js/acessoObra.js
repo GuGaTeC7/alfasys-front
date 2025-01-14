@@ -369,7 +369,11 @@ function finalizaAgendamentoObra(endId) {
     if (!response.ok) {
       throw new Error(`Erro ao enviar para Obra: ${response.statusText}`);
     }
-    alert("Acesso Obra finalizado e enviado para Obra com sucesso!");
+    return atualizarEtapa(endId, 7 );
+  })
+  .then((data) => {
+      console.log("End ID enviado com sucesso, com status 'Não Iniciado':", data);
+      alert("Acesso Obra finalizado, enviada para Obras e etapa atualizada com sucesso!");
       
       // Atualiza a tabela na página atual
       const paginacao = document.getElementById(
@@ -384,6 +388,32 @@ function finalizaAgendamentoObra(endId) {
     });
 }
 
+// Função para atualizar a etapa
+function atualizarEtapa(endId, novaEtapaId) {
+  const payloadEtapa = {
+    etapa: {
+      id: novaEtapaId,
+    },
+  };
+
+  return fetch(`${host}/cadastroEndIds/etapa/${endId}`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payloadEtapa),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Erro ao atualizar a etapa: ${response.statusText}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Etapa atualizada com sucesso:", data);
+    });
+}
 
 // Função para atualizar um end ID
 function atualizarNovoAcessoObra(secao) {

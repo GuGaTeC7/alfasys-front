@@ -234,7 +234,11 @@ function finalizaVistoria(endId) {
       if (!response.ok) {
         throw new Error(`Erro ao enviar para Kit-TSSR: ${response.statusText}`);
       }
-      alert("Vistoria finalizada e enviada para Kit-TSSR com sucesso!");
+      return atualizarEtapa(endId, 3 );
+        })
+        .then((data) => {
+            console.log("End ID enviado com sucesso, com status 'Não Iniciado':", data);
+            alert("Vistoria finalizada, enviada para Kit-Tssr e etapa atualizada com sucesso!");;
 
       // Atualiza a tabela na página atual (caso necessário)
       const paginacao = document.getElementById("pagination-controls-vistoria");
@@ -244,6 +248,33 @@ function finalizaVistoria(endId) {
     .catch((error) => {
       console.error("Erro durante a atualização dos dados:", error);
       alert("Erro ao finalizar a vistoria e enviar para Kit-TSSR.");
+    });
+}
+
+// Função para atualizar a etapa
+function atualizarEtapa(endId, novaEtapaId) {
+  const payloadEtapa = {
+    etapa: {
+      id: novaEtapaId,
+    },
+  };
+
+  return fetch(`${host}/cadastroEndIds/etapa/${endId}`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payloadEtapa),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Erro ao atualizar a etapa: ${response.statusText}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Etapa atualizada com sucesso:", data);
     });
 }
 

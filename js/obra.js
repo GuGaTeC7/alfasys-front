@@ -240,7 +240,11 @@ function finalizaObra(endId) {
     if (!response.ok) {
       throw new Error(`Erro ao enviar para Sci-Exclusão: ${response.statusText}`);
     }
-    alert("Obra finalizada e enviada para Sci-Exclusão com sucesso!");
+    return atualizarEtapa(endId, 8 );
+    })
+    .then((data) => {
+      console.log("End ID enviado com sucesso, com status 'Não Iniciado':", data);
+      alert("Obra finalizada, enviada para Sci-Exclusão e etapa atualizada com sucesso!");
     
     // Atualiza a tabela na página atual (caso necessário)
       const paginacao = document.getElementById("pagination-controls-obra");
@@ -250,6 +254,33 @@ function finalizaObra(endId) {
     .catch((error) => {
       console.error("Erro ao finalizar a obra:", error);
       alert("Erro ao finalizar a obra. Verifique as informações e tente novamente.");
+    });
+}
+
+// Função para atualizar a etapa
+function atualizarEtapa(endId, novaEtapaId) {
+  const payloadEtapa = {
+    etapa: {
+      id: novaEtapaId,
+    },
+  };
+
+  return fetch(`${host}/cadastroEndIds/etapa/${endId}`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payloadEtapa),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Erro ao atualizar a etapa: ${response.statusText}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Etapa atualizada com sucesso:", data);
     });
 }
 

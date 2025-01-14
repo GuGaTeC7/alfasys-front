@@ -368,7 +368,12 @@ function finalizaAgendamento(endId) {
       if (!response.ok) {
         throw new Error(`Erro ao enviar o End ID para vistoria: ${response.statusText}`);
       }
-      alert("Agendamento finalizado e enviado para vistoria com sucesso!");
+      return atualizarEtapa(endId, 2 );
+        })
+        .then((data) => {
+            console.log("End ID enviado com sucesso, com status 'Não Iniciado':", data);
+            alert("Acesso Vistoria finalizada, enviado para Vistoria e etapa atualizada com sucesso!");
+
 
       // Atualiza a tabela na página atual
       const paginacao = document.getElementById(
@@ -382,6 +387,35 @@ function finalizaAgendamento(endId) {
       alert("Erro ao finalizar e enviar o End ID para vistoria.");
     });
 }
+
+// Função para atualizar a etapa
+function atualizarEtapa(endId, novaEtapaId) {
+  const payloadEtapa = {
+    etapa: {
+      id: novaEtapaId,
+    },
+  };
+
+  return fetch(`${host}/cadastroEndIds/etapa/${endId}`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payloadEtapa),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Erro ao atualizar a etapa: ${response.statusText}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Etapa atualizada com sucesso:", data);
+    });
+}
+
+
 
 // Função para atualizar um end ID
 function atualizarNovoAcesso(secao) {

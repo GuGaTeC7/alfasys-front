@@ -194,79 +194,112 @@ function iniciaTssr(endId) {
 
 //Finalizar Kit Tssr
 function finalizaKitTssr(endId) {
-// Obtém os valores das datas e do status
-const dataPrevista = document.getElementById(`data-prevista-${endId}`)?.value;
-const dataRealizacao = document.getElementById(`data-realizada-${endId}`)?.value;
-const parecer = document.getElementById(`select-parecer-${endId}`)?.value;
+  // Obtém os valores das datas e do status
+  const dataPrevista = document.getElementById(`data-prevista-${endId}`)?.value;
+  const dataRealizacao = document.getElementById(`data-realizada-${endId}`)?.value;
+  const parecer = document.getElementById(`select-parecer-${endId}`)?.value;
 
-// Verifica se todas as datas estão preenchidas
-if (!dataRealizacao || !dataPrevista ) {
-  alert("A data de realização e data prevista devem estar preenchidas.");
-  return; // Interrompe a execução se a data não for válida
-}
+  // Verifica se todas as datas estão preenchidas
+  if (!dataRealizacao || !dataPrevista) {
+    alert("A data de realização e data prevista devem estar preenchidas.");
+    return; // Interrompe a execução se a data não for válida
+  }
 
-// Verifica se o campo de status está preenchido
-if (!parecer || parecer === "") {
-  alert("Por favor, selecione algum parecer (Viável ou Inviável).");
-  return; // Interrompe a execução se o status não for selecionado
-}
+  // Verifica se o campo de status está preenchido
+  if (!parecer || parecer === "") {
+    alert("Por favor, selecione algum parecer (Viável ou Inviável).");
+    return; // Interrompe a execução se o status não for selecionado
+  }
 
-// Monta o payload
-const payload = {
-  status: "Concluído",
-  resultado: parecer, // Adiciona o status selecionado ao payload
-};
+  // Monta o payload
+  const payload = {
+    status: "Concluído",
+    resultado: parecer, // Adiciona o status selecionado ao payload
+  };
 
-// Realiza a requisição
-fetch(`${host}/tssrs/${endId}`, {
-  method: "PATCH",
-  headers: {
-    Authorization: `Bearer ${token}`,
-    "Content-Type": "application/json",
-  },
-  body: JSON.stringify(payload),
-})
-  .then((response) => {
-    console.log("Resposta da requisição recebida:", response);
-    if (!response.ok) {
-      throw new Error(`Erro ao atualizar os dados: ${response.statusText}`);
-    }
-    return response.json();
+  // Realiza a requisição
+  fetch(`${host}/tssrs/${endId}`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
   })
-  .then((data) => {
-    console.log("Dados retornados pelo servidor:", data);
+    .then((response) => {
+      console.log("Resposta da requisição recebida:", response);
+      if (!response.ok) {
+        throw new Error(`Erro ao atualizar os dados: ${response.statusText}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Dados retornados pelo servidor:", data);
 
-  // Após finalizar o Kit-TSSR, envia o endId para o Sci-Inclusão com status "Não iniciado"
-    const payloadInclusao = {
-      endId: endId,
-      status: "Não iniciado"
-    };
-    // Envia para o Sci-Inclusão
-    return fetch(`${host}/sciInclusao/${endId}`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payloadInclusao),
+      // Após finalizar o Kit-TSSR, envia o endId para o Sci-Inclusão com status "Não iniciado"
+      const payloadInclusao = {
+        endId: endId,
+        status: "Não iniciado",
+      };
+      // Envia para o Sci-Inclusão
+      return fetch(`${host}/sciInclusao/${endId}`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payloadInclusao),
+      });
+    })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Erro ao enviar para Sci-Inclusão: ${response.statusText}`);
+      }
+
+      // Atualiza a etapa para o valor 7
+      return atualizarEtapa(endId, 4 );
+    })
+    .then(() => {
+      alert("Kit-TSSR finalizada, enviada para Sci-Inclusão e etapa atualizada com sucesso!");
+      
+      // Atualiza a tabela na página atual (caso necessário)
+      const paginacao = document.getElementById("pagination-controls-Tssr");
+      const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
+      preencherTabelaKitTssr(paginaAtual - 1);
+    })
+    .catch((error) => {
+      console.error("Erro durante a atualização dos dados:", error);
+      alert("Erro ao finalizar Kit-TSSR e enviar para Sci-Inclusão.");
     });
-  })
-  .then((response) => {
-    if (!response.ok) {
-      throw new Error(`Erro ao enviar para Sci-Inclusão: ${response.statusText}`);
-    }
-    alert("Kit-TSSR finalizada e enviada para Sci-Inclusão com sucesso!");
-    // Atualiza a tabela na página atual (caso necessário)
-    const paginacao = document.getElementById("pagination-controls-Tssr");
-    const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
-    preencherTabelaKitTssr(paginaAtual - 1);
-  })
-  .catch((error) => {
-    console.error("Erro durante a atualização dos dados:", error);
-    alert("Erro ao finalizar Kit-TSSR..");
-    alert("Erro ao finalizar Kit-TSSR e enviar para Sci-Inclusão.");
-  });
 }
+
+// Função para atualizar a etapa
+function atualizarEtapa(endId, novaEtapaId) {
+  const payloadEtapa = {
+    etapa: {
+      id: novaEtapaId,
+    },
+  };
+
+  return fetch(`${host}/cadastroEndIds/etapa/${endId}`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payloadEtapa),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Erro ao atualizar a etapa: ${response.statusText}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Etapa atualizada com sucesso:", data);
+    });
+}
+
 
 
 // Delegação de eventos para os botões na tabela
