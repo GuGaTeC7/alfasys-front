@@ -466,6 +466,9 @@ function criarLinhaHistoricoAgendamento(item, i) {
         : ""
     }">
       <td>
+        ${item.id}
+      </td>
+      <td>
         <button class="btn btn-link p-0 text-decoration-none end-id" id="textoParaCopiar" data-id="${
           item.endId
         }">

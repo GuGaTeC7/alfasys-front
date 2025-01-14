@@ -29,6 +29,9 @@ function preencherTabelaVistoria(page = 0) {
         const row = `
           <tr>
             <td>
+              ${item.id}
+            </td>
+            <td>
               <button class="btn btn-link p-0 text-decoration-none end-id" id="textoParaCopiar" data-id="${
                 item.endId
               }">
@@ -617,6 +620,9 @@ document
   
     return `
       <tr>
+        <td>
+          ${item.id}
+        </td>
         <td>
           <button class="btn btn-link p-0 text-decoration-none end-id" id="textoParaCopiar" data-id="${item.endId}">
             ${item.endId}

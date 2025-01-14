@@ -26,23 +26,23 @@ function preencherTabelaStatus(page = 0) {
           const row = `
             <tr>
               <td>
+                ${item.id}
+              </td>
+              <td>
                 <button class="btn btn-link p-0 text-decoration-none end-id" id="textoParaCopiar" data-id="${item.endId}">
                   ${item.endId}
                 </button>
                 <i class="fa-regular fa-copy btnCopiar" title="Copiar" data-id="${item.endId}"></i>
               </td>
               <td>
-                ${dataCadastro ? `<input type="date" class="form-control text-center" value="${dataCadastro}" disabled id="data-cadastro-status-${item.endId}" />` : ""}
-              </td>
-              <td>
-                <select disabled class="form-select border-0 bg-light p-2">
+                
                   <option value="etapa">${item.etapa}</option>
-                </select>
+                
               </td>
               <td>
-                <select disabled class="form-select border-0 bg-light p-2">
+                
                   <option value="status">${item.status}</option>
-                </select>
+                
               </td>
             </tr>`;
   
@@ -95,7 +95,7 @@ function filtrarTabelaStatus(page = 0, secao, idTabela) {
     const pesquisaCampos = {
       endId: secaoId.querySelector("#pesquisaEndIdStatus").value.trim(),
       etapa: secaoId.querySelector("#pesquisaEtapaStatus").value.trim(),
-      situacao: secaoId.querySelector("#pesquisaSituacaoStatus").value.trim(),
+      status: secaoId.querySelector("#pesquisaSituacaoStatus").value.trim(),
     };
   
     // Monta os parâmetros da URL
@@ -143,8 +143,8 @@ function filtrarTabelaStatus(page = 0, secao, idTabela) {
       params.append("endId", pesquisaCampos.endId.toUpperCase());
     if (pesquisaCampos.etapa)
       params.append("etapa", pesquisaCampos.etapa.toUpperCase());
-    if (pesquisaCampos.situacao)
-      params.append("situacao", pesquisaCampos.situacao.toUpperCase());
+    if (pesquisaCampos.status)
+      params.append("status", pesquisaCampos.status.toUpperCase());
     params.append("page", page);
     params.append("size", pageSize);
     return params;
@@ -174,19 +174,26 @@ function filtrarTabelaStatus(page = 0, secao, idTabela) {
     return `
       <tr style="${item.situacao === "Pendente" ? "background-color: #ffcc00;" : ""}">
         <td>
+            ${item.id}
+        </td>
+        <td>
           <button class="btn btn-link p-0 text-decoration-none end-id" id="textoParaCopiar" data-id="${item.endId}">
             ${item.endId}
           </button>
           <i class="fa-regular fa-copy btnCopiar" title="Copiar" data-id="${item.endId}"></i>
         </td>
-        <td>
-          ${dataCadastro
-            ? `<input type="date" class="form-control text-center" value="${dataCadastro}" disabled />`
-            : "Data não disponível"}
-        </td>
         <td>${item.etapa}</td>
-        <td>${item.situacao}</td>
+        <td>${item.status}</td>
       </tr>
     `;
   }
+
+
+  // Selecione o link "Histórico de agendamentos" e "Editar agendamento"
+const historicoLinkStatus = document.querySelector("a[href='#status']");
+
+// Adicione o evento de clique ao link de "Histórico de agendamentos"
+historicoLinkStatus.addEventListener("click", function (event) {
+  preencherTabelaStatus(); // Função chamada ao clicar no link
+});
   

@@ -56,6 +56,9 @@ function preencherTabelaAcessoObra(page = 0) {
               : ""
           }">
             <td>
+              ${item.id}
+            </td>
+            <td>
               <button class="btn btn-link p-0 text-decoration-none end-id" id="textoParaCopiar" data-id="${
                 item.endId
               }">
@@ -838,6 +841,9 @@ function criarLinhaAgendamento(item, i) {
           ? "background-color: #f75c577d;"
           : ""
       }">
+        <td>
+          ${item.id}
+        </td>
         <td>
           <button class="btn btn-link p-0 text-decoration-none end-id" id="textoParaCopiar" data-id="${item.endId}">
             ${item.endId}
