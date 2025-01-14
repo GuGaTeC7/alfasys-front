@@ -188,13 +188,13 @@ document.getElementById("button-buscar-projeto").addEventListener("click", funct
     .then((data) => {
       console.log("Dados retornados pelo servidor:", data);
 
-       // Após finalizar o Kit-TSSR, envia o endId para o Sci-Inclusão com status "Não iniciado"
+       // Após finalizar o Projeto, envia o endId para o Agendamento com status "Não iniciado"
     const payloaAcessoObra = {
-      status: null,
-      statusAgendamento: "Não iniciado"
+      statusAgendamento: "Não iniciado",
+      status: "Não Iniciado"
     };
-    // Envia para o Sci-Inclusão
-    return fetch(`${host}/obras/${endId}`, {
+    // Envia para Acesso Obra
+    return fetch(`${host}/obras/agendamento/${endId}`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -205,9 +205,9 @@ document.getElementById("button-buscar-projeto").addEventListener("click", funct
   })
   .then((response) => {
     if (!response.ok) {
-      throw new Error(`Erro ao enviar para Sci-Inclusão: ${response.statusText}`);
+      throw new Error(`Erro ao enviar para Acesso Obra: ${response.statusText}`);
     }
-    alert("Kit-TSSR finalizada e enviada para Sci-Inclusão com sucesso!");
+    alert("Projeto finalizado e enviada para Acesso Obra com sucesso!");
   
       // Atualiza a tabela na página atual
       const paginacao = document.getElementById("pagination-controls-projeto");
@@ -216,7 +216,7 @@ document.getElementById("button-buscar-projeto").addEventListener("click", funct
     })
     .catch((error) => {
       console.error("Erro durante a atualização dos dados:", error);
-      alert("Erro ao finalizar o Kit Tssr.");
+      alert("Erro ao finalizar o Projeto.");
     });
   }
   
@@ -556,7 +556,7 @@ function criarLinhaProjeto(item, i) {
 
 // Adiciona o End ID diretamente na tabela ou processa de outra forma
 function processarEndIdParaProjetos(endId) {
-  console.log(`End ID recebido para Sci-Inclusão: ${endId}`);
+  console.log(`End ID recebido para Projetos: ${endId}`);
   // Lógica adicional para tratar ou exibir o End ID
 }
 

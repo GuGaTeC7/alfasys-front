@@ -92,7 +92,7 @@ function preencherTabelaAcessoObra(page = 0) {
                       disabled
                       id="data-solicitacao-obra-${item.endId}"
                     />`
-                  : renderInputDate(
+                  : renderInputDateAcessoObra(
                       "data-solicitacao-obra",
                       item.endId,
                       item.statusAgendamento
@@ -109,7 +109,7 @@ function preencherTabelaAcessoObra(page = 0) {
                       disabled
                       id="data-previsao-obra-${item.endId}"
                     />`
-                  : renderInputDate(
+                  : renderInputDateAcessoObra(
                       "data-previsao-obra",
                       item.endId,
                       item.statusAgendamento
@@ -126,7 +126,7 @@ function preencherTabelaAcessoObra(page = 0) {
                       disabled
                       id="data-liberacao-obra-${item.endId}"
                     />`
-                  : renderInputDate(
+                  : renderInputDateAcessoObra(
                       "data-liberacao-obra",
                       item.endId,
                       item.statusAgendamento
@@ -206,8 +206,8 @@ loadingOverlay.style.display = "none";
 
 
 // Função para renderizar o input de data com ícone de envio
-function renderInputDate(action, endId, status) {
-  if (status === "Não iniciado") {
+function renderInputDateAcessoObra(action, endId, status) {
+  if (status === "Em andamento" ? "" : "disabled") {
     return `
       <div class="input-icon-group">
         <input 
@@ -274,7 +274,7 @@ function exibirConfirmacao(mensagem, onConfirm) {
 // Função para iniciar um agendamento
 function iniciaAgendamentoObra(endId) {
   const payload = {
-    statusAgendamento: "Em andamento",
+    status: "Em andamento",
   };
   fetch(`${host}/obras/agendamento/${endId}`, {
     method: "PATCH",
@@ -329,11 +329,11 @@ function finalizaAgendamentoObra(endId) {
 
   // Monta o payload
   const payload = {
-    statusAgendamento: "Concluído",
+    status: "Concluído",
   };
 
   // Realiza a requisição
-  fetch(`${host}/obras/${endId}`, {
+  fetch(`${host}/obras/agendamento/${endId}`, {
     method: "PATCH",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -354,7 +354,6 @@ function finalizaAgendamentoObra(endId) {
       // Após finalizar o Kit-TSSR, envia o endId para o Sci-Inclusão com status "Não iniciado"
     const payloadObra = {
       status: "Não iniciado",
-      statusAgendamento: "Concluído"
     };
     // Envia para o Sci-Inclusão
     return fetch(`${host}/obras/${endId}`, {
@@ -368,9 +367,9 @@ function finalizaAgendamentoObra(endId) {
   })
   .then((response) => {
     if (!response.ok) {
-      throw new Error(`Erro ao enviar para Sci-Inclusão: ${response.statusText}`);
+      throw new Error(`Erro ao enviar para Obra: ${response.statusText}`);
     }
-    alert("Kit-TSSR finalizada e enviada para Sci-Inclusão com sucesso!");
+    alert("Acesso Obra finalizado e enviado para Obra com sucesso!");
       
       // Atualiza a tabela na página atual
       const paginacao = document.getElementById(
@@ -870,7 +869,7 @@ function criarLinhaAgendamento(item, i) {
                   disabled
                   id="data-solicitacao-obra-${item.endId}"
                 />`
-              : renderInputDate("data-solicitacao-obra", item.endId, item.statusAgendamento)
+              : renderInputDateAcessoObra("data-solicitacao-obra", item.endId, item.statusAgendamento)
           }
         </td>
         <td>
@@ -883,7 +882,7 @@ function criarLinhaAgendamento(item, i) {
                   disabled
                   id="data-previsao-obra-${item.endId}"
                 />`
-              : renderInputDate("data-previsao-obra", item.endId, item.statusAgendamento)
+              : renderInputDateAcessoObra("data-previsao-obra", item.endId, item.statusAgendamento)
           }
         </td>
         <td>
@@ -896,7 +895,7 @@ function criarLinhaAgendamento(item, i) {
                   disabled
                   id="data-liberacao-obra-${item.endId}"
                 />`
-              : renderInputDate("data-liberacao-obra", item.endId, item.statusAgendamento)
+              : renderInputDateAcessoObra("data-liberacao-obra", item.endId, item.statusAgendamento)
           }
         </td>
         <td>
