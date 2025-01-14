@@ -467,7 +467,6 @@ function renderInputDateTssr(action, endId, status) {
 }
 
 
-
 function filtrarTabelaKitTssr(page = 0, secao, idTabela) {
   const loadingOverlay = document.getElementById("loading-overlay");
   const tbody = document.querySelector(`#${idTabela} tbody`);

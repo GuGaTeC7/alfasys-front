@@ -705,3 +705,4 @@ document.addEventListener("DOMContentLoaded", () => {
   // Essa lógica é executada quando a página é carregada
   console.log("Página de Vistoria carregada. Aguardando novos End IDs");
 });
+

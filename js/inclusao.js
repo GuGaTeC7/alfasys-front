@@ -250,8 +250,6 @@ loadingOverlay.style.display = "none";
 }
 
 
-
-
 // Botões de alert para Finalizar e Iniciar
   document.querySelector("#sci-inclusao tbody").addEventListener("click", (event) => {
     const button = event.target.closest("[data-id-botao]");

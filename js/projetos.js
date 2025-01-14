@@ -245,6 +245,7 @@ document.getElementById("button-buscar-projeto").addEventListener("click", funct
   });
   
   
+  
   // Delegação de evento para ver end ID na tabela
   document.querySelector("#tabelaHistoricoProjetos").addEventListener("click", (event) => {
     const loadingOverlay = document.getElementById("loading-overlay");

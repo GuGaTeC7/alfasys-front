@@ -1,7 +1,5 @@
 // Adiciona evento ao botão "Buscar Agendamento"
-document
-  .getElementById("button-buscar-agendamento")
-  .addEventListener("click", function (event) {
+document.getElementById("button-buscar-agendamento").addEventListener("click", function (event) {
     event.preventDefault();
     const botaoBuscar = this;
 
@@ -15,7 +13,7 @@ document
       botaoBuscar.innerHTML =
         '<i class="fa-solid fa-magnifying-glass"></i>⠀Buscar';
     }, 3000);
-  });
+});
 
 // Função para preencher a tabela de agendamentos
 function preencherTabelaAcessoObra(page = 0) {
@@ -484,7 +482,6 @@ function atualizarNovoAcessoObra(secao) {
     });
 }
 
-
 // Delegação de eventos para os ícones de enviar data
 document.querySelector("#tabelaHistoricoAgendamento-obra").addEventListener("click", (event) => {
     const target = event.target;
@@ -623,6 +620,7 @@ document.querySelector("#tabelaHistoricoAgendamento-obra").addEventListener("cli
     }
   });
 
+
 // Delegação de eventos para os botões na tabela
 document.querySelector("#tabelaHistoricoAgendamento-obra tbody").addEventListener("click", (event) => {
     const button = event.target.closest("[data-id-botao]");
@@ -653,10 +651,13 @@ historicoLinkAgendamentoObra.addEventListener("click", function (event) {
   preencherTabelaAcessoObra(); // Função chamada ao clicar no link
 });
 
+
 // Adiciona o evento ao botão resetar
 document.getElementById("botaoResetar").addEventListener("click", resetarCampos("cadastro-fazer"));
 
 
+
+// Função para buscar acesso
 function buscaAcessoObra(secao) {
     const botaoBuscar = event.target;
     botaoBuscar.disabled = true;
@@ -737,8 +738,8 @@ function buscaAcessoObra(secao) {
   }
 
 
-
-  function filtrarTabelaAcessoObra(page = 0, secao = 'todos-agendamentos-obra', idTabela = 'tabelaHistoricoAgendamento-obra') {
+// Função para filtrar tabela
+function filtrarTabelaAcessoObra(page = 0, secao = 'todos-agendamentos-obra', idTabela = 'tabelaHistoricoAgendamento-obra') {
     const loadingOverlay = document.getElementById("loading-overlay");
     const tbody = document.querySelector(`#${idTabela} tbody`);
     const secaoId = document.getElementById(secao);
@@ -788,8 +789,7 @@ function buscaAcessoObra(secao) {
       });
   }
   
-
-  function montarParametrosAgendamento(pesquisaCampos, page) {
+function montarParametrosAgendamento(pesquisaCampos, page) {
     const params = new URLSearchParams();
   
     if (pesquisaCampos.endId)
@@ -805,8 +805,7 @@ function buscaAcessoObra(secao) {
     return params;
   }
   
-
-  function renderizarTabelaAgendamentos(dados, idTabela, tbody) {
+function renderizarTabelaAgendamentos(dados, idTabela, tbody) {
     tbody.innerHTML = ""; // Limpa a tabela antes de preencher
   
     if (!dados.content || dados.content.length === 0) {
@@ -822,8 +821,7 @@ function buscaAcessoObra(secao) {
     configurarEventosCopiar(); // Mantém funcionalidade adicional, se necessária
   }
   
-
-  function criarLinhaAgendamento(item, i) {
+function criarLinhaAgendamento(item, i) {
     const dataSolicitacao = item.dataSolicitacao
       ? formatarDataParaInput(item.dataSolicitacao)
       : "";

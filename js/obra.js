@@ -100,8 +100,7 @@ function preencherTabelaObra(page = 0) {
         tbody.insertAdjacentHTML("beforeend", row);
       });
       
-   
-        
+         
 // Adicionar eventListener para cada botão "Copiar Texto"
 document.querySelectorAll(".btnCopiar").forEach((button) => {
 button.addEventListener("click", function () {
