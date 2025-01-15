@@ -83,7 +83,7 @@ function preencherTabelaSciExclusao(page = 0) {
                           disabled
                           id="data-envio${item.endId}"
                         />`
-                      : renderInputDate("data-envio", item.endId, item.status)
+                      : renderInputDateExclusao("data-envio", item.endId, item.status)
                   }
                 </td>
                 <td>
@@ -96,7 +96,7 @@ function preencherTabelaSciExclusao(page = 0) {
                           disabled
                           id="data-aprovacao-${item.endId}"
                         />`
-                      : renderInputDate("data-aprovacao", item.endId, item.status)
+                      :  renderInputDateExclusao("data-aprovacao", item.endId, item.status)
                   }
                 </td>
                 <td>
@@ -109,7 +109,7 @@ function preencherTabelaSciExclusao(page = 0) {
                           disabled
                           id="ultima-cobranca-${item.endId}"
                         />`
-                      : renderInputDate("ultima-cobranca", item.endId, item.status)
+                      : renderInputDateExclusao("ultima-cobranca", item.endId, item.status)
                   }
                 </td>
                 <td>
@@ -422,8 +422,8 @@ historicoLinkExclusao.addEventListener("click", function (event) {
 
 
 // Função para renderizar o input de data com ícone de envio
-function renderInputDate(action, endId, status) {
-if (status === "Não iniciado") {
+function renderInputDateExclusao(action, endId, status) {
+  if (status === "Em andamento" ? "" : "disabled") {
   return `
     <div class="input-icon-group">
       <input 
