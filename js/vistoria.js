@@ -137,7 +137,7 @@ function preencherTabelaVistoria(page = 0) {
 }
 
 
-//FUNÇÃO PARA INICIAR VISTORIA//
+// FUNÇÃO PARA INICIAR VISTORIA
 function iniciaVistoria(endId) {
   const payload = {
     status: "Em andamento",
@@ -152,9 +152,18 @@ function iniciaVistoria(endId) {
   })
     .then((response) => {
       console.log("Resposta da requisição recebida:", response);
+      
+      // Verifica se a resposta não está OK
       if (!response.ok) {
-        throw new Error(`Erro ao atualizar os dados: ${response.statusText}`);
+        if (response.status === 403) {
+          // Caso o erro seja de permissão
+          alert("Você não tem permissão para realizar esta ação.");
+        } else {
+          // Para outros erros
+          throw new Error(`Erro ao atualizar os dados: ${response.statusText}`);
+        }
       }
+      
       return response.json();
     })
     .then((data) => {
@@ -167,35 +176,33 @@ function iniciaVistoria(endId) {
     })
     .catch((error) => {
       console.error("Erro durante a atualização dos dados:", error);
-      alert("Erro ao iniciar.");
+      if (error.message !== "Você não tem permissão para realizar esta ação.") {
+        alert("Erro ao iniciar.");
+      }
     });
 }
 
+
 function finalizaVistoria(endId) {
-  // Obtém os valores das datas e do parecer
   const dataRealizacao = document.getElementById(
     `data-realizacao-${endId}`
   )?.value;
   const parecer = document.getElementById(`select-parecer-${endId}`)?.value;
 
-  // Verifica se a data de realização está preenchida
   if (!dataRealizacao) {
     alert("A data de realização deve estar preenchida.");
-    return; // Interrompe a execução se a data não for válida
+    return;
   }
 
-  // Verifica se o campo de parecer está preenchido
   if (!parecer || parecer === "") {
     alert("Por favor, selecione algum parecer (Viável ou Inviável).");
-    return; // Interrompe a execução se o parecer não for selecionado
+    return;
   }
 
-  // Monta o payload para finalizar a vistoria
   const payloadVistoria = {
     status: "Concluído"
   };
 
-  // Realiza a requisição para finalizar a vistoria
   fetch(`${host}/vistorias/${endId}`, {
     method: "PATCH",
     headers: {
@@ -205,22 +212,21 @@ function finalizaVistoria(endId) {
     body: JSON.stringify(payloadVistoria),
   })
     .then((response) => {
-      console.log("Resposta da requisição recebida:", response);
+      if (response.status === 403) {
+        throw new Error("Você não tem permissão para realizar esta ação.");
+      }
       if (!response.ok) {
         throw new Error(`Erro ao atualizar os dados: ${response.statusText}`);
       }
       return response.json();
     })
     .then((data) => {
-      console.log("Dados retornados pelo servidor:", data);
-
-      // Após finalizar a vistoria, envia o endId para o kit-tssr com status "Não iniciado"
       const payloadKitTssr = {
         endId: endId,
         status: "Não iniciado"
       };
 
-      // Envia para o kit-tssr
+      // Envia pro Kit-Tssr
       return fetch(`${host}/tssrs/${endId}`, {
         method: "POST",
         headers: {
@@ -231,25 +237,30 @@ function finalizaVistoria(endId) {
       });
     })
     .then((response) => {
+      if (response.status === 403) {
+        throw new Error("Você não tem permissão para realizar esta ação.");
+      }
       if (!response.ok) {
         throw new Error(`Erro ao enviar para Kit-TSSR: ${response.statusText}`);
       }
-      return atualizarEtapa(endId, 3 );
-        })
-        .then((data) => {
-            console.log("End ID enviado com sucesso, com status 'Não Iniciado':", data);
-            alert("Vistoria finalizada, enviada para Kit-Tssr e etapa atualizada com sucesso!");;
-
-      // Atualiza a tabela na página atual (caso necessário)
+      return atualizarEtapa(endId, 3);
+    })
+    .then((data) => {
+      alert("Vistoria finalizada, enviada para Kit-Tssr e etapa atualizada com sucesso!");
       const paginacao = document.getElementById("pagination-controls-vistoria");
       const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
       preencherTabelaVistoria(paginaAtual - 1);
     })
     .catch((error) => {
-      console.error("Erro durante a atualização dos dados:", error);
-      alert("Erro ao finalizar a vistoria e enviar para Kit-TSSR.");
+      if (error.message === "Você não tem permissão para realizar esta ação.") {
+        alert(error.message);
+      } else {
+        console.error("Erro durante a atualização dos dados:", error);
+        alert("Erro ao finalizar a vistoria e enviar para Kit-TSSR.");
+      }
     });
 }
+
 
 // Função para atualizar a etapa
 function atualizarEtapa(endId, novaEtapaId) {

@@ -958,7 +958,6 @@ function enviarParecer(endId, parecerSelecionado, etapa) {
     return;
   }
 
-  // Mapeamento dinâmico de etapas para endpoints
   const endpointMap = {
     "vistoria": {
       payloadKey: "parecer",
@@ -968,10 +967,8 @@ function enviarParecer(endId, parecerSelecionado, etapa) {
       payloadKey: "parecer",
       url: `${host}/tssrs/${endId}`,
     },
-    // Outros tipos de etapa podem ser adicionados aqui
   };
 
-  // Valida se a etapa está mapeada
   const endpointConfig = endpointMap[etapa];
   if (!endpointConfig) {
     console.error("Etapa inválida ou não mapeada.");
@@ -979,10 +976,8 @@ function enviarParecer(endId, parecerSelecionado, etapa) {
     return;
   }
 
-  // Cria o payload dinamicamente
   const payload = { [endpointConfig.payloadKey]: parecerSelecionado };
 
-  // Realiza o fetch para o endpoint correto
   fetch(endpointConfig.url, {
     method: "PATCH",
     headers: {
@@ -994,6 +989,9 @@ function enviarParecer(endId, parecerSelecionado, etapa) {
     .then((response) => {
       if (!response.ok) {
         return response.json().then((err) => {
+          if (response.status === 403) {
+            throw new Error("Você não tem permissão para realizar esta ação.");
+          }
           throw new Error(
             `${response.status} - ${response.statusText}: ${
               err.message || "Erro desconhecido"
@@ -1004,14 +1002,12 @@ function enviarParecer(endId, parecerSelecionado, etapa) {
       return response.json();
     })
     .then((dados) => {
-      // Atualiza o campo correspondente
       const selectField = document.getElementById(`select-parecer-${endId}`);
       if (selectField) {
         selectField.value = parecerSelecionado;
-        selectField.setAttribute("disabled", "true"); // Desativa o campo após envio
+        selectField.setAttribute("disabled", "true");
       }
 
-      // Oculta ou desativa os botões relacionados (se necessário)
       const button = document.querySelector(
         `button[data-id-botao="${endId}"]`
       );
@@ -1022,25 +1018,28 @@ function enviarParecer(endId, parecerSelecionado, etapa) {
       alert("Parecer enviado com sucesso!");
       console.log("Resposta do servidor:", dados);
 
-      // Atualiza a tabela correspondente à etapa
       if (etapa === "vistoria") {
-        const paginacao = document.getElementById("pagination-controls-vistoria");
+        const paginacao = document.getElementById(
+          "pagination-controls-vistoria"
+        );
         const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
-        preencherTabelaVistoria(paginaAtual - 1); // Atualiza a tabela de vistorias
-      
+        preencherTabelaVistoria(paginaAtual - 1);
       } else if (etapa === "kit-tssr") {
-        const paginacao = document.getElementById("pagination-controls-Tssr");
+        const paginacao = document.getElementById(
+          "pagination-controls-Tssr"
+        );
         const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
-        preencherTabelaKitTssr(paginaAtual - 1); // Atualiza a tabela de Kit TSSR
+        preencherTabelaKitTssr(paginaAtual - 1);
       } else {
         console.warn(`Nenhuma ação definida para a etapa: ${etapa}`);
       }
     })
     .catch((erro) => {
       console.error("Erro ao enviar parecer:", erro);
-      alert(`Erro ao enviar parecer: ${erro.message}`);
+      alert(erro.message); // Mensagem específica exibida para o usuário
     });
 }
+
 
 
 function enviarWorkflow(endId, cadastroWorkflowSelecionado, etapa) {
