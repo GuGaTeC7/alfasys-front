@@ -156,7 +156,7 @@ loadingOverlay.style.display = "none";
 }
 
 
-//Iniciar Kit Tssr
+// Iniciar Kit Tssr
 function iniciaTssr(endId) {
   const payload = {
     status: "Em andamento",
@@ -171,9 +171,18 @@ function iniciaTssr(endId) {
   })
     .then((response) => {
       console.log("Resposta da requisição recebida:", response);
+
+      // Verifica se a resposta não está OK
       if (!response.ok) {
-        throw new Error(`Erro ao atualizar os dados: ${response.statusText}`);
+        if (response.status === 403) {
+          // Caso o erro seja de permissão
+          alert("Você não tem permissão para realizar esta ação.");
+        } else {
+          // Para outros erros
+          throw new Error(`Erro ao atualizar os dados: ${response.statusText}`);
+        }
       }
+
       return response.json();
     })
     .then((data) => {
@@ -187,12 +196,14 @@ function iniciaTssr(endId) {
     })
     .catch((error) => {
       console.error("Erro durante a atualização dos dados:", error);
-      alert("Erro ao iniciar.");
+      if (error.message !== "Você não tem permissão para realizar esta ação.") {
+        alert("Erro ao iniciar.");
+      }
     });
 }
 
 
-//Finalizar Kit Tssr
+// Finalizar Kit Tssr
 function finalizaKitTssr(endId) {
   // Obtém os valores das datas e do status
   const dataPrevista = document.getElementById(`data-prevista-${endId}`)?.value;
@@ -227,7 +238,9 @@ function finalizaKitTssr(endId) {
     body: JSON.stringify(payload),
   })
     .then((response) => {
-      console.log("Resposta da requisição recebida:", response);
+      if (response.status === 403) {
+        throw new Error("Você não tem permissão para realizar esta ação.");
+      }
       if (!response.ok) {
         throw new Error(`Erro ao atualizar os dados: ${response.statusText}`);
       }
@@ -252,12 +265,15 @@ function finalizaKitTssr(endId) {
       });
     })
     .then((response) => {
+      if (response.status === 403) {
+        throw new Error("Você não tem permissão para realizar esta ação.");
+      }
       if (!response.ok) {
         throw new Error(`Erro ao enviar para Sci-Inclusão: ${response.statusText}`);
       }
 
       // Atualiza a etapa para o valor 7
-      return atualizarEtapa(endId, 4 );
+      return atualizarEtapa(endId, 4);
     })
     .then(() => {
       alert("Kit-TSSR finalizada, enviada para Sci-Inclusão e etapa atualizada com sucesso!");
@@ -268,10 +284,15 @@ function finalizaKitTssr(endId) {
       preencherTabelaKitTssr(paginaAtual - 1);
     })
     .catch((error) => {
-      console.error("Erro durante a atualização dos dados:", error);
-      alert("Erro ao finalizar Kit-TSSR e enviar para Sci-Inclusão.");
+      if (error.message === "Você não tem permissão para realizar esta ação.") {
+        alert(error.message);
+      } else {
+        console.error("Erro durante a atualização dos dados:", error);
+        alert("Erro ao finalizar Kit-TSSR e enviar para Sci-Inclusão.");
+      }
     });
 }
+
 
 // Função para atualizar a etapa
 function atualizarEtapa(endId, novaEtapaId) {

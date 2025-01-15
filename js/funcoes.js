@@ -1084,6 +1084,9 @@ function enviarWorkflow(endId, cadastroWorkflowSelecionado, etapa) {
     .then((response) => {
       if (!response.ok) {
         return response.json().then((err) => {
+          if (response.status === 403) {
+            throw new Error("Você não tem permissão para realizar esta ação.");
+          }
           throw new Error(
             `${response.status} - ${response.statusText}: ${
               err.message || "Erro desconhecido"
@@ -1123,9 +1126,14 @@ function enviarWorkflow(endId, cadastroWorkflowSelecionado, etapa) {
     })
     .catch((erro) => {
       console.error("Erro ao enviar Cadastro Workflow:", erro);
-      alert(`Erro ao enviar Cadastro Workflow: ${erro.message}`);
+      if (erro.message === "Você não tem permissão para realizar esta ação.") {
+        alert(erro.message);
+      } else {
+        alert(`Erro ao enviar Cadastro Workflow: ${erro.message}`);
+      }
     });
 }
+
 
 
 
@@ -1172,6 +1180,9 @@ function enviarCodigoSCI(endId, codigo, etapa) {
     .then((response) => {
       if (!response.ok) {
         return response.json().then((err) => {
+          if (response.status === 403) {
+            throw new Error("Você não tem permissão para realizar esta ação.");
+          }
           throw new Error(
             `${response.status} - ${response.statusText}: ${err.message || "Erro desconhecido"}`
           );
@@ -1202,17 +1213,21 @@ function enviarCodigoSCI(endId, codigo, etapa) {
         const paginacao = document.getElementById("pagination-controls-exclusão");
         const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
         preencherTabelaSciExclusao(paginaAtual - 1); // Atualiza a tabela de SCI Exclusão
-      
       } else if (etapa === "sci-inclusao") {
         const paginacao = document.getElementById("pagination-controls-inclusao");
         const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
-        preencherTabelaSciInclusao();
+        preencherTabelaSciInclusao(paginaAtual - 1); // Atualiza a tabela de SCI Inclusão
       } else {
         console.warn(`Nenhuma ação definida para o etapa: ${etapa}`);
       }
     })
     .catch((erro) => {
       console.error(`Erro ao enviar código de ${etapa === "sci-exclusao" ? "exclusão" : "inclusão"}:`, erro);
-      alert(`Erro ao enviar o código de ${etapa === "sci-exclusao" ? "exclusão" : "inclusão"}. Tente novamente.`);
+      if (erro.message === "Você não tem permissão para realizar esta ação.") {
+        alert(erro.message);
+      } else {
+        alert(`Erro ao enviar o código de ${etapa === "sci-exclusao" ? "exclusão" : "inclusão"}. Tente novamente.`);
+      }
     });
 }
+

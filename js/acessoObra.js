@@ -286,26 +286,36 @@ function iniciaAgendamentoObra(endId) {
   })
     .then((response) => {
       console.log("Resposta da requisição recebida:", response);
+      
+      // Verifica se a resposta não está OK
       if (!response.ok) {
-        throw new Error(`Erro ao atualizar os dados: ${response.statusText}`);
+        if (response.status === 403) {
+          // Caso o erro seja de permissão
+          alert("Você não tem permissão para realizar esta ação.");
+        } else {
+          // Para outros erros
+          throw new Error(`Erro ao atualizar os dados: ${response.statusText}`);
+        }
       }
+
       return response.json();
     })
     .then((data) => {
       console.log("Dados retornados pelo servidor:", data);
       const botaoIniciar = document.querySelector(`[data-id-botao="${endId}"]`);
       botaoIniciar.style.display = "none";
-      const paginacao = document.getElementById(
-        "pagination-controls-agendamento-obra"
-      );
+      const paginacao = document.getElementById("pagination-controls-agendamento-obra");
       const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
       preencherTabelaAcessoObra(paginaAtual - 1);
     })
     .catch((error) => {
       console.error("Erro durante a atualização dos dados:", error);
-      alert("Erro ao iniciar.");
+      if (error.message !== "Você não tem permissão para realizar esta ação.") {
+        alert("Erro ao iniciar.");
+      }
     });
 }
+
 
 
 // Função para finalizar um agendamento
@@ -343,6 +353,12 @@ function finalizaAgendamentoObra(endId) {
   })
     .then((response) => {
       console.log("Resposta da requisição recebida:", response);
+      
+      // Verifica se o erro é de permissão (status 403)
+      if (response.status === 403) {
+        throw new Error("Você não tem permissão para realizar esta ação.");
+      }
+
       if (!response.ok) {
         throw new Error(`Erro ao atualizar os dados: ${response.statusText}`);
       }
@@ -352,26 +368,31 @@ function finalizaAgendamentoObra(endId) {
       console.log("Dados retornados pelo servidor:", data);
 
       // Após finalizar o Kit-TSSR, envia o endId para o Sci-Inclusão com status "Não iniciado"
-    const payloadObra = {
-      status: "Não iniciado",
-    };
-    // Envia para o Sci-Inclusão
-    return fetch(`${host}/obras/${endId}`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payloadObra),
-    });
-  })
-  .then((response) => {
-    if (!response.ok) {
-      throw new Error(`Erro ao enviar para Obra: ${response.statusText}`);
-    }
-    return atualizarEtapa(endId, 7 );
-  })
-  .then((data) => {
+      const payloadObra = {
+        status: "Não iniciado",
+      };
+      // Envia para o Sci-Inclusão
+      return fetch(`${host}/obras/${endId}`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payloadObra),
+      });
+    })
+    .then((response) => {
+      // Verifica o erro de permissão na resposta
+      if (response.status === 403) {
+        throw new Error("Você não tem permissão para realizar esta ação.");
+      }
+
+      if (!response.ok) {
+        throw new Error(`Erro ao enviar para Obra: ${response.statusText}`);
+      }
+      return atualizarEtapa(endId, 7);
+    })
+    .then((data) => {
       console.log("End ID enviado com sucesso, com status 'Não Iniciado':", data);
       alert("Acesso Obra finalizado, enviada para Obras e etapa atualizada com sucesso!");
       
@@ -383,8 +404,12 @@ function finalizaAgendamentoObra(endId) {
       preencherTabelaAcessoObra(paginaAtual - 1);
     })
     .catch((error) => {
-      console.error("Erro durante a atualização dos dados:", error);
-      alert("Erro ao iniciar.");
+      if (error.message === "Você não tem permissão para realizar esta ação.") {
+        alert(error.message);
+      } else {
+        console.error("Erro durante a atualização dos dados:", error);
+        alert("Erro ao iniciar.");
+      }
     });
 }
 

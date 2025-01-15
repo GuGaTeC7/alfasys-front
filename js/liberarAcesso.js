@@ -288,9 +288,18 @@ function iniciaAgendamento(endId) {
   })
     .then((response) => {
       console.log("Resposta da requisição recebida:", response);
+
+      // Verifica se a resposta não está OK
       if (!response.ok) {
-        throw new Error(`Erro ao atualizar os dados: ${response.statusText}`);
+        if (response.status === 403) {
+          // Caso o erro seja de permissão
+          alert("Você não tem permissão para realizar esta ação.");
+        } else {
+          // Para outros erros
+          throw new Error(`Erro ao atualizar os dados: ${response.statusText}`);
+        }
       }
+
       return response.json();
     })
     .then((data) => {
@@ -305,9 +314,12 @@ function iniciaAgendamento(endId) {
     })
     .catch((error) => {
       console.error("Erro durante a atualização dos dados:", error);
-      alert("Erro ao iniciar.");
+      if (error.message !== "Você não tem permissão para realizar esta ação.") {
+        alert("Erro ao iniciar.");
+      }
     });
 }
+
 
 
 function finalizaAgendamento(endId) {
@@ -343,6 +355,9 @@ function finalizaAgendamento(endId) {
     body: JSON.stringify(payload),
   })
     .then((response) => {
+      if (response.status === 403) {
+        throw new Error("Você não tem permissão para realizar esta ação.");
+      }
       if (!response.ok) {
         throw new Error(`Erro ao atualizar os dados: ${response.statusText}`);
       }
@@ -365,15 +380,19 @@ function finalizaAgendamento(endId) {
       });
     })
     .then((response) => {
+      if (response.status === 403) {
+        throw new Error("Você não tem permissão para realizar esta ação.");
+      }
       if (!response.ok) {
         throw new Error(`Erro ao enviar o End ID para vistoria: ${response.statusText}`);
       }
-      return atualizarEtapa(endId, 2 );
-        })
-        .then((data) => {
-            console.log("End ID enviado com sucesso, com status 'Não Iniciado':", data);
-            alert("Acesso Vistoria finalizada, enviado para Vistoria e etapa atualizada com sucesso!");
-
+      return atualizarEtapa(endId, 2);
+    })
+    .then((data) => {
+      console.log("End ID enviado com sucesso, com status 'Não Iniciado':", data);
+      alert(
+        "Acesso Vistoria finalizada, enviado para Vistoria e etapa atualizada com sucesso!"
+      );
 
       // Atualiza a tabela na página atual
       const paginacao = document.getElementById(
@@ -383,10 +402,15 @@ function finalizaAgendamento(endId) {
       preencherTabelaAcesso(paginaAtual - 1);
     })
     .catch((error) => {
-      console.error("Erro durante a finalização e envio para vistoria:", error);
-      alert("Erro ao finalizar e enviar o End ID para vistoria.");
+      if (error.message === "Você não tem permissão para realizar esta ação.") {
+        alert(error.message);
+      } else {
+        console.error("Erro durante a finalização e envio para vistoria:", error);
+        alert("Erro ao finalizar e enviar o End ID para vistoria.");
+      }
     });
 }
+
 
 // Função para atualizar a etapa
 function atualizarEtapa(endId, novaEtapaId) {

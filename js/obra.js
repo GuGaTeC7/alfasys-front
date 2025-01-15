@@ -146,6 +146,7 @@ function iniciaObra(endId) {
   const payload = {
     status: "Em andamento",
   };
+
   fetch(`${host}/obras/${endId}`, {
     method: "PATCH",
     headers: {
@@ -156,9 +157,18 @@ function iniciaObra(endId) {
   })
     .then((response) => {
       console.log("Resposta da requisição recebida:", response);
+      
+      // Verifica se a resposta não está OK
       if (!response.ok) {
-        throw new Error(`Erro ao atualizar os dados: ${response.statusText}`);
+        if (response.status === 403) {
+          // Caso o erro seja de permissão
+          alert("Você não tem permissão para realizar esta ação.");
+        } else {
+          // Para outros erros
+          throw new Error(`Erro ao atualizar os dados: ${response.statusText}`);
+        }
       }
+
       return response.json();
     })
     .then((data) => {
@@ -172,9 +182,12 @@ function iniciaObra(endId) {
     })
     .catch((error) => {
       console.error("Erro durante a atualização dos dados:", error);
-      alert("Erro ao iniciar.");
+      if (error.message !== "Você não tem permissão para realizar esta ação.") {
+        alert("Erro ao iniciar.");
+      }
     });
 }
+
 
 
 function finalizaObra(endId) {
@@ -213,6 +226,9 @@ function finalizaObra(endId) {
   })
     .then((response) => {
       console.log("Resposta recebida:", response);
+      if (response.status === 403) {
+        throw new Error("Você não tem permissão para realizar esta ação.");
+      }
       if (!response.ok) {
         throw new Error(`Erro ao atualizar os dados: ${response.statusText}`);
       }
@@ -222,38 +238,46 @@ function finalizaObra(endId) {
       console.log("Dados retornados pelo servidor:", data);
 
       // Após finalizar Obra, envia o endId para o Sci-Exclusão com status "Não iniciado"
-    const payloadExclusao = {
-      endId: endId,
-      status: "Não iniciado"
-    };
-    // Envia para o Sci-Inclusão
-    return fetch(`${host}/sciExclusao/${endId}`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payloadExclusao),
-    });
-  })
-  .then((response) => {
-    if (!response.ok) {
-      throw new Error(`Erro ao enviar para Sci-Exclusão: ${response.statusText}`);
-    }
-    return atualizarEtapa(endId, 8 );
+      const payloadExclusao = {
+        endId: endId,
+        status: "Não iniciado"
+      };
+
+      // Envia para o Sci-Inclusão
+      return fetch(`${host}/sciExclusao/${endId}`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payloadExclusao),
+      });
+    })
+    .then((response) => {
+      if (response.status === 403) {
+        throw new Error("Você não tem permissão para realizar esta ação.");
+      }
+      if (!response.ok) {
+        throw new Error(`Erro ao enviar para Sci-Exclusão: ${response.statusText}`);
+      }
+      return atualizarEtapa(endId, 8);
     })
     .then((data) => {
       console.log("End ID enviado com sucesso, com status 'Não Iniciado':", data);
       alert("Obra finalizada, enviada para Sci-Exclusão e etapa atualizada com sucesso!");
-    
-    // Atualiza a tabela na página atual (caso necessário)
+
+      // Atualiza a tabela na página atual (caso necessário)
       const paginacao = document.getElementById("pagination-controls-obra");
       const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
       preencherTabelaObra(paginaAtual - 1);
     })
     .catch((error) => {
-      console.error("Erro ao finalizar a obra:", error);
-      alert("Erro ao finalizar a obra. Verifique as informações e tente novamente.");
+      if (error.message === "Você não tem permissão para realizar esta ação.") {
+        alert(error.message);
+      } else {
+        console.error("Erro ao finalizar a obra:", error);
+        alert("Erro ao finalizar a obra. Verifique as informações e tente novamente.");
+      }
     });
 }
 

@@ -175,11 +175,12 @@ loadingOverlay.style.display = "none";
 }
 
 
-// Função para iniciar Inclusão
+// Função para iniciar Exclusão
 function iniciaExclusao(endId) {
   const payload = {
     status: "Em andamento",
   };
+
   fetch(`${host}/sciExclusao/${endId}`, {
     method: "PATCH",
     headers: {
@@ -190,9 +191,18 @@ function iniciaExclusao(endId) {
   })
     .then((response) => {
       console.log("Resposta da requisição recebida:", response);
+      
+      // Verifica se a resposta não está OK
       if (!response.ok) {
-        throw new Error(`Erro ao atualizar os dados: ${response.statusText}`);
+        if (response.status === 403) {
+          // Caso o erro seja de permissão
+          alert("Você não tem permissão para realizar esta ação.");
+        } else {
+          // Para outros erros
+          throw new Error(`Erro ao atualizar os dados: ${response.statusText}`);
+        }
       }
+
       return response.json();
     })
     .then((data) => {
@@ -206,12 +216,14 @@ function iniciaExclusao(endId) {
     })
     .catch((error) => {
       console.error("Erro durante a atualização dos dados:", error);
-      alert("Erro ao iniciar.");
+      if (error.message !== "Você não tem permissão para realizar esta ação.") {
+        alert("Erro ao iniciar.");
+      }
     });
 }
 
 
-
+// Função para finalizar Sci-Exclusão
 function finalizaSciExclusao(endId) { 
   // Monta o payload
   const payload = {
@@ -228,9 +240,19 @@ function finalizaSciExclusao(endId) {
     body: JSON.stringify(payload),
   })
     .then((response) => {
+      console.log("Resposta da requisição recebida:", response);
+
+      // Verifica se a resposta não está OK
       if (!response.ok) {
-        throw new Error(`Erro ao atualizar os dados: ${response.statusText}`);
+        if (response.status === 403) {
+          // Caso o erro seja de permissão
+          alert("Você não tem permissão para realizar esta ação.");
+        } else {
+          // Para outros erros
+          throw new Error(`Erro ao atualizar os dados: ${response.statusText}`);
+        }
       }
+
       return response.json();
     })
     .then((data) => {
@@ -243,9 +265,12 @@ function finalizaSciExclusao(endId) {
     })
     .catch((error) => {
       console.error("Erro durante a atualização dos dados:", error);
-      alert("Erro ao finalizar a Inclusão.");
+      if (error.message !== "Você não tem permissão para realizar esta ação.") {
+        alert("Erro ao finalizar a Inclusão.");
+      }
     });
 }
+
 
 
 // Botões de alert para Finalizar e Iniciar
@@ -621,7 +646,7 @@ function criarLinhaSciExclusao(item) {
   
       exibirConfirmacao(
         `Tem certeza que deseja enviar o código de exclusão: ${codExclusao}?`,
-        () => enviarCodigoSCI(endId, codExclusao, "sci-exclusao")
+        () => enviarCodigoSCI(endId, codExclusao, "sci-exclusão")
       );
     }
   });

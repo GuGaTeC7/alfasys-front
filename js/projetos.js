@@ -115,60 +115,71 @@ document.getElementById("button-buscar-projeto").addEventListener("click", funct
   }
   
   
-  //Iniciar Kit Tssr
-  function iniciaProjeto(endId) {
-    const payload = {
-      status: "Em andamento",
-    };
-    fetch(`${host}/projetos/${endId}`, {
-      method: "PATCH",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    })
-      .then((response) => {
-        console.log("Resposta da requisição recebida:", response);
-        if (!response.ok) {
+// Iniciar Kit Tssr
+function iniciaProjeto(endId) {
+  const payload = {
+    status: "Em andamento",
+  };
+  fetch(`${host}/projetos/${endId}`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  })
+    .then((response) => {
+      console.log("Resposta da requisição recebida:", response);
+      
+      // Verifica se a resposta não está OK
+      if (!response.ok) {
+        if (response.status === 403) {
+          // Caso o erro seja de permissão
+          alert("Você não tem permissão para realizar esta ação.");
+        } else {
+          // Para outros erros
           throw new Error(`Erro ao atualizar os dados: ${response.statusText}`);
         }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("Dados retornados pelo servidor:", data);
-        const botaoIniciar = document.querySelector(`[data-id-botao="${endId}"]`);
-        botaoIniciar.style.display = "none";
-        const paginacao = document.getElementById("pagination-controls-projeto");
-        const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
-  
-        preencherTabelaProjetos(paginaAtual - 1);
-      })
-      .catch((error) => {
-        console.error("Erro durante a atualização dos dados:", error);
+      }
+
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Dados retornados pelo servidor:", data);
+      const botaoIniciar = document.querySelector(`[data-id-botao="${endId}"]`);
+      botaoIniciar.style.display = "none";
+      const paginacao = document.getElementById("pagination-controls-projeto");
+      const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
+
+      preencherTabelaProjetos(paginaAtual - 1);
+    })
+    .catch((error) => {
+      console.error("Erro durante a atualização dos dados:", error);
+      if (error.message !== "Você não tem permissão para realizar esta ação.") {
         alert("Erro ao iniciar.");
-      });
-  }
+      }
+    });
+}
+
   
   
-  //Finalizar Kit Tssr
-  function finalizaProjeto(endId) {
+// Finalizar Projeto
+function finalizaProjeto(endId) {
   // Obtém os valores das datas e do status
   const dataEntrada = document.getElementById(`data-entrada-${endId}`)?.value;
   const dataAprovacao = document.getElementById(`data-aprovacao-projeto-${endId}`)?.value;
- 
-  
+
   // Verifica se todas as datas estão preenchidas
-  if (!dataEntrada || !dataAprovacao ) {
+  if (!dataEntrada || !dataAprovacao) {
     alert("A data de realização e data prevista devem estar preenchidas.");
     return; // Interrompe a execução se a data não for válida
   }
-  
+
   // Monta o payload
   const payload = {
     status: "Concluído",
   };
-  
+
   // Realiza a requisição
   fetch(`${host}/projetos/${endId}`, {
     method: "PATCH",
@@ -180,6 +191,9 @@ document.getElementById("button-buscar-projeto").addEventListener("click", funct
   })
     .then((response) => {
       console.log("Resposta da requisição recebida:", response);
+      if (response.status === 403) {
+        throw new Error("Você não tem permissão para realizar esta ação.");
+      }
       if (!response.ok) {
         throw new Error(`Erro ao atualizar os dados: ${response.statusText}`);
       }
@@ -188,28 +202,32 @@ document.getElementById("button-buscar-projeto").addEventListener("click", funct
     .then((data) => {
       console.log("Dados retornados pelo servidor:", data);
 
-       // Após finalizar o Projeto, envia o endId para o Agendamento com status "Não iniciado"
-    const payloaAcessoObra = {
-      statusAgendamento: "Não iniciado",
-      status: "Não Iniciado"
-    };
-    // Envia para Acesso Obra
-    return fetch(`${host}/obras/agendamento/${endId}`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payloaAcessoObra),
-    });
-  })
-  .then((response) => {
-    if (!response.ok) {
-      throw new Error(`Erro ao enviar para Acesso Obra: ${response.statusText}`);
-    }
-    return atualizarEtapa(endId, 6 );
-  })
-  .then((data) => {
+      // Após finalizar o Projeto, envia o endId para o Agendamento com status "Não iniciado"
+      const payloaAcessoObra = {
+        statusAgendamento: "Não iniciado",
+        status: "Não Iniciado",
+      };
+
+      // Envia para Acesso Obra
+      return fetch(`${host}/obras/agendamento/${endId}`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payloaAcessoObra),
+      });
+    })
+    .then((response) => {
+      if (response.status === 403) {
+        throw new Error("Você não tem permissão para realizar esta ação.");
+      }
+      if (!response.ok) {
+        throw new Error(`Erro ao enviar para Acesso Obra: ${response.statusText}`);
+      }
+      return atualizarEtapa(endId, 6);
+    })
+    .then((data) => {
       console.log("End ID enviado com sucesso, com status 'Não Iniciado':", data);
       alert("Projeto finalizado, enviada para Acesso Obra e etapa atualizada com sucesso!");
 
@@ -219,10 +237,14 @@ document.getElementById("button-buscar-projeto").addEventListener("click", funct
       preencherTabelaProjetos(paginaAtual - 1);
     })
     .catch((error) => {
-      console.error("Erro durante a atualização dos dados:", error);
-      alert("Erro ao finalizar o Projeto.");
+      if (error.message === "Você não tem permissão para realizar esta ação.") {
+        alert(error.message);
+      } else {
+        console.error("Erro durante a atualização dos dados:", error);
+        alert("Erro ao finalizar o Projeto.");
+      }
     });
-  }
+}
 
 // Função para atualizar a etapa
 function atualizarEtapa(endId, novaEtapaId) {
@@ -241,6 +263,9 @@ function atualizarEtapa(endId, novaEtapaId) {
     body: JSON.stringify(payloadEtapa),
   })
     .then((response) => {
+      if (response.status === 403) {
+        throw new Error("Você não tem permissão para realizar esta ação.");
+      }
       if (!response.ok) {
         throw new Error(`Erro ao atualizar a etapa: ${response.statusText}`);
       }
@@ -250,6 +275,7 @@ function atualizarEtapa(endId, novaEtapaId) {
       console.log("Etapa atualizada com sucesso:", data);
     });
 }
+
 
   
   

@@ -143,114 +143,137 @@ loadingOverlay.style.display = "none";
 
 
 // Função para iniciar Inclusão
-  function iniciaInclusao(endId) {
-    const payload = {
-      status: "Em andamento",
+function iniciaInclusao(endId) {
+  const payload = {
+    status: "Em andamento",
+  };
+  fetch(`${host}/sciInclusao/${endId}`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  })
+    .then((response) => {
+      console.log("Resposta da requisição recebida:", response);
+      
+      // Verifica se a resposta não está OK
+      if (!response.ok) {
+        if (response.status === 403) {
+          // Caso o erro seja de permissão
+          alert("Você não tem permissão para realizar esta ação.");
+        } else {
+          // Para outros erros
+          throw new Error(`Erro ao atualizar os dados: ${response.statusText}`);
+        }
+      }
+
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Dados retornados pelo servidor:", data);
+      const botaoIniciar = document.querySelector(`[data-id-botao="${endId}"]`);
+      botaoIniciar.style.display = "none";
+      const paginacao = document.getElementById("pagination-controls-inclusao");
+      const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
+
+      preencherTabelaSciInclusao(paginaAtual - 1);
+    })
+    .catch((error) => {
+      console.error("Erro durante a atualização dos dados:", error);
+      if (error.message !== "Você não tem permissão para realizar esta ação.") {
+        alert("Erro ao iniciar.");
+      }
+    });
+}
+
+
+
+  function finalizaSciInclusao(endId) {
+    const dataEnvio = document.getElementById(`data-envio-inclusao-${endId}`)?.value;
+    const dataAprovacao = document.getElementById(`data-aprovacao-inclusao-${endId}`)?.value;
+  
+    if (!dataEnvio || !dataAprovacao) {
+      alert("A data de envio e data de aprovação devem estar preenchidas.");
+      return;
+    }
+  
+    const payloadInclusao = {
+      status: "Concluído",
     };
+  
+    // Atualiza o status para "Concluído"
     fetch(`${host}/sciInclusao/${endId}`, {
       method: "PATCH",
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(payload),
+      body: JSON.stringify(payloadInclusao),
     })
       .then((response) => {
-        console.log("Resposta da requisição recebida:", response);
+        if (response.status === 403) {
+          throw new Error("Você não tem permissão para realizar esta ação.");
+        }
         if (!response.ok) {
           throw new Error(`Erro ao atualizar os dados: ${response.statusText}`);
         }
         return response.json();
       })
+      .then(() => {
+        // Envia o endId para a página de projetos com o status "Não Iniciado"
+        const payloadProjetos = {
+          status: "Não Iniciado",
+          informacoesLigacao: {
+            statusLigacao: null,
+            concessionaria: null,
+            previsaoLigacao: null,
+            numeroMedidor: null,
+            numeroInstalacao: null,
+            numeroDeFases: null,
+            leituraInicial: null,
+            dataLigacao: null,
+          },
+        };
+  
+        return fetch(`${host}/projetos/${endId}`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payloadProjetos),
+        });
+      })
+      .then((response) => {
+        if (response.status === 403) {
+          throw new Error("Você não tem permissão para realizar esta ação.");
+        }
+        if (!response.ok) {
+          throw new Error(`Erro ao enviar o endId para projetos: ${response.statusText}`);
+        }
+        return atualizarEtapa(endId, 5);
+      })
       .then((data) => {
-        console.log("Dados retornados pelo servidor:", data);
-        const botaoIniciar = document.querySelector(`[data-id-botao="${endId}"]`);
-        botaoIniciar.style.display = "none";
+        console.log("End ID enviado com sucesso, com status 'Não Iniciado':", data);
+        alert("Sci-Inclusão finalizada, enviada para Projetos e etapa atualizada com sucesso!");
+  
+        // Atualiza a tabela na página atual
         const paginacao = document.getElementById("pagination-controls-inclusao");
         const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
-  
         preencherTabelaSciInclusao(paginaAtual - 1);
       })
       .catch((error) => {
-        console.error("Erro durante a atualização dos dados:", error);
-        alert("Erro ao iniciar.");
+        if (error.message === "Você não tem permissão para realizar esta ação.") {
+          alert(error.message);
+        } else {
+          console.error("Erro durante o processo de finalização:", error);
+          alert("Erro ao finalizar a Inclusão.");
+        }
       });
   }
-
-
-  function finalizaSciInclusao(endId) {
-    const dataEnvio = document.getElementById(`data-envio-inclusao-${endId}`)?.value;
-    const dataAprovacao = document.getElementById(`data-aprovacao-inclusao-${endId}`)?.value;
-
-    if (!dataEnvio || !dataAprovacao) {
-        alert("A data de envio e data de aprovação devem estar preenchidas.");
-        return;
-    }
-
-    const payloadInclusao = {
-        status: "Concluído",
-    };
-
-    // Atualiza o status para "Concluído"
-    fetch(`${host}/sciInclusao/${endId}`, {
-        method: "PATCH",
-        headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payloadInclusao),
-    })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error(`Erro ao atualizar os dados: ${response.statusText}`);
-            }
-            return response.json();
-        })
-        .then(() => {
-            // Envia o endId para a página de projetos com o status "Não Iniciado"
-            const payloadProjetos = {
-                status: "Não Iniciado",
-                informacoesLigacao: {
-                statusLigacao: null,
-                concessionaria: null,
-                previsaoLigacao: null,
-                numeroMedidor: null,
-                numeroInstalacao: null,
-                numeroDeFases: null,
-                leituraInicial: null,
-                dataLigacao: null
-              }
-            };
-
-            return fetch(`${host}/projetos/${endId}`, {
-                method: "POST",
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(payloadProjetos),
-            });
-        })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error(`Erro ao enviar o endId para projetos: ${response.statusText}`);
-            }
-            return atualizarEtapa(endId, 5 );
-        })
-        .then((data) => {
-            console.log("End ID enviado com sucesso, com status 'Não Iniciado':", data);
-            alert("Sci-Inclusão finalizada, enviada para Projetos e etapa atualizada com sucesso!");
-
-            // Atualiza a tabela na página atual
-            const paginacao = document.getElementById("pagination-controls-inclusao");
-            const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
-            preencherTabelaSciInclusao(paginaAtual - 1);
-        })
-        .catch((error) => {
-            console.error("Erro durante o processo de finalização:", error);
-            alert("Erro ao finalizar a Inclusão.");
-        });
-}
+  
 
 // Função para atualizar a etapa
 function atualizarEtapa(endId, novaEtapaId) {
