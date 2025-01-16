@@ -643,7 +643,7 @@ document
     tbody.innerHTML = ""; // Limpa a tabela antes de preencher
   
     if (!dados.content || dados.content.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="5" class="text-center">Nenhum dado encontrado.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="6" class="text-center">Nenhum dado encontrado.</td></tr>`;
       return;
     }
   
