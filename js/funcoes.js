@@ -672,7 +672,6 @@ function enviarData(endId, dateInput, action, etapa) {
       payloadKey: "dataAprovacao",
       url: `${host}/projetos/${endId}`,
     },
-    
   };
 
   // Valida se a ação está mapeada
@@ -699,6 +698,10 @@ function enviarData(endId, dateInput, action, etapa) {
   })
     .then((response) => {
       if (!response.ok) {
+        if (response.status === 403) {
+          alert("Você não tem permissão para realizar esta ação.");
+          throw new Error("Permissão negada (403).");
+        }
         return response.json().then((err) => {
           throw new Error(
             `${response.status} - ${response.statusText}: ${
@@ -716,7 +719,7 @@ function enviarData(endId, dateInput, action, etapa) {
         inputField.value = dateInput;
         inputField.setAttribute("disabled", "true"); // Desativa o campo após envio
       }
-    
+
       // Oculta o botão correspondente
       const button = document.querySelector(
         `i[data-action="${action}"][data-id="${endId}"]`
@@ -726,58 +729,47 @@ function enviarData(endId, dateInput, action, etapa) {
       } else {
         console.warn("Botão não encontrado! Mas a operação continua.");
       }
-    
+
       alert("Data enviada com sucesso!");
       console.log("Resposta do servidor:", dados);
-      
       
       // Atualiza a tabela correspondente à etapa
       if (etapa === "obra") {
         const paginacao = document.getElementById("pagination-controls-obra");
         const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
         preencherTabelaObra(paginaAtual - 1); // Atualiza a tabela de obras
-
-      } else if 
-        (etapa === "vistoria") {
+      } else if (etapa === "vistoria") {
         const paginacao = document.getElementById("pagination-controls-vistoria");
         const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
         preencherTabelaVistoria(paginaAtual - 1); // Atualiza a tabela de vistorias
-
       } else if (etapa === "kit-tssr") {
         const paginacao = document.getElementById("pagination-controls-Tssr");
         const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
         preencherTabelaKitTssr(paginaAtual - 1); // Atualiza a tabela de Kit TSSR
-
       } else if (etapa === "cadastro-feito") {
         const paginacao = document.getElementById("pagination-controls");
         const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
         preencherTabela(paginaAtual - 1); // Atualiza a tabela geral
-
       } else if (etapa === "sci-exclusão") {
         const paginacao = document.getElementById("pagination-controls-exclusão");
         const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
         preencherTabelaSciExclusao(paginaAtual - 1); // Atualiza a tabela de SCI Exclusão
-
       } else if (etapa === "sci-inclusao") {
         const paginacao = document.getElementById("pagination-controls-inclusao");
         const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
         preencherTabelaSciInclusao(paginaAtual - 1); // Atualiza a tabela de SCI Inclusão
-
       } else if (etapa === "projetos") {
         const paginacao = document.getElementById("pagination-controls-projeto");
         const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
         preencherTabelaProjetos(paginaAtual - 1); // Atualiza a tabela de projetos
-
       } else if (etapa === "agendamento") {
         const paginacao = document.getElementById("pagination-controls-agendamento");
         const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
         preencherTabelaAcesso(paginaAtual - 1); // Atualiza a tabela de acesso
-
       } else if (etapa === "agendamento-obra") {
         const paginacao = document.getElementById("pagination-controls-agendamento-obra");
         const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
         preencherTabelaAcessoObra(paginaAtual - 1); // Atualiza a tabela de acesso 
-
       } else if (etapa === "todos-projetos") {
         const paginacao = document.getElementById("pagination-controls-projeto");
         const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
@@ -785,8 +777,14 @@ function enviarData(endId, dateInput, action, etapa) {
       } else {
         console.warn(`Nenhuma ação definida para a etapa: ${etapa}`);
       }
-    })    
-  }    
+    })
+    .catch((error) => {
+      console.error("Erro ao enviar a data:", error);
+      if (error.message !== "Permissão negada (403).") {
+        alert(`Erro ao enviar a data: ${error.message}`);
+      }
+    });
+}
 
 
 
