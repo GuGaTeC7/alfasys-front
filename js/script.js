@@ -1,3 +1,22 @@
+// Seleciona todos os elementos de botão com o ícone inicial
+const buttons = document.querySelectorAll('.list-group-item .bx-error-circle');
+
+// Adiciona um evento de clique para cada botão
+buttons.forEach(button => {
+  button.parentElement.addEventListener('click', () => {
+    // Verifica se o ícone atual é o de erro
+    if (button.classList.contains('bx-error-circle')) {
+      // Altera para o ícone de sucesso
+      button.classList.remove('bx-error-circle', 'text-warning');
+      button.classList.add('bx-check-circle', 'text-success');
+    } else {
+      // Altera de volta para o ícone de erro (opcional, caso queira alternar novamente)
+      button.classList.remove('bx-check-circle', 'text-success');
+      button.classList.add('bx-error-circle', 'text-warning');
+    }
+  });
+});
+
 let userImg = document.querySelector(".user-img");
 let userName = document.querySelector("#nomeUserHeader");
 let nomeUserInfo = document.querySelector("#nomeUserInfo");
@@ -73,4 +92,3 @@ navbarBrand.addEventListener("click", (e) => {
   e.preventDefault();
   location.reload();
 });
-

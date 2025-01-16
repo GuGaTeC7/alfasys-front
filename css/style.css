@@ -95,6 +95,9 @@ body {
 }
 .notice {
   width: 350px;
+  height: auto; /* Permite que a altura se ajuste ao conteúdo */
+  max-height: 210px; /* Ajuste para exibir 3 notificações */
+  overflow-y: auto; /* Adiciona uma barra de rolagem caso o conteúdo ultrapasse o limite */
   background-color: #fff;
   position: absolute;
   top: 64px;
@@ -103,6 +106,40 @@ body {
   box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
     rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
   display: none;
+  scrollbar-width: thin; /* Para navegadores compatíveis */
+  scrollbar-color: #cccccc #ffffff; /* Personalize a aparência da barra */
+}
+.notice::-webkit-scrollbar {
+  width: 8px;
+}
+
+.notice::-webkit-scrollbar-thumb {
+  background-color: #cccccc;
+  border-radius: 4px;
+}
+.notice ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.notice ul li {
+  padding: 5px 10px; /* Reduz o padding interno */
+  font-size: 14px; /* Diminui o tamanho do texto */
+  line-height: 1.2; /* Ajusta o espaçamento entre as linhas */
+  border-bottom: 1px solid #f1f1f1;
+}
+.notice ul li:last-child {
+  border-bottom: none; /* Remove a borda do último item */
+}
+.notice ul li .mr-3 {
+  font-size: 16px; /* Reduz o tamanho do ícone */
+}
+.notice ul li h6 {
+  margin: 0;
+  font-size: 14px; /* Diminui o tamanho do título */
+}
+.notice ul li small {
+  font-size: 12px; /* Ajusta o tamanho do texto secundário */
 }
 .notice::before {
   position: absolute;
@@ -187,7 +224,7 @@ body {
     width: 90%; /* Ajusta a largura para ocupar quase toda a tela */
     right: 5%; /* Centraliza horizontalmente */
     left: 5%; /* Garante o espaçamento lateral */
-    top: 60px; /* Ajusta a posição vertical */
+    top: 80px; /* Ajusta a posição vertical */
     border-radius: 10px; /* Borda arredondada para estética */
     z-index: 999; /* Garante que fique sobre outros elementos */
   }
