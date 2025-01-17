@@ -92,3 +92,20 @@ navbarBrand.addEventListener("click", (e) => {
   e.preventDefault();
   location.reload();
 });
+
+
+// Botão para fazer logout
+document.getElementById("logout").addEventListener("click", function () {
+  localStorage.removeItem("token");
+  window.location.href = "login.html";
+});
+
+// Botão para fazer logout
+document.getElementById("configs").addEventListener("click", function () {
+  window.location.href = "configs.html";
+});
+
+// Botão para fazer logout
+document.getElementById("support").addEventListener("click", function () {
+  window.location.href = "support.html";
+});

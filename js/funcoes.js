@@ -166,12 +166,6 @@ document.querySelectorAll(".end-id").forEach((button) => {
 });
 
 
-// Botão para fazer logout
-document.getElementById("logout").addEventListener("click", function () {
-  localStorage.removeItem("token");
-  window.location.href = "login.html";
-});
-
 // Função genérica para resetar os campos de um formulário
 function resetarCampos(formularioId) {
   const formulario = document.getElementById(formularioId);
