@@ -751,7 +751,7 @@ function enviarData(endId, dateInput, action, etapa) {
         const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
         preencherTabela(paginaAtual - 1); // Atualiza a tabela geral
       } else if (etapa === "sci-exclusão") {
-        const paginacao = document.getElementById("pagination-controls-exclusão");
+        const paginacao = document.getElementById("pagination-controls-exclusao");
         const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
         preencherTabelaSciExclusao(paginaAtual - 1); // Atualiza a tabela de SCI Exclusão
       } else if (etapa === "sci-inclusao") {
@@ -1115,7 +1115,7 @@ function enviarWorkflow(endId, cadastroWorkflowSelecionado, etapa) {
 
       // Atualiza a tabela correspondente à etapa
       if (etapa === "sci-exclusão") {
-        const paginacao = document.getElementById("pagination-controls-exclusão");
+        const paginacao = document.getElementById("pagination-controls-exclusao");
         const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
         preencherTabelaSciExclusao();
       } else {
@@ -1208,7 +1208,7 @@ function enviarCodigoSCI(endId, codigo, etapa) {
 
       // Atualiza elementos específicos do etapa
       if (etapa === "sci-exclusao") {
-        const paginacao = document.getElementById("pagination-controls-exclusão");
+        const paginacao = document.getElementById("pagination-controls-exclusao");
         const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
         preencherTabelaSciExclusao(paginaAtual - 1); // Atualiza a tabela de SCI Exclusão
       } else if (etapa === "sci-inclusao") {
