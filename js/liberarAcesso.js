@@ -340,6 +340,10 @@ function finalizaAgendamento(endId) {
     return; // Interrompe a execução se as datas não forem válidas
   }
 
+  // Adiciona o overlay de carregamento
+  const loadingOverlay = document.getElementById("loading-overlay");
+  loadingOverlay.style.display = "block";
+
   // Monta o payload para finalizar o agendamento
   const payload = {
     statusAgendamento: "Concluído",
@@ -408,7 +412,11 @@ function finalizaAgendamento(endId) {
         console.error("Erro durante a finalização e envio para vistoria:", error);
         alert("Erro ao finalizar e enviar o End ID para vistoria.");
       }
-    });
+    })
+    .finally(() => {
+      // Remove o overlay de carregamento
+      loadingOverlay.style.display = "none";
+    }); 
 }
 
 

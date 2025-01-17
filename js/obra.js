@@ -204,6 +204,10 @@ function finalizaObra(endId) {
     return;
   }
 
+   // Adiciona o overlay de carregamento
+   const loadingOverlay = document.getElementById("loading-overlay");
+   loadingOverlay.style.display = "block";
+
   const selectElement = document.querySelector(`select[data-id-botao="${endId}"]`);
   const selectStatus = selectElement?.value || "Status desconhecido";
 
@@ -278,6 +282,10 @@ function finalizaObra(endId) {
         console.error("Erro ao finalizar a obra:", error);
         alert("Erro ao finalizar a obra. Verifique as informações e tente novamente.");
       }
+    })
+    .finally(() => {
+      // Remove o overlay de carregamento
+      loadingOverlay.style.display = "none";
     });
 }
 
@@ -770,3 +778,96 @@ function resetarObra(endId) {
       alert("Erro ao resetar a obra.");
     });
 }
+
+/*
+// Adicionar event listener para o ícone do livro (ver mais informações)
+document.querySelectorAll(".ver-mais").forEach((button) => {
+  button.addEventListener("click", (event) => {
+    const endId = event.target.getAttribute("data-id");
+
+    const alertDiv = document.createElement("div");
+    alertDiv.className = "alert-container";
+
+    alertDiv.style.position = "fixed";
+    alertDiv.style.top = "50%";
+    alertDiv.style.left = "50%";
+    alertDiv.style.transform = "translate(-50%, -50%)";
+    alertDiv.style.width = "86%";
+    alertDiv.style.maxWidth = "900px";
+    alertDiv.style.padding = "30px";
+    alertDiv.style.backgroundColor = "#012970";
+    alertDiv.style.color = "#ffffff";
+    alertDiv.style.border = "2px solid #012970";
+    alertDiv.style.borderRadius = "15px";
+    alertDiv.style.boxShadow = "0 4px 20px rgba(0, 0, 0, 0.15)";
+    alertDiv.style.zIndex = "1000";
+    alertDiv.style.overflow = "hidden";
+
+    alertDiv.innerHTML = `<strong style="display: block; text-align: center; margin-bottom: 20px; font-size: 1.5em;">Carregando informações...</strong>`;
+
+    document.body.appendChild(alertDiv);
+
+    fetch(`${host}/projetos/${endId}`, { // Ajuste o endpoint conforme sua API
+      method: "GET",
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error("Erro ao buscar informações do projeto.");
+        return response.json();
+      })
+      .then((dados) => {
+        alertDiv.innerHTML = `
+          <strong style="display: block; text-align: center; margin-bottom: 20px; font-size: 1.5em;">
+            Informações do projeto: ${endId}
+          </strong>
+          <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+            <ul style="flex: 1; padding-left: 20px; font-size: 1em; list-style: none;">
+              <li><strong>ENDEREÇO ID:</strong> ${dados.enderecoId || "N/A"}</li>
+              <li><strong>SITE ID:</strong> ${dados.siteId || "N/A"}</li>
+              <li><strong>Leitura Inicial:</strong> ${dados.leituraInicial || "N/A"}</li>
+              <li><strong>Concessionária:</strong> ${dados.concessionaria || "N/A"}</li>
+              <li><strong>Regional:</strong> ${dados.regional || "N/A"}</li>
+              <li><strong>CEP:</strong> ${dados.cep || "N/A"}</li>
+              <li><strong>UF:</strong> ${dados.uf || "N/A"}</li>
+              <li><strong>Cidade:</strong> ${dados.cidade || "N/A"}</li>
+              <li><strong>Endereço:</strong> ${dados.endereco || "N/A"}</li>
+            </ul>
+            <ul style="flex: 1; padding-right: 20px; font-size: 1em; list-style: none;">
+              <li><strong>CNPJ:</strong> ${dados.cnpj || "N/A"}</li>
+              <li><strong>Previsão de Ligação:</strong> ${dados.previsaoLigacao || "N/A"}</li>
+              <li><strong>Número Medidor:</strong> ${dados.numeroMedidor || "N/A"}</li>
+              <li><strong>Tipo de Tensão:</strong> ${dados.tipoTensao || "N/A"}</li>
+              <li><strong>Unidade:</strong> ${dados.unidade || "N/A"}</li>
+              <li><strong>Número de Instalação:</strong> ${dados.numeroInstalacao || "N/A"}</li>
+              <li><strong>Número de Fases:</strong> ${dados.numeroFases || "N/A"}</li>
+            </ul>
+          </div>
+        `;
+
+        const closeButton = document.createElement("button");
+        closeButton.innerText = "Fechar";
+        closeButton.style.marginTop = "20px";
+        closeButton.style.padding = "12px 20px";
+        closeButton.style.backgroundColor = "#ffffff";
+        closeButton.style.border = "2px solid #ffffff";
+        closeButton.style.color = "#012970";
+        closeButton.style.cursor = "pointer";
+        closeButton.style.borderRadius = "10px";
+        closeButton.style.display = "block";
+        closeButton.style.marginLeft = "auto";
+        closeButton.style.marginRight = "auto";
+
+        closeButton.addEventListener("click", () => {
+          alertDiv.remove();
+        });
+
+        alertDiv.appendChild(closeButton);
+      })
+      .catch((error) => {
+        console.error("Erro ao buscar informações do projeto:", error);
+        alertDiv.innerHTML = `<strong style="color: red;">Erro ao carregar informações. Tente novamente mais tarde.</strong>`;
+      });
+  });
+});
+
+\*/

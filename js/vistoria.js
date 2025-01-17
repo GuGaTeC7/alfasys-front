@@ -199,6 +199,10 @@ function finalizaVistoria(endId) {
     return;
   }
 
+  // Adiciona o overlay de carregamento
+  const loadingOverlay = document.getElementById("loading-overlay");
+  loadingOverlay.style.display = "block";
+
   const payloadVistoria = {
     status: "Concluído"
   };
@@ -258,7 +262,11 @@ function finalizaVistoria(endId) {
         console.error("Erro durante a atualização dos dados:", error);
         alert("Erro ao finalizar a vistoria e enviar para Kit-TSSR.");
       }
-    });
+    })
+    .finally(() => {
+      // Remove o overlay de carregamento
+      loadingOverlay.style.display = "none";
+    }); 
 }
 
 

@@ -337,6 +337,10 @@ function finalizaAgendamentoObra(endId) {
     return; // Interrompe a execução se as datas não forem válidas
   }
 
+  // Adiciona o overlay de carregamento
+  const loadingOverlay = document.getElementById("loading-overlay");
+  loadingOverlay.style.display = "block";
+
   // Monta o payload
   const payload = {
     status: "Concluído",
@@ -353,7 +357,7 @@ function finalizaAgendamentoObra(endId) {
   })
     .then((response) => {
       console.log("Resposta da requisição recebida:", response);
-      
+
       // Verifica se o erro é de permissão (status 403)
       if (response.status === 403) {
         throw new Error("Você não tem permissão para realizar esta ação.");
@@ -395,7 +399,7 @@ function finalizaAgendamentoObra(endId) {
     .then((data) => {
       console.log("End ID enviado com sucesso, com status 'Não Iniciado':", data);
       alert("Acesso Obra finalizado, enviada para Obras e etapa atualizada com sucesso!");
-      
+
       // Atualiza a tabela na página atual
       const paginacao = document.getElementById(
         "pagination-controls-agendamento-obra"
@@ -410,8 +414,13 @@ function finalizaAgendamentoObra(endId) {
         console.error("Erro durante a atualização dos dados:", error);
         alert("Erro ao iniciar.");
       }
+    })
+    .finally(() => {
+      // Remove o overlay de carregamento
+      loadingOverlay.style.display = "none";
     });
 }
+
 
 // Função para atualizar a etapa
 function atualizarEtapa(endId, novaEtapaId) {

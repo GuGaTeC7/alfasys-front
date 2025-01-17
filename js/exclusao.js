@@ -225,6 +225,12 @@ function iniciaExclusao(endId) {
 
 // Função para finalizar Sci-Exclusão
 function finalizaSciExclusao(endId) { 
+  
+  
+  // Adiciona o overlay de carregamento
+  const loadingOverlay = document.getElementById("loading-overlay");
+  loadingOverlay.style.display = "block";
+  
   // Monta o payload
   const payload = {
     status: "Concluído",
@@ -268,7 +274,11 @@ function finalizaSciExclusao(endId) {
       if (error.message !== "Você não tem permissão para realizar esta ação.") {
         alert("Erro ao finalizar a Inclusão.");
       }
-    });
+    })
+    .finally(() => {
+      // Remove o overlay de carregamento
+      loadingOverlay.style.display = "none";
+    }); 
 }
 
 

@@ -175,6 +175,10 @@ function finalizaProjeto(endId) {
     return; // Interrompe a execução se a data não for válida
   }
 
+  // Adiciona o overlay de carregamento
+  const loadingOverlay = document.getElementById("loading-overlay");
+  loadingOverlay.style.display = "block";
+
   // Monta o payload
   const payload = {
     status: "Concluído",
@@ -243,7 +247,11 @@ function finalizaProjeto(endId) {
         console.error("Erro durante a atualização dos dados:", error);
         alert("Erro ao finalizar o Projeto.");
       }
-    });
+    })
+    .finally(() => {
+      // Remove o overlay de carregamento
+      loadingOverlay.style.display = "none";
+    }); 
 }
 
 // Função para atualizar a etapa

@@ -198,7 +198,11 @@ function iniciaInclusao(endId) {
       alert("A data de envio e data de aprovação devem estar preenchidas.");
       return;
     }
-  
+    
+    // Adiciona o overlay de carregamento
+    const loadingOverlay = document.getElementById("loading-overlay");
+    loadingOverlay.style.display = "block";
+
     const payloadInclusao = {
       status: "Concluído",
     };
@@ -271,7 +275,11 @@ function iniciaInclusao(endId) {
           console.error("Erro durante o processo de finalização:", error);
           alert("Erro ao finalizar a Inclusão.");
         }
-      });
+      })
+      .finally(() => {
+        // Remove o overlay de carregamento
+        loadingOverlay.style.display = "none";
+      }); 
   }
   
 
