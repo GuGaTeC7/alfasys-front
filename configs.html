@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/new.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- favicon link  -->
+    <link rel="icon" type="image/x-icon" href="img/logo_alfa.png" />
+    <title>Grupo Alfa - Arujá</title>
+</head>
+
+<body>
+    <div class="container">
+        <a href="index.html" class="back-button"><i class="fa-solid fa-arrow-left"></i></a>
+        <div class="form">
+            <form action="#">
+                <div class="form-header">
+                    <div class="title">
+                        <h1>Cadastrar um novo usuário</h1>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="input-box">
+                        <label for="fullname">Nome Completo</label>
+                        <input id="fullname" type="text" name="fullname" placeholder="Digite seu nome completo" required>
+                    </div>
+
+                    <div class="input-box">
+                        <label for="email">E-mail</label>
+                        <input id="email" type="email" name="email" placeholder="Digite seu e-mail" required>
+                    </div>
+
+                    <div class="input-box">
+                        <label for="phone">Telefone</label>
+                        <input id="phone" type="tel" name="phone" placeholder="Digite seu número" required>
+                    </div>
+
+                    <div class="input-box">
+                        <label for="password">Senha</label>
+                        <input id="password" type="password" name="password" placeholder="Digite sua senha" required>
+                    </div>
+
+                    <div class="input-box">
+                        <label for="cargo">Cargo</label>
+                        <input id="cargo" type="number" name="cargo" placeholder="Digite o cargo" min="1" max="9" required>
+                    </div>
+                </div>
+
+                <div class="continue-button">
+                    <button><a href="#">Cadastrar</a></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
