@@ -82,7 +82,9 @@ document.getElementById('notification-icon').addEventListener('click', function(
         // Definindo o conteúdo de cada notificação
         listItem.innerHTML = `
           <div class="mr-3">
-            <span><i class="bx bx-error-circle text-warning"></i></span>
+            <span class="notification-icon" data-id="${message.id}">
+              <i class="bx bx-error-circle text-warning"></i>
+            </span>
           </div>
           <div>
             <h6 class="text-dark mb-1">${message.titulo}</h6>
@@ -90,6 +92,46 @@ document.getElementById('notification-icon').addEventListener('click', function(
             <small class="text-muted">${message.dataFormatada}</small>
           </div>
         `;
+
+        // Adicionando evento de clique para marcar como lida
+        listItem.querySelector('.notification-icon').addEventListener('click', function() {
+          const mensagensId = this.dataset.id;  // Alterado para 'mensagensId'
+
+          try {
+            // Decodificando o token para extrair o ID do usuário
+            const decodedToken = JSON.parse(atob(token.split('.')[1]));
+            const usersId = decodedToken.id || decodedToken.userId || "0";  // Pegando o ID corretamente
+
+            // Definição do payload para marcar como lida
+            const payload = { lida: true };
+
+            fetch(`${host}/mensagens/${mensagensId}/usuarios/${usersId}/lida`, {
+              method: 'PATCH',
+              headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(payload)  // Enviando o payload corretamente
+            })
+            .then(response => {
+              if (response.ok) {
+                this.innerHTML = '<i class="bx bx-check-circle text-success"></i>';
+                console.log(`Mensagem ${mensagensId} marcada como lida para usuário ${usersId}.`);
+                
+                // Recarregando a página após sucesso
+                location.reload();
+              } else {
+                console.error('Erro ao marcar como lida:', response.statusText);
+              }
+            })
+            .catch(error => {
+              console.error('Erro na requisição PATCH:', error);
+            });
+          } catch (error) {
+            console.error('Erro ao processar o token:', error);
+          }
+        });
+
         notificationList.appendChild(listItem);
       });
     } else {
@@ -102,4 +144,25 @@ document.getElementById('notification-icon').addEventListener('click', function(
 });
 
 
-    
+
+document.addEventListener('DOMContentLoaded', function() {
+  const decodedToken = JSON.parse(atob(token.split('.')[1]));
+  const usersId = decodedToken.id || decodedToken.userId || "0";  // Pegando o ID corretamente
+  const mensagensId = document.getElementById('notification-badge');
+
+  fetch(`${host}/mensagens/nao-visualizadas/${usersId}`, {
+    method: 'GET',  // Método GET explicitamente declarado
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+      // Outros cabeçalhos, se necessário
+    }
+  })
+  .then(response => response.json())
+  .then(data => {
+      mensagensId.textContent = data;  // Atualiza o número de notificações
+  })
+  .catch(error => {
+      console.error('Erro ao obter as notificações:', error);
+  });
+})  

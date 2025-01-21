@@ -222,21 +222,60 @@ function renderizarBotoesPaginacao(
   totalPages,
   ...args // Permite passar argumentos extras
 ) {
-  const paginationControls = document.getElementById(`${idPaginationControls}`);
+  const paginationControls = document.getElementById(idPaginationControls);
   paginationControls.innerHTML = ""; // Limpa botões antigos
 
-  for (let i = 0; i < totalPages; i++) {
+  const maxButtons = 5; // Máximo de botões a serem exibidos
+  let startPage, endPage;
+
+  // Se o número total de páginas for menor ou igual ao máximo, exibe todas as páginas
+  if (totalPages <= maxButtons) {
+    startPage = 0;
+    endPage = totalPages;
+  } else {
+    // Exibe um conjunto de páginas ao redor da página atual
+    if (currentPage <= 2) {
+      startPage = 0;
+      endPage = maxButtons;
+    } else if (currentPage + 2 >= totalPages) {
+      startPage = totalPages - maxButtons;
+      endPage = totalPages;
+    } else {
+      startPage = currentPage - 2;
+      endPage = currentPage + 3;
+    }
+  }
+
+  // Ícone de "Anterior"
+  if (currentPage > 0) {
+    const prevButton = document.createElement("button");
+    prevButton.className = "btn btn-sm btn-light mx-1";
+    prevButton.innerHTML = "&laquo;";
+    prevButton.addEventListener("click", () => tabelaFunction(currentPage - 1, ...args));
+    paginationControls.appendChild(prevButton);
+  }
+
+  // Botões de página
+  for (let i = startPage; i < endPage; i++) {
     const button = document.createElement("button");
     button.className = `btn btn-sm ${
       i === currentPage ? "btn-primary" : "btn-light"
     } mx-1`;
     button.textContent = i + 1;
-
-    // Passa a página e argumentos extras para a função
     button.addEventListener("click", () => tabelaFunction(i, ...args));
     paginationControls.appendChild(button);
   }
+
+  // Ícone de "Próximo"
+  if (currentPage < totalPages - 1) {
+    const nextButton = document.createElement("button");
+    nextButton.className = "btn btn-sm btn-light mx-1";
+    nextButton.innerHTML = "&raquo;";
+    nextButton.addEventListener("click", () => tabelaFunction(currentPage + 1, ...args));
+    paginationControls.appendChild(nextButton);
+  }
 }
+
 
 
 function filtrarTabela(page = 0, secao, idTabela) {
