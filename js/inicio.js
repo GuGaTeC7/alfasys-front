@@ -63,33 +63,43 @@ document.getElementById('notification-icon').addEventListener('click', function(
     method: "GET",
     headers: { Authorization: `Bearer ${token}` },
   })
-      .then(response => response.json()) // Converte a resposta em JSON
-      .then(data => {
-        console.log(data); // Verifique os dados da resposta no console
-        const notificationList = document.querySelector('#notification-list');
-        notificationList.innerHTML = ''; // Limpa as notificações anteriores
-        
-        if (Array.isArray(data) && data.length > 0) {
-            data.forEach(message => {
-                const listItem = document.createElement('li');
-                listItem.classList.add('list-group-item', 'd-flex', 'align-items-center');
-                
-                // Definindo o conteúdo de cada notificação
-                listItem.innerHTML = `
-                    <div class="mr-3">
-                        <span><i class="bx bx-error-circle text-warning"></i></span>
-                    </div>
-                    <div>
-                        <h6 class="text-dark">${message.titulo}</h6>
-                        <small class="text-muted">${message.conteudo}</small><br />
-                        <small class="text-muted">${message.dataFormatada}</small>
-                    </div>
-                `;
-                notificationList.appendChild(listItem);
-            });
-        } else {
-            console.log("Nenhuma notificação encontrada.");
-        }
-    })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Erro ao carregar as notificações');
+    }
+    return response.json();
   })
+  .then(data => {
+    console.log('Dados recebidos:', data); // Verifique os dados da resposta no console
+    const notificationList = document.querySelector('#notification-list');
+    notificationList.innerHTML = ''; // Limpa as notificações anteriores
+
+    if (data.content && Array.isArray(data.content) && data.content.length > 0) {
+      data.content.forEach(message => {
+        const listItem = document.createElement('li');
+        listItem.classList.add('list-group-item', 'd-flex', 'align-items-center');
+        
+        // Definindo o conteúdo de cada notificação
+        listItem.innerHTML = `
+          <div class="mr-3">
+            <span><i class="bx bx-error-circle text-warning"></i></span>
+          </div>
+          <div>
+            <h6 class="text-dark mb-1">${message.titulo}</h6>
+            <small class="text-muted">${message.conteudo}</small><br />
+            <small class="text-muted">${message.dataFormatada}</small>
+          </div>
+        `;
+        notificationList.appendChild(listItem);
+      });
+    } else {
+      notificationList.innerHTML = '<li class="list-group-item text-muted">Nenhuma notificação encontrada.</li>';
+    }
+  })
+  .catch(error => {
+    console.error('Erro ao buscar notificações:', error);
+  });
+});
+
+
     
