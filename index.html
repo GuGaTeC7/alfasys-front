@@ -39,7 +39,7 @@
           <div id="logo-container">
             <img src="img/logo.png" alt="Logo" id="navbar-logo" />
           </div>
-        </a>              
+        </a>
         <div class="actions mr-auto d-flex align-items-center">
           <span><i class="bx bx-menu menu mr-3" id="menu"></i></span>
           <div class="input">
@@ -49,18 +49,19 @@
         </div>
 
         <div class="user">
-          <span class="mr-3 d-flex"
-            ><i class="bx bx-bell notice-icon">
+          <span class="mr-3 d-flex">
+            <i class="bx bx-bell notice-icon" id="notification-icon">
               <div class="badge-icon bg-primary">1</div>
-            </i></span
-          >
+            </i>
+          </span>
 
-          <span
-            ><img
+          <span>
+            <img
               src="img/1077114.png"
               class="ml-3 rounded-circle img-fluid user-img"
               alt=""
-          /></span>
+            />
+          </span>
           <div class="user-descr">
             <h6 class="ml-3 mb-0" id="nomeUserHeader"></h6>
             <small class="text-muted h6 ml-3" id="cargoHeader"></small>
@@ -68,54 +69,10 @@
 
           <!-- monitoramento -->
           <div class="notice rounded">
-            <ul class="list-group">
-              <li class="list-group-item d-flex align-items-center border-top-0">
-                <div>
-                  <small class="text-muted">Notificações</small>
-                </div>
-              </li>
-              <li class="list-group-item d-flex align-items-center">
-                <div class="mr-3">
-                  <span><i class="bx bx-error-circle text-warning"></i></span>
-                </div>
-                <div>
-                  <h6 class="text-dark">Vistoria finalizada!</h6>
-                  <small class="text-muted">Alisson Silva finalizou MGHTH_1234</small><br />
-                  <small class="text-muted">16/01/2025 às 14:31</small>
-                </div>
-              </li>
-              <li class="list-group-item d-flex align-items-center">
-                <div class="mr-3">
-                  <span><i class="bx bx-check-circle text-success"></i></span>
-                </div>
-                <div>
-                  <h6 class="text-dark">Projeto iniciado</h6>
-                  <small class="text-muted">Caroline Vitor iniciou RJTH_4521</small><br />
-                  <small class="text-muted">11/01/2025 às 11:24</small>
-                </div>
-              </li>
-              <li class="list-group-item d-flex align-items-center">
-                <div class="mr-3">
-                  <span><i class="bx bx-error-circle text-warning"></i></span>
-                </div>
-                <div>
-                  <h6 class="text-dark">Acesso Obra finalizado</h6>
-                  <small class="text-muted">Luis Alberto finalizou SPHRE_7810</small><br />
-                  <small class="text-muted">14/02/2025 às 16:29</small>
-                </div>
-              </li>
-              <li class="list-group-item d-flex align-items-center">
-                <div class="mr-3">
-                  <span><i class="bx bx-error-circle text-warning"></i></span>
-                </div>
-                <div>
-                  <h6 class="text-dark">Cadastro editado</h6>
-                  <small class="text-muted">Thayná iniciou PETEW_1100</small><br />
-                  <small class="text-muted">01/01/2025 às 00:00</small>
-                </div>
-              </li>
+            <ul class="list-group" id="notification-list">
+              <!-- As notificações serão carregadas aqui -->
             </ul>
-          </div>          
+          </div>       
 
           <!-- perfil -->
           <div class="profile rounded">
@@ -135,7 +92,7 @@
             <ul class="list-group">
               <li class="list-group-item border-top text-muted" id="configs">
                 <span class="mr-3"><i class="bx bx-cog"></i></span>
-                <span>Cadastrar</span>
+                <span>Cadastro</span>
               </li>
               <li class="list-group-item border-top text-muted" id="support">
                 <span class="mr-3"><i class="bx bx-help-circle"></i></span>

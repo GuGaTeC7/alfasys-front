@@ -53,3 +53,43 @@ async function preencherInicio() {
 
 // Exemplo de chamada
 preencherInicio();
+
+
+
+// Lógica para lidar com as notificações
+document.getElementById('notification-icon').addEventListener('click', function() {
+  // Fazendo a requisição GET para o endpoint de mensagens
+  fetch(`${host}/mensagens?page=0&size=10`, {
+    method: "GET",
+    headers: { Authorization: `Bearer ${token}` },
+  })
+      .then(response => response.json()) // Converte a resposta em JSON
+      .then(data => {
+        console.log(data); // Verifique os dados da resposta no console
+        const notificationList = document.querySelector('#notification-list');
+        notificationList.innerHTML = ''; // Limpa as notificações anteriores
+        
+        if (Array.isArray(data) && data.length > 0) {
+            data.forEach(message => {
+                const listItem = document.createElement('li');
+                listItem.classList.add('list-group-item', 'd-flex', 'align-items-center');
+                
+                // Definindo o conteúdo de cada notificação
+                listItem.innerHTML = `
+                    <div class="mr-3">
+                        <span><i class="bx bx-error-circle text-warning"></i></span>
+                    </div>
+                    <div>
+                        <h6 class="text-dark">${message.titulo}</h6>
+                        <small class="text-muted">${message.conteudo}</small><br />
+                        <small class="text-muted">${message.dataFormatada}</small>
+                    </div>
+                `;
+                notificationList.appendChild(listItem);
+            });
+        } else {
+            console.log("Nenhuma notificação encontrada.");
+        }
+    })
+  })
+    
