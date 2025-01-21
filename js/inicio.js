@@ -56,9 +56,7 @@ preencherInicio();
 
 
 
-// Lógica para lidar com as notificações
 document.getElementById('notification-icon').addEventListener('click', function() {
-  // Fazendo a requisição GET para o endpoint de mensagens
   fetch(`${host}/mensagens?page=0&size=10`, {
     method: "GET",
     headers: { Authorization: `Bearer ${token}` },
@@ -70,20 +68,23 @@ document.getElementById('notification-icon').addEventListener('click', function(
     return response.json();
   })
   .then(data => {
-    console.log('Dados recebidos:', data); // Verifique os dados da resposta no console
+    console.log('Dados recebidos:', data);
     const notificationList = document.querySelector('#notification-list');
-    notificationList.innerHTML = ''; // Limpa as notificações anteriores
+    notificationList.innerHTML = '';
 
     if (data.content && Array.isArray(data.content) && data.content.length > 0) {
       data.content.forEach(message => {
         const listItem = document.createElement('li');
         listItem.classList.add('list-group-item', 'd-flex', 'align-items-center');
-        
-        // Definindo o conteúdo de cada notificação
+
+        // Verificando se a mensagem foi marcada como lida no localStorage
+        const isRead = localStorage.getItem(`notification_${message.id}_read`) === 'true';
+        const iconClass = isRead ? 'bx-check-circle text-success' : 'bx-error-circle text-warning';
+
         listItem.innerHTML = `
           <div class="mr-3">
             <span class="notification-icon" data-id="${message.id}">
-              <i class="bx bx-error-circle text-warning"></i>
+              <i class="bx ${iconClass}"></i>
             </span>
           </div>
           <div>
@@ -93,16 +94,13 @@ document.getElementById('notification-icon').addEventListener('click', function(
           </div>
         `;
 
-        // Adicionando evento de clique para marcar como lida
         listItem.querySelector('.notification-icon').addEventListener('click', function() {
-          const mensagensId = this.dataset.id;  // Alterado para 'mensagensId'
+          const mensagensId = this.dataset.id;
 
           try {
-            // Decodificando o token para extrair o ID do usuário
             const decodedToken = JSON.parse(atob(token.split('.')[1]));
-            const usersId = decodedToken.id || decodedToken.userId || "0";  // Pegando o ID corretamente
+            const usersId = decodedToken.id || decodedToken.userId || "0";
 
-            // Definição do payload para marcar como lida
             const payload = { lida: true };
 
             fetch(`${host}/mensagens/${mensagensId}/usuarios/${usersId}/lida`, {
@@ -111,15 +109,18 @@ document.getElementById('notification-icon').addEventListener('click', function(
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
               },
-              body: JSON.stringify(payload)  // Enviando o payload corretamente
+              body: JSON.stringify(payload)
             })
             .then(response => {
               if (response.ok) {
+                // Atualizando o ícone localmente e no localStorage
                 this.innerHTML = '<i class="bx bx-check-circle text-success"></i>';
                 console.log(`Mensagem ${mensagensId} marcada como lida para usuário ${usersId}.`);
-                
-                // Recarregando a página após sucesso
-                location.reload();
+
+                // Salvando o estado no localStorage
+                localStorage.setItem(`notification_${mensagensId}_read`, 'true');
+
+                location.reload();  // Recarregar a página após sucesso
               } else {
                 console.error('Erro ao marcar como lida:', response.statusText);
               }
@@ -142,6 +143,7 @@ document.getElementById('notification-icon').addEventListener('click', function(
     console.error('Erro ao buscar notificações:', error);
   });
 });
+
 
 
 
