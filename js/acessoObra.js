@@ -271,11 +271,12 @@ function exibirConfirmacao(mensagem, onConfirm) {
 }
 
 
-// Função para iniciar um agendamento
+// Função para iniciar um agendamento de obra
 function iniciaAgendamentoObra(endId) {
   const payload = {
     status: "Em andamento",
   };
+
   fetch(`${host}/obras/agendamento/${endId}`, {
     method: "PATCH",
     headers: {
@@ -302,8 +303,56 @@ function iniciaAgendamentoObra(endId) {
     })
     .then((data) => {
       console.log("Dados retornados pelo servidor:", data);
+
+      // Envia a mensagem de início do agendamento de obra
+      const now = new Date();
+      now.setHours(now.getHours() - 3); // Ajustando UTC-3 para horário de Brasília
+
+      const dataFormatada = [
+        now.getFullYear(),
+        now.getMonth() + 1,
+        now.getDate(),
+        now.getHours(),
+        now.getMinutes(),
+        now.getSeconds(),
+        now.getMilliseconds(),
+      ];
+
+      const decodedToken = JSON.parse(atob(token.split('.')[1]));
+      const usuarioNome = decodedToken.nome || "Usuário Desconhecido";
+
+      const payloadMensagem = {
+        titulo: "Agendamento de obra iniciado",
+        conteudo: `${usuarioNome} iniciou ${endId}`,
+        dataFormatada: dataFormatada,
+        user: {
+          id: 2,
+          nome: usuarioNome,
+          senha: null,
+          email: null,
+          telefone: null,
+          cargo: null,
+          operadoras: null
+        },
+        cargo: null
+      };
+
+      // Envia a mensagem
+      return fetch(`${host}/mensagens`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payloadMensagem),
+      });
+    })
+    .then(() => {
+      // Oculta o botão de iniciar
       const botaoIniciar = document.querySelector(`[data-id-botao="${endId}"]`);
       botaoIniciar.style.display = "none";
+
+      // Atualiza a tabela na página atual
       const paginacao = document.getElementById("pagination-controls-agendamento-obra");
       const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
       preencherTabelaAcessoObra(paginaAtual - 1);
@@ -311,14 +360,14 @@ function iniciaAgendamentoObra(endId) {
     .catch((error) => {
       console.error("Erro durante a atualização dos dados:", error);
       if (error.message !== "Você não tem permissão para realizar esta ação.") {
-        alert("Erro ao iniciar.");
+        alert("Erro ao iniciar o agendamento de obra.");
       }
     });
 }
 
 
 
-// Função para finalizar um agendamento
+
 function finalizaAgendamentoObra(endId) {
   // Obtém os valores das datas
   const dataSolicitacao = document.getElementById(
@@ -396,9 +445,51 @@ function finalizaAgendamentoObra(endId) {
       }
       return atualizarEtapa(endId, 7);
     })
-    .then((data) => {
-      console.log("End ID enviado com sucesso, com status 'Não Iniciado':", data);
-      alert("Acesso Obra finalizado, enviada para Obras e etapa atualizada com sucesso!");
+    .then(() => {
+      const now = new Date();
+      now.setHours(now.getHours() - 3); // Ajustando UTC-3 para horário de Brasília
+
+      const dataFormatada = [
+        now.getFullYear(),
+        now.getMonth() + 1,
+        now.getDate(),
+        now.getHours(),
+        now.getMinutes(),
+        now.getSeconds(),
+        now.getMilliseconds(),
+      ];
+
+      const decodedToken = JSON.parse(atob(token.split('.')[1]));
+      const usuarioNome = decodedToken.nome || "Usuário Desconhecido";
+
+      const payloadMensagem = {
+        titulo: "Agendamento de obra finalizado",
+        conteudo: `${usuarioNome} finalizou ${endId}`,
+        dataFormatada: dataFormatada,
+        user: {
+          id: 2,
+          nome: usuarioNome,
+          senha: null,
+          email: null,
+          telefone: null,
+          cargo: null,
+          operadoras: null
+        },
+        cargo: null
+      };
+
+      // Envia a mensagem
+      return fetch(`${host}/mensagens`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payloadMensagem),
+      });
+    })
+    .then(() => {
+      alert("Acesso Obra finalizado, enviada para Obras, etapa atualizada e mensagem enviada com sucesso!");
 
       // Atualiza a tabela na página atual
       const paginacao = document.getElementById(

@@ -115,11 +115,12 @@ document.getElementById("button-buscar-projeto").addEventListener("click", funct
   }
   
   
-// Iniciar Kit Tssr
+// Iniciar Projeto
 function iniciaProjeto(endId) {
   const payload = {
     status: "Em andamento",
   };
+
   fetch(`${host}/projetos/${endId}`, {
     method: "PATCH",
     headers: {
@@ -146,24 +147,70 @@ function iniciaProjeto(endId) {
     })
     .then((data) => {
       console.log("Dados retornados pelo servidor:", data);
+
+      // Envia a mensagem de início do projeto
+      const now = new Date();
+      now.setHours(now.getHours() - 3); // Ajustando UTC-3 para horário de Brasília
+
+      const dataFormatada = [
+        now.getFullYear(),
+        now.getMonth() + 1,
+        now.getDate(),
+        now.getHours(),
+        now.getMinutes(),
+        now.getSeconds(),
+        now.getMilliseconds(),
+      ];
+
+      const decodedToken = JSON.parse(atob(token.split('.')[1]));
+      const usuarioNome = decodedToken.nome || "Usuário Desconhecido";
+
+      const payloadMensagem = {
+        titulo: "Projeto iniciado",
+        conteudo: `${usuarioNome} iniciou ${endId}`,
+        dataFormatada: dataFormatada,
+        user: {
+          id: 2,
+          nome: usuarioNome,
+          senha: null,
+          email: null,
+          telefone: null,
+          cargo: null,
+          operadoras: null
+        },
+        cargo: null
+      };
+
+      // Envia a mensagem
+      return fetch(`${host}/mensagens`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payloadMensagem),
+      });
+    })
+    .then(() => {
+      // Oculta o botão de iniciar
       const botaoIniciar = document.querySelector(`[data-id-botao="${endId}"]`);
       botaoIniciar.style.display = "none";
+
+      // Atualiza a tabela na página atual
       const paginacao = document.getElementById("pagination-controls-projeto");
       const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
-
       preencherTabelaProjetos(paginaAtual - 1);
     })
     .catch((error) => {
       console.error("Erro durante a atualização dos dados:", error);
       if (error.message !== "Você não tem permissão para realizar esta ação.") {
-        alert("Erro ao iniciar.");
+        alert("Erro ao iniciar o projeto.");
       }
     });
 }
 
   
   
-// Finalizar Projeto
 function finalizaProjeto(endId) {
   // Obtém os valores das datas e do status
   const dataEntrada = document.getElementById(`data-entrada-${endId}`)?.value;
@@ -231,9 +278,51 @@ function finalizaProjeto(endId) {
       }
       return atualizarEtapa(endId, 6);
     })
-    .then((data) => {
-      console.log("End ID enviado com sucesso, com status 'Não Iniciado':", data);
-      alert("Projeto finalizado, enviada para Acesso Obra e etapa atualizada com sucesso!");
+    .then(() => {
+      const now = new Date();
+      now.setHours(now.getHours() - 3); // Ajustando UTC-3 para horário de Brasília
+
+      const dataFormatada = [
+        now.getFullYear(),
+        now.getMonth() + 1,
+        now.getDate(),
+        now.getHours(),
+        now.getMinutes(),
+        now.getSeconds(),
+        now.getMilliseconds(),
+      ];
+
+      const decodedToken = JSON.parse(atob(token.split('.')[1]));
+      const usuarioNome = decodedToken.nome || "Usuário Desconhecido";
+
+      const payloadMensagem = {
+        titulo: "Projeto finalizado",
+        conteudo: `${usuarioNome} finalizou ${endId}`,
+        dataFormatada: dataFormatada,
+        user: {
+          id: 2,
+          nome: usuarioNome,
+          senha: null,
+          email: null,
+          telefone: null,
+          cargo: null,
+          operadoras: null
+        },
+        cargo: null
+      };
+
+      // Envia a mensagem
+      return fetch(`${host}/mensagens`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payloadMensagem),
+      });
+    })
+    .then(() => {
+      alert("Projeto finalizado, enviado para Acesso Obra, etapa atualizada e mensagem enviada com sucesso!");
 
       // Atualiza a tabela na página atual
       const paginacao = document.getElementById("pagination-controls-projeto");
@@ -251,8 +340,9 @@ function finalizaProjeto(endId) {
     .finally(() => {
       // Remove o overlay de carregamento
       loadingOverlay.style.display = "none";
-    }); 
+    });
 }
+
 
 // Função para atualizar a etapa
 function atualizarEtapa(endId, novaEtapaId) {

@@ -142,6 +142,7 @@ function iniciaVistoria(endId) {
   const payload = {
     status: "Em andamento",
   };
+
   fetch(`${host}/vistorias/${endId}`, {
     method: "PATCH",
     headers: {
@@ -152,7 +153,7 @@ function iniciaVistoria(endId) {
   })
     .then((response) => {
       console.log("Resposta da requisição recebida:", response);
-      
+
       // Verifica se a resposta não está OK
       if (!response.ok) {
         if (response.status === 403) {
@@ -163,13 +164,61 @@ function iniciaVistoria(endId) {
           throw new Error(`Erro ao atualizar os dados: ${response.statusText}`);
         }
       }
-      
+
       return response.json();
     })
     .then((data) => {
       console.log("Dados retornados pelo servidor:", data);
+
+      // Envia a mensagem de início da vistoria
+      const now = new Date();
+      now.setHours(now.getHours() - 3); // Ajustando UTC-3 para horário de Brasília
+
+      const dataFormatada = [
+        now.getFullYear(),
+        now.getMonth() + 1,
+        now.getDate(),
+        now.getHours(),
+        now.getMinutes(),
+        now.getSeconds(),
+        now.getMilliseconds(),
+      ];
+
+      const decodedToken = JSON.parse(atob(token.split('.')[1]));
+      const usuarioNome = decodedToken.nome || "Usuário Desconhecido";
+
+      const payloadMensagem = {
+        titulo: "Vistoria iniciada",
+        conteudo: `${usuarioNome} iniciou ${endId}`,
+        dataFormatada: dataFormatada,
+        user: {
+          id: 2,
+          nome: usuarioNome,
+          senha: null,
+          email: null,
+          telefone: null,
+          cargo: null,
+          operadoras: null
+        },
+        cargo: null
+      };
+
+      // Envia a mensagem
+      return fetch(`${host}/mensagens`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payloadMensagem),
+      });
+    })
+    .then(() => {
+      // Oculta o botão de iniciar
       const botaoIniciar = document.querySelector(`[data-id-botao="${endId}"]`);
       botaoIniciar.style.display = "none";
+
+      // Atualiza a tabela na página atual
       const paginacao = document.getElementById("pagination-controls-vistoria");
       const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
       preencherTabelaVistoria(paginaAtual - 1);
@@ -177,10 +226,11 @@ function iniciaVistoria(endId) {
     .catch((error) => {
       console.error("Erro durante a atualização dos dados:", error);
       if (error.message !== "Você não tem permissão para realizar esta ação.") {
-        alert("Erro ao iniciar.");
+        alert("Erro ao iniciar a vistoria.");
       }
     });
 }
+
 
 
 function finalizaVistoria(endId) {
@@ -199,7 +249,6 @@ function finalizaVistoria(endId) {
     return;
   }
 
-  // Adiciona o overlay de carregamento
   const loadingOverlay = document.getElementById("loading-overlay");
   loadingOverlay.style.display = "block";
 
@@ -224,13 +273,12 @@ function finalizaVistoria(endId) {
       }
       return response.json();
     })
-    .then((data) => {
+    .then(() => {
       const payloadKitTssr = {
         endId: endId,
         status: "Não iniciado"
       };
 
-      // Envia pro Kit-Tssr
       return fetch(`${host}/tssrs/${endId}`, {
         method: "POST",
         headers: {
@@ -240,34 +288,65 @@ function finalizaVistoria(endId) {
         body: JSON.stringify(payloadKitTssr),
       });
     })
-    .then((response) => {
-      if (response.status === 403) {
-        throw new Error("Você não tem permissão para realizar esta ação.");
-      }
-      if (!response.ok) {
-        throw new Error(`Erro ao enviar para Kit-TSSR: ${response.statusText}`);
-      }
-      return atualizarEtapa(endId, 3);
+    .then(() => atualizarEtapa(endId, 3))
+    .then(() => {
+      const now = new Date();
+      now.setHours(now.getHours() - 3); // Ajustando UTC-3 para horário de Brasília
+
+      const dataFormatada = [
+        now.getFullYear(),
+        now.getMonth() + 1,
+        now.getDate(),
+        now.getHours(),
+        now.getMinutes(),
+        now.getSeconds(),
+        now.getMilliseconds(),
+      ];
+
+
+      const decodedToken = JSON.parse(atob(token.split('.')[1]));
+      const usuarioNome = decodedToken.nome || "Usuário Desconhecido";
+
+      const payloadMensagem = {
+        titulo: "Vistoria finalizada",
+        conteudo: `${usuarioNome} finalizou ${endId}`,
+        dataFormatada: dataFormatada,
+        user: {
+          id: 2,
+          nome: usuarioNome,
+          senha: null,
+          email: null,
+          telefone: null,
+          cargo: null,
+          operadoras: null
+        },
+        cargo: null
+      };
+      
+
+      return fetch(`${host}/mensagens`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payloadMensagem),
+      });
     })
-    .then((data) => {
-      alert("Vistoria finalizada, enviada para Kit-Tssr e etapa atualizada com sucesso!");
+    .then(() => {
+      alert("Vistoria finalizada, enviada para Kit-Tssr, etapa atualizada e mensagem enviada com sucesso!");
       const paginacao = document.getElementById("pagination-controls-vistoria");
       const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
       preencherTabelaVistoria(paginaAtual - 1);
     })
     .catch((error) => {
-      if (error.message === "Você não tem permissão para realizar esta ação.") {
-        alert(error.message);
-      } else {
-        console.error("Erro durante a atualização dos dados:", error);
-        alert("Erro ao finalizar a vistoria e enviar para Kit-TSSR.");
-      }
+      alert(error.message || "Erro ao processar a solicitação.");
     })
     .finally(() => {
-      // Remove o overlay de carregamento
       loadingOverlay.style.display = "none";
-    }); 
+    });
 }
+
 
 
 // Função para atualizar a etapa

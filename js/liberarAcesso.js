@@ -278,6 +278,7 @@ function iniciaAgendamento(endId) {
   const payload = {
     statusAgendamento: "Em andamento",
   };
+
   fetch(`${host}/cadastroEndIds/agendamento-parcial/${endId}`, {
     method: "PATCH",
     headers: {
@@ -304,8 +305,56 @@ function iniciaAgendamento(endId) {
     })
     .then((data) => {
       console.log("Dados retornados pelo servidor:", data);
+
+      // Envia a mensagem de início
+      const now = new Date();
+      now.setHours(now.getHours() - 3); // Ajustando UTC-3 para horário de Brasília
+
+      const dataFormatada = [
+        now.getFullYear(),
+        now.getMonth() + 1,
+        now.getDate(),
+        now.getHours(),
+        now.getMinutes(),
+        now.getSeconds(),
+        now.getMilliseconds(),
+      ];
+
+      const decodedToken = JSON.parse(atob(token.split('.')[1]));
+      const usuarioNome = decodedToken.nome || "Usuário Desconhecido";
+
+      const payloadMensagem = {
+        titulo: "Agendamento iniciado",
+        conteudo: `${usuarioNome} iniciou ${endId}`,
+        dataFormatada: dataFormatada,
+        user: {
+          id: 2,
+          nome: usuarioNome,
+          senha: null,
+          email: null,
+          telefone: null,
+          cargo: null,
+          operadoras: null
+        },
+        cargo: null
+      };
+
+      // Envia a mensagem
+      return fetch(`${host}/mensagens`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payloadMensagem),
+      });
+    })
+    .then(() => {
+      // Oculta o botão de iniciar
       const botaoIniciar = document.querySelector(`[data-id-botao="${endId}"]`);
       botaoIniciar.style.display = "none";
+
+      // Atualiza a tabela na página atual
       const paginacao = document.getElementById(
         "pagination-controls-agendamento"
       );
@@ -319,6 +368,7 @@ function iniciaAgendamento(endId) {
       }
     });
 }
+
 
 
 
@@ -394,8 +444,53 @@ function finalizaAgendamento(endId) {
     })
     .then((data) => {
       console.log("End ID enviado com sucesso, com status 'Não Iniciado':", data);
+
+      // Envia a mensagem de conclusão
+      const now = new Date();
+      now.setHours(now.getHours() - 3); // Ajustando UTC-3 para horário de Brasília
+
+      const dataFormatada = [
+        now.getFullYear(),
+        now.getMonth() + 1,
+        now.getDate(),
+        now.getHours(),
+        now.getMinutes(),
+        now.getSeconds(),
+        now.getMilliseconds(),
+      ];
+
+      const decodedToken = JSON.parse(atob(token.split('.')[1]));
+      const usuarioNome = decodedToken.nome || "Usuário Desconhecido";
+
+      const payloadMensagem = {
+        titulo: "Agendamento finalizado",
+        conteudo: `${usuarioNome} finalizou ${endId}`,
+        dataFormatada: dataFormatada,
+        user: {
+          id: 2,
+          nome: usuarioNome,
+          senha: null,
+          email: null,
+          telefone: null,
+          cargo: null,
+          operadoras: null
+        },
+        cargo: null
+      };
+
+      // Envia a mensagem
+      return fetch(`${host}/mensagens`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payloadMensagem),
+      });
+    })
+    .then(() => {
       alert(
-        "Acesso Vistoria finalizada, enviado para Vistoria e etapa atualizada com sucesso!"
+        "Acesso Vistoria finalizada, enviada para Vistoria e etapa atualizada com sucesso!"
       );
 
       // Atualiza a tabela na página atual
@@ -416,8 +511,9 @@ function finalizaAgendamento(endId) {
     .finally(() => {
       // Remove o overlay de carregamento
       loadingOverlay.style.display = "none";
-    }); 
+    });
 }
+
 
 
 // Função para atualizar a etapa
