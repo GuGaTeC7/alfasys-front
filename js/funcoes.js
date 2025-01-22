@@ -225,7 +225,7 @@ function renderizarBotoesPaginacao(
   const paginationControls = document.getElementById(idPaginationControls);
   paginationControls.innerHTML = ""; // Limpa botões antigos
 
-  const maxButtons = 10; // Máximo de botões a serem exibidos
+  const maxButtons = 7; // Máximo de botões a serem exibidos
   let startPage, endPage;
 
   // Se o número total de páginas for menor ou igual ao máximo, exibe todas as páginas
@@ -234,15 +234,15 @@ function renderizarBotoesPaginacao(
     endPage = totalPages;
   } else {
     // Exibe um conjunto de páginas ao redor da página atual
-    if (currentPage <= 4) {
+    if (currentPage <= 2) {
       startPage = 0;
       endPage = maxButtons;
-    } else if (currentPage + 5 >= totalPages) {
+    } else if (currentPage + 3 >= totalPages) {
       startPage = totalPages - maxButtons;
       endPage = totalPages;
     } else {
-      startPage = currentPage - 4;
-      endPage = currentPage + 5;
+      startPage = currentPage - 2;
+      endPage = currentPage + 3;
     }
   }
 
