@@ -26,27 +26,37 @@
                 <div class="input-group">
                     <div class="input-box">
                         <label for="fullname">Nome Completo</label>
-                        <input id="fullname" type="text" name="fullname" placeholder="Digite seu nome completo" required>
+                        <input id="fullname" type="text" name="fullname" placeholder="Digite o nome completo" required>
                     </div>
 
                     <div class="input-box">
                         <label for="email">E-mail</label>
-                        <input id="email" type="email" name="email" placeholder="Digite seu e-mail" required>
+                        <input id="email" type="email" name="email" placeholder="Digite o e-mail" required>
                     </div>
 
                     <div class="input-box">
                         <label for="phone">Telefone</label>
-                        <input id="phone" type="tel" name="phone" placeholder="Digite seu número" required>
+                        <input id="phone" type="tel" name="phone" placeholder="Digite o número" required>
                     </div>
 
                     <div class="input-box">
                         <label for="password">Senha</label>
-                        <input id="password" type="password" name="password" placeholder="Digite sua senha" required>
+                        <input id="password" type="password" name="password" placeholder="Digite a senha" required>
                     </div>
 
                     <div class="input-box">
                         <label for="cargo">Cargo</label>
-                        <input id="cargo" type="number" name="cargo" placeholder="Digite o cargo" min="1" max="9" required>
+                        <select id="cargo" name="cargo" required>
+                            <option value="1">1 - Acesso Vistoria</option>
+                            <option value="2">2 - Vistoria</option>
+                            <option value="3">3 - Kit Tssr</option>
+                            <option value="4">4 - Sci de Inclusao</option>
+                            <option value="5">5 - Projeto</option>
+                            <option value="6">6 - Acesso Obra</option>
+                            <option value="7">7 - Obra</option>
+                            <option value="8">8 - Sci de Exclusão</option>
+                            <option value="9">9 - Admin</option>
+                        </select>
                     </div>
                 </div>
 
