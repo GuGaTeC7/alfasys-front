@@ -225,56 +225,49 @@ function renderizarBotoesPaginacao(
   const paginationControls = document.getElementById(idPaginationControls);
   paginationControls.innerHTML = ""; // Limpa botões antigos
 
-  const maxButtons = 7; // Máximo de botões a serem exibidos
+  const maxButtons = 3; // Número de botões a serem exibidos (páginas intermediárias)
   let startPage, endPage;
 
-  // Se o número total de páginas for menor ou igual ao máximo, exibe todas as páginas
-  if (totalPages <= maxButtons) {
+  // Exibe páginas em torno da página atual
+  if (currentPage <= 1) {
     startPage = 0;
+    endPage = maxButtons;
+  } else if (currentPage + 1 >= totalPages) {
+    startPage = totalPages - maxButtons;
     endPage = totalPages;
   } else {
-    // Exibe um conjunto de páginas ao redor da página atual
-    if (currentPage <= 2) {
-      startPage = 0;
-      endPage = maxButtons;
-    } else if (currentPage + 3 >= totalPages) {
-      startPage = totalPages - maxButtons;
-      endPage = totalPages;
-    } else {
-      startPage = currentPage - 2;
-      endPage = currentPage + 3;
-    }
+    startPage = currentPage - 1;
+    endPage = currentPage + 2;
   }
 
-  // Ícone de "Anterior"
+  // Ícone de "Primeira página"
   if (currentPage > 0) {
-    const prevButton = document.createElement("button");
-    prevButton.className = "btn btn-sm btn-light mx-1";
-    prevButton.innerHTML = "&laquo;";
-    prevButton.addEventListener("click", () => tabelaFunction(currentPage - 1, ...args));
-    paginationControls.appendChild(prevButton);
+    const firstButton = document.createElement("button");
+    firstButton.className = "btn btn-sm btn-light mx-1";
+    firstButton.textContent = "«";
+    firstButton.addEventListener("click", () => tabelaFunction(0, ...args)); // Vai para a primeira página
+    paginationControls.appendChild(firstButton);
   }
 
   // Botões de página
   for (let i = startPage; i < endPage; i++) {
     const button = document.createElement("button");
-    button.className = `btn btn-sm ${
-      i === currentPage ? "btn-primary" : "btn-light"
-    } mx-1`;
+    button.className = `btn btn-sm ${i === currentPage ? "btn-primary" : "btn-light"} mx-1`;
     button.textContent = i + 1;
     button.addEventListener("click", () => tabelaFunction(i, ...args));
     paginationControls.appendChild(button);
   }
 
-  // Ícone de "Próximo"
+  // Ícone de "Última página"
   if (currentPage < totalPages - 1) {
-    const nextButton = document.createElement("button");
-    nextButton.className = "btn btn-sm btn-light mx-1";
-    nextButton.innerHTML = "&raquo;";
-    nextButton.addEventListener("click", () => tabelaFunction(currentPage + 1, ...args));
-    paginationControls.appendChild(nextButton);
+    const lastButton = document.createElement("button");
+    lastButton.className = "btn btn-sm btn-light mx-1";
+    lastButton.textContent = "»";
+    lastButton.addEventListener("click", () => tabelaFunction(totalPages - 1, ...args)); // Vai para a última página
+    paginationControls.appendChild(lastButton);
   }
 }
+
 
 
 
