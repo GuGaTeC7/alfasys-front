@@ -55,9 +55,10 @@ async function preencherInicio() {
 preencherInicio();
 
 
-
 document.getElementById('notification-icon').addEventListener('click', function() {
-  fetch(`${host}/mensagens?page=0&size=10`, {
+  const decodedToken = JSON.parse(atob(token.split('.')[1]));
+  const usersId = decodedToken.id || decodedToken.userId || "0";
+  fetch(`${host}/mensagens/${usersId}?page=0&size=10`, {
     method: "GET",
     headers: { Authorization: `Bearer ${token}` },
   })
