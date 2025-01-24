@@ -225,31 +225,30 @@ function renderizarBotoesPaginacao(
   const paginationControls = document.getElementById(idPaginationControls);
   paginationControls.innerHTML = ""; // Limpa botões antigos
 
-  const maxButtons = 3; // Número de botões a serem exibidos (páginas intermediárias)
-  let startPage, endPage;
+  const maxButtons = 3; // Número máximo de botões a serem exibidos
+  let startPage = Math.max(0, currentPage - 1);
+  let endPage = Math.min(totalPages, startPage + maxButtons);
 
-  // Exibe páginas em torno da página atual
-  if (currentPage <= 1) {
-    startPage = 0;
-    endPage = maxButtons;
-  } else if (currentPage + 1 >= totalPages) {
-    startPage = totalPages - maxButtons;
-    endPage = totalPages;
-  } else {
-    startPage = currentPage - 1;
-    endPage = currentPage + 2;
+  // Ajusta a faixa de exibição se estiver perto do final
+  if (endPage - startPage < maxButtons) {
+    startPage = Math.max(0, endPage - maxButtons);
   }
 
-  // Ícone de "Primeira página"
+  // Ícone de "Voltar 10 páginas"
   if (currentPage > 0) {
-    const firstButton = document.createElement("button");
-    firstButton.className = "btn btn-sm btn-light mx-1";
-    firstButton.textContent = "«";
-    firstButton.addEventListener("click", () => tabelaFunction(0, ...args)); // Vai para a primeira página
-    paginationControls.appendChild(firstButton);
+    const prevJumpButton = document.createElement("button");
+    prevJumpButton.className = "btn btn-sm btn-light mx-1";
+    prevJumpButton.textContent = "«";
+    
+    prevJumpButton.addEventListener("click", () => {
+      const prevPage = Math.max(currentPage - 10, 0); // Volta 10 páginas ou para a primeira página
+      tabelaFunction(prevPage, ...args);
+    });
+
+    paginationControls.appendChild(prevJumpButton);
   }
 
-  // Botões de página
+  // Botões de página dinâmicos
   for (let i = startPage; i < endPage; i++) {
     const button = document.createElement("button");
     button.className = `btn btn-sm ${i === currentPage ? "btn-primary" : "btn-light"} mx-1`;
@@ -258,15 +257,23 @@ function renderizarBotoesPaginacao(
     paginationControls.appendChild(button);
   }
 
-  // Ícone de "Última página"
+  // Ícone de "Pular 10 páginas"
   if (currentPage < totalPages - 1) {
-    const lastButton = document.createElement("button");
-    lastButton.className = "btn btn-sm btn-light mx-1";
-    lastButton.textContent = "»";
-    lastButton.addEventListener("click", () => tabelaFunction(totalPages - 1, ...args)); // Vai para a última página
-    paginationControls.appendChild(lastButton);
+    const nextJumpButton = document.createElement("button");
+    nextJumpButton.className = "btn btn-sm btn-light mx-1";
+    nextJumpButton.textContent = "»";
+    
+    nextJumpButton.addEventListener("click", () => {
+      const nextPage = Math.min(currentPage + 10, totalPages - 1); // Pula 10 páginas ou vai para última disponível
+      tabelaFunction(nextPage, ...args);
+    });
+
+    paginationControls.appendChild(nextJumpButton);
   }
 }
+
+
+
 
 
 
