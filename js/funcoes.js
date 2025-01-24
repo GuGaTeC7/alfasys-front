@@ -225,8 +225,8 @@ function renderizarBotoesPaginacao(
   const paginationControls = document.getElementById(idPaginationControls);
   paginationControls.innerHTML = ""; // Limpa botões antigos
 
-  const maxButtons = 3; // Número máximo de botões a serem exibidos
-  let startPage = Math.max(0, currentPage - 1);
+  const maxButtons = 5; // Número máximo de botões a serem exibidos
+  let startPage = Math.max(0, currentPage - 2);
   let endPage = Math.min(totalPages, startPage + maxButtons);
 
   // Ajusta a faixa de exibição se estiver perto do final
@@ -248,7 +248,7 @@ function renderizarBotoesPaginacao(
     paginationControls.appendChild(prevJumpButton);
   }
 
-  // Botões de página dinâmicos
+  // Botões de página dinâmicos (5 botões agora)
   for (let i = startPage; i < endPage; i++) {
     const button = document.createElement("button");
     button.className = `btn btn-sm ${i === currentPage ? "btn-primary" : "btn-light"} mx-1`;
@@ -271,10 +271,6 @@ function renderizarBotoesPaginacao(
     paginationControls.appendChild(nextJumpButton);
   }
 }
-
-
-
-
 
 
 
