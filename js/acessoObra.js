@@ -1122,6 +1122,10 @@ function buscaProjeto(secao) {
       document.getElementById("editarNumeroMedidor").value = data.numeroMedidor || "";
       document.getElementById("editarNumeroInstalacao").value = data.numeroInstalacao || "";
       document.getElementById("editarNumeroFases").value = data.numeroDeFases || "";
+      document.getElementById("editarRegional").value = data.dataLigacao || "";
+      document.getElementById("editarUnidade").value = data.dataLigacao || "";
+      document.getElementById("editarCNPJ").value = data.dataLigacao || "";
+      document.getElementById("editarTipoTensao").value = data.dataLigacao || "";
       document.getElementById("editarPrevisaoLigacao").value = data.leituraInicial || "";
       document.getElementById("editarDataLigacao").value = data.dataLigacao || "";
 
