@@ -1,3 +1,7 @@
+if (host === "http://localhost:8080") {
+  alert("VOCÊ ESTÁ EM AMBIENTE DE DESENVOLVIMENTO");
+}
+
 async function preencherInicio() {
   const url = `${host}/cadastroEndIds/quantidades`; // Substitua `host` pela variável correta
 
@@ -61,7 +65,7 @@ document.getElementById('notification-icon').addEventListener('click', function(
   const decodedToken = JSON.parse(atob(token.split('.')[1]));
   const usersId = decodedToken.id || decodedToken.userId || "0";  // Pegando o ID corretamente
   // Fazendo a requisição GET para o endpoint de mensagens
-  fetch(`${host}/mensagens/${usersId}?page=0&size=10`, {
+  fetch(`${host}/mensagens/${usersId}?page=0&size=100`, {
     method: "GET",
     headers: { Authorization: `Bearer ${token}` },
   })
