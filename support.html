@@ -26,11 +26,22 @@
                 <div class="input-group">
                     <div class="input-box">
                         <label for="email">E-mail</label>
-                        <input id="email" type="email" name="email" placeholder="Digite o e-mail" required>
+                        <div class="input-with-icon">
+                            <input id="email" type="email" name="email" placeholder="Digite o e-mail" required>
+                            <button type="button" class="search-button">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+
+                    <div class="input-box">
+                        <label for="email">Cargo atual</label>
+                        <input id="email" type="email" name="email" disabled required>
                     </div>
 
                     <div class="input-box">
-                        <label for="cargo">Cargo</label>
+                        <label for="cargo">Novo cargo</label>
                         <select id="cargo" name="cargo" required>
                             <option value="1">1 - Acesso Vistoria</option>
                             <option value="2">2 - Vistoria</option>
@@ -53,5 +64,7 @@
     </div>
 </body>
 <script src="js/validaToken.js"></script>
+<script src="js/host.js"></script>
+<script src="js/support.js"></script>
 </html>
 
