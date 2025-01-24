@@ -815,3 +815,106 @@ historicoLinkAgendamento.addEventListener("click", function (event) {
 
 // Adiciona o evento ao botão resetar
 document.getElementById("botaoResetar").addEventListener("click", resetarCampos("cadastro-fazer"));
+
+
+function filtrarTabelaAgendamento(page = 0, secao, idTabela) {
+  const loadingOverlay = document.getElementById("loading-overlay");
+  const tbody = document.querySelector(`#${idTabela} tbody`);
+  const secaoId = document.getElementById(secao);
+
+  // Obtém os valores dos campos de pesquisa
+  const pesquisaCampos = {
+      endId: secaoId.querySelector("#pesquisaEndIdAg").value.trim(),
+      status: secaoId.querySelector("#pesquisaStatusAgendamentoo").value.trim(),
+      municipio: secaoId.querySelector("#pesquisaMunicipioo").value.trim(),
+  };
+
+  // Monta os parâmetros da URL
+  const params = montarParametrosAgendamento(pesquisaCampos, page);
+  const endpoint = `${host}/cadastroEndIds/buscar-agendamento`;
+
+  loadingOverlay.style.display = "block";
+
+  fetch(`${endpoint}?${params.toString()}`, {
+      method: "GET",
+      headers: { Authorization: `Bearer ${token}` },
+  })
+      .then((response) => {
+          if (!response.ok) throw new Error("Erro ao buscar dados.");
+          return response.json();
+      })
+      .then((dados) => {
+          renderizarTabelaAgendamento(dados, idTabela, tbody);
+          renderizarBotoesPaginacao(
+              "pagination-controls-agendamento",
+              filtrarTabelaAgendamento,
+              dados.pageable.pageNumber,
+              dados.totalPages,
+              secao,
+              idTabela
+          );
+          exibirTotalResultados("total-pesquisa-agendamento", dados.totalElements);
+      })
+      .catch((error) => {
+          console.error("Erro ao buscar dados:", error);
+          alert("Erro ao carregar os dados. Atualize a tela apertando 'F5'.");
+      })
+      .finally(() => {
+          loadingOverlay.style.display = "none";
+      });
+}
+
+function montarParametrosAgendamento(pesquisaCampos, page) {
+  const params = new URLSearchParams();
+  if (pesquisaCampos.endId) params.append("endId", pesquisaCampos.endId.toUpperCase());
+  if (pesquisaCampos.status) params.append("status", pesquisaCampos.status.toUpperCase());
+  if (pesquisaCampos.municipio) params.append("municipio", pesquisaCampos.municipio.toUpperCase());
+  params.append("page", page);
+  params.append("size", pageSize);
+  return params;
+}
+
+function renderizarTabelaAgendamento(dados, idTabela, tbody) {
+  tbody.innerHTML = ""; // Limpa a tabela antes de preencher
+
+  if (!dados.content || dados.content.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="8" class="text-center">Nenhum dado encontrado.</td></tr>`;
+      return;
+  }
+
+  dados.content.forEach((item, i) => {
+      const row = criarLinhaAgendamento(item, i);
+      tbody.insertAdjacentHTML("beforeend", row);
+  });
+}
+
+function criarLinhaAgendamento(item, i) {
+  const dataSolicitacao = item.dataSolicitacao ? formatarDataParaInput(item.dataSolicitacao) : "";
+  const dataPrevisao = item.dataPrevisao ? formatarDataParaInput(item.dataPrevisao) : "";
+  const dataLiberacao = item.dataLiberacao ? formatarDataParaInput(item.dataLiberacao) : "";
+
+  return `
+    <tr style="${item.statusAgendamento === "Não iniciado" && item.reset === true ? "background-color: #f75c577d;" : ""}">
+      <td>${item.id}</td>
+      <td>
+        <button class="btn btn-link p-0 text-decoration-none end-id" data-id="${item.endId}">
+          ${item.endId}
+        </button>
+        <i class="fa-regular fa-copy btnCopiar" title="Copiar" data-id="${item.endId}"></i>
+      </td>
+      <td>${item.statusAgendamento}</td>
+      <td>${dataSolicitacao}</td>
+      <td>${dataPrevisao}</td>
+      <td>${dataLiberacao}</td>
+      <td>
+        <button class="btn btn-primary finalizar-btn" data-id="${item.endId}" ${item.statusAgendamento === "Concluído" ? "disabled" : ""}>
+          Finalizar
+        </button>
+      </td>
+      <td style="text-align: center;">
+        <i class="fa-solid fa-comments" style="font-size: 1.7rem; color: ${item.reset ? "#007bff" : "rgba(0, 123, 255, 0.46)"};" 
+           ${item.observacoes ? `onclick="alert('${item.observacoes}');"` : 'style="cursor: not-allowed;"'}>
+        </i>
+      </td>
+    </tr>`;
+}
