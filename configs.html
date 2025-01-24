@@ -36,7 +36,7 @@
 
                     <div class="input-box">
                         <label for="phone">Telefone</label>
-                        <input id="phone" type="tel" name="phone" placeholder="Digite o número" required>
+                        <input id="phone" type="number" name="phone" placeholder="Digite o número" required>
                     </div>
 
                     <div class="input-box">
@@ -61,11 +61,15 @@
                 </div>
 
                 <div class="continue-button">
-                    <button><a href="#">Cadastrar</a></button>
+                    <button type="button" onclick="realizarCadastroUsuario()">Cadastrar</button>
                 </div>
             </form>
         </div>
     </div>
 </body>
+<script src="js/host.js"></script>
+<script src="js/configs.js"></script>
 <script src="js/validaToken.js"></script>
+
+
 </html>
