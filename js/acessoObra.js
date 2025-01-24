@@ -1102,7 +1102,7 @@ function buscaProjeto(secao) {
   }
 
   // Requisição para buscar as informações do projeto
-  fetch(`${host}/cadastroEndIds/${endId}`, {
+  fetch(`${host}/projetos/informacoes-ligacao/${endId}`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
