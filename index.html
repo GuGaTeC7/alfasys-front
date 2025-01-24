@@ -1553,17 +1553,20 @@
                   <form>
                     <div class="row form-desing my-4">
                       <div class="col-md-4 mt-2 mt-md-0">
-                        <label>END ID *</label>
+                        <label for="editarEndIdProjeto">END ID *</label>
                         <input
                           type="text"
-                          class="form-control"
+                          class="form-control editarEndIdProjeto"
                           placeholder="Informe o END ID"
+                          autofocus
+
                         />
                       </div>
                       <div class="col-md-2 mt-2 mt-md-0 d-flex align-items-end">
                         <button
                           class="btn btn-primary w-100"
                           id="button-buscar-projeto"
+                          onclick="buscaProjeto('informacoes-de-ligacao')"
                         >
                           <i class="fa-solid fa-magnifying-glass"></i> Buscar
                         </button>
@@ -1572,8 +1575,11 @@
           
                     <div class="row form-desing my-4">
                       <div class="col-md-6 mt-2 mt-md-0">
-                        <label>Status ligação *</label>
-                        <select class="form-select border-0 bg-light p-2">
+                        <label for="editarStatusLigacao">Status ligação *</label>
+                        <select 
+                          class="form-select border-0 bg-light p-2"
+                          id="editarStatusLigacao"
+                          >
                           <option value="" selected disabled>
                             Selecione uma opção
                           </option>
@@ -1583,50 +1589,86 @@
                         </select>
                       </div>
                       <div class="col-md-6 mt-2 mt-md-0">
-                        <label>Concessionária *</label>
-                        <input type="text" class="form-control" />
+                        <label for="editarConcessionaria">Concessionária *</label>
+                        <input 
+                          type="text" 
+                          class="form-control" 
+                          id="editarConcessionaria"
+                          />
                       </div>
                     </div>
           
                     <div class="row form-desing my-4">
                       <div class="col-md-6 mt-2 mt-md-0">
-                        <label>Leitura inicial *</label>
-                        <input type="text" class="form-control" />
+                        <label for="editarLeituraInicial">Leitura inicial *</label>
+                        <input 
+                          type="text" 
+                          class="form-control" 
+                          id="editarLeituraInicial"
+                          />
                       </div>
                       <div class="col-md-6 mt-2 mt-md-0">
-                        <label>Número Medidor *</label>
-                        <input type="text" class="form-control" />
-                      </div>
-                    </div>
-          
-                    <div class="row form-desing my-4">
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label>Número de instalação *</label>
-                        <input type="text" class="form-control" />
-                      </div>
-                      <div class="col-md-6 mt-2 mt-md-0">
-                        <label>Número de fases *</label>
-                        <input type="text" class="form-control" />
+                        <label for="editarNumeroMedidor">Número Medidor *</label>
+                        <input 
+                          type="text" 
+                          class="form-control" 
+                          id="editarNumeroMedidor"
+                          />
                       </div>
                     </div>
           
                     <div class="row form-desing my-4">
                       <div class="col-md-6 mt-2 mt-md-0">
-                        <label>Previsão de ligação *</label>
-                        <input type="date" class="form-control" />
+                        <label for="editarNumeroInstalacao">Número de instalação *</label>
+                        <input 
+                          type="text" 
+                          class="form-control" 
+                          id="editarNumeroInstalacao"
+                          />
                       </div>
                       <div class="col-md-6 mt-2 mt-md-0">
-                        <label>Data de ligação *</label>
-                        <input type="date" class="form-control" />
+                        <label for="editarNumeroFases">Número de fases *</label>
+                        <input 
+                          type="text" 
+                          class="form-control" 
+                          id="editarNumeroFases"
+                        />
+                      </div>
+                    </div>
+          
+                    <div class="row form-desing my-4">
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarPrevisaoLigacao">Previsão de ligação *</label>
+                        <input 
+                          type="date" 
+                          class="form-control" 
+                          id="editarPrevisaoLigacao"
+                          />
+                      </div>
+                      <div class="col-md-6 mt-2 mt-md-0">
+                        <label for="editarDataLigacao">Data de ligação *</label>
+                        <input 
+                          type="date" 
+                          class="form-control" 
+                          id="editarDataLigacao"
+                          />
                       </div>
                     </div>
           
                     <div class="row form-desing my-4">
                       <div class="col">
-                        <button class="btn btn-primary text-white py-2 px-5" type="button">
+                        <button
+                          class="btn btn-primary text-white py-2 px-5"
+                          type="button"
+                          id="salvarInfLigacao"
+                          onclick="atualizaInformacoesLigacao('informacoes-de-ligacao')"
+                        >
                           Atualizar
                         </button>
-                        <button class="btn btn-secondary text-white py-2 px-5" type="reset">
+                        <button
+                          class="btn btn-secondary text-white py-2 px-5"
+                          type="reset"
+                        >
                           Resetar
                         </button>
                       </div>

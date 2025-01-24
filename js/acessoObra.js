@@ -1080,3 +1080,138 @@ function criarLinhaAgendamento(item, i) {
     `;
   }
   
+
+// Busca as informações do projeto baseado no END ID
+function buscaProjeto(secao) {
+  const botaoBuscar = event.target;
+  botaoBuscar.disabled = true;
+  botaoBuscar.innerHTML =
+    '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Buscando...';
+
+  const secaoId = document.querySelector(`#${secao}`);
+
+  console.log(secaoId);
+  const endId = secaoId.querySelector(".editarEndIdProjeto").value;
+
+  if (!endId) {
+    alert("Por favor, informe o END ID.");
+    botaoBuscar.disabled = false;
+    botaoBuscar.innerHTML =
+      '<i class="fa-solid fa-magnifying-glass"></i>⠀Buscar';
+    return;
+  }
+
+  // Requisição para buscar as informações do projeto
+  fetch(`${host}/cadastroEndIds/${endId}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Erro ao buscar dados. Verifique o END ID informado.");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data);
+      document.getElementById("editarStatusLigacao").value = data.statusLigacao || "";
+      document.getElementById("editarConcessionaria").value = data.concessionaria || "";
+      document.getElementById("editarLeituraInicial").value = data.previsaoLigacao || "";
+      document.getElementById("editarNumeroMedidor").value = data.numeroMedidor || "";
+      document.getElementById("editarNumeroInstalacao").value = data.numeroInstalacao || "";
+      document.getElementById("editarNumeroFases").value = data.numeroDeFases || "";
+      document.getElementById("editarPrevisaoLigacao").value = data.leituraInicial || "";
+      document.getElementById("editarDataLigacao").value = data.dataLigacao || "";
+
+      // Habilitar o botão novamente
+      botaoBuscar.disabled = false;
+      botaoBuscar.innerHTML =
+        '<i class="fa-solid fa-magnifying-glass"></i>⠀Buscar';
+    })
+    .catch((error) => {
+      console.error("Erro:", error);
+      alert(
+        "Não foi possível buscar os dados. Verifique o console para mais detalhes."
+      );
+      botaoBuscar.disabled = false;
+      botaoBuscar.innerHTML =
+        '<i class="fa-solid fa-magnifying-glass"></i>⠀Buscar';
+    });
+}
+
+
+  // Atualiza as Informações de Ligação
+  function atualizaInformacoesLigacao(secao) {
+    const secaoId = document.querySelector(`#${secao}`);
+  
+    if (!secaoId) {
+      console.error(`Seção com ID '${secao}' não encontrada no DOM.`);
+      return;
+    }
+  
+    const endIdInput = secaoId.querySelector(".editarEndIdProjeto");
+    if (!endIdInput) {
+      console.error("Elemento .editarEndId não encontrado na seção especificada.");
+      return;
+    }
+  
+    const endId = endIdInput.value;
+    if (!endId) {
+      alert("Por favor, informe o END ID para poder atualizar.");
+      return;
+    }
+  
+    const botaoAtualizar = document.querySelector("#salvarInfLigacao");
+    if (botaoAtualizar) {
+      botaoAtualizar.disabled = true;
+      botaoAtualizar.textContent = "Atualizando...";
+    }
+  
+    const payload = {
+      informacoesLigacao: {
+        statusLigacao: secaoId.querySelector("editarStatusLigacao").value || "",
+        concessionaria: secaoId.querySelector("editarConcessionaria").value || "",
+        previsaoLigacao: secaoId.querySelector("editarLeituraInicial").value || "",
+        numeroMedidor: secaoId.querySelector("editarNumeroMedidor").value || "",
+        numeroInstalacao: secaoId.querySelector("editarNumeroInstalacao").value || "",
+        numeroDeFases: secaoId.querySelector("editarNumeroFases").value || "",
+        leituraInicial: secaoId.querySelector("editarPrevisaoLigacao").value || "",
+        dataLigacao: secaoId.querySelector("editarDataLigacao").value || "",
+      }
+    };
+  
+    console.log("Payload preparado para envio:", JSON.stringify(payload, null, 2));
+  
+    fetch(`${host}/projetos/${endId}`, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    })
+      .then((response) => {
+        console.log("Resposta da requisição recebida:", response);
+        if (!response.ok) {
+          throw new Error(`Erro ao atualizar os dados: ${response.statusText}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Dados retornados pelo servidor:", data);
+        alert("Informações de ligação atualizadas com sucesso!");
+        resetarCampos(secao);
+      })
+      .catch((error) => {
+        console.error("Erro durante a atualização dos dados:", error);
+        alert("Erro ao atualizar os dados. Veja os detalhes no console.");
+      })
+      .finally(() => {
+        if (botaoAtualizar) {
+          botaoAtualizar.disabled = false;
+          botaoAtualizar.textContent = "Atualizar";
+        }
+      });
+  }
