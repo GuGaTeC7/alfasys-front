@@ -94,9 +94,9 @@ body {
   background-color: #f2f6f7;
 }
 .notice {
-  width: 350px;
+  width: 380px;
   height: auto; /* Permite que a altura se ajuste ao conteúdo */
-  max-height: 210px; /* Ajuste para exibir 3 notificações */
+  max-height: 450px; /* Ajuste para exibir 3 notificações */
   overflow-y: auto; /* Adiciona uma barra de rolagem caso o conteúdo ultrapasse o limite */
   background-color: #fff;
   position: absolute;
@@ -152,7 +152,6 @@ body {
   border-right: 20px solid transparent;
 }
 .notice.show {
-  display: flex;
   display: block;
 }
 .view-all {
