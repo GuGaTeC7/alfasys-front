@@ -1118,16 +1118,16 @@ function buscaProjeto(secao) {
       console.log(data);
       document.getElementById("editarStatusLigacao").value = data.statusLigacao || "";
       document.getElementById("editarConcessionaria").value = data.concessionaria || "";
-      document.getElementById("editarLeituraInicial").value = data.previsaoLigacao || "";
+      document.getElementById("editarLeituraInicial").value = data.leituraInicial || "";
       document.getElementById("editarNumeroMedidor").value = data.numeroMedidor || "";
       document.getElementById("editarNumeroInstalacao").value = data.numeroInstalacao || "";
       document.getElementById("editarNumeroFases").value = data.numeroDeFases || "";
-      document.getElementById("editarRegional").value = data.dataLigacao || "";
-      document.getElementById("editarUnidade").value = data.dataLigacao || "";
-      document.getElementById("editarCNPJ").value = data.dataLigacao || "";
-      document.getElementById("editarTipoTensao").value = data.dataLigacao || "";
-      document.getElementById("editarPrevisaoLigacao").value = data.leituraInicial || "";
-      document.getElementById("editarDataLigacao").value = data.dataLigacao || "";
+      document.getElementById("editarRegional").value = data.regional || "";
+      document.getElementById("editarUnidade").value = data.unidade || "";
+      document.getElementById("editarCNPJ").value = data.cnpjUc || "";
+      document.getElementById("editarTipoTensao").value = data.tipoTensao || "";
+      document.getElementById("editarPrevisaoLigacao").value = formatarDataParaInput(data.previsaoLigacao) || "";
+      document.getElementById("editarDataLigacao").value = formatarDataParaInput(data.dataLigacao) || "";
 
       // Habilitar o botão novamente
       botaoBuscar.disabled = false;
