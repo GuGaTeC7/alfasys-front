@@ -941,8 +941,8 @@ document.querySelector("#tabelaHistoricoObra").addEventListener("click", (event)
                   <li><strong>Unidade:</strong> ${dados.unidade}</li>
 		              <li><strong>CNPJ UC:</strong> ${dados.cnpjUc}</li>
                   <li><strong>Tipo de tensão:</strong> ${dados.tipoTensao}</li>
-                  <li><strong>Previsão de ligação:</strong> ${dados.previsaoLigacao}</li>
-                  <li><strong>Data de ligação:</strong> ${dados.dataLigacao}</li>
+                  <li><strong>Previsão de ligação:</strong> ${formataData(dados.previsaoLigacao)}</li>
+                  <li><strong>Data de ligação:</strong> ${formataData(dados.dataLigacao)}</li>
               </ul>
           </div>
         `;
