@@ -1,8 +1,10 @@
-document.getElementById('remove-cargo').addEventListener('click', function() {
+// Manipula somente a exibição do campo dinâmico
+document.getElementById('remove-cargo').addEventListener('click', function () {
     document.getElementById('dynamic-field').innerHTML = `
         <div class="input-box">
             <label for="cargo-antigo">Remover cargo</label>
             <select id="cargo-antigo" name="cargo-antigo" required>
+                <option value="">Selecione...</option>
                 <option value="1">1 - Acesso Vistoria</option>
                 <option value="2">2 - Vistoria</option>
                 <option value="3">3 - Kit Tssr</option>
@@ -17,11 +19,12 @@ document.getElementById('remove-cargo').addEventListener('click', function() {
     `;
 });
 
-document.getElementById('add-cargo').addEventListener('click', function() {
+document.getElementById('add-cargo').addEventListener('click', function () {
     document.getElementById('dynamic-field').innerHTML = `
         <div class="input-box">
             <label for="cargo-novo">Adicionar cargo</label>
             <select id="cargo-novo" name="cargo-novo" required>
+                <option value="">Selecione...</option>
                 <option value="1">1 - Acesso Vistoria</option>
                 <option value="2">2 - Vistoria</option>
                 <option value="3">3 - Kit Tssr</option>
@@ -85,3 +88,145 @@ document.querySelector('.search-button').addEventListener('click', function () {
             alert('Erro: ' + error.message);
         });
 });
+
+// Adicionar cargo (POST)
+document.getElementById('add-cargo').addEventListener('click', function () {
+    const email = document.getElementById('email').value;
+    const cargoNovo = document.getElementById('cargo-novo')?.value;
+
+    if (!cargoNovo) {
+        alert('Por favor, selecione um cargo para adicionar.');
+        return;
+    }
+
+    // Requisição para buscar o ID do usuário pelo e-mail
+    fetch(`${host}/users`, {
+        method: 'GET',
+        headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+        },
+    })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error('Erro ao buscar usuários.');
+            }
+            return response.json();
+        })
+        .then((users) => {
+            const user = users.find((u) => u.email === email);
+            if (!user) {
+                throw new Error('Usuário não encontrado.');
+            }
+
+            // Realiza o POST para adicionar o cargo
+            fetch(`${host}/users/${user.id}/cargos/${cargoNovo}`, {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                },
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error('Erro ao adicionar o cargo.');
+                    }
+                    alert('Cargo adicionado com sucesso!');
+                })
+                .catch((error) => {
+                    console.error(error);
+                    alert('Erro: ' + error.message);
+                });
+        })
+        .catch((error) => {
+            console.error(error);
+            alert('Erro: ' + error.message);
+        });
+});
+
+// POST - Adicionar cargo
+document.getElementById('dynamic-field').addEventListener('change', function () {
+    const cargoNovo = document.getElementById('cargo-novo')?.value;
+    if (!cargoNovo) return; // Evita execução sem valor
+
+    const email = document.getElementById('email').value;
+    if (!email) {
+        alert('Email inválido ou não preenchido.');
+        return;
+    }
+
+    fetch(`${host}/users`, {
+        method: 'GET',
+        headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        },
+    })
+        .then((response) => response.json())
+        .then((users) => {
+            const user = users.find((u) => u.email === email);
+            if (!user) throw new Error('Usuário não encontrado.');
+
+            return fetch(`${host}/users/${user.id}/cargos/${cargoNovo}`, {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+        })
+        .then((response) => {
+            if (!response.ok) throw new Error('Erro ao adicionar cargo.');
+            alert('Cargo adicionado com sucesso!');
+            location.reload(); // Recarrega a página
+        })
+        .catch((error) => {
+            console.error(error);
+            alert('Erro: ' + error.message);
+        });
+});
+
+// DELETE - Remover cargo
+document.getElementById('dynamic-field').addEventListener('change', function () {
+    const cargoAntigo = document.getElementById('cargo-antigo')?.value;
+    if (!cargoAntigo) return; // Evita execução sem valor
+
+    const email = document.getElementById('email').value;
+    if (!email) {
+        alert('Email inválido ou não preenchido.');
+        return;
+    }
+
+    fetch(`${host}/users`, {
+        method: 'GET',
+        headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        },
+    })
+        .then((response) => response.json())
+        .then((users) => {
+            const user = users.find((u) => u.email === email);
+            if (!user) throw new Error('Usuário não encontrado.');
+
+            return fetch(`${host}/users/${user.id}/cargos/${cargoAntigo}`, {
+                method: 'DELETE',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+        })
+        .then((response) => {
+            if (!response.ok) throw new Error('Erro ao remover cargo.');
+            alert('Cargo removido com sucesso!');
+            location.reload(); // Recarrega a página
+        })
+        .catch((error) => {
+            console.error(error);
+            alert('Erro: ' + error.message);
+        });
+});
+
+
+
