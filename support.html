@@ -7,7 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/new.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- favicon link  -->
     <link rel="icon" type="image/x-icon" href="img/logo_alfa.png" />
     <title>Grupo Alfa - Arujá</title>
 </head>
@@ -28,32 +27,25 @@
                         <label for="email">E-mail</label>
                         <div class="input-with-icon">
                             <input id="email" type="email" name="email" placeholder="Digite o e-mail" required>
-                            <button type="button" class="search-button">
+                            <button type="button" class="search-button" id="search-email">
                                 <i class="fa-solid fa-magnifying-glass"></i>
                             </button>
                         </div>
                     </div>
-                    
 
                     <div class="input-box">
-                        <label for="email">Cargo atual</label>
-                        <input id="email" type="email" name="email" disabled required>
+                        <label for="cargo-atual">Cargo atual</label>
+                        <input id="cargo-atual" name="cargo-atual" disabled required>
                     </div>
 
-                    <div class="input-box">
-                        <label for="cargo">Novo cargo</label>
-                        <select id="cargo" name="cargo" required>
-                            <option value="1">1 - Acesso Vistoria</option>
-                            <option value="2">2 - Vistoria</option>
-                            <option value="3">3 - Kit Tssr</option>
-                            <option value="4">4 - Sci de Inclusao</option>
-                            <option value="5">5 - Projeto</option>
-                            <option value="6">6 - Acesso Obra</option>
-                            <option value="7">7 - Obra</option>
-                            <option value="8">8 - Sci de Exclusão</option>
-                            <option value="9">9 - Admin</option>
-                        </select>
+                    <div id="dynamic-field">
+                        <!-- O campo dinâmico será inserido aqui -->
                     </div>
+                </div>
+
+                <div class="button-group">
+                    <button type="button" class="action-button" id="remove-cargo">Remover cargo</button>
+                    <button type="button" class="action-button" id="add-cargo">Adicionar cargo</button>
                 </div>
 
                 <div class="continue-button">
@@ -67,4 +59,3 @@
 <script src="js/host.js"></script>
 <script src="js/support.js"></script>
 </html>
-
