@@ -39,48 +39,49 @@ document.getElementById('add-cargo').addEventListener('click', function() {
 document.querySelector('.search-button').addEventListener('click', function () {
     const email = document.getElementById('email').value;
 
-    // Validação do campo de e-mail
-    if (!email) {
-        alert('Por favor, insira um e-mail.');
+    // Validação do e-mail
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailRegex.test(email)) {
+        alert('Por favor, insira um e-mail válido.');
         return;
     }
 
-    // Consulta ao servidor para buscar o usuário
-    fetch(`${host}/users?email=${encodeURIComponent(email)}`, {
+    // Requisição para buscar todos os usuários
+    fetch(`${host}/users`, {
         method: 'GET',
         headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
         },
     })
-    .then((response) => {
-        if (!response.ok) {
-            throw new Error('Usuário não encontrado ou erro no servidor.');
-        }
-        return response.json();
-    })
-    .then((user) => {
-        if (!user || !user.id || !user.cargos || user.cargos.length === 0) {
-            throw new Error('Usuário não possui cargos cadastrados.');
-        }
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error('Erro ao buscar usuários.');
+            }
+            return response.json();
+        })
+        .then((users) => {
+            // Filtra o usuário pelo e-mail
+            const user = users.find((u) => u.email === email);
+            if (!user) {
+                throw new Error('Usuário não encontrado.');
+            }
 
-        // Preenche o campo de cargos
-        const cargoAtual = user.cargos
-            .map((cargo) => `${cargo.id} - ${cargo.nome}`)
-            .join(', ');
+            if (!user.cargos || user.cargos.length === 0) {
+                throw new Error('Usuário não possui cargos cadastrados.');
+            }
 
-        document.getElementById('email').disabled = true; // Bloqueia o campo de e-mail
-        document.querySelector('.search-button').disabled = true; // Bloqueia o botão de busca
-        const cargoAtualField = document.querySelector('#dynamic-field');
-        cargoAtualField.innerHTML = `
-            <div class="input-box">
-                <label for="cargo-atual">Cargo atual</label>
-                <input id="cargo-atual" name="cargo-atual" value="${cargoAtual}" disabled>
-            </div>
-        `;
-    })
-    .catch((error) => {
-        console.error(error);
-        alert('Erro: ' + error.message);
-    });
+            // Preenche os cargos no campo
+            const cargoAtual = user.cargos
+                .map((cargo) => `${cargo.id} - ${cargo.nome}`)
+                .join(', ');
+
+            document.getElementById('email').disabled = true;
+            document.querySelector('.search-button').disabled = true;
+            document.getElementById('cargo-atual').value = cargoAtual;
+        })
+        .catch((error) => {
+            console.error(error);
+            alert('Erro: ' + error.message);
+        });
 });
