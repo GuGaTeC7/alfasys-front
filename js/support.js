@@ -63,26 +63,30 @@ document.querySelector('.search-button').addEventListener('click', function () {
             }
             return response.json();
         })
+        // Alteração no trecho da função que valida se o usuário tem cargos
         .then((users) => {
-            // Filtra o usuário pelo e-mail
             const user = users.find((u) => u.email === email);
             if (!user) {
                 throw new Error('Usuário não encontrado.');
             }
-
+        
+            // Se o usuário não tem cargos, exibe a mensagem no campo "cargo atual"
             if (!user.cargos || user.cargos.length === 0) {
-                throw new Error('Usuário não possui cargos cadastrados.');
+                document.getElementById('cargo-atual').value = 'O usuário não tem cargos existentes';
+                // Torna visível a opção de adicionar um cargo
+                document.getElementById('add-cargo').style.display = 'block';  // Torna o botão visível
+            } else {
+                // Se o usuário tiver cargos, preenche o campo com os cargos existentes
+                const cargoAtual = user.cargos
+                    .map((cargo) => `${cargo.id} - ${cargo.nome}`)
+                    .join(', ');
+        
+                document.getElementById('cargo-atual').value = cargoAtual;
             }
-
-            // Preenche os cargos no campo
-            const cargoAtual = user.cargos
-                .map((cargo) => `${cargo.id} - ${cargo.nome}`)
-                .join(', ');
-
+        
             document.getElementById('email').disabled = true;
             document.querySelector('.search-button').disabled = true;
-            document.getElementById('cargo-atual').value = cargoAtual;
-        })
+        })        
         .catch((error) => {
             console.error(error);
             alert('Erro: ' + error.message);
@@ -94,8 +98,7 @@ document.getElementById('add-cargo').addEventListener('click', function () {
     const email = document.getElementById('email').value;
     const cargoNovo = document.getElementById('cargo-novo')?.value;
 
-    if (!cargoNovo) {
-        alert('Por favor, selecione um cargo para adicionar.');
+    if (!cargoNovo) {        
         return;
     }
 

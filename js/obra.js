@@ -666,9 +666,6 @@ if (pesquisaCampos.dataFinalizacao) {
     });
 }
 
-console.log(pesquisaCampos.dataFinalizacao); // Verifica se a data final está sendo corretamente capturada
-
-
 function montarParametrosObra(pesquisaCampos, page) {
   const params = new URLSearchParams();
 if (pesquisaCampos.endId) params.append("endId", pesquisaCampos.endId.toUpperCase());
