@@ -589,7 +589,14 @@ function filtrarTabelaProjeto(page = 0, secao, idTabela) {
   const pesquisaCampos = {
     endId: secaoId.querySelector("#pesquisaEndIdProjeto").value.trim(),
     status: secaoId.querySelector("#pesquisaStatusProjeto").value.trim(),
+    dataEntrada: secaoId.querySelector("#pesquisaDataEntradaProjeto").value.trim(),
   };
+
+  // Verifica se a data foi informada e a formata corretamente
+if (pesquisaCampos.dataEntrada) {
+  // Se o campo já for no formato correto, basta usá-lo diretamente
+  pesquisaCampos.dataEntrada = pesquisaCampos.dataEntrada;
+}
 
   // Monta os parâmetros da URL
   const params = montarParametrosProjetos(pesquisaCampos, page);
@@ -633,6 +640,7 @@ function montarParametrosProjetos(pesquisaCampos, page) {
   const params = new URLSearchParams();
   if (pesquisaCampos.endId) params.append("endId", pesquisaCampos.endId.toUpperCase());
   if (pesquisaCampos.status) params.append("status", pesquisaCampos.status.toUpperCase());
+  if (pesquisaCampos.dataEntrada) params.append("dataEntrada", pesquisaCampos.dataEntrada); // A data final já no formato adequado
   params.append("page", page);
   params.append("size", pageSize); // Certifique-se de que a variável `pageSize` está definida corretamente
   return params;

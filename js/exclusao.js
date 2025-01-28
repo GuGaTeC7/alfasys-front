@@ -632,7 +632,7 @@ function montarParametrosExclusao(pesquisaCampos, page) {
   if (pesquisaCampos.status)
     params.append("status", pesquisaCampos.status.toUpperCase());
   if (pesquisaCampos.codigoSci)
-    params.append("codigoSci", pesquisaCampos.codigoSci.toUpperCase());
+    params.append("codExclusao", pesquisaCampos.codigoSci.toUpperCase());
   params.append("page", page);
   params.append("size", pageSize);
   return params;

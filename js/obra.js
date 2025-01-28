@@ -621,11 +621,12 @@ function filtrarTabelaObra(page = 0, secao = 'obra', idTabela = 'tabelaHistorico
     dataFinalizacao: secaoId.querySelector("#pesquisaDataFinal").value.trim(),
   };
 
-  // Formata a dataFinalizacao, se presente, usando a função formataData
-  if (pesquisaCampos.dataFinalizacao) {
-    // Supondo que o formato desejado seja 'YYYY-MM-DD' no backend
-    pesquisaCampos.dataFinalizacao = formataData(pesquisaCampos.dataFinalizacao.split("-"));
-  }
+ // Verifica se a data foi informada e a formata corretamente
+if (pesquisaCampos.dataFinalizacao) {
+  // Se o campo já for no formato correto, basta usá-lo diretamente
+  pesquisaCampos.dataFinalizacao = pesquisaCampos.dataFinalizacao;
+}
+
 
   // Monta os parâmetros da URL
   const params = montarParametrosObra(pesquisaCampos, page);
@@ -665,16 +666,16 @@ function filtrarTabelaObra(page = 0, secao = 'obra', idTabela = 'tabelaHistorico
     });
 }
 
+console.log(pesquisaCampos.dataFinalizacao); // Verifica se a data final está sendo corretamente capturada
+
+
 function montarParametrosObra(pesquisaCampos, page) {
   const params = new URLSearchParams();
-  if (pesquisaCampos.endId)
-    params.append("endId", pesquisaCampos.endId.toUpperCase());
-  if (pesquisaCampos.status)
-    params.append("status", pesquisaCampos.status.toUpperCase());
-  if (pesquisaCampos.dataFinalizacao) // Aqui é garantido que a data foi formatada corretamente
-    params.append("dataFinal", pesquisaCampos.dataFinalizacao); // Passa a data formatada
-  params.append("page", page);
-  params.append("size", pageSize);
+if (pesquisaCampos.endId) params.append("endId", pesquisaCampos.endId.toUpperCase());
+if (pesquisaCampos.status) params.append("status", pesquisaCampos.status.toUpperCase());
+if (pesquisaCampos.dataFinalizacao) params.append("dataFinalizacao", pesquisaCampos.dataFinalizacao); // A data final já no formato adequado
+params.append("page", page);
+params.append("size", pageSize);
   return params;
 }
 
