@@ -69,7 +69,7 @@ document
   loginButton.textContent = "Carregando...";
   loginButton.disabled = true;
 
-  fetch("https://alfasys-back-production.up.railway.app/users/login", {
+  fetch(`${host}/users/login`, {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -138,7 +138,7 @@ document
     signupButton.textContent = "Carregando...";
     signupButton.disabled = true;
   
-    fetch("https://alfasys-back-production.up.railway.app/users/login", {
+    fetch(`${host}/users/login`, {
       method: "POST",
       headers: {
         Accept: "application/json",

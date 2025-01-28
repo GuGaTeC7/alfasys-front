@@ -1177,7 +1177,7 @@ function buscaProjeto(secao) {
       informacoesLigacao: {
         statusLigacao: document.getElementById("editarStatusLigacao").value || "",
         concessionaria: document.getElementById("editarConcessionaria").value || "",
-        previsaoLigacao: document.getElementById("editarLeituraInicial").value || "",
+        leituraInicial: document.getElementById("editarLeituraInicial").value || "",
         numeroMedidor: document.getElementById("editarNumeroMedidor").value || "",
         numeroInstalacao: document.getElementById("editarNumeroInstalacao").value || "",
         numeroDeFases: document.getElementById("editarNumeroFases").value || "",
@@ -1185,7 +1185,7 @@ function buscaProjeto(secao) {
         unidade: document.getElementById("editarUnidade").value  || "",
         cnpjUc: document.getElementById("editarCNPJ").value || "",
         tipoTensao: document.getElementById("editarTipoTensao").value || "",
-        leituraInicial: document.getElementById("editarPrevisaoLigacao").value || "",
+        previsaoLigacao: document.getElementById("editarPrevisaoLigacao").value || "",
         dataLigacao: document.getElementById("editarDataLigacao").value || "",
       }
     };
