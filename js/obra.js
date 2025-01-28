@@ -826,12 +826,12 @@ function resetarObra(endId) {
   const observacao = prompt("Deixe uma observação para o reset da obra:");
 
   const payload = {
-    statusAgendamento: "Não iniciado",
+    status: "Não iniciado",
     dataSolicitacao: null,
     dataPrevisao: null,
     dataLiberacao: null,
     reset: 1, 
-    observacoesAgendamento: observacao,
+    observacoes: observacao,
   };
   
   console.log("Payload enviado:", payload);

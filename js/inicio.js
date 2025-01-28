@@ -19,6 +19,8 @@ async function preencherInicio() {
 
     const data = await response.json();
 
+    console.log(data)
+
     // Mapeamento entre as etapas retornadas pela API e as classes HTML
     const mappings = {
       "Total EndIDs Cadastrados": "cadastro1",
