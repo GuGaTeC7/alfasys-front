@@ -1175,14 +1175,18 @@ function buscaProjeto(secao) {
   
     const payload = {
       informacoesLigacao: {
-        statusLigacao: secaoId.querySelector("editarStatusLigacao").value || "",
-        concessionaria: secaoId.querySelector("editarConcessionaria").value || "",
-        previsaoLigacao: secaoId.querySelector("editarLeituraInicial").value || "",
-        numeroMedidor: secaoId.querySelector("editarNumeroMedidor").value || "",
-        numeroInstalacao: secaoId.querySelector("editarNumeroInstalacao").value || "",
-        numeroDeFases: secaoId.querySelector("editarNumeroFases").value || "",
-        leituraInicial: secaoId.querySelector("editarPrevisaoLigacao").value || "",
-        dataLigacao: secaoId.querySelector("editarDataLigacao").value || "",
+        statusLigacao: document.getElementById("editarStatusLigacao").value || "",
+        concessionaria: document.getElementById("editarConcessionaria").value || "",
+        previsaoLigacao: document.getElementById("editarLeituraInicial").value || "",
+        numeroMedidor: document.getElementById("editarNumeroMedidor").value || "",
+        numeroInstalacao: document.getElementById("editarNumeroInstalacao").value || "",
+        numeroDeFases: document.getElementById("editarNumeroFases").value || "",
+        regional: document.getElementById("editarRegional").value || "",
+        unidade: document.getElementById("editarUnidade").value  || "",
+        cnpjUc: document.getElementById("editarCNPJ").value || "",
+        tipoTensao: document.getElementById("editarTipoTensao").value || "",
+        leituraInicial: document.getElementById("editarPrevisaoLigacao").value || "",
+        dataLigacao: document.getElementById("editarDataLigacao").value || "",
       }
     };
   
