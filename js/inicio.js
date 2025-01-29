@@ -19,7 +19,7 @@ async function preencherInicio() {
 
     const data = await response.json();
 
-    console.log(data)
+    console.log(data);
 
     // Mapeamento entre as etapas retornadas pela API e as classes HTML
     const mappings = {
@@ -34,7 +34,7 @@ async function preencherInicio() {
       "Projeto": "projeto1",
     };
 
-    // Define todos os valores iniciais como 0 encontrados
+    // Define todos os valores iniciais como 0 encontrado(s)
     Object.values(mappings).forEach((className) => {
       const element = document.querySelector(`.icon.${className} ~ .desc h5`);
       if (element) {
@@ -42,13 +42,13 @@ async function preencherInicio() {
       }
     });
 
-    // Atualiza as quantidades no HTML com base no mapeamento
-    data.forEach((item) => {
-      const className = mappings[item.etapa];
+    // Itera sobre os dados convertidos
+    data.forEach(([etapa, quantidade]) => {
+      const className = mappings[etapa];
       if (className) {
         const element = document.querySelector(`.icon.${className} ~ .desc h5`);
         if (element) {
-          element.textContent = `${item.quantidade} encontrado(s)`;
+          element.textContent = `${quantidade} encontrado(s)`;
         }
       }
     });
@@ -59,6 +59,7 @@ async function preencherInicio() {
 
 // Exemplo de chamada
 preencherInicio();
+
 
 
 
