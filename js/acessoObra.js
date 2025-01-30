@@ -1137,7 +1137,7 @@ function buscaProjeto(secao) {
     .catch((error) => {
       console.error("Erro:", error);
       alert(
-        "Não foi possível buscar os dados. Verifique o console para mais detalhes."
+        "O End Id não foi concluído na etapa projeto! Aguarde..."
       );
       botaoBuscar.disabled = false;
       botaoBuscar.innerHTML =

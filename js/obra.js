@@ -921,27 +921,27 @@ document.querySelector("#tabelaHistoricoObra").addEventListener("click", (event)
         return response.json();
       })
       .then((dados) => {
-          alertDiv.innerHTML = `
-          <h1 style="display: block; text-align: center; margin-bottom: 25px; font-size: 1.5em; width: 100%;">
-            Detalhes do END ID: <b>${endId}</b>
-          </h1>
-          <div style="display: flex; flex-wrap: wrap; gap: 70px;">
-              <ul style="flex: 1; padding-left: 20px; font-size: 1em; list-style: none;">
-                  <li><strong>Status ligação:</strong> ${dados.statusLigacao}</li>
-                  <li><strong>Concessionária:</strong> ${dados.concessionaria}</li>
-                  <li><strong>Leitura inicial:</strong> ${dados.leituraInicial}</li>
-                  <li><strong>Número Medidor:</strong> ${dados.numeroMedidor}</li>
-                  <li><strong>Número de instalação:</strong> ${dados.numeroInstalacao}</li>
-                  <li><strong>Número de fases:</strong> ${dados.numeroDeFases}</li>
-              </ul>
-              <ul style="flex: 1; padding-right: 20px; font-size: 1em; list-style: none;">
-                  <li><strong>Regional:</strong> ${dados.regional}</li>
-                  <li><strong>Unidade:</strong> ${dados.unidade}</li>
-		              <li><strong>CNPJ UC:</strong> ${dados.cnpjUc}</li>
-                  <li><strong>Tipo de tensão:</strong> ${dados.tipoTensao}</li>
-                  <li><strong>Previsão de ligação:</strong> ${formataData(dados.previsaoLigacao)}</li>
-                  <li><strong>Data de ligação:</strong> ${formataData(dados.dataLigacao)}</li>
-              </ul>
+        alertDiv.innerHTML = `
+        <h1 style="display: block; text-align: center; margin-bottom: 25px; font-size: 1.5em; width: 100%;">
+          Detalhes do END ID: <b>${endId}</b>
+        </h1>
+        <div style="display: flex; flex-wrap: wrap; gap: 70px;">
+            <ul style="flex: 1; padding-left: 20px; font-size: 1em; list-style: none;">
+                <li><strong>Status ligação:</strong> ${dados.statusLigacao ?? ""}</li>
+                <li><strong>Concessionária:</strong> ${dados.concessionaria ?? ""}</li>
+                <li><strong>Leitura inicial:</strong> ${dados.leituraInicial ?? ""}</li>
+                <li><strong>Número Medidor:</strong> ${dados.numeroMedidor ?? ""}</li>
+                <li><strong>Número de instalação:</strong> ${dados.numeroInstalacao ?? ""}</li>
+                <li><strong>Número de fases:</strong> ${dados.numeroDeFases ?? ""}</li>
+            </ul>
+            <ul style="flex: 1; padding-right: 20px; font-size: 1em; list-style: none;">
+                <li><strong>Regional:</strong> ${dados.regional ?? ""}</li>
+                <li><strong>Unidade:</strong> ${dados.unidade ?? ""}</li>
+                <li><strong>CNPJ UC:</strong> ${dados.cnpjUc ?? ""}</li>
+                <li><strong>Tipo de tensão:</strong> ${dados.tipoTensao ?? ""}</li>
+                <li><strong>Previsão de ligação:</strong> ${formataData(dados.previsaoLigacao) ?? ""}</li>
+                <li><strong>Data de ligação:</strong> ${formataData(dados.dataLigacao) ?? ""}</li>
+            </ul>
           </div>
         `;
           const closeButton = document.createElement("button");
