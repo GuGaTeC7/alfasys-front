@@ -69,17 +69,26 @@ async function fetchUserData(userId) {
       "VISTORIA": "VIS",
       "ACESSO OBRA": "ACO",
       "ACESSO VISTORIA": "ACV"
-      // Adicione mais cargos conforme necessário
     };
 
-    // Gerar siglas personalizadas ou usar as 3 primeiras letras se não houver mapeamento
     const cargos = userData.cargos && userData.cargos.length > 0
       ? [...new Set(userData.cargos.map(cargo => cargoSiglas[cargo] || cargo.substring(0, 3).toUpperCase()))].join(", ")
       : "Cargo não encontrado";
 
-    // Atualizar os campos no front-end
+    // Atualiza o HTML com os cargos do usuário
     cargoInfo.innerHTML = cargos;
     cargoHeader.innerHTML = cargos;
+
+    // --- NOVA LÓGICA PARA OCULTAR OS BOTÕES ---
+    const cadastro = document.getElementById("configs");
+    const gerenciamento = document.getElementById("support");
+
+    // Verifica se o usuário NÃO é ADMIN
+    if (!userData.cargos.includes("ADMIN")) {
+      if (cadastro) cadastro.style.display = "none";
+      if (gerenciamento) gerenciamento.style.display = "none";
+    }
+
   } catch (error) {
     console.error("Erro ao buscar o cargo do usuário:", error.message);
   }
@@ -144,12 +153,12 @@ document.getElementById("logout").addEventListener("click", function () {
   window.location.href = "login.html";
 });
 
-// Botão para fazer logout
+
 document.getElementById("configs").addEventListener("click", function () {
   window.location.href = "configs.html";
 });
 
-// Botão para fazer logout
+
 document.getElementById("support").addEventListener("click", function () {
   window.location.href = "support.html";
 });
