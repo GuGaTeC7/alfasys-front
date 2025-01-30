@@ -82,6 +82,7 @@ function preencherTabelaVistoria(page = 0) {
                 item.parecer === "Inviável" ? "selected" : ""
               }>Inviável</option>
             </select>
+            ${item.parecer === "Inviável" && item.status === "Concluído" ? `<button class="btn p-0 border-0 bg-transparent btn-reverterVistoria" data-id="${item.endId}"><i class="fa-solid fa-rotate-left"></i></button>` : ""}
           </td>
           <td>
             <button class="btn btn-primary finalizar-btn" data-id-botao="${
@@ -106,17 +107,36 @@ function preencherTabelaVistoria(page = 0) {
       document.querySelectorAll(".btnCopiar").forEach((button) => {
         button.addEventListener("click", function () {
           const endId = this.getAttribute("data-id");
-          const textoParaCopiarPuro = document.querySelector(
-            `button[data-id="${endId}"]`
-          ).textContent;
-          const textoParaCopiar = textoParaCopiarPuro.trim();
+          const textoParaCopiar = document.querySelector(`button[data-id="${endId}"]`).textContent.trim();
+          navigator.clipboard.writeText(textoParaCopiar).catch((err) => console.error("Erro ao copiar: ", err));
+        });
+      });
 
-          navigator.clipboard
-            .writeText(textoParaCopiar)
-            .then(function () {})
-            .catch(function (err) {
-              console.error("Erro ao tentar copiar o texto: ", err);
-            });
+      document.querySelectorAll(".btn-reverterVistoria").forEach((button) => {
+        button.addEventListener("click", function () {
+          const endId = this.getAttribute("data-id");
+          const payload = { status: "Em andamento", dataRealizacao: "", parecer: "" };
+          
+          fetch(`${host}/vistorias/${endId}`, {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(payload),
+          })
+          .then(response => {
+            if (!response.ok) throw new Error("Erro ao reverter status.");
+            return response.json();
+          })
+          .then(() => {
+            alert("Status revertido com sucesso!");
+            preencherTabelaVistoria(page);
+          })
+          .catch(error => {
+            console.error("Erro ao reverter status:", error);
+            alert("Erro ao reverter status. Tente novamente.");
+          });
         });
       });
 
@@ -279,6 +299,11 @@ function finalizaVistoria(endId) {
         status: "Não iniciado"
       };
 
+      // Se o parecer for "Inviável", apenas finaliza aqui
+      if (parecer === "Inviável") {
+        return enviarMensagemFinalizacao(endId);
+      }
+
       return fetch(`${host}/tssrs/${endId}`, {
         method: "POST",
         headers: {
@@ -286,55 +311,18 @@ function finalizaVistoria(endId) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(payloadKitTssr),
-      });
-    })
-    .then(() => atualizarEtapa(endId, 3))
-    .then(() => {
-      const now = new Date();
-      now.setHours(now.getHours() - 3); // Ajustando UTC-3 para horário de Brasília
-
-      const dataFormatada = [
-        now.getFullYear(),
-        now.getMonth() + 1,
-        now.getDate(),
-        now.getHours(),
-        now.getMinutes(),
-        now.getSeconds(),
-        now.getMilliseconds(),
-      ];
-
-
-      const decodedToken = JSON.parse(atob(token.split('.')[1]));
-      const usuarioNome = decodedToken.nome || "Usuário Desconhecido";
-
-      const payloadMensagem = {
-        titulo: "Vistoria finalizada",
-        conteudo: `${usuarioNome} finalizou ${endId}`,
-        dataFormatada: dataFormatada,
-        user: {
-          id: 2,
-          nome: usuarioNome,
-          senha: null,
-          email: null,
-          telefone: null,
-          cargo: null,
-          operadoras: null
-        },
-        cargo: null
-      };
-      
-
-      return fetch(`${host}/mensagens`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payloadMensagem),
-      });
-    })
-    .then(() => {
-      alert("Vistoria finalizada, enviada para Kit-Tssr, etapa atualizada e mensagem enviada com sucesso!");
+      })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Erro ao enviar para Kit-Tssr: ${response.statusText}`);
+        }
+        // Atualiza a etapa para o valor 4
+        return atualizarEtapa(endId, 4);
+      })
+      .then(() => enviarMensagemFinalizacao(endId));
+      })
+      .then(() => {
+      alert("Kit-TSSR finalizado com sucesso!");
       const paginacao = document.getElementById("pagination-controls-vistoria");
       const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
       preencherTabelaVistoria(paginaAtual - 1);
@@ -345,6 +333,45 @@ function finalizaVistoria(endId) {
     .finally(() => {
       loadingOverlay.style.display = "none";
     });
+}
+
+function enviarMensagemFinalizacao(endId) {
+  const now = new Date();
+  now.setHours(now.getHours() - 3); // Ajustando UTC-3 para horário de Brasília
+  const dataFormatada = [
+    now.getFullYear(),
+    now.getMonth() + 1,
+    now.getDate(),
+    now.getHours(),
+    now.getMinutes(),
+    now.getSeconds(),
+    now.getMilliseconds(),
+  ];
+  const decodedToken = JSON.parse(atob(token.split('.')[1]));
+  const usuarioNome = decodedToken.nome || "Usuário Desconhecido";
+  const payloadMensagem = {
+    titulo: "Kit-TSSR finalizado",
+    conteudo: `${usuarioNome} finalizou ${endId}`,
+    dataFormatada: dataFormatada,
+    user: {
+      id: 2,
+      nome: usuarioNome,
+      senha: null,
+      email: null,
+      telefone: null,
+      cargo: null,
+      operadoras: null
+    },
+    cargo: null
+  };
+  return fetch(`${host}/mensagens`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payloadMensagem),
+  });
 }
 
 
@@ -740,12 +767,40 @@ document
     });
   
     configurarEventosCopiar(); // Chama a função para configurar os eventos de copiar
+
+    document.querySelectorAll(".btn-reverterVistoria").forEach((button) => {
+      button.addEventListener("click", function () {
+        const endId = this.getAttribute("data-id");
+        const payload = { status: "Em andamento", dataRealizacao: "", parecer: "" };
+        
+        fetch(`${host}/vistorias/${endId}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+        })
+        .then(response => {
+          if (!response.ok) throw new Error("Erro ao reverter status.");
+          return response.json();
+        })
+        .then(() => {
+          alert("Status revertido com sucesso!");
+          preencherTabelaVistoria(page);
+        })
+        .catch(error => {
+          console.error("Erro ao reverter status:", error);
+          alert("Status Revertido, por favor atualize a página!");
+        });
+      });
+    });
   }
   
 
   function criarLinhaVistoria(item, i) {
     const dataRealizacao = item.dataRealizacao ? formatarDataParaInput(item.dataRealizacao) : "";
-    const parecerDisabled = item.status !== "Em andamento";
+    const parecerDisabled = item.status !== "Em andamento" || item.parecer;
   
     return `
       <tr>
@@ -788,6 +843,7 @@ document
             <option value="Viável" ${item.parecer === "Viável" ? "selected" : ""}>Viável</option>
             <option value="Inviável" ${item.parecer === "Inviável" ? "selected" : ""}>Inviável</option>
           </select>
+          ${item.parecer === "Inviável" && item.status === "Concluído" ? `<button class="btn p-0 border-0 bg-transparent btn-reverterVistoria" data-id="${item.endId}"><i class="fa-solid fa-rotate-left"></i></button>` : ""}
         </td>
         <td>
           <button class="btn btn-primary finalizar-btn" data-id-botao="${item.endId}" 

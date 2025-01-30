@@ -717,7 +717,8 @@ function renderizarTabelaKitTssr(dados, idTabela, tbody) {
       })
       .catch(error => {
         console.error("Erro ao reverter status:", error);
-        alert("Status Revertido por meio do filtro!");
+        alert("Status Revertido, por favor atualize a página!");
+        preencherTabelaKitTssr(page);
       });
     });
   });
