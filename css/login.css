@@ -345,7 +345,12 @@ input.error::placeholder {
 
     .input-container i,
     .input-password i {
-        font-size: 0.8rem; /* Ícones um pouco maiores */
+        font-size: 0.6rem; /* Ícones um pouco maiores */
+    }
+
+    input#login-password {
+        width: 100%;
+        padding: 12px 22px;
     }
 }
     
