@@ -792,6 +792,7 @@ document
         .catch(error => {
           console.error("Erro ao reverter status:", error);
           alert("Status Revertido, por favor atualize a página!");
+          preencherTabelaVistoria
         });
       });
     });

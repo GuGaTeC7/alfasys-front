@@ -834,3 +834,10 @@ table th {
     max-width: 34px; /* Reduz a logo para 50px em telas menores */
   }
 }
+
+@media (max-width: 600px) { 
+  #cargoInfo, #cargoHeader {
+    font-size: 12px;  /* Reduz o tamanho da fonte em telas menores */
+    max-width: 200px; /* Ajusta o tamanho máximo para caber melhor */
+  }
+}

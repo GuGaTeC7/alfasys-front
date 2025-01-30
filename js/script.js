@@ -58,16 +58,33 @@ async function fetchUserData(userId) {
 
     const userData = await response.json();
 
-    // Extrair o cargo do array "cargos"
-    const cargo = userData.cargos && userData.cargos.length > 0 ? userData.cargos[0] : "Cargo não encontrado";
+    // Mapeamento de cargos para siglas personalizadas
+    const cargoSiglas = {
+      "ADMIN": "ADM",
+      "SCI INCLUSÃO": "INC",
+      "KIT TSSR": "KIT",
+      "SCI EXCLUSÃO": "EXC",
+      "OBRA": "OBR",
+      "PROJETO": "PRO",
+      "VISTORIA": "VIS",
+      "ACESSO OBRA": "ACO",
+      "ACESSO VISTORIA": "ACV"
+      // Adicione mais cargos conforme necessário
+    };
+
+    // Gerar siglas personalizadas ou usar as 3 primeiras letras se não houver mapeamento
+    const cargos = userData.cargos && userData.cargos.length > 0
+      ? [...new Set(userData.cargos.map(cargo => cargoSiglas[cargo] || cargo.substring(0, 3).toUpperCase()))].join(", ")
+      : "Cargo não encontrado";
 
     // Atualizar os campos no front-end
-    cargoInfo.innerHTML = cargo;
-    cargoHeader.innerHTML = cargo;
+    cargoInfo.innerHTML = cargos;
+    cargoHeader.innerHTML = cargos;
   } catch (error) {
     console.error("Erro ao buscar o cargo do usuário:", error.message);
   }
 }
+
 
 // Buscar os dados do usuário se o ID existir
 if (userId) {
