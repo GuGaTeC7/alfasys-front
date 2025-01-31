@@ -71,9 +71,17 @@ async function fetchUserData(userId) {
       "ACESSO VISTORIA": "ACV"
     };
 
-    const cargos = userData.cargos && userData.cargos.length > 0
-      ? [...new Set(userData.cargos.map(cargo => cargoSiglas[cargo] || cargo.substring(0, 3).toUpperCase()))].join(", ")
-      : "Cargo não encontrado";
+    let cargos = userData.cargos || [];
+
+    if (cargos.length === 1) {
+      // Se houver apenas um cargo, exibir o nome completo
+      cargos = cargos[0];
+    } else if (cargos.length > 1) {
+      // Se houver mais de um cargo, exibir apenas as siglas
+      cargos = [...new Set(cargos.map(cargo => cargoSiglas[cargo] || cargo.substring(0, 3).toUpperCase()))].join(", ");
+    } else {
+      cargos = "Cargo não encontrado";
+    }
 
     // Atualiza o HTML com os cargos do usuário
     cargoInfo.innerHTML = cargos;
