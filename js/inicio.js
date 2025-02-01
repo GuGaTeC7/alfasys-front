@@ -61,6 +61,74 @@ async function preencherInicio() {
 preencherInicio();
 
 
+document.addEventListener('DOMContentLoaded', function() {
+  const notificationList = document.querySelector('#notification-list');
+  
+  if (!notificationList) return; // Sai se a lista de notificações não existir
+
+  // Criando o container para o ícone e o texto
+  const marcarTudoContainer = document.createElement('span');
+  marcarTudoContainer.style.cursor = 'pointer';
+  marcarTudoContainer.style.fontSize = '14px';
+  marcarTudoContainer.style.color = '#007bff'; // Azul padrão, pode ser alterado
+  marcarTudoContainer.style.display = 'flex';
+  marcarTudoContainer.style.alignItems = 'center';
+  marcarTudoContainer.style.gap = '5px'; // Espaço entre o ícone e o texto
+  marcarTudoContainer.title = 'Marcar todas como lidas';
+
+  // Criando o ícone de check pequeno
+  const marcarTudoIcon = document.createElement('i');
+  marcarTudoIcon.classList.add('bx', 'bx-check-double');
+  marcarTudoIcon.style.fontSize = '18px';
+
+  // Criando o texto ao lado do ícone
+  const marcarTudoText = document.createElement('span');
+  marcarTudoText.innerText = 'Marcar todas notificações como lidas';
+
+  // Adicionando o ícone e o texto ao container
+  marcarTudoContainer.appendChild(marcarTudoIcon);
+  marcarTudoContainer.appendChild(marcarTudoText);
+
+  // Evento de clique para marcar todas como lidas
+  marcarTudoContainer.addEventListener('click', function() {
+    const decodedToken = JSON.parse(atob(token.split('.')[1]));
+    const usersId = decodedToken.id || decodedToken.userId || "0";
+
+    fetch(`${host}/mensagens/${usersId}`, {
+      method: 'PATCH',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ lida: true })
+    })
+    .then(response => {
+      if (response.ok) {
+        console.log(`Todas as mensagens marcadas como lidas para o usuário ${usersId}.`);
+        location.reload();
+      } else {
+        console.error('Erro ao marcar todas como lidas:', response.statusText);
+      }
+    })
+    .catch(error => {
+      console.error('Erro na requisição PATCH:', error);
+    });
+  });
+
+  // Adicionando o container na interface
+  const notificationTitle = document.querySelector('#notification-title'); // Título da seção de notificações
+
+  if (notificationTitle) {
+    // Se houver um título, coloca o ícone e texto ao lado
+    notificationTitle.appendChild(marcarTudoContainer);
+  } else {
+    // Se não houver título, adiciona antes da lista de notificações
+    notificationList.parentNode.insertBefore(marcarTudoContainer, notificationList);
+  }
+});
+
+
+
 
 
 // Lógica para lidar com as notificações
