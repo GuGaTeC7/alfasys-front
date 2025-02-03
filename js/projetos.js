@@ -682,6 +682,11 @@ function criarLinhaProjeto(item, i) {
         <select disabled class="form-select border-0 bg-light p-2">
           <option value="status">${item.status}</option>
         </select>
+        <button class="btn iniciar-btn p-0 border-0 bg-transparent ml-2" 
+          style="display:${["Em andamento", "Concluído"].includes(item.status) ? "none" : ""};" 
+          data-id-botao="${item.endId}">
+          <i class="fa-solid fa-circle-play"></i>
+        </button>
       </td>
       <td>
         ${

@@ -18,9 +18,6 @@ function preencherTabelaStatus(page = 0) {
         totalPesquisado.innerHTML = ""; // Limpa a tabela
   
         dados.content.forEach((item) => {
-          const dataCadastro = item.dataCadastro
-            ? formatarDataParaInput(item.dataCadastro)
-            : "";
   
           // Monta a linha da tabela
           const row = `

@@ -317,12 +317,12 @@ function finalizaVistoria(endId) {
           throw new Error(`Erro ao enviar para Kit-Tssr: ${response.statusText}`);
         }
         // Atualiza a etapa para o valor 4
-        return atualizarEtapa(endId, 4);
+        return atualizarEtapa(endId, 3);
       })
       .then(() => enviarMensagemFinalizacao(endId));
       })
       .then(() => {
-      alert("Kit-TSSR finalizado com sucesso!");
+      alert("Vistoria finalizada com sucesso!");
       const paginacao = document.getElementById("pagination-controls-vistoria");
       const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
       preencherTabelaVistoria(paginaAtual - 1);
@@ -350,7 +350,7 @@ function enviarMensagemFinalizacao(endId) {
   const decodedToken = JSON.parse(atob(token.split('.')[1]));
   const usuarioNome = decodedToken.nome || "Usuário Desconhecido";
   const payloadMensagem = {
-    titulo: "Kit-TSSR finalizado",
+    titulo: "Vistoria finalizada",
     conteudo: `${usuarioNome} finalizou ${endId}`,
     dataFormatada: dataFormatada,
     user: {
