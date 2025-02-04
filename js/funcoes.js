@@ -1091,7 +1091,7 @@ function enviarCodigoSCI(endId, codigo, etapa) {
 
   // Mapeamento dinâmico de etapas para endpoints e chaves de payload
   const endpointMap = {
-    "sci-exclusao": {
+    "sci-exclusão": {
       payloadKey: "codExclusao",
       url: `${host}/sciExclusao/${endId}`,
     },
