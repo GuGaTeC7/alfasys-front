@@ -971,14 +971,14 @@ function renderizarTabelaAgendamentos(dados, idTabela, tbody) {
     }
   
     dados.content.forEach((item, i) => {
-      const row = criarLinhaAgendamento(item, i); // Cria cada linha usando uma função separada
+      const row = criarLinhaAgendamentoObra(item, i); // Cria cada linha usando uma função separada
       tbody.insertAdjacentHTML("beforeend", row);
     });
   
     configurarEventosCopiar(); // Mantém funcionalidade adicional, se necessária
   }
   
-function criarLinhaAgendamento(item, i) {
+function criarLinhaAgendamentoObra(item, i) {
     const dataSolicitacao = item.dataSolicitacao
       ? formatarDataParaInput(item.dataSolicitacao)
       : "";

@@ -209,7 +209,7 @@ loadingOverlay.style.display = "none";
 
 // Função para renderizar o input de data com ícone de envio
 function renderInputDate(action, endId, status) {
-  if (status === "Não iniciado") {
+  if (status === "Em andamento" ? "" : "disabled") {
     return `
       <div class="input-icon-group">
         <input 
