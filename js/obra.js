@@ -836,14 +836,13 @@ function resetarObra(endId) {
   
   console.log("Payload enviado:", payload);
 
-  // Verifique se o método correto é PATCH ou PUT no seu backend
   fetch(`${host}/obras/agendamento/${endId}`, {
     method: "PUT",
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(payload), // Enviar um objeto vazio, caso o backend exija um corpo
+    body: JSON.stringify(payload),
   })
     .then((response) => {
       if (!response.ok) {
@@ -859,9 +858,38 @@ function resetarObra(endId) {
     })
     .then((data) => {
       console.log("Resposta do servidor:", data);
-      alert("A Obra foi resetada com sucesso!"); // Alerta de sucesso
-      preencherTabelaObra(); // Atualiza a tabela de obras
-    })    
+      alert("A Obra foi resetada com sucesso!");
+
+      // Agora, vamos buscar o ID correspondente ao End ID antes de deletar
+      fetch(`${host}/obras?endId=${endId}`, {
+        method: "GET",
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then((response) => {
+          if (!response.ok) throw new Error("Erro ao buscar ID da obra.");
+          return response.json();
+        })
+        .then((dados) => {
+          const obra = dados.content.find((item) => item.endId === endId);
+          if (!obra || !obra.id) {
+            throw new Error("ID da obra não encontrado.");
+          }
+
+          // Agora deletamos a obra correspondente ao ID encontrado
+          return fetch(`${host}/obras/${obra.id}`, {
+            method: "DELETE",
+            headers: { Authorization: `Bearer ${token}` },
+          });
+        })
+        .then((response) => {
+          if (!response.ok) throw new Error("Erro ao deletar obra.");
+          preencherTabelaObra(); // Atualiza a tabela
+        })
+        .catch((error) => {
+          console.error("Erro ao deletar a obra:", error);
+          alert("Erro ao deletar a obra.");
+        });
+    })
     .catch((error) => {
       console.error("Erro ao resetar os dados:", error);
       alert("Erro ao resetar a obra.");
