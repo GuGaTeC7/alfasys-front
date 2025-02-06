@@ -287,7 +287,7 @@ function finalizaKitTssr(endId) {
 
       // Se o parecer for "Inviável", apenas finaliza aqui
       if (parecer === "Inviável") {
-        return enviarMensagemFinalizacao(endId);
+        return enviarMensagemFinalizacaoKit(endId);
       }
 
       // Caso contrário, envia para o Sci-Inclusão
@@ -312,7 +312,7 @@ function finalizaKitTssr(endId) {
           // Atualiza a etapa para o valor 4
           return atualizarEtapa(endId, 4);
         })
-        .then(() => enviarMensagemFinalizacao(endId));
+        .then(() => enviarMensagemFinalizacaoKit(endId));
     })
     .then(() => {
       alert("Kit-TSSR finalizado com sucesso!");
@@ -333,7 +333,7 @@ function finalizaKitTssr(endId) {
 }
 
 // Função para enviar mensagem de finalização
-function enviarMensagemFinalizacao(endId) {
+function enviarMensagemFinalizacaoKit(endId) {
   const now = new Date();
   now.setHours(now.getHours() - 3); // Ajustando UTC-3 para horário de Brasília
 

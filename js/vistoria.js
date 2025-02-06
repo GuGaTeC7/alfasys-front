@@ -301,7 +301,7 @@ function finalizaVistoria(endId) {
 
       // Se o parecer for "Inviável", apenas finaliza aqui
       if (parecer === "Inviável") {
-        return enviarMensagemFinalizacao(endId);
+        return enviarMensagemFinalizacaoVistoria(endId);
       }
 
       return fetch(`${host}/tssrs/${endId}`, {
@@ -319,7 +319,7 @@ function finalizaVistoria(endId) {
         // Atualiza a etapa para o valor 4
         return atualizarEtapa(endId, 3);
       })
-      .then(() => enviarMensagemFinalizacao(endId));
+      .then(() => enviarMensagemFinalizacaoVistoria(endId));
       })
       .then(() => {
       alert("Vistoria finalizada com sucesso!");
@@ -335,7 +335,7 @@ function finalizaVistoria(endId) {
     });
 }
 
-function enviarMensagemFinalizacao(endId) {
+function enviarMensagemFinalizacaoVistoria(endId) {
   const now = new Date();
   now.setHours(now.getHours() - 3); // Ajustando UTC-3 para horário de Brasília
   const dataFormatada = [

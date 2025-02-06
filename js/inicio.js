@@ -166,7 +166,7 @@ document.getElementById('notification-icon').addEventListener('click', function(
           <div>
             <h6 class="text-dark mb-1">${message.titulo}</h6>
             <small class="text-muted">${message.conteudo}</small><br />
-            <small class="text-muted">${message.dataFormatada}</small>
+            <small class="text-muted">${message.dataHoraFormatada}</small>
           </div>
         `;
 
