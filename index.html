@@ -37,7 +37,7 @@
         <a href="#" class="navbar-brand d-flex align-items-center">
           <span class="mr-2">AlfaSys</span>
           <div id="logo-container">
-            <img src="img/logo.png" alt="Logo" id="navbar-logo" />
+            <img src="img/logo_alfa.png" alt="Logo" id="navbar-logo" />
           </div>
         </a>
         <div class="actions mr-auto d-flex align-items-center">
@@ -2033,18 +2033,3 @@
     </div>
   </body>
 </html>
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const userType = localStorage.getItem("userType");
-    const logoContainer = document.getElementById("logo-container");
-
-    if (userType === "tim") {
-      logoContainer.innerHTML = '<img src="img/logotim.png" alt="Logo TIM" />';
-    } else if (userType === "claro") {
-      logoContainer.innerHTML =
-        '<img src="img/logoclaro.png" alt="Logo Claro" />';
-    } else {
-      console.warn("Tipo de usuário não definido. Usando logo padrão.");
-    }
-  });
-</script>

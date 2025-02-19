@@ -826,7 +826,7 @@ table th {
   gap: 10px;
 }
 #logo-container img {
-  max-width: 70px; /* Tamanho máximo da logo */
+  max-width: 55px; /* Tamanho máximo da logo */
   height: auto; /* Mantém a proporção da imagem */
 }
 @media (max-width: 768px) { /* Ajuste para dispositivos móveis */
