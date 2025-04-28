@@ -1,120 +1,144 @@
-document.getElementById("button-buscar-projeto").addEventListener("click", function (event) {
+document
+  .getElementById("button-buscar-projeto")
+  .addEventListener("click", function (event) {
     event.preventDefault(); // Previne o comportamento padrão do botão, como submissão de formulário.
-  
+
     const botaoBuscar = this; // Referência ao botão
     botaoBuscar.disabled = true; // Desabilita o botão temporariamente
-    botaoBuscar.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Buscando...';
-  
+    botaoBuscar.innerHTML =
+      '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Buscando...';
+
     // Simula o processo de busca com um delay de 3 segundos
     setTimeout(() => {
       botaoBuscar.disabled = false; // Habilita o botão novamente
-      botaoBuscar.innerHTML = '<i class="fa-solid fa-magnifying-glass"></i>⠀Buscar'; // Restaura o conteúdo original do botão
+      botaoBuscar.innerHTML =
+        '<i class="fa-solid fa-magnifying-glass"></i>⠀Buscar'; // Restaura o conteúdo original do botão
     }, 3000);
   });
 
+function preencherTabelaProjetos(page = 0) {
+  const loadingOverlay = document.getElementById("loading-overlay");
+  const tbody = document.querySelector("#tabelaHistoricoProjetos tbody");
+  const totalPesquisado = document.getElementById("total-pesquisa-projeto");
 
-  function preencherTabelaProjetos(page = 0) {
-    const loadingOverlay = document.getElementById("loading-overlay");
-    const tbody = document.querySelector("#tabelaHistoricoProjetos tbody");
-    const totalPesquisado = document.getElementById("total-pesquisa-projeto");
-  
-    loadingOverlay.style.display = "block";
-  
-    fetch(`${host}/projetos?page=${page}&size=${pageSize}`, {
-      method: "GET",
-      headers: { Authorization: `Bearer ${token}` },
+  loadingOverlay.style.display = "block";
+
+  fetch(`${host}/projetos?page=${page}&size=${pageSize}`, {
+    method: "GET",
+    headers: { Authorization: `Bearer ${token}` },
+  })
+    .then((response) => {
+      if (!response.ok) throw new Error("Erro ao buscar dados.");
+      return response.json();
     })
-      .then((response) => {
-        if (!response.ok) throw new Error("Erro ao buscar dados.");
-        return response.json();
-      })
-      .then((dados) => {
-        tbody.innerHTML = ""; // Limpa a tabela
-        totalPesquisado.innerHTML = ""; // Limpa a tabela
-        
-        dados.content.forEach((item) => {
-            const dataEntrada = item.dataEntrada
-              ? formatarDataParaInput(item.dataEntrada)
-              : "";
-  
-            const dataAprovacao = item.dataAprovacao
-              ? formatarDataParaInput(item.dataAprovacao)
-              : "";  
-  // Monta a linha da tabela
-  const row = `
+    .then((dados) => {
+      tbody.innerHTML = ""; // Limpa a tabela
+      totalPesquisado.innerHTML = ""; // Limpa a tabela
+
+      dados.content.forEach((item) => {
+        const dataEntrada = item.dataEntrada
+          ? formatarDataParaInput(item.dataEntrada)
+          : "";
+
+        const dataAprovacao = item.dataAprovacao
+          ? formatarDataParaInput(item.dataAprovacao)
+          : "";
+        // Monta a linha da tabela
+        const row = `
     <tr>
       <td>
         ${item.id}
       </td>
       <td>
-        <button class="btn btn-link p-0 text-decoration-none end-id" id="textoParaCopiar" data-id="${item.endId}">
+        <button class="btn btn-link p-0 text-decoration-none end-id" id="textoParaCopiar" data-id="${
+          item.endId
+        }">
           ${item.endId}
         </button>
-        <i class="fa-regular fa-copy btnCopiar" title="Copiar" data-id="${item.endId}"></i>
+        <i class="fa-regular fa-copy btnCopiar" title="Copiar" data-id="${
+          item.endId
+        }"></i>
       </td>
       <td>
         <select disabled class="form-select border-0 bg-light p-2">
           <option value="status">${item.status}</option>
         </select>
         <button class="btn iniciar-btn p-0 border-0 bg-transparent ml-2" 
-          style="display:${["Em andamento", "Concluído"].includes(item.status) ? "none" : ""};" 
+          style="display:${
+            ["Em andamento", "Concluído"].includes(item.status) ? "none" : ""
+          };" 
           data-id-botao="${item.endId}">
           <i class="fa-solid fa-circle-play"></i>
         </button>
       </td>
       <td>
-        ${dataEntrada ? `<input type="date" class="form-control text-center" value="${dataEntrada}" disabled id="data-entrada-${item.endId}" />` : renderInputDateProjetos("data-entrada", item.endId, item.status)}
+        ${
+          dataEntrada
+            ? `<input type="date" class="form-control text-center" value="${dataEntrada}" disabled id="data-entrada-${item.endId}" />`
+            : renderInputDateProjetos("data-entrada", item.endId, item.status)
+        }
       </td>
       <td>
-        ${dataAprovacao ? `<input type="date" class="form-control text-center" value="${dataAprovacao}" disabled id="data-aprovacao-projeto-${item.endId}" />` : renderInputDateProjetos("data-aprovacao-projeto", item.endId, item.status)}
+        ${
+          dataAprovacao
+            ? `<input type="date" class="form-control text-center" value="${dataAprovacao}" disabled id="data-aprovacao-projeto-${item.endId}" />`
+            : renderInputDateProjetos(
+                "data-aprovacao-projeto",
+                item.endId,
+                item.status
+              )
+        }
       </td>
       <td>
-        <button class="btn btn-primary finalizar-btn" data-id-botao="${item.endId}" ${item.status === "Não iniciado" || item.status === "Concluído" ? "disabled" : ""}>
+        <button class="btn btn-primary finalizar-btn" data-id-botao="${
+          item.endId
+        }" ${
+          item.status === "Não iniciado" || item.status === "Concluído"
+            ? "disabled"
+            : ""
+        }>
           Finalizar
         </button>
       </td>
     </tr>`;
-          tbody.insertAdjacentHTML("beforeend", row);
+        tbody.insertAdjacentHTML("beforeend", row);
+      });
+
+      // Adicionar eventListener para cada botão "Copiar Texto"
+      document.querySelectorAll(".btnCopiar").forEach((button) => {
+        button.addEventListener("click", function () {
+          const endId = this.getAttribute("data-id");
+          const textoParaCopiarPuro = document.querySelector(
+            `button[data-id="${endId}"]`
+          ).textContent;
+          const textoParaCopiar = textoParaCopiarPuro.trim();
+
+          navigator.clipboard
+            .writeText(textoParaCopiar)
+            .then(function () {})
+            .catch(function (err) {
+              console.error("Erro ao tentar copiar o texto: ", err);
+            });
         });
-  
-  
-  // Adicionar eventListener para cada botão "Copiar Texto"
-  document.querySelectorAll(".btnCopiar").forEach((button) => {
-    button.addEventListener("click", function () {
-      const endId = this.getAttribute("data-id");
-      const textoParaCopiarPuro = document.querySelector(
-        `button[data-id="${endId}"]`
-      ).textContent;
-      const textoParaCopiar = textoParaCopiarPuro.trim();
-  
-      navigator.clipboard
-        .writeText(textoParaCopiar)
-        .then(function () {})
-        .catch(function (err) {
-          console.error("Erro ao tentar copiar o texto: ", err);
-        });
+      });
+
+      // Renderiza botões de paginação
+      renderizarBotoesPaginacao(
+        "pagination-controls-projeto",
+        preencherTabelaProjetos,
+        dados.pageable.pageNumber,
+        dados.totalPages
+      );
+    })
+    .catch((error) => {
+      console.error("Erro ao buscar dados:", error);
+      alert("Erro ao carregar os dados. Tente novamente.");
+    })
+    .finally(() => {
+      loadingOverlay.style.display = "none";
     });
-  });
-  
-  
-  // Renderiza botões de paginação
-  renderizarBotoesPaginacao(
-    "pagination-controls-projeto",
-    preencherTabelaProjetos,
-    dados.pageable.pageNumber,
-    dados.totalPages
-  );
-  })
-  .catch((error) => {
-  console.error("Erro ao buscar dados:", error);
-  alert("Erro ao carregar os dados. Tente novamente.");
-  })
-  .finally(() => {
-  loadingOverlay.style.display = "none";
-  });
-  }
-  
-  
+}
+
 // Iniciar Projeto
 function iniciaProjeto(endId) {
   const payload = {
@@ -131,7 +155,7 @@ function iniciaProjeto(endId) {
   })
     .then((response) => {
       console.log("Resposta da requisição recebida:", response);
-      
+
       // Verifica se a resposta não está OK
       if (!response.ok) {
         if (response.status === 403) {
@@ -162,7 +186,7 @@ function iniciaProjeto(endId) {
         now.getMilliseconds(),
       ];
 
-      const decodedToken = JSON.parse(atob(token.split('.')[1]));
+      const decodedToken = JSON.parse(atob(token.split(".")[1]));
       const usuarioNome = decodedToken.nome || "Usuário Desconhecido";
 
       const payloadMensagem = {
@@ -176,9 +200,9 @@ function iniciaProjeto(endId) {
           email: null,
           telefone: null,
           cargo: null,
-          operadoras: null
+          operadoras: null,
         },
-        cargo: null
+        cargo: null,
       };
 
       // Envia a mensagem
@@ -209,12 +233,12 @@ function iniciaProjeto(endId) {
     });
 }
 
-  
-  
 function finalizaProjeto(endId) {
   // Obtém os valores das datas e do status
   const dataEntrada = document.getElementById(`data-entrada-${endId}`)?.value;
-  const dataAprovacao = document.getElementById(`data-aprovacao-projeto-${endId}`)?.value;
+  const dataAprovacao = document.getElementById(
+    `data-aprovacao-projeto-${endId}`
+  )?.value;
 
   // Verifica se todas as datas estão preenchidas
   if (!dataEntrada || !dataAprovacao) {
@@ -274,7 +298,9 @@ function finalizaProjeto(endId) {
         throw new Error("Você não tem permissão para realizar esta ação.");
       }
       if (!response.ok) {
-        throw new Error(`Erro ao enviar para Acesso Obra: ${response.statusText}`);
+        throw new Error(
+          `Erro ao enviar para Acesso Obra: ${response.statusText}`
+        );
       }
       return atualizarEtapa(endId, 6);
     })
@@ -292,7 +318,7 @@ function finalizaProjeto(endId) {
         now.getMilliseconds(),
       ];
 
-      const decodedToken = JSON.parse(atob(token.split('.')[1]));
+      const decodedToken = JSON.parse(atob(token.split(".")[1]));
       const usuarioNome = decodedToken.nome || "Usuário Desconhecido";
 
       const payloadMensagem = {
@@ -306,9 +332,9 @@ function finalizaProjeto(endId) {
           email: null,
           telefone: null,
           cargo: null,
-          operadoras: null
+          operadoras: null,
         },
-        cargo: null
+        cargo: null,
       };
 
       // Envia a mensagem
@@ -322,7 +348,9 @@ function finalizaProjeto(endId) {
       });
     })
     .then(() => {
-      alert("Projeto finalizado, enviado para Acesso Obra, etapa atualizada e mensagem enviada com sucesso!");
+      alert(
+        "Projeto finalizado, enviado para Acesso Obra, etapa atualizada e mensagem enviada com sucesso!"
+      );
 
       // Atualiza a tabela na página atual
       const paginacao = document.getElementById("pagination-controls-projeto");
@@ -342,7 +370,6 @@ function finalizaProjeto(endId) {
       loadingOverlay.style.display = "none";
     });
 }
-
 
 // Função para atualizar a etapa
 function atualizarEtapa(endId, novaEtapaId) {
@@ -374,20 +401,20 @@ function atualizarEtapa(endId, novaEtapaId) {
     });
 }
 
-
-  
-  
-  // Delegação de eventos para os botões na tabela
-  document.querySelector("#tabelaHistoricoProjetos tbody").addEventListener("click", (event) => {
+// Delegação de eventos para os botões na tabela
+document
+  .querySelector("#tabelaHistoricoProjetos tbody")
+  .addEventListener("click", (event) => {
     const button = event.target.closest("[data-id-botao]");
     if (!button) return; // Se não clicar em um botão relevante, retorna
-  
+
     const endId = button.getAttribute("data-id-botao");
-  
+
     if (button.classList.contains("iniciar-btn")) {
       // Lógica para o botão "Iniciar"
-      exibirConfirmacao("Tem certeza que deseja <b>iniciar</b> essa etapa?", () =>
-        confirmAlert("iniciar", endId, "todos-projetos")
+      exibirConfirmacao(
+        "Tem certeza que deseja <b>iniciar</b> essa etapa?",
+        () => confirmAlert("iniciar", endId, "todos-projetos")
       );
     } else if (button.classList.contains("finalizar-btn")) {
       // Lógica para o botão "Finalizar"
@@ -397,24 +424,24 @@ function atualizarEtapa(endId, novaEtapaId) {
       );
     }
   });
-  
-  
-  
-  // Delegação de evento para ver end ID na tabela
-  document.querySelector("#tabelaHistoricoProjetos").addEventListener("click", (event) => {
+
+// Delegação de evento para ver end ID na tabela
+document
+  .querySelector("#tabelaHistoricoProjetos")
+  .addEventListener("click", (event) => {
     const loadingOverlay = document.getElementById("loading-overlay");
-    
+
     // Verifica se o elemento clicado possui a classe `end-id`
     if (event.target.classList.contains("end-id")) {
       const endId = event.target.getAttribute("data-id");
-  
+
       if (!loadingOverlay) {
         console.error("Elemento de loadingOverlay não encontrado!");
         return;
       }
-  
+
       loadingOverlay.style.display = "block";
-  
+
       // Criação do elemento de alerta
       const alertDiv = document.createElement("div");
       alertDiv.className = "alert-container";
@@ -436,14 +463,14 @@ function atualizarEtapa(endId, novaEtapaId) {
       alertDiv.style.justifyContent = "center";
       alertDiv.style.alignItems = "center";
       alertDiv.style.flexDirection = "column";
-  
+
       // Verificação do token de autenticação
       if (!token) {
         console.error("Token de autenticação não encontrado!");
         loadingOverlay.style.display = "none";
         return;
       }
-  
+
       fetch(`${host}/cadastroEndIds/${endId}`, {
         method: "GET",
         headers: { Authorization: `Bearer ${token}` },
@@ -461,25 +488,43 @@ function atualizarEtapa(endId, novaEtapaId) {
                 <ul style="flex: 1; padding-left: 20px; font-size: 1em; list-style: none;">
                     <li><strong>Site ID:</strong> ${dados.siteId}</li>
                     <li><strong>Demanda:</strong> ${dados.demanda}</li>
-                    <li><strong>Detentora:</strong> ${dados.detentora.detentora}</li>
-                    <li><strong>ID Detentora:</strong> ${dados.detentora.idDetentora}</li>
-                    <li><strong>Operadora cedente:</strong> ${dados.cedente.operadora}</li>
-                    <li><strong>ID Operadora:</strong> ${dados.cedente.idOperadora}</li>
-                    <li><strong>Logradouro:</strong> ${dados.endereco.logradouro}</li>
+                    <li><strong>Detentora:</strong> ${
+                      dados.detentora.detentora
+                    }</li>
+                    <li><strong>ID Detentora:</strong> ${
+                      dados.detentora.idDetentora
+                    }</li>
+                    <li><strong>Operadora cedente:</strong> ${
+                      dados.cedente.operadora
+                    }</li>
+                    <li><strong>ID Operadora:</strong> ${
+                      dados.cedente.idOperadora
+                    }</li>
+                    <li><strong>Logradouro:</strong> ${
+                      dados.endereco.logradouro
+                    }</li>
                     <li><strong>Número:</strong> ${dados.endereco.numero}</li>
                 </ul>
                 <ul style="flex: 1; padding-right: 20px; font-size: 1em; list-style: none;">
                     <li><strong>Bairro:</strong> ${dados.endereco.bairro}</li>
-                    <li><strong>Município:</strong> ${dados.endereco.municipio}</li>
+                    <li><strong>Município:</strong> ${
+                      dados.endereco.municipio
+                    }</li>
                     <li><strong>Estado:</strong> ${dados.endereco.estado}</li>
                     <li><strong>CEP:</strong> ${dados.endereco.cep}</li>
-                    <li><strong>Latitude:</strong> ${dados.endereco.latitude}</li>
-                    <li><strong>Longitude:</strong> ${dados.endereco.longitude}</li>
-                    <li><strong>Observações:</strong> ${dados.observacoes}</li>
+                    <li><strong>Latitude:</strong> ${
+                      dados.endereco.latitude
+                    }</li>
+                    <li><strong>Longitude:</strong> ${
+                      dados.endereco.longitude
+                    }</li>
+                    <li><strong>Observações:</strong> ${
+                      dados.observacoes || ""
+                    }</li>
                 </ul>
             </div>
           `;
-  
+
           const closeButton = document.createElement("button");
           closeButton.innerText = "Fechar";
           closeButton.style.marginTop = "20px";
@@ -492,14 +537,14 @@ function atualizarEtapa(endId, novaEtapaId) {
           closeButton.style.display = "block";
           closeButton.style.marginLeft = "auto";
           closeButton.style.marginRight = "auto";
-  
+
           closeButton.addEventListener("click", () => {
             alertDiv.remove();
           });
-  
+
           alertDiv.appendChild(closeButton);
           document.body.appendChild(alertDiv);
-  
+
           window.scrollTo(
             0,
             alertDiv.getBoundingClientRect().top + window.scrollY - 100
@@ -514,34 +559,35 @@ function atualizarEtapa(endId, novaEtapaId) {
         });
     }
   });
-  
-  
-  // Selecione o link "Kit Tssr"
-  const historicoLinkProjeto = document.querySelector("a[href='#todos-projetos']");
-  
-  
-  // Adicione o evento de clique ao link de "Kit Tssr"
-  historicoLinkProjeto.addEventListener("click", function (event) {
-    preencherTabelaProjetos(); // Função chamada ao clicar no link
-  });
-  
-  
-  // Delegação de eventos para os ícones de enviar data
-  document.querySelector("#tabelaHistoricoProjetos").addEventListener("click", (event) => {
+
+// Selecione o link "Kit Tssr"
+const historicoLinkProjeto = document.querySelector(
+  "a[href='#todos-projetos']"
+);
+
+// Adicione o evento de clique ao link de "Kit Tssr"
+historicoLinkProjeto.addEventListener("click", function (event) {
+  preencherTabelaProjetos(); // Função chamada ao clicar no link
+});
+
+// Delegação de eventos para os ícones de enviar data
+document
+  .querySelector("#tabelaHistoricoProjetos")
+  .addEventListener("click", (event) => {
     const target = event.target;
-  
+
     if (target.classList.contains("fa-square-arrow-up-right")) {
       const action = target.getAttribute("data-action");
       const endId = target.getAttribute("data-id"); // Identifica o End ID
       const dateInput = target.previousElementSibling.value; // Obtém o valor da data
       const dataFormatada = formataData(dateInput.split("-"));
-  
+
       // Verifica se a data foi preenchida
       if (!dateInput) {
         alert("Por favor, preencha a data antes de enviá-la.");
         return;
       }
-  
+
       // Exibe a confirmação antes de enviar
       exibirConfirmacao(
         `Tem certeza que deseja enviar a data ${dataFormatada}?`,
@@ -549,12 +595,11 @@ function atualizarEtapa(endId, novaEtapaId) {
       );
     }
   });
-  
-  
-  // Função para renderizar o input de data com ícone de envio
-  function renderInputDateProjetos(action, endId, status) {
-    if (status === "Em andamento" ? "" : "disabled") {
-      return `
+
+// Função para renderizar o input de data com ícone de envio
+function renderInputDateProjetos(action, endId, status) {
+  if (status === "Em andamento" ? "" : "disabled") {
+    return `
         <div class="input-icon-group">
           <input 
             type="date" 
@@ -565,8 +610,8 @@ function atualizarEtapa(endId, novaEtapaId) {
             data-action="${action}" 
             data-id="${endId}"></i>
         </div>`;
-    }
-    return `
+  }
+  return `
         <div class="input-icon-group">
           <input 
             type="date" 
@@ -576,9 +621,7 @@ function atualizarEtapa(endId, novaEtapaId) {
             data-action="${action}" 
             data-id="${endId}"></i>
         </div>`;
-  }
-  
-
+}
 
 function filtrarTabelaProjeto(page = 0, secao, idTabela) {
   const loadingOverlay = document.getElementById("loading-overlay");
@@ -589,14 +632,16 @@ function filtrarTabelaProjeto(page = 0, secao, idTabela) {
   const pesquisaCampos = {
     endId: secaoId.querySelector("#pesquisaEndIdProjeto").value.trim(),
     status: secaoId.querySelector("#pesquisaStatusProjeto").value.trim(),
-    dataEntrada: secaoId.querySelector("#pesquisaDataEntradaProjeto").value.trim(),
+    dataEntrada: secaoId
+      .querySelector("#pesquisaDataEntradaProjeto")
+      .value.trim(),
   };
 
   // Verifica se a data foi informada e a formata corretamente
-if (pesquisaCampos.dataEntrada) {
-  // Se o campo já for no formato correto, basta usá-lo diretamente
-  pesquisaCampos.dataEntrada = pesquisaCampos.dataEntrada;
-}
+  if (pesquisaCampos.dataEntrada) {
+    // Se o campo já for no formato correto, basta usá-lo diretamente
+    pesquisaCampos.dataEntrada = pesquisaCampos.dataEntrada;
+  }
 
   // Monta os parâmetros da URL
   const params = montarParametrosProjetos(pesquisaCampos, page);
@@ -638,9 +683,12 @@ if (pesquisaCampos.dataEntrada) {
 
 function montarParametrosProjetos(pesquisaCampos, page) {
   const params = new URLSearchParams();
-  if (pesquisaCampos.endId) params.append("endId", pesquisaCampos.endId.toUpperCase());
-  if (pesquisaCampos.status) params.append("status", pesquisaCampos.status.toUpperCase());
-  if (pesquisaCampos.dataEntrada) params.append("dataEntrada", pesquisaCampos.dataEntrada); // A data final já no formato adequado
+  if (pesquisaCampos.endId)
+    params.append("endId", pesquisaCampos.endId.toUpperCase());
+  if (pesquisaCampos.status)
+    params.append("status", pesquisaCampos.status.toUpperCase());
+  if (pesquisaCampos.dataEntrada)
+    params.append("dataEntrada", pesquisaCampos.dataEntrada); // A data final já no formato adequado
   params.append("page", page);
   params.append("size", pageSize); // Certifique-se de que a variável `pageSize` está definida corretamente
   return params;
@@ -663,8 +711,12 @@ function renderizarTabelaProjetos(dados, idTabela, tbody) {
 }
 
 function criarLinhaProjeto(item, i) {
-  const dataEntrada = item.dataEntrada ? formatarDataParaInput(item.dataEntrada) : "";
-  const dataAprovacao = item.dataAprovacao ? formatarDataParaInput(item.dataAprovacao) : "";
+  const dataEntrada = item.dataEntrada
+    ? formatarDataParaInput(item.dataEntrada)
+    : "";
+  const dataAprovacao = item.dataAprovacao
+    ? formatarDataParaInput(item.dataAprovacao)
+    : "";
 
   return `
     <tr>
@@ -672,10 +724,14 @@ function criarLinhaProjeto(item, i) {
         ${item.id}
       </td>
       <td>
-        <button class="btn btn-link p-0 text-decoration-none end-id" id="textoParaCopiar" data-id="${item.endId}">
+        <button class="btn btn-link p-0 text-decoration-none end-id" id="textoParaCopiar" data-id="${
+          item.endId
+        }">
           ${item.endId}
         </button>
-        <i class="fa-regular fa-copy btnCopiar" title="Copiar" data-id="${item.endId}"></i>
+        <i class="fa-regular fa-copy btnCopiar" title="Copiar" data-id="${
+          item.endId
+        }"></i>
       </td>
       </td>
       <td>
@@ -683,7 +739,9 @@ function criarLinhaProjeto(item, i) {
           <option value="status">${item.status}</option>
         </select>
         <button class="btn iniciar-btn p-0 border-0 bg-transparent ml-2" 
-          style="display:${["Em andamento", "Concluído"].includes(item.status) ? "none" : ""};" 
+          style="display:${
+            ["Em andamento", "Concluído"].includes(item.status) ? "none" : ""
+          };" 
           data-id-botao="${item.endId}">
           <i class="fa-solid fa-circle-play"></i>
         </button>
@@ -711,12 +769,22 @@ function criarLinhaProjeto(item, i) {
                 disabled
                 id="data-aprovacao-projeto-${item.endId}"
               />`
-            : renderInputDateProjetos("data-aprovacao-projeto", item.endId, item.status)
+            : renderInputDateProjetos(
+                "data-aprovacao-projeto",
+                item.endId,
+                item.status
+              )
         }
       </td>
       <td>
-        <button class="btn btn-primary finalizar-btn" data-id-botao="${item.endId}" 
-          ${item.status === "Não iniciado" || item.status === "Concluído" ? "disabled" : ""}>
+        <button class="btn btn-primary finalizar-btn" data-id-botao="${
+          item.endId
+        }" 
+          ${
+            item.status === "Não iniciado" || item.status === "Concluído"
+              ? "disabled"
+              : ""
+          }>
           Finalizar
         </button>
       </td>

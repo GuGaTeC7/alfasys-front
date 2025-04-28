@@ -16,27 +16,39 @@ function preencherTabelaKitTssr(page = 0) {
     .then((dados) => {
       tbody.innerHTML = "";
       totalPesquisado.innerHTML = "";
-      
+
       dados.content.forEach((item) => {
-        const dataPrevista = item.dataPrevista ? formatarDataParaInput(item.dataPrevista) : "";
-        const dataRealizacao = item.dataRealizacao ? formatarDataParaInput(item.dataRealizacao) : "";
+        const dataPrevista = item.dataPrevista
+          ? formatarDataParaInput(item.dataPrevista)
+          : "";
+        const dataRealizacao = item.dataRealizacao
+          ? formatarDataParaInput(item.dataRealizacao)
+          : "";
         const parecerDisabled = item.status !== "Em andamento" || item.parecer;
 
         const row = `
           <tr>
             <td>${item.id}</td>
             <td>
-              <button class="btn btn-link p-0 text-decoration-none end-id" data-id="${item.endId}">
+              <button class="btn btn-link p-0 text-decoration-none end-id" data-id="${
+                item.endId
+              }">
                 ${item.endId}
               </button>
-              <i class="fa-regular fa-copy btnCopiar" title="Copiar" data-id="${item.endId}"></i>
+              <i class="fa-regular fa-copy btnCopiar" title="Copiar" data-id="${
+                item.endId
+              }"></i>
             </td>
             <td>
               <select disabled class="form-select border-0 bg-light p-2">
                 <option value="status">${item.status}</option>
               </select>
               <button class="btn iniciar-btn p-0 border-0 bg-transparent ml-2" 
-                style="display:${["Em andamento", "Concluído"].includes(item.status) ? "none" : ""};" 
+                style="display:${
+                  ["Em andamento", "Concluído"].includes(item.status)
+                    ? "none"
+                    : ""
+                };" 
                 data-id-botao="${item.endId}">
                 <i class="fa-solid fa-circle-play"></i>
               </button>
@@ -76,15 +88,29 @@ function preencherTabelaKitTssr(page = 0) {
                 }
               </td>
             <td>
-              <select class="form-select border-0 bg-light p-2" id="select-parecer-${item.endId}" ${parecerDisabled ? "disabled" : ""}>
+              <select class="form-select border-0 bg-light p-2" id="select-parecer-${
+                item.endId
+              }" ${parecerDisabled ? "disabled" : ""}>
                 <option value="" selected>Selecione um parecer</option>
-                <option value="Viável" ${item.parecer === "Viável" ? "selected" : ""}>Viável</option>
-                <option value="Inviável" ${item.parecer === "Inviável" ? "selected" : ""}>Inviável</option>
+                <option value="Viável" ${
+                  item.parecer === "Viável" ? "selected" : ""
+                }>Viável</option>
+                <option value="Inviável" ${
+                  item.parecer === "Inviável" ? "selected" : ""
+                }>Inviável</option>
               </select>
-              ${item.parecer === "Inviável" && item.status === "Concluído" ? `<button class="btn p-0 border-0 bg-transparent btn-reverter" data-id="${item.endId}"><i class="fa-solid fa-rotate-left"></i></button>` : ""}
+              ${
+                item.parecer === "Inviável" && item.status === "Concluído"
+                  ? `<button class="btn p-0 border-0 bg-transparent btn-reverter" data-id="${item.endId}"><i class="fa-solid fa-rotate-left"></i></button>`
+                  : ""
+              }
             </td>
             <td>
-              <button class="btn btn-primary finalizar-btn" data-id-botao="${item.endId}" ${item.status !== "Em andamento" ? "disabled" : ""}>Finalizar</button>
+              <button class="btn btn-primary finalizar-btn" data-id-botao="${
+                item.endId
+              }" ${
+          item.status !== "Em andamento" ? "disabled" : ""
+        }>Finalizar</button>
             </td>
           </tr>`;
 
@@ -94,16 +120,25 @@ function preencherTabelaKitTssr(page = 0) {
       document.querySelectorAll(".btnCopiar").forEach((button) => {
         button.addEventListener("click", function () {
           const endId = this.getAttribute("data-id");
-          const textoParaCopiar = document.querySelector(`button[data-id="${endId}"]`).textContent.trim();
-          navigator.clipboard.writeText(textoParaCopiar).catch((err) => console.error("Erro ao copiar: ", err));
+          const textoParaCopiar = document
+            .querySelector(`button[data-id="${endId}"]`)
+            .textContent.trim();
+          navigator.clipboard
+            .writeText(textoParaCopiar)
+            .catch((err) => console.error("Erro ao copiar: ", err));
         });
       });
 
       document.querySelectorAll(".btn-reverter").forEach((button) => {
         button.addEventListener("click", function () {
           const endId = this.getAttribute("data-id");
-          const payload = { status: "Em andamento", dataRealizacao: "", dataPrevista: "", parecer: "" };
-          
+          const payload = {
+            status: "Em andamento",
+            dataRealizacao: "",
+            dataPrevista: "",
+            parecer: "",
+          };
+
           fetch(`${host}/tssrs/${endId}`, {
             method: "PATCH",
             headers: {
@@ -112,22 +147,27 @@ function preencherTabelaKitTssr(page = 0) {
             },
             body: JSON.stringify(payload),
           })
-          .then(response => {
-            if (!response.ok) throw new Error("Erro ao reverter status.");
-            return response.json();
-          })
-          .then(() => {
-            alert("Status revertido com sucesso!");
-            preencherTabelaKitTssr(page);
-          })
-          .catch(error => {
-            console.error("Erro ao reverter status:", error);
-            alert("Erro ao reverter status. Tente novamente.");
-          });
+            .then((response) => {
+              if (!response.ok) throw new Error("Erro ao reverter status.");
+              return response.json();
+            })
+            .then(() => {
+              alert("Status revertido com sucesso!");
+              preencherTabelaKitTssr(page);
+            })
+            .catch((error) => {
+              console.error("Erro ao reverter status:", error);
+              alert("Erro ao reverter status. Tente novamente.");
+            });
         });
       });
 
-      renderizarBotoesPaginacao("pagination-controls-Tssr", preencherTabelaKitTssr, dados.pageable.pageNumber, dados.totalPages);
+      renderizarBotoesPaginacao(
+        "pagination-controls-Tssr",
+        preencherTabelaKitTssr,
+        dados.pageable.pageNumber,
+        dados.totalPages
+      );
     })
     .catch((error) => {
       console.error("Erro ao buscar dados:", error);
@@ -137,7 +177,6 @@ function preencherTabelaKitTssr(page = 0) {
       loadingOverlay.style.display = "none";
     });
 }
-
 
 // Iniciar Kit Tssr
 function iniciaTssr(endId) {
@@ -186,7 +225,7 @@ function iniciaTssr(endId) {
         now.getMilliseconds(),
       ];
 
-      const decodedToken = JSON.parse(atob(token.split('.')[1]));
+      const decodedToken = JSON.parse(atob(token.split(".")[1]));
       const usuarioNome = decodedToken.nome || "Usuário Desconhecido";
 
       const payloadMensagem = {
@@ -200,9 +239,9 @@ function iniciaTssr(endId) {
           email: null,
           telefone: null,
           cargo: null,
-          operadoras: null
+          operadoras: null,
         },
-        cargo: null
+        cargo: null,
       };
 
       // Envia a mensagem
@@ -233,13 +272,13 @@ function iniciaTssr(endId) {
     });
 }
 
-
-
 // Finalizar Kit Tssr
 function finalizaKitTssr(endId) {
   // Obtém os valores das datas e do parecer
   const dataPrevista = document.getElementById(`data-prevista-${endId}`)?.value;
-  const dataRealizacao = document.getElementById(`data-realizada-${endId}`)?.value;
+  const dataRealizacao = document.getElementById(
+    `data-realizada-${endId}`
+  )?.value;
   const parecer = document.getElementById(`select-parecer-${endId}`)?.value;
 
   // Verifica se todas as datas estão preenchidas
@@ -306,7 +345,9 @@ function finalizaKitTssr(endId) {
       })
         .then((response) => {
           if (!response.ok) {
-            throw new Error(`Erro ao enviar para Sci-Inclusão: ${response.statusText}`);
+            throw new Error(
+              `Erro ao enviar para Sci-Inclusão: ${response.statusText}`
+            );
           }
 
           // Atualiza a etapa para o valor 4
@@ -347,7 +388,7 @@ function enviarMensagemFinalizacaoKit(endId) {
     now.getMilliseconds(),
   ];
 
-  const decodedToken = JSON.parse(atob(token.split('.')[1]));
+  const decodedToken = JSON.parse(atob(token.split(".")[1]));
   const usuarioNome = decodedToken.nome || "Usuário Desconhecido";
 
   const payloadMensagem = {
@@ -361,9 +402,9 @@ function enviarMensagemFinalizacaoKit(endId) {
       email: null,
       telefone: null,
       cargo: null,
-      operadoras: null
+      operadoras: null,
     },
-    cargo: null
+    cargo: null,
   };
 
   return fetch(`${host}/mensagens`, {
@@ -375,8 +416,6 @@ function enviarMensagemFinalizacaoKit(endId) {
     body: JSON.stringify(payloadMensagem),
   });
 }
-
-
 
 // Função para atualizar a etapa
 function atualizarEtapa(endId, novaEtapaId) {
@@ -405,8 +444,6 @@ function atualizarEtapa(endId, novaEtapaId) {
     });
 }
 
-
-
 // Delegação de eventos para os botões na tabela
 document.querySelector("#kit-tssr tbody").addEventListener("click", (event) => {
   const button = event.target.closest("[data-id-botao]");
@@ -428,61 +465,62 @@ document.querySelector("#kit-tssr tbody").addEventListener("click", (event) => {
   }
 });
 
-
 // Delegação de evento para ver end ID na tabela
-document.querySelector("#tabelaHistoricoKitTssr").addEventListener("click", (event) => {
-  const loadingOverlay = document.getElementById("loading-overlay");
-  
-  // Verifica se o elemento clicado possui a classe `end-id`
-  if (event.target.classList.contains("end-id")) {
-    const endId = event.target.getAttribute("data-id");
+document
+  .querySelector("#tabelaHistoricoKitTssr")
+  .addEventListener("click", (event) => {
+    const loadingOverlay = document.getElementById("loading-overlay");
 
-    if (!loadingOverlay) {
-      console.error("Elemento de loadingOverlay não encontrado!");
-      return;
-    }
+    // Verifica se o elemento clicado possui a classe `end-id`
+    if (event.target.classList.contains("end-id")) {
+      const endId = event.target.getAttribute("data-id");
 
-    loadingOverlay.style.display = "block";
+      if (!loadingOverlay) {
+        console.error("Elemento de loadingOverlay não encontrado!");
+        return;
+      }
 
-    // Criação do elemento de alerta
-    const alertDiv = document.createElement("div");
-    alertDiv.className = "alert-container";
-    alertDiv.style.position = "fixed";
-    alertDiv.style.top = "50%";
-    alertDiv.style.left = "50%";
-    alertDiv.style.transform = "translate(-50%, -50%)";
-    alertDiv.style.width = "86%";
-    alertDiv.style.maxWidth = "900px";
-    alertDiv.style.padding = "30px";
-    alertDiv.style.backgroundColor = "#012970";
-    alertDiv.style.color = "#ffffff";
-    alertDiv.style.border = "2px solid #012970";
-    alertDiv.style.borderRadius = "15px";
-    alertDiv.style.boxShadow = "0 4px 20px rgba(0, 0, 0, 0.15)";
-    alertDiv.style.zIndex = "1000";
-    alertDiv.style.overflow = "hidden";
-    alertDiv.style.display = "flex";
-    alertDiv.style.justifyContent = "center";
-    alertDiv.style.alignItems = "center";
-    alertDiv.style.flexDirection = "column";
+      loadingOverlay.style.display = "block";
 
-    // Verificação do token de autenticação
-    if (!token) {
-      console.error("Token de autenticação não encontrado!");
-      loadingOverlay.style.display = "none";
-      return;
-    }
+      // Criação do elemento de alerta
+      const alertDiv = document.createElement("div");
+      alertDiv.className = "alert-container";
+      alertDiv.style.position = "fixed";
+      alertDiv.style.top = "50%";
+      alertDiv.style.left = "50%";
+      alertDiv.style.transform = "translate(-50%, -50%)";
+      alertDiv.style.width = "86%";
+      alertDiv.style.maxWidth = "900px";
+      alertDiv.style.padding = "30px";
+      alertDiv.style.backgroundColor = "#012970";
+      alertDiv.style.color = "#ffffff";
+      alertDiv.style.border = "2px solid #012970";
+      alertDiv.style.borderRadius = "15px";
+      alertDiv.style.boxShadow = "0 4px 20px rgba(0, 0, 0, 0.15)";
+      alertDiv.style.zIndex = "1000";
+      alertDiv.style.overflow = "hidden";
+      alertDiv.style.display = "flex";
+      alertDiv.style.justifyContent = "center";
+      alertDiv.style.alignItems = "center";
+      alertDiv.style.flexDirection = "column";
 
-    fetch(`${host}/cadastroEndIds/${endId}`, {
-      method: "GET",
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((response) => {
-        if (!response.ok) throw new Error("Erro ao buscar dados.");
-        return response.json();
+      // Verificação do token de autenticação
+      if (!token) {
+        console.error("Token de autenticação não encontrado!");
+        loadingOverlay.style.display = "none";
+        return;
+      }
+
+      fetch(`${host}/cadastroEndIds/${endId}`, {
+        method: "GET",
+        headers: { Authorization: `Bearer ${token}` },
       })
-      .then((dados) => {
-        alertDiv.innerHTML = `
+        .then((response) => {
+          if (!response.ok) throw new Error("Erro ao buscar dados.");
+          return response.json();
+        })
+        .then((dados) => {
+          alertDiv.innerHTML = `
           <h1 style="display: block; text-align: center; margin-bottom: 25px; font-size: 1.5em; width: 100%;">
             Detalhes do END ID: <b>${endId}</b>
           </h1>
@@ -490,95 +528,111 @@ document.querySelector("#tabelaHistoricoKitTssr").addEventListener("click", (eve
               <ul style="flex: 1; padding-left: 20px; font-size: 1em; list-style: none;">
                   <li><strong>Site ID:</strong> ${dados.siteId}</li>
                   <li><strong>Demanda:</strong> ${dados.demanda}</li>
-                  <li><strong>Detentora:</strong> ${dados.detentora.detentora}</li>
-                  <li><strong>ID Detentora:</strong> ${dados.detentora.idDetentora}</li>
-                  <li><strong>Operadora cedente:</strong> ${dados.cedente.operadora}</li>
-                  <li><strong>ID Operadora:</strong> ${dados.cedente.idOperadora}</li>
-                  <li><strong>Logradouro:</strong> ${dados.endereco.logradouro}</li>
+                  <li><strong>Detentora:</strong> ${
+                    dados.detentora.detentora
+                  }</li>
+                  <li><strong>ID Detentora:</strong> ${
+                    dados.detentora.idDetentora
+                  }</li>
+                  <li><strong>Operadora cedente:</strong> ${
+                    dados.cedente.operadora
+                  }</li>
+                  <li><strong>ID Operadora:</strong> ${
+                    dados.cedente.idOperadora
+                  }</li>
+                  <li><strong>Logradouro:</strong> ${
+                    dados.endereco.logradouro
+                  }</li>
                   <li><strong>Número:</strong> ${dados.endereco.numero}</li>
               </ul>
               <ul style="flex: 1; padding-right: 20px; font-size: 1em; list-style: none;">
                   <li><strong>Bairro:</strong> ${dados.endereco.bairro}</li>
-                  <li><strong>Município:</strong> ${dados.endereco.municipio}</li>
+                  <li><strong>Município:</strong> ${
+                    dados.endereco.municipio
+                  }</li>
                   <li><strong>Estado:</strong> ${dados.endereco.estado}</li>
                   <li><strong>CEP:</strong> ${dados.endereco.cep}</li>
-                  <li><strong>Latitude:</strong> ${dados.endereco.latitude}</li>
-                  <li><strong>Longitude:</strong> ${dados.endereco.longitude}</li>
-                  <li><strong>Observações:</strong> ${dados.observacoes}</li>
+                  <li><strong>Latitude:</strong> ${
+                    dados.endereco.latitude || ""
+                  }</li>
+                  <li><strong>Longitude:</strong> ${
+                    dados.endereco.longitude || ""
+                  }</li>
+                  <li><strong>Observações:</strong> ${
+                    dados.observacoes || ""
+                  }</li>
               </ul>
           </div>
         `;
 
-        const closeButton = document.createElement("button");
-        closeButton.innerText = "Fechar";
-        closeButton.style.marginTop = "20px";
-        closeButton.style.padding = "12px 20px";
-        closeButton.style.backgroundColor = "#ffffff";
-        closeButton.style.border = "2px solid #ffffff";
-        closeButton.style.color = "#012970";
-        closeButton.style.cursor = "pointer";
-        closeButton.style.borderRadius = "10px";
-        closeButton.style.display = "block";
-        closeButton.style.marginLeft = "auto";
-        closeButton.style.marginRight = "auto";
+          const closeButton = document.createElement("button");
+          closeButton.innerText = "Fechar";
+          closeButton.style.marginTop = "20px";
+          closeButton.style.padding = "12px 20px";
+          closeButton.style.backgroundColor = "#ffffff";
+          closeButton.style.border = "2px solid #ffffff";
+          closeButton.style.color = "#012970";
+          closeButton.style.cursor = "pointer";
+          closeButton.style.borderRadius = "10px";
+          closeButton.style.display = "block";
+          closeButton.style.marginLeft = "auto";
+          closeButton.style.marginRight = "auto";
 
-        closeButton.addEventListener("click", () => {
-          alertDiv.remove();
+          closeButton.addEventListener("click", () => {
+            alertDiv.remove();
+          });
+
+          alertDiv.appendChild(closeButton);
+          document.body.appendChild(alertDiv);
+
+          window.scrollTo(
+            0,
+            alertDiv.getBoundingClientRect().top + window.scrollY - 100
+          );
+        })
+        .catch((error) => {
+          console.error("Erro ao buscar dados:", error);
+          alert("Erro ao carregar os dados. Atualize a tela apertando 'F5'.");
+        })
+        .finally(() => {
+          loadingOverlay.style.display = "none";
         });
-
-        alertDiv.appendChild(closeButton);
-        document.body.appendChild(alertDiv);
-
-        window.scrollTo(
-          0,
-          alertDiv.getBoundingClientRect().top + window.scrollY - 100
-        );
-      })
-      .catch((error) => {
-        console.error("Erro ao buscar dados:", error);
-        alert("Erro ao carregar os dados. Atualize a tela apertando 'F5'.");
-      })
-      .finally(() => {
-        loadingOverlay.style.display = "none";
-      });
-  }
-});
-
+    }
+  });
 
 // Selecione o link "Kit Tssr"
 const historicoLinkKitTssr = document.querySelector("a[href='#kit-tssr']");
-
 
 // Adicione o evento de clique ao link de "Kit Tssr"
 historicoLinkKitTssr.addEventListener("click", function (event) {
   preencherTabelaKitTssr(); // Função chamada ao clicar no link
 });
 
-
 // Delegação de eventos para os ícones de enviar data
-document.querySelector("#tabelaHistoricoKitTssr").addEventListener("click", (event) => {
-  const target = event.target;
+document
+  .querySelector("#tabelaHistoricoKitTssr")
+  .addEventListener("click", (event) => {
+    const target = event.target;
 
-  if (target.classList.contains("fa-square-arrow-up-right")) {
-    const action = target.getAttribute("data-action");
-    const endId = target.getAttribute("data-id"); // Identifica o End ID
-    const dateInput = target.previousElementSibling.value; // Obtém o valor da data
-    const dataFormatada = formataData(dateInput.split("-"));
+    if (target.classList.contains("fa-square-arrow-up-right")) {
+      const action = target.getAttribute("data-action");
+      const endId = target.getAttribute("data-id"); // Identifica o End ID
+      const dateInput = target.previousElementSibling.value; // Obtém o valor da data
+      const dataFormatada = formataData(dateInput.split("-"));
 
-    // Verifica se a data foi preenchida
-    if (!dateInput) {
-      alert("Por favor, preencha a data antes de enviá-la.");
-      return;
+      // Verifica se a data foi preenchida
+      if (!dateInput) {
+        alert("Por favor, preencha a data antes de enviá-la.");
+        return;
+      }
+
+      // Exibe a confirmação antes de enviar
+      exibirConfirmacao(
+        `Tem certeza que deseja enviar a data ${dataFormatada}?`,
+        () => enviarData(endId, dateInput, action, "kit-tssr")
+      );
     }
-
-    // Exibe a confirmação antes de enviar
-    exibirConfirmacao(
-      `Tem certeza que deseja enviar a data ${dataFormatada}?`,
-      () => enviarData(endId, dateInput, action, "kit-tssr")
-    );
-  }
-});
-
+  });
 
 // Função para renderizar o input de data com ícone de envio
 function renderInputDateTssr(action, endId, status) {
@@ -606,7 +660,6 @@ function renderInputDateTssr(action, endId, status) {
           data-id="${endId}"></i>
       </div>`;
 }
-
 
 function filtrarTabelaKitTssr(page = 0, secao, idTabela) {
   const loadingOverlay = document.getElementById("loading-overlay");
@@ -646,7 +699,7 @@ function filtrarTabelaKitTssr(page = 0, secao, idTabela) {
         dados.totalPages,
         secao, // Argumento extra
         idTabela // Argumento extra
-        );
+      );
       exibirTotalResultados("total-pesquisa-Tssr", dados.totalElements);
     })
     .catch((error) => {
@@ -697,8 +750,13 @@ function renderizarTabelaKitTssr(dados, idTabela, tbody) {
   document.querySelectorAll(".btn-reverter").forEach((button) => {
     button.addEventListener("click", function () {
       const endId = this.getAttribute("data-id");
-      const payload = { status: "Em andamento", dataRealizacao: "", dataPrevista: "", parecer: "" };
-      
+      const payload = {
+        status: "Em andamento",
+        dataRealizacao: "",
+        dataPrevista: "",
+        parecer: "",
+      };
+
       fetch(`${host}/tssrs/${endId}`, {
         method: "PATCH",
         headers: {
@@ -707,27 +765,31 @@ function renderizarTabelaKitTssr(dados, idTabela, tbody) {
         },
         body: JSON.stringify(payload),
       })
-      .then(response => {
-        if (!response.ok) throw new Error("Erro ao reverter status.");
-        return response.json();
-      })
-      .then(() => {
-        alert("Status revertido com sucesso!");
-        preencherTabelaKitTssr(page);
-      })
-      .catch(error => {
-        console.error("Erro ao reverter status:", error);
-        alert("Status Revertido, por favor atualize a página!");
-        preencherTabelaKitTssr(page);
-      });
+        .then((response) => {
+          if (!response.ok) throw new Error("Erro ao reverter status.");
+          return response.json();
+        })
+        .then(() => {
+          alert("Status revertido com sucesso!");
+          preencherTabelaKitTssr(page);
+        })
+        .catch((error) => {
+          console.error("Erro ao reverter status:", error);
+          alert("Status Revertido, por favor atualize a página!");
+          preencherTabelaKitTssr(page);
+        });
     });
   });
 }
 
 function criarLinhaKitTssr(item, i) {
-  const dataPrevista = item.dataPrevista ? formatarDataParaInput(item.dataPrevista) : "";
-  const dataRealizacao = item.dataRealizacao ? formatarDataParaInput(item.dataRealizacao) : "";
-  
+  const dataPrevista = item.dataPrevista
+    ? formatarDataParaInput(item.dataPrevista)
+    : "";
+  const dataRealizacao = item.dataRealizacao
+    ? formatarDataParaInput(item.dataRealizacao)
+    : "";
+
   // Verifica se o parecer está definido
   const parecerDisabled = item.status !== "Em andamento" || item.parecer;
 
@@ -737,56 +799,76 @@ function criarLinhaKitTssr(item, i) {
         ${item.id}
       </td>
       <td>
-        <button class="btn btn-link p-0 text-decoration-none end-id" id="textoParaCopiar" data-id="${item.endId}">
+        <button class="btn btn-link p-0 text-decoration-none end-id" id="textoParaCopiar" data-id="${
+          item.endId
+        }">
           ${item.endId}
         </button>
-        <i class="fa-regular fa-copy btnCopiar" title="Copiar" data-id="${item.endId}"></i>
+        <i class="fa-regular fa-copy btnCopiar" title="Copiar" data-id="${
+          item.endId
+        }"></i>
       </td>
       <td>
         <select disabled class="form-select border-0 bg-light p-2">
           <option value="status">${item.status}</option>
         </select>
         <button class="btn iniciar-btn p-0 border-0 bg-transparent ml-2" 
-          style="display:${["Em andamento", "Concluído"].includes(item.status) ? "none" : ""};" 
+          style="display:${
+            ["Em andamento", "Concluído"].includes(item.status) ? "none" : ""
+          };" 
           data-id-botao="${item.endId}">
           <i class="fa-solid fa-circle-play"></i>
         </button>
       </td>
       <td>
-        ${dataPrevista
-          ? `<input 
+        ${
+          dataPrevista
+            ? `<input 
               type="date" 
               class="form-control text-center" 
               value="${dataPrevista}" 
               disabled
               id="data-prevista-${item.endId}"
             />`
-          : renderInputDateTssr("data-prevista", item.endId, item.status)
+            : renderInputDateTssr("data-prevista", item.endId, item.status)
         }
       </td>
       <td>
-        ${dataRealizacao
-          ? `<input 
+        ${
+          dataRealizacao
+            ? `<input 
               type="date" 
               class="form-control text-center" 
               value="${dataRealizacao}" 
               disabled
               id="data-realizada-${item.endId}"
             />`
-          : renderInputDateTssr("data-realizada", item.endId, item.status)
+            : renderInputDateTssr("data-realizada", item.endId, item.status)
         }
       </td>
       <td>
-        <select class="form-select border-0 bg-light p-2" id="select-parecer-${item.endId}" 
+        <select class="form-select border-0 bg-light p-2" id="select-parecer-${
+          item.endId
+        }" 
           ${parecerDisabled ? "disabled" : ""}>
           <option value="" selected>Selecione um parecer</option>
-          <option value="Viável" ${item.parecer === "Viável" ? "selected" : ""}>Viável</option>
-          <option value="Inviável" ${item.parecer === "Inviável" ? "selected" : ""}>Inviável</option>
+          <option value="Viável" ${
+            item.parecer === "Viável" ? "selected" : ""
+          }>Viável</option>
+          <option value="Inviável" ${
+            item.parecer === "Inviável" ? "selected" : ""
+          }>Inviável</option>
         </select>
-        ${item.parecer === "Inviável" && item.status === "Concluído" ? `<button class="btn p-0 border-0 bg-transparent btn-reverter" data-id="${item.endId}"><i class="fa-solid fa-rotate-left"></i></button>` : ""}
+        ${
+          item.parecer === "Inviável" && item.status === "Concluído"
+            ? `<button class="btn p-0 border-0 bg-transparent btn-reverter" data-id="${item.endId}"><i class="fa-solid fa-rotate-left"></i></button>`
+            : ""
+        }
       </td>
       <td>
-        <button class="btn btn-primary finalizar-btn" data-id-botao="${item.endId}" 
+        <button class="btn btn-primary finalizar-btn" data-id-botao="${
+          item.endId
+        }" 
           ${item.status !== "Em andamento" ? "disabled" : ""}>
           Finalizar
         </button>
@@ -795,27 +877,30 @@ function criarLinhaKitTssr(item, i) {
   `;
 }
 
+document
+  .querySelector("#tabelaHistoricoKitTssr")
+  .addEventListener("change", (event) => {
+    const target = event.target;
 
-document.querySelector("#tabelaHistoricoKitTssr").addEventListener("change", (event) => {
-  const target = event.target;
+    if (
+      target.tagName === "SELECT" &&
+      target.id.startsWith("select-parecer-")
+    ) {
+      const endId = target.id.split("-")[2]; // Obtém o End ID
+      const parecerSelecionado = target.value; // Obtém o valor selecionado
 
-  if (target.tagName === "SELECT" && target.id.startsWith("select-parecer-")) {
-    const endId = target.id.split("-")[2]; // Obtém o End ID
-    const parecerSelecionado = target.value; // Obtém o valor selecionado
+      if (!parecerSelecionado) {
+        alert("Por favor, selecione um parecer válido.");
+        return;
+      }
 
-    if (!parecerSelecionado) {
-      alert("Por favor, selecione um parecer válido.");
-      return;
+      // Exibe a confirmação antes de enviar
+      exibirConfirmacao(
+        `Tem certeza que deseja definir o parecer como "${parecerSelecionado}"?`,
+        () => enviarParecer(endId, parecerSelecionado, "kit-tssr")
+      );
     }
-
-    // Exibe a confirmação antes de enviar
-    exibirConfirmacao(
-      `Tem certeza que deseja definir o parecer como "${parecerSelecionado}"?`,
-      () => enviarParecer(endId, parecerSelecionado, "kit-tssr")
-    );
-  }
-});
-
+  });
 
 // Adiciona o End ID diretamente na tabela ou processa de outra forma
 function processarEndIdParaKitTssr(endId) {

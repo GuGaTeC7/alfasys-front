@@ -1,33 +1,33 @@
 function preencherTabelaSciInclusao(page = 0) {
-    const loadingOverlay = document.getElementById("loading-overlay");
-    const tbody = document.querySelector("#sci-inclusao tbody");
-    const totalPesquisado = document.getElementById("total-pesquisa-inclusao");
-  
-    loadingOverlay.style.display = "block";
-  
-    fetch(`${host}/sciInclusao?page=${page}&size=${pageSize}`, {
-      method: "GET",
-      headers: { Authorization: `Bearer ${token}` },
+  const loadingOverlay = document.getElementById("loading-overlay");
+  const tbody = document.querySelector("#sci-inclusao tbody");
+  const totalPesquisado = document.getElementById("total-pesquisa-inclusao");
+
+  loadingOverlay.style.display = "block";
+
+  fetch(`${host}/sciInclusao?page=${page}&size=${pageSize}`, {
+    method: "GET",
+    headers: { Authorization: `Bearer ${token}` },
+  })
+    .then((response) => {
+      if (!response.ok) throw new Error("Erro ao buscar dados.");
+      return response.json();
     })
-      .then((response) => {
-        if (!response.ok) throw new Error("Erro ao buscar dados.");
-        return response.json();
-      })
-      .then((dados) => {
-        tbody.innerHTML = ""; // Limpa a tabela
-        totalPesquisado.innerHTML = ""; // Limpa a tabela
-        
-        dados.content.forEach((item) => {
-            const dataEnvio = item.dataEnvio
-              ? formatarDataParaInput(item.dataEnvio)
-              : "";
-          
-            const dataAprovacao = item.dataAprovacao
-              ? formatarDataParaInput(item.dataAprovacao)
-              : "";
-          
-            // Monta a linha da tabela
-            const row = `
+    .then((dados) => {
+      tbody.innerHTML = ""; // Limpa a tabela
+      totalPesquisado.innerHTML = ""; // Limpa a tabela
+
+      dados.content.forEach((item) => {
+        const dataEnvio = item.dataEnvio
+          ? formatarDataParaInput(item.dataEnvio)
+          : "";
+
+        const dataAprovacao = item.dataAprovacao
+          ? formatarDataParaInput(item.dataAprovacao)
+          : "";
+
+        // Monta a linha da tabela
+        const row = `
                 <tr>
                   <td>
                     ${item.id}
@@ -48,7 +48,9 @@ function preencherTabelaSciInclusao(page = 0) {
                     </select>
                     <button class="btn iniciar-btn p-0 border-0 bg-transparent ml-2" 
                       style="display:${
-                        ["Em andamento", "Concluído"].includes(item.status) ? "none" : ""
+                        ["Em andamento", "Concluído"].includes(item.status)
+                          ? "none"
+                          : ""
                       };" 
                       data-id-botao="${item.endId}">
                       <i class="fa-solid fa-circle-play"></i>
@@ -59,12 +61,16 @@ function preencherTabelaSciInclusao(page = 0) {
                     item.codInclusao
                       ? item.codInclusao
                       : `<div class="input-icon-group">
-                          <input type="text" class="form-control" id="codInclusao-${item.endId}" placeholder="Código SCI"  ${item.status !== "Em andamento" ? "disabled" : ""}/>
+                          <input type="text" class="form-control" id="codInclusao-${
+                            item.endId
+                          }" placeholder="Código SCI"  ${
+                          item.status !== "Em andamento" ? "disabled" : ""
+                        }/>
                           <i class="fa-sharp-duotone fa-solid fa-square-arrow-up-right btnEnviarCodInclusao" 
                             data-id="${item.endId}">
                           </i>
                         </div>`
-                      }
+                  }
                   </td>
                   <td>
                     ${
@@ -76,7 +82,11 @@ function preencherTabelaSciInclusao(page = 0) {
                             disabled
                             id="data-envio-inclusao-${item.endId}"
                           />`
-                        : renderInputDateInclusao("data-envio-inclusao", item.endId, item.status)
+                        : renderInputDateInclusao(
+                            "data-envio-inclusao",
+                            item.endId,
+                            item.status
+                          )
                     }
                   </td>
                   <td>
@@ -89,58 +99,60 @@ function preencherTabelaSciInclusao(page = 0) {
                             disabled
                             id="data-aprovacao-inclusao-${item.endId}"
                           />`
-                        : renderInputDateInclusao("data-aprovacao-inclusao", item.endId, item.status)
+                        : renderInputDateInclusao(
+                            "data-aprovacao-inclusao",
+                            item.endId,
+                            item.status
+                          )
                     }
                   </td>
                   <td>
                     <button class="btn btn-primary finalizar-btn" data-id-botao="${
-              item.endId
-            }" 
+                      item.endId
+                    }" 
             ${item.status !== "Em andamento" ? "disabled" : ""}>
             Finalizar
           </button>
                   </td>
                 </tr>`;
-            
-            tbody.insertAdjacentHTML("beforeend", row);
-          });
-     
-          
-// Adicionar eventListener para cada botão "Copiar Texto"
-document.querySelectorAll(".btnCopiar").forEach((button) => {
-  button.addEventListener("click", function () {
-    const endId = this.getAttribute("data-id");
-    const textoParaCopiarPuro = document.querySelector(
-      `button[data-id="${endId}"]`
-    ).textContent;
-    const textoParaCopiar = textoParaCopiarPuro.trim();
 
-    navigator.clipboard
-      .writeText(textoParaCopiar)
-      .then(function () {})
-      .catch(function (err) {
-        console.error("Erro ao tentar copiar o texto: ", err);
+        tbody.insertAdjacentHTML("beforeend", row);
       });
-  });
-});
 
-// Renderizar botões de paginação
-renderizarBotoesPaginacao(
-  "pagination-controls-inclusao",
-  preencherTabelaSciInclusao,
-  dados.pageable.pageNumber,
-  dados.totalPages
-);
-})
-.catch((error) => {
-console.error("Erro ao buscar dados:", error);
-alert("Erro ao carregar os dados. Tente novamente.");
-})
-.finally(() => {
-loadingOverlay.style.display = "none";
-});
+      // Adicionar eventListener para cada botão "Copiar Texto"
+      document.querySelectorAll(".btnCopiar").forEach((button) => {
+        button.addEventListener("click", function () {
+          const endId = this.getAttribute("data-id");
+          const textoParaCopiarPuro = document.querySelector(
+            `button[data-id="${endId}"]`
+          ).textContent;
+          const textoParaCopiar = textoParaCopiarPuro.trim();
+
+          navigator.clipboard
+            .writeText(textoParaCopiar)
+            .then(function () {})
+            .catch(function (err) {
+              console.error("Erro ao tentar copiar o texto: ", err);
+            });
+        });
+      });
+
+      // Renderizar botões de paginação
+      renderizarBotoesPaginacao(
+        "pagination-controls-inclusao",
+        preencherTabelaSciInclusao,
+        dados.pageable.pageNumber,
+        dados.totalPages
+      );
+    })
+    .catch((error) => {
+      console.error("Erro ao buscar dados:", error);
+      alert("Erro ao carregar os dados. Tente novamente.");
+    })
+    .finally(() => {
+      loadingOverlay.style.display = "none";
+    });
 }
-
 
 // Função para iniciar Inclusão
 function iniciaInclusao(endId) {
@@ -158,7 +170,7 @@ function iniciaInclusao(endId) {
   })
     .then((response) => {
       console.log("Resposta da requisição recebida:", response);
-      
+
       // Verifica se a resposta não está OK
       if (!response.ok) {
         if (response.status === 403) {
@@ -189,7 +201,7 @@ function iniciaInclusao(endId) {
         now.getMilliseconds(),
       ];
 
-      const decodedToken = JSON.parse(atob(token.split('.')[1]));
+      const decodedToken = JSON.parse(atob(token.split(".")[1]));
       const usuarioNome = decodedToken.nome || "Usuário Desconhecido";
 
       const payloadMensagem = {
@@ -203,9 +215,9 @@ function iniciaInclusao(endId) {
           email: null,
           telefone: null,
           cargo: null,
-          operadoras: null
+          operadoras: null,
         },
-        cargo: null
+        cargo: null,
       };
 
       // Envia a mensagem
@@ -236,18 +248,19 @@ function iniciaInclusao(endId) {
     });
 }
 
-
-
-
 function finalizaSciInclusao(endId) {
-  const dataEnvio = document.getElementById(`data-envio-inclusao-${endId}`)?.value;
-  const dataAprovacao = document.getElementById(`data-aprovacao-inclusao-${endId}`)?.value;
+  const dataEnvio = document.getElementById(
+    `data-envio-inclusao-${endId}`
+  )?.value;
+  const dataAprovacao = document.getElementById(
+    `data-aprovacao-inclusao-${endId}`
+  )?.value;
 
   if (!dataEnvio || !dataAprovacao) {
     alert("A data de envio e data de aprovação devem estar preenchidas.");
     return;
   }
-  
+
   // Adiciona o overlay de carregamento
   const loadingOverlay = document.getElementById("loading-overlay");
   loadingOverlay.style.display = "block";
@@ -304,7 +317,9 @@ function finalizaSciInclusao(endId) {
         throw new Error("Você não tem permissão para realizar esta ação.");
       }
       if (!response.ok) {
-        throw new Error(`Erro ao enviar o endId para projetos: ${response.statusText}`);
+        throw new Error(
+          `Erro ao enviar o endId para projetos: ${response.statusText}`
+        );
       }
       return atualizarEtapa(endId, 5);
     })
@@ -322,7 +337,7 @@ function finalizaSciInclusao(endId) {
         now.getMilliseconds(),
       ];
 
-      const decodedToken = JSON.parse(atob(token.split('.')[1]));
+      const decodedToken = JSON.parse(atob(token.split(".")[1]));
       const usuarioNome = decodedToken.nome || "Usuário Desconhecido";
 
       const payloadMensagem = {
@@ -336,9 +351,9 @@ function finalizaSciInclusao(endId) {
           email: null,
           telefone: null,
           cargo: null,
-          operadoras: null
+          operadoras: null,
         },
-        cargo: null
+        cargo: null,
       };
 
       // Envia a mensagem
@@ -352,7 +367,9 @@ function finalizaSciInclusao(endId) {
       });
     })
     .then(() => {
-      alert("Sci-Inclusão finalizada, enviada para Projetos, etapa atualizada e mensagem enviada com sucesso!");
+      alert(
+        "Sci-Inclusão finalizada, enviada para Projetos, etapa atualizada e mensagem enviada com sucesso!"
+      );
 
       // Atualiza a tabela na página atual
       const paginacao = document.getElementById("pagination-controls-inclusao");
@@ -372,8 +389,6 @@ function finalizaSciInclusao(endId) {
       loadingOverlay.style.display = "none";
     });
 }
-
-  
 
 // Função para atualizar a etapa
 function atualizarEtapa(endId, novaEtapaId) {
@@ -402,18 +417,20 @@ function atualizarEtapa(endId, novaEtapaId) {
     });
 }
 
-
 // Botões de alert para Finalizar e Iniciar
-  document.querySelector("#sci-inclusao tbody").addEventListener("click", (event) => {
+document
+  .querySelector("#sci-inclusao tbody")
+  .addEventListener("click", (event) => {
     const button = event.target.closest("[data-id-botao]");
     if (!button) return; // Se não clicar em um botão relevante, retorna
-  
+
     const endId = button.getAttribute("data-id-botao");
-  
+
     if (button.classList.contains("iniciar-btn")) {
       // Lógica para o botão "Iniciar"
-      exibirConfirmacao("Tem certeza que deseja <b>iniciar</b> essa etapa?", () =>
-        confirmAlert("iniciar", endId, "sci-inclusao")
+      exibirConfirmacao(
+        "Tem certeza que deseja <b>iniciar</b> essa etapa?",
+        () => confirmAlert("iniciar", endId, "sci-inclusao")
       );
     } else if (button.classList.contains("finalizar-btn")) {
       // Lógica para o botão "Finalizar"
@@ -423,10 +440,11 @@ function atualizarEtapa(endId, novaEtapaId) {
       );
     }
   });
-  
 
 // Delegação de eventos para os ícones de enviar data
-document.querySelector("#tabelaHistoricoInclusao").addEventListener("click", (event) => {
+document
+  .querySelector("#tabelaHistoricoInclusao")
+  .addEventListener("click", (event) => {
     const target = event.target;
 
     if (target.classList.contains("fa-square-arrow-up-right")) {
@@ -449,44 +467,45 @@ document.querySelector("#tabelaHistoricoInclusao").addEventListener("click", (ev
     }
   });
 
-
-  // Delegação de eventos para os ícones de enviar código inclusão
-  document.querySelector("#tabelaHistoricoInclusao").addEventListener("click", (event) => {
+// Delegação de eventos para os ícones de enviar código inclusão
+document
+  .querySelector("#tabelaHistoricoInclusao")
+  .addEventListener("click", (event) => {
     const target = event.target;
-  
+
     if (target.classList.contains("btnEnviarCodInclusao")) {
       const endId = target.getAttribute("data-id");
       const codInclusaoInput = document.getElementById(`codInclusao-${endId}`);
       const codInclusao = codInclusaoInput ? codInclusaoInput.value.trim() : "";
-  
+
       if (!codInclusao) {
         return;
       }
-  
+
       exibirConfirmacao(
         `Tem certeza que deseja enviar o código de inclusão: ${codInclusao}?`,
         () => enviarCodigoSCI(endId, codInclusao, "sci-inclusao")
       );
     }
   });
-  
-
 
 // Função para mostrar mais do end ID
-  document.querySelector("#tabelaHistoricoInclusao").addEventListener("click", (event) => {
+document
+  .querySelector("#tabelaHistoricoInclusao")
+  .addEventListener("click", (event) => {
     const loadingOverlay = document.getElementById("loading-overlay");
-    
+
     // Verifica se o elemento clicado possui a classe `end-id`
     if (event.target.classList.contains("end-id")) {
       const endId = event.target.getAttribute("data-id");
-  
+
       if (!loadingOverlay) {
         console.error("Elemento de loadingOverlay não encontrado!");
         return;
       }
-  
+
       loadingOverlay.style.display = "block";
-  
+
       // Criação do elemento de alerta
       const alertDiv = document.createElement("div");
       alertDiv.className = "alert-container";
@@ -508,14 +527,14 @@ document.querySelector("#tabelaHistoricoInclusao").addEventListener("click", (ev
       alertDiv.style.justifyContent = "center";
       alertDiv.style.alignItems = "center";
       alertDiv.style.flexDirection = "column";
-  
+
       // Verificação do token de autenticação
       if (!token) {
         console.error("Token de autenticação não encontrado!");
         loadingOverlay.style.display = "none";
         return;
       }
-  
+
       fetch(`${host}/cadastroEndIds/${endId}`, {
         method: "GET",
         headers: { Authorization: `Bearer ${token}` },
@@ -533,25 +552,43 @@ document.querySelector("#tabelaHistoricoInclusao").addEventListener("click", (ev
                 <ul style="flex: 1; padding-left: 20px; font-size: 1em; list-style: none;">
                     <li><strong>Site ID:</strong> ${dados.siteId}</li>
                     <li><strong>Demanda:</strong> ${dados.demanda}</li>
-                    <li><strong>Detentora:</strong> ${dados.detentora.detentora}</li>
-                    <li><strong>ID Detentora:</strong> ${dados.detentora.idDetentora}</li>
-                    <li><strong>Operadora cedente:</strong> ${dados.cedente.operadora}</li>
-                    <li><strong>ID Operadora:</strong> ${dados.cedente.idOperadora}</li>
-                    <li><strong>Logradouro:</strong> ${dados.endereco.logradouro}</li>
+                    <li><strong>Detentora:</strong> ${
+                      dados.detentora.detentora
+                    }</li>
+                    <li><strong>ID Detentora:</strong> ${
+                      dados.detentora.idDetentora
+                    }</li>
+                    <li><strong>Operadora cedente:</strong> ${
+                      dados.cedente.operadora
+                    }</li>
+                    <li><strong>ID Operadora:</strong> ${
+                      dados.cedente.idOperadora
+                    }</li>
+                    <li><strong>Logradouro:</strong> ${
+                      dados.endereco.logradouro
+                    }</li>
                     <li><strong>Número:</strong> ${dados.endereco.numero}</li>
                 </ul>
                 <ul style="flex: 1; padding-right: 20px; font-size: 1em; list-style: none;">
                     <li><strong>Bairro:</strong> ${dados.endereco.bairro}</li>
-                    <li><strong>Município:</strong> ${dados.endereco.municipio}</li>
+                    <li><strong>Município:</strong> ${
+                      dados.endereco.municipio
+                    }</li>
                     <li><strong>Estado:</strong> ${dados.endereco.estado}</li>
                     <li><strong>CEP:</strong> ${dados.endereco.cep}</li>
-                    <li><strong>Latitude:</strong> ${dados.endereco.latitude}</li>
-                    <li><strong>Longitude:</strong> ${dados.endereco.longitude}</li>
-                    <li><strong>Observações:</strong> ${dados.observacoes}</li>
+                    <li><strong>Latitude:</strong> ${
+                      dados.endereco.latitude
+                    }</li>
+                    <li><strong>Longitude:</strong> ${
+                      dados.endereco.longitude
+                    }</li>
+                    <li><strong>Observações:</strong> ${
+                      dados.observacoes || ""
+                    }</li>
                 </ul>
             </div>
           `;
-  
+
           const closeButton = document.createElement("button");
           closeButton.innerText = "Fechar";
           closeButton.style.marginTop = "20px";
@@ -564,14 +601,14 @@ document.querySelector("#tabelaHistoricoInclusao").addEventListener("click", (ev
           closeButton.style.display = "block";
           closeButton.style.marginLeft = "auto";
           closeButton.style.marginRight = "auto";
-  
+
           closeButton.addEventListener("click", () => {
             alertDiv.remove();
           });
-  
+
           alertDiv.appendChild(closeButton);
           document.body.appendChild(alertDiv);
-  
+
           window.scrollTo(
             0,
             alertDiv.getBoundingClientRect().top + window.scrollY - 100
@@ -587,16 +624,13 @@ document.querySelector("#tabelaHistoricoInclusao").addEventListener("click", (ev
     }
   });
 
-
 // Selecione o link "Sci Inclusao"
 const historicoLinkInclusao = document.querySelector("a[href='#sci-inclusao']");
 
-
 // Adicione o evento de clique ao link de "Sci Inclusao"
 historicoLinkInclusao.addEventListener("click", function (event) {
-    preencherTabelaSciInclusao(); // Função chamada ao clicar no link
+  preencherTabelaSciInclusao(); // Função chamada ao clicar no link
 });
-
 
 // Função para renderizar o input de data com ícone de envio
 function renderInputDateInclusao(action, endId, status) {
@@ -624,8 +658,6 @@ function renderInputDateInclusao(action, endId, status) {
           data-id="${endId}"></i>
       </div>`;
 }
-
-
 
 function filtrarTabelaSciInclusao(page = 0, secao, idTabela) {
   const loadingOverlay = document.getElementById("loading-overlay");
@@ -665,7 +697,7 @@ function filtrarTabelaSciInclusao(page = 0, secao, idTabela) {
         dados.totalPages,
         secao, // Argumento extra
         idTabela // Argumento extra
-        );
+      );
       exibirTotalResultados("total-pesquisa-inclusao", dados.totalElements);
     })
     .catch((error) => {
@@ -676,7 +708,6 @@ function filtrarTabelaSciInclusao(page = 0, secao, idTabela) {
       loadingOverlay.style.display = "none";
     });
 }
-
 
 function montarParametrosInclusao(pesquisaCampos, page) {
   const params = new URLSearchParams();
@@ -690,7 +721,6 @@ function montarParametrosInclusao(pesquisaCampos, page) {
   params.append("size", pageSize);
   return params;
 }
-
 
 function renderizarTabelaInclusao(dados, idTabela, tbody) {
   tbody.innerHTML = ""; // Limpa a tabela antes de preencher
@@ -717,7 +747,9 @@ function renderizarTabelaInclusao(dados, idTabela, tbody) {
 // Função para criar uma linha da tabela de histórico de inclusão
 function criarLinhaHistoricoInclusao(item, i) {
   const dataEnvio = item.dataEnvio ? formatarDataParaInput(item.dataEnvio) : "";
-  const dataAprovacao = item.dataAprovacao ? formatarDataParaInput(item.dataAprovacao) : "";
+  const dataAprovacao = item.dataAprovacao
+    ? formatarDataParaInput(item.dataAprovacao)
+    : "";
 
   return `
     <tr style="${
@@ -729,17 +761,23 @@ function criarLinhaHistoricoInclusao(item, i) {
         ${item.id}
       </td>
       <td>
-        <button class="btn btn-link p-0 text-decoration-none end-id" id="textoParaCopiar" data-id="${item.endId}">
+        <button class="btn btn-link p-0 text-decoration-none end-id" id="textoParaCopiar" data-id="${
+          item.endId
+        }">
           ${item.endId}
         </button>
-        <i class="fa-regular fa-copy btnCopiar" title="Copiar" data-id="${item.endId}"></i>
+        <i class="fa-regular fa-copy btnCopiar" title="Copiar" data-id="${
+          item.endId
+        }"></i>
       </td>
       <td>
         <select disabled class="form-select border-0 bg-light p-2">
           <option value="status">${item.status}</option>
         </select>
         <button class="btn iniciar-btn p-0 border-0 bg-transparent ml-2" 
-          style="display:${["Em andamento", "Concluído"].includes(item.status) ? "none" : ""};" 
+          style="display:${
+            ["Em andamento", "Concluído"].includes(item.status) ? "none" : ""
+          };" 
           data-id-botao="${item.endId}">
           <i class="fa-solid fa-circle-play"></i>
         </button>
@@ -749,7 +787,11 @@ function criarLinhaHistoricoInclusao(item, i) {
           item.codInclusao
             ? item.codInclusao
             : `<div class="input-icon-group">
-                <input type="text" class="form-control" id="codInclusao-${item.endId}" placeholder="Código SCI" ${item.status !== "Em andamento" ? "disabled" : ""}/>
+                <input type="text" class="form-control" id="codInclusao-${
+                  item.endId
+                }" placeholder="Código SCI" ${
+                item.status !== "Em andamento" ? "disabled" : ""
+              }/>
                 <i class="fa-solid fa-square-arrow-up-right btnEnviarCodInclusao" 
                   data-id="${item.endId}" 
                   title="Enviar Código"></i>
@@ -766,7 +808,11 @@ function criarLinhaHistoricoInclusao(item, i) {
                 disabled
                 id="data-envio-inclusao-${item.endId}"
               />`
-            : renderInputDateInclusao("data-envio-inclusao", item.endId, item.status)
+            : renderInputDateInclusao(
+                "data-envio-inclusao",
+                item.endId,
+                item.status
+              )
         }
       </td>
       <td>
@@ -779,11 +825,17 @@ function criarLinhaHistoricoInclusao(item, i) {
                 disabled
                 id="data-aprovacao-inclusao-${item.endId}"
               />`
-            : renderInputDateInclusao("data-aprovacao-inclusao", item.endId, item.status)
+            : renderInputDateInclusao(
+                "data-aprovacao-inclusao",
+                item.endId,
+                item.status
+              )
         }
       </td>
       <td>
-        <button class="btn btn-primary finalizar-btn" data-id-botao="${item.endId}" 
+        <button class="btn btn-primary finalizar-btn" data-id-botao="${
+          item.endId
+        }" 
           ${item.status !== "Em andamento" ? "disabled" : ""}>
           Finalizar
         </button>
@@ -791,7 +843,6 @@ function criarLinhaHistoricoInclusao(item, i) {
     </tr>
   `;
 }
-
 
 // Adiciona o End ID diretamente na tabela ou processa de outra forma
 function processarEndIdParaInclusao(endId) {

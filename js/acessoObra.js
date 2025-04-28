@@ -1,5 +1,7 @@
 // Adiciona evento ao botão "Buscar Agendamento"
-document.getElementById("button-buscar-agendamento").addEventListener("click", function (event) {
+document
+  .getElementById("button-buscar-agendamento")
+  .addEventListener("click", function (event) {
     event.preventDefault();
     const botaoBuscar = this;
 
@@ -13,13 +15,17 @@ document.getElementById("button-buscar-agendamento").addEventListener("click", f
       botaoBuscar.innerHTML =
         '<i class="fa-solid fa-magnifying-glass"></i>⠀Buscar';
     }, 3000);
-});
+  });
 
 // Função para preencher a tabela de agendamentos
 function preencherTabelaAcessoObra(page = 0) {
   const loadingOverlay = document.getElementById("loading-overlay");
-  const tbody = document.querySelector("#tabelaHistoricoAgendamento-obra tbody");
-  const totalPesquisado = document.getElementById("total-pesquisa-agendamento-obra");
+  const tbody = document.querySelector(
+    "#tabelaHistoricoAgendamento-obra tbody"
+  );
+  const totalPesquisado = document.getElementById(
+    "total-pesquisa-agendamento-obra"
+  );
 
   loadingOverlay.style.display = "block";
 
@@ -168,42 +174,40 @@ function preencherTabelaAcessoObra(page = 0) {
         tbody.insertAdjacentHTML("beforeend", row);
       });
 
-// Adicionar eventListener para cada botão "Copiar Texto"
-document.querySelectorAll(".btnCopiar").forEach((button) => {
-  button.addEventListener("click", function () {
-    const endId = this.getAttribute("data-id");
-    const textoParaCopiarPuro = document.querySelector(
-      `button[data-id="${endId}"]`
-    ).textContent;
-    const textoParaCopiar = textoParaCopiarPuro.trim();
+      // Adicionar eventListener para cada botão "Copiar Texto"
+      document.querySelectorAll(".btnCopiar").forEach((button) => {
+        button.addEventListener("click", function () {
+          const endId = this.getAttribute("data-id");
+          const textoParaCopiarPuro = document.querySelector(
+            `button[data-id="${endId}"]`
+          ).textContent;
+          const textoParaCopiar = textoParaCopiarPuro.trim();
 
-    navigator.clipboard
-      .writeText(textoParaCopiar)
-      .then(function () {})
-      .catch(function (err) {
-        console.error("Erro ao tentar copiar o texto: ", err);
+          navigator.clipboard
+            .writeText(textoParaCopiar)
+            .then(function () {})
+            .catch(function (err) {
+              console.error("Erro ao tentar copiar o texto: ", err);
+            });
+        });
       });
-  });
-});
 
-
-// Função para renderizar botões de páginação
-renderizarBotoesPaginacao(
-  "pagination-controls-agendamento-obra",
-  preencherTabelaAcessoObra,
-  dados.pageable.pageNumber,
-  dados.totalPages
-);
-})
-.catch((error) => {
-console.error("Erro ao buscar dados:", error);
-alert("Erro ao carregar os dados. Tente novamente.");
-})
-.finally(() => {
-loadingOverlay.style.display = "none";
-});
+      // Função para renderizar botões de páginação
+      renderizarBotoesPaginacao(
+        "pagination-controls-agendamento-obra",
+        preencherTabelaAcessoObra,
+        dados.pageable.pageNumber,
+        dados.totalPages
+      );
+    })
+    .catch((error) => {
+      console.error("Erro ao buscar dados:", error);
+      alert("Erro ao carregar os dados. Tente novamente.");
+    })
+    .finally(() => {
+      loadingOverlay.style.display = "none";
+    });
 }
-
 
 // Função para renderizar o input de data com ícone de envio
 function renderInputDateAcessoObra(action, endId, status) {
@@ -231,7 +235,6 @@ function renderInputDateAcessoObra(action, endId, status) {
           data-id="${endId}"></i>
       </div>`;
 }
-
 
 // Função para exibir uma confirmação
 function exibirConfirmacao(mensagem, onConfirm) {
@@ -270,7 +273,6 @@ function exibirConfirmacao(mensagem, onConfirm) {
   });
 }
 
-
 // Função para iniciar um agendamento de obra
 function iniciaAgendamentoObra(endId) {
   const payload = {
@@ -287,7 +289,7 @@ function iniciaAgendamentoObra(endId) {
   })
     .then((response) => {
       console.log("Resposta da requisição recebida:", response);
-      
+
       // Verifica se a resposta não está OK
       if (!response.ok) {
         if (response.status === 403) {
@@ -318,7 +320,7 @@ function iniciaAgendamentoObra(endId) {
         now.getMilliseconds(),
       ];
 
-      const decodedToken = JSON.parse(atob(token.split('.')[1]));
+      const decodedToken = JSON.parse(atob(token.split(".")[1]));
       const usuarioNome = decodedToken.nome || "Usuário Desconhecido";
 
       const payloadMensagem = {
@@ -332,9 +334,9 @@ function iniciaAgendamentoObra(endId) {
           email: null,
           telefone: null,
           cargo: null,
-          operadoras: null
+          operadoras: null,
         },
-        cargo: null
+        cargo: null,
       };
 
       // Envia a mensagem
@@ -353,7 +355,9 @@ function iniciaAgendamentoObra(endId) {
       botaoIniciar.style.display = "none";
 
       // Atualiza a tabela na página atual
-      const paginacao = document.getElementById("pagination-controls-agendamento-obra");
+      const paginacao = document.getElementById(
+        "pagination-controls-agendamento-obra"
+      );
       const paginaAtual = paginacao.querySelector(".btn-primary").textContent;
       preencherTabelaAcessoObra(paginaAtual - 1);
     })
@@ -365,15 +369,14 @@ function iniciaAgendamentoObra(endId) {
     });
 }
 
-
-
-
 function finalizaAgendamentoObra(endId) {
   // Obtém os valores das datas
   const dataSolicitacao = document.getElementById(
     `data-solicitacao-obra-${endId}`
   )?.value;
-  const dataPrevisao = document.getElementById(`data-previsao-obra-${endId}`)?.value;
+  const dataPrevisao = document.getElementById(
+    `data-previsao-obra-${endId}`
+  )?.value;
   const dataLiberacao = document.getElementById(
     `data-liberacao-obra-${endId}`
   )?.value;
@@ -459,7 +462,7 @@ function finalizaAgendamentoObra(endId) {
         now.getMilliseconds(),
       ];
 
-      const decodedToken = JSON.parse(atob(token.split('.')[1]));
+      const decodedToken = JSON.parse(atob(token.split(".")[1]));
       const usuarioNome = decodedToken.nome || "Usuário Desconhecido";
 
       const payloadMensagem = {
@@ -473,9 +476,9 @@ function finalizaAgendamentoObra(endId) {
           email: null,
           telefone: null,
           cargo: null,
-          operadoras: null
+          operadoras: null,
         },
-        cargo: null
+        cargo: null,
       };
 
       // Envia a mensagem
@@ -489,7 +492,9 @@ function finalizaAgendamentoObra(endId) {
       });
     })
     .then(() => {
-      alert("Acesso Obra finalizado, enviada para Obras, etapa atualizada e mensagem enviada com sucesso!");
+      alert(
+        "Acesso Obra finalizado, enviada para Obras, etapa atualizada e mensagem enviada com sucesso!"
+      );
 
       // Atualiza a tabela na página atual
       const paginacao = document.getElementById(
@@ -511,7 +516,6 @@ function finalizaAgendamentoObra(endId) {
       loadingOverlay.style.display = "none";
     });
 }
-
 
 // Função para atualizar a etapa
 function atualizarEtapa(endId, novaEtapaId) {
@@ -573,24 +577,29 @@ function atualizarNovoAcessoObra(secao) {
     endId: endId,
     siteId: secaoId.querySelector("#editarSiteIdAcessoObra")?.value || "",
     demanda: secaoId.querySelector("#editarDemandaAcessoObra")?.value || "",
-    observacoes: secaoId.querySelector("#editarObservacoesAcessoObra")?.value || "",
+    observacoes:
+      secaoId.querySelector("#editarObservacoesAcessoObra")?.value || "",
     detentora: {
       idDetentora:
         secaoId.querySelector("#editarIdDetentoraAcessoObra")?.value || "",
-      detentora: secaoId.querySelector("#editarDetentoraAcessoObra")?.value || "",
+      detentora:
+        secaoId.querySelector("#editarDetentoraAcessoObra")?.value || "",
     },
     cedente: {
       idOperadora:
         secaoId.querySelector("#editarIdOperadoraAcessoObra")?.value || "",
-      operadora: secaoId.querySelector("#editarOperadoraAcessoObra")?.value || "",
+      operadora:
+        secaoId.querySelector("#editarOperadoraAcessoObra")?.value || "",
     },
     linkLocalizacao:
       secaoId.querySelector("#editarLocalizacaoAcessoObra")?.value || "",
     endereco: {
-      logradouro: secaoId.querySelector("#editarLogradouroAcessoObra")?.value || "",
+      logradouro:
+        secaoId.querySelector("#editarLogradouroAcessoObra")?.value || "",
       numero: secaoId.querySelector("#editarNumeroAcessoObra")?.value || "",
       bairro: secaoId.querySelector("#editarBairroAcessoObra")?.value || "",
-      municipio: secaoId.querySelector("#editarMunicipioAcessoObra")?.value || "",
+      municipio:
+        secaoId.querySelector("#editarMunicipioAcessoObra")?.value || "",
       estado: secaoId.querySelector("#editarEstadoAcessoObra")?.value || "",
       cep: secaoId.querySelector("#editarCepAcessoObra")?.value || "",
       latitude: parseFloat(
@@ -640,9 +649,11 @@ function atualizarNovoAcessoObra(secao) {
 }
 
 // Delegação de eventos para os ícones de enviar data
-document.querySelector("#tabelaHistoricoAgendamento-obra").addEventListener("click", (event) => {
+document
+  .querySelector("#tabelaHistoricoAgendamento-obra")
+  .addEventListener("click", (event) => {
     const target = event.target;
-    
+
     if (target.classList.contains("fa-square-arrow-up-right")) {
       const action = target.getAttribute("data-action");
       const endId = target.getAttribute("data-id"); // Identifica o End ID
@@ -663,9 +674,10 @@ document.querySelector("#tabelaHistoricoAgendamento-obra").addEventListener("cli
     }
   });
 
-
 // // Busca rápida de informações do END ID
-document.querySelector("#tabelaHistoricoAgendamento-obra").addEventListener("click", (event) => {
+document
+  .querySelector("#tabelaHistoricoAgendamento-obra")
+  .addEventListener("click", (event) => {
     const loadingOverlay = document.getElementById("loading-overlay");
     if (event.target.classList.contains("end-id")) {
       const endId = event.target.getAttribute("data-id");
@@ -723,21 +735,39 @@ document.querySelector("#tabelaHistoricoAgendamento-obra").addEventListener("cli
               <ul style="flex: 1; padding-left: 20px; font-size: 1em; list-style: none;">
                   <li><strong>Site ID:</strong> ${dados.siteId}</li>
                   <li><strong>Demanda:</strong> ${dados.demanda}</li>
-                  <li><strong>Detentora:</strong> ${dados.detentora.detentora}</li>
-                  <li><strong>ID Detentora:</strong> ${dados.detentora.idDetentora}</li>
-                  <li><strong>Operadora cedente:</strong> ${dados.cedente.operadora}</li>
-                  <li><strong>ID Operadora:</strong> ${dados.cedente.idOperadora}</li>
-                  <li><strong>Logradouro:</strong> ${dados.endereco.logradouro}</li>
+                  <li><strong>Detentora:</strong> ${
+                    dados.detentora.detentora
+                  }</li>
+                  <li><strong>ID Detentora:</strong> ${
+                    dados.detentora.idDetentora
+                  }</li>
+                  <li><strong>Operadora cedente:</strong> ${
+                    dados.cedente.operadora
+                  }</li>
+                  <li><strong>ID Operadora:</strong> ${
+                    dados.cedente.idOperadora
+                  }</li>
+                  <li><strong>Logradouro:</strong> ${
+                    dados.endereco.logradouro
+                  }</li>
                   <li><strong>Número:</strong> ${dados.endereco.numero}</li>
               </ul>
               <ul style="flex: 1; padding-right: 20px; font-size: 1em; list-style: none;">
                   <li><strong>Bairro:</strong> ${dados.endereco.bairro}</li>
-                  <li><strong>Município:</strong> ${dados.endereco.municipio}</li>
+                  <li><strong>Município:</strong> ${
+                    dados.endereco.municipio
+                  }</li>
                   <li><strong>Estado:</strong> ${dados.endereco.estado}</li>
                   <li><strong>CEP:</strong> ${dados.endereco.cep}</li>
-                  <li><strong>Latitude:</strong> ${dados.endereco.latitude}</li>
-                  <li><strong>Longitude:</strong> ${dados.endereco.longitude}</li>
-                  <li><strong>Observações:</strong> ${dados.observacoes}</li>
+                  <li><strong>Latitude:</strong> ${
+                    dados.endereco.latitude || ""
+                  }</li>
+                  <li><strong>Longitude:</strong> ${
+                    dados.endereco.longitude || ""
+                  }</li>
+                  <li><strong>Observações:</strong> ${
+                    dados.observacoes || ""
+                  }</li>
               </ul>
           </div>
         `;
@@ -777,9 +807,10 @@ document.querySelector("#tabelaHistoricoAgendamento-obra").addEventListener("cli
     }
   });
 
-
 // Delegação de eventos para os botões na tabela
-document.querySelector("#tabelaHistoricoAgendamento-obra tbody").addEventListener("click", (event) => {
+document
+  .querySelector("#tabelaHistoricoAgendamento-obra tbody")
+  .addEventListener("click", (event) => {
     const button = event.target.closest("[data-id-botao]");
     if (!button) return; // Se não clicar em um botão relevante, retorna
 
@@ -801,195 +832,208 @@ document.querySelector("#tabelaHistoricoAgendamento-obra tbody").addEventListene
   });
 
 // Selecione o link "Histórico de agendamentos" e "Editar agendamento"
-const historicoLinkAgendamentoObra = document.querySelector("a[href='#todos-agendamentos-obra']");
+const historicoLinkAgendamentoObra = document.querySelector(
+  "a[href='#todos-agendamentos-obra']"
+);
 
 // Adicione o evento de clique ao link de "Histórico de agendamentos"
 historicoLinkAgendamentoObra.addEventListener("click", function (event) {
   preencherTabelaAcessoObra(); // Função chamada ao clicar no link
 });
 
-
 // Adiciona o evento ao botão resetar
-document.getElementById("botaoResetar").addEventListener("click", resetarCampos("cadastro-fazer"));
-
-
+document
+  .getElementById("botaoResetar")
+  .addEventListener("click", resetarCampos("cadastro-fazer"));
 
 // Função para buscar acesso
 function buscaAcessoObra(secao) {
-    const botaoBuscar = event.target;
-    botaoBuscar.disabled = true;
+  const botaoBuscar = event.target;
+  botaoBuscar.disabled = true;
+  botaoBuscar.innerHTML =
+    '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Buscando...';
+
+  const secaoId = document.querySelector(`#${secao}`);
+
+  console.log(secaoId);
+  const endId = secaoId.querySelector(".editarEndIdAcessoObra").value;
+
+  if (!endId) {
+    alert("Por favor, informe o END ID.");
+    botaoBuscar.disabled = false;
     botaoBuscar.innerHTML =
-      '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Buscando...';
-  
-    const secaoId = document.querySelector(`#${secao}`);
-  
-    console.log(secaoId);
-    const endId = secaoId.querySelector(".editarEndIdAcessoObra").value;
-  
-    if (!endId) {
-      alert("Por favor, informe o END ID.");
+      '<i class="fa-solid fa-magnifying-glass"></i>⠀Buscar';
+    return;
+  }
+
+  fetch(`${host}/cadastroEndIds/${endId}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Erro ao buscar dados. Verifique o END ID informado.");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data);
+      document.getElementById("editarSiteIdAcessoObra").value =
+        data.siteId || "";
+      document.getElementById("editarDemandaAcessoObra").value =
+        data.demanda || "";
+      document.getElementById("editarDetentoraAcessoObra").value =
+        data.detentora.detentora || "";
+      document.getElementById("editarIdDetentoraAcessoObra").value =
+        data.detentora.idDetentora || "";
+      document.getElementById("editarOperadoraAcessoObra").value =
+        data.cedente.operadora || "";
+      document.getElementById("editarIdOperadoraAcessoObra").value =
+        data.cedente.idOperadora || "";
+      document.getElementById("editarLogradouroAcessoObra").value =
+        data.endereco.logradouro || "";
+      document.getElementById("editarNumeroAcessoObra").value =
+        data.endereco.numero || "";
+      document.getElementById("editarBairroAcessoObra").value =
+        data.endereco.bairro || "";
+      document.getElementById("editarMunicipioAcessoObra").value =
+        data.endereco.municipio || "";
+      document.getElementById("editarEstadoAcessoObra").value =
+        data.endereco.estado || "";
+      document.getElementById("editarCepAcessoObra").value =
+        data.endereco.cep || "";
+      document.getElementById("editarLatitudeAcessoObra").value =
+        data.endereco.latitude || "";
+      document.getElementById("editarLongitudeAcessoObra").value =
+        data.endereco.longitude || "";
+      document.getElementById("editarObservacoesAcessoObra").value =
+        data.observacoes || "";
+      document.getElementById("editarLocalizacaoAcessoObra").value =
+        data.linkLocalizacao || "";
+
       botaoBuscar.disabled = false;
       botaoBuscar.innerHTML =
         '<i class="fa-solid fa-magnifying-glass"></i>⠀Buscar';
-      return;
-    }
-  
-    fetch(`${host}/cadastroEndIds/${endId}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
     })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Erro ao buscar dados. Verifique o END ID informado.");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log(data);
-        document.getElementById("editarSiteIdAcessoObra").value = data.siteId || "";
-        document.getElementById("editarDemandaAcessoObra").value = data.demanda || "";
-        document.getElementById("editarDetentoraAcessoObra").value =
-          data.detentora.detentora || "";
-        document.getElementById("editarIdDetentoraAcessoObra").value =
-          data.detentora.idDetentora || "";
-        document.getElementById("editarOperadoraAcessoObra").value =
-          data.cedente.operadora || "";
-        document.getElementById("editarIdOperadoraAcessoObra").value =
-          data.cedente.idOperadora || "";
-        document.getElementById("editarLogradouroAcessoObra").value =
-          data.endereco.logradouro || "";
-        document.getElementById("editarNumeroAcessoObra").value =
-          data.endereco.numero || "";
-        document.getElementById("editarBairroAcessoObra").value =
-          data.endereco.bairro || "";
-        document.getElementById("editarMunicipioAcessoObra").value =
-          data.endereco.municipio || "";
-        document.getElementById("editarEstadoAcessoObra").value =
-          data.endereco.estado || "";
-        document.getElementById("editarCepAcessoObra").value =
-          data.endereco.cep || "";
-        document.getElementById("editarLatitudeAcessoObra").value =
-          data.endereco.latitude || "";
-        document.getElementById("editarLongitudeAcessoObra").value =
-          data.endereco.longitude || "";
-        document.getElementById("editarObservacoesAcessoObra").value =
-          data.observacoes || "";
-        document.getElementById("editarLocalizacaoAcessoObra").value =
-          data.linkLocalizacao || "";
-  
-        botaoBuscar.disabled = false;
-        botaoBuscar.innerHTML =
-          '<i class="fa-solid fa-magnifying-glass"></i>⠀Buscar';
-      })
-      .catch((error) => {
-        console.error("Erro:", error);
-        alert(
-          "Não foi possível buscar os dados. Verifique o console para mais detalhes."
-        );
-        botaoBuscar.disabled = false;
-        botaoBuscar.innerHTML =
-          '<i class="fa-solid fa-magnifying-glass"></i>⠀Buscar';
-      });
-  }
-
+    .catch((error) => {
+      console.error("Erro:", error);
+      alert(
+        "Não foi possível buscar os dados. Verifique o console para mais detalhes."
+      );
+      botaoBuscar.disabled = false;
+      botaoBuscar.innerHTML =
+        '<i class="fa-solid fa-magnifying-glass"></i>⠀Buscar';
+    });
+}
 
 // Função para filtrar tabela
-function filtrarTabelaAcessoObra(page = 0, secao = 'todos-agendamentos-obra', idTabela = 'tabelaHistoricoAgendamento-obra') {
-    const loadingOverlay = document.getElementById("loading-overlay");
-    const tbody = document.querySelector(`#${idTabela} tbody`);
-    const secaoId = document.getElementById(secao);
-  
-    // Obtém os valores dos campos de pesquisa
-    const pesquisaCampos = {
-      endId: secaoId.querySelector("#pesquisaEndIdAcessoObra").value.trim(),
-      status: secaoId.querySelector("#pesquisaStatusAgendamentoAcessoObra").value.trim(),
-      municipio: secaoId.querySelector("#pesquisaMunicipioAcessoObra").value.trim(),
-    };
-  
-    // Monta os parâmetros da URL
-    const params = montarParametrosAgendamento(pesquisaCampos, page);
-  
-    // Define a URL para buscar os agendamentos
-    const endpoint = `${host}/obras/buscar-agendamento`;
-  
-    loadingOverlay.style.display = "block";
-  
-    // Realiza a requisição e manipula a resposta
-    fetch(`${endpoint}?${params.toString()}`, {
-      method: "GET",
-      headers: { Authorization: `Bearer ${token}` },
+function filtrarTabelaAcessoObra(
+  page = 0,
+  secao = "todos-agendamentos-obra",
+  idTabela = "tabelaHistoricoAgendamento-obra"
+) {
+  const loadingOverlay = document.getElementById("loading-overlay");
+  const tbody = document.querySelector(`#${idTabela} tbody`);
+  const secaoId = document.getElementById(secao);
+
+  // Obtém os valores dos campos de pesquisa
+  const pesquisaCampos = {
+    endId: secaoId.querySelector("#pesquisaEndIdAcessoObra").value.trim(),
+    status: secaoId
+      .querySelector("#pesquisaStatusAgendamentoAcessoObra")
+      .value.trim(),
+    municipio: secaoId
+      .querySelector("#pesquisaMunicipioAcessoObra")
+      .value.trim(),
+  };
+
+  // Monta os parâmetros da URL
+  const params = montarParametrosAgendamento(pesquisaCampos, page);
+
+  // Define a URL para buscar os agendamentos
+  const endpoint = `${host}/obras/buscar-agendamento`;
+
+  loadingOverlay.style.display = "block";
+
+  // Realiza a requisição e manipula a resposta
+  fetch(`${endpoint}?${params.toString()}`, {
+    method: "GET",
+    headers: { Authorization: `Bearer ${token}` },
+  })
+    .then((response) => {
+      if (!response.ok) throw new Error("Erro ao buscar dados.");
+      return response.json();
     })
-      .then((response) => {
-        if (!response.ok) throw new Error("Erro ao buscar dados.");
-        return response.json();
-      })
-      .then((dados) => {
-        renderizarTabelaAgendamentos(dados, idTabela, tbody);
-        renderizarBotoesPaginacao(
-          "pagination-controls-agendamento-obra",
-          filtrarTabelaAcessoObra,
-          dados.pageable.pageNumber,
-          dados.totalPages,
-          secao, // Argumento extra
-          idTabela // Argumento extra
-        );
-        exibirTotalResultados("total-pesquisa-agendamento-obra", dados.totalElements);
-      })
-      .catch((error) => {
-        console.error("Erro ao buscar dados:", error);
-        alert("Erro ao carregar os dados. Atualize a tela apertando 'F5'.");
-      })
-      .finally(() => {
-        loadingOverlay.style.display = "none";
-      });
-  }
-  
-function montarParametrosAgendamento(pesquisaCampos, page) {
-    const params = new URLSearchParams();
-  
-    if (pesquisaCampos.endId)
-      params.append("endId", pesquisaCampos.endId.toUpperCase());
-    if (pesquisaCampos.status)
-      params.append("status", pesquisaCampos.status.toUpperCase());
-    if (pesquisaCampos.municipio)
-      params.append("municipio", pesquisaCampos.municipio.toUpperCase());
-  
-    params.append("page", page);
-    params.append("size", pageSize);
-  
-    return params;
-  }
-  
-function renderizarTabelaAgendamentos(dados, idTabela, tbody) {
-    tbody.innerHTML = ""; // Limpa a tabela antes de preencher
-  
-    if (!dados.content || dados.content.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="8" class="text-center">Nenhum dado encontrado.</td></tr>`;
-      return;
-    }
-  
-    dados.content.forEach((item, i) => {
-      const row = criarLinhaAgendamentoObra(item, i); // Cria cada linha usando uma função separada
-      tbody.insertAdjacentHTML("beforeend", row);
+    .then((dados) => {
+      renderizarTabelaAgendamentos(dados, idTabela, tbody);
+      renderizarBotoesPaginacao(
+        "pagination-controls-agendamento-obra",
+        filtrarTabelaAcessoObra,
+        dados.pageable.pageNumber,
+        dados.totalPages,
+        secao, // Argumento extra
+        idTabela // Argumento extra
+      );
+      exibirTotalResultados(
+        "total-pesquisa-agendamento-obra",
+        dados.totalElements
+      );
+    })
+    .catch((error) => {
+      console.error("Erro ao buscar dados:", error);
+      alert("Erro ao carregar os dados. Atualize a tela apertando 'F5'.");
+    })
+    .finally(() => {
+      loadingOverlay.style.display = "none";
     });
-  
-    configurarEventosCopiar(); // Mantém funcionalidade adicional, se necessária
+}
+
+function montarParametrosAgendamento(pesquisaCampos, page) {
+  const params = new URLSearchParams();
+
+  if (pesquisaCampos.endId)
+    params.append("endId", pesquisaCampos.endId.toUpperCase());
+  if (pesquisaCampos.status)
+    params.append("status", pesquisaCampos.status.toUpperCase());
+  if (pesquisaCampos.municipio)
+    params.append("municipio", pesquisaCampos.municipio.toUpperCase());
+
+  params.append("page", page);
+  params.append("size", pageSize);
+
+  return params;
+}
+
+function renderizarTabelaAgendamentos(dados, idTabela, tbody) {
+  tbody.innerHTML = ""; // Limpa a tabela antes de preencher
+
+  if (!dados.content || dados.content.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8" class="text-center">Nenhum dado encontrado.</td></tr>`;
+    return;
   }
-  
+
+  dados.content.forEach((item, i) => {
+    const row = criarLinhaAgendamentoObra(item, i); // Cria cada linha usando uma função separada
+    tbody.insertAdjacentHTML("beforeend", row);
+  });
+
+  configurarEventosCopiar(); // Mantém funcionalidade adicional, se necessária
+}
+
 function criarLinhaAgendamentoObra(item, i) {
-    const dataSolicitacao = item.dataSolicitacao
-      ? formatarDataParaInput(item.dataSolicitacao)
-      : "";
-    const dataPrevisao = item.dataPrevisao
-      ? formatarDataParaInput(item.dataPrevisao)
-      : "";
-    const dataLiberacao = item.dataLiberacao
-      ? formatarDataParaInput(item.dataLiberacao)
-      : "";
-  
-    return `
+  const dataSolicitacao = item.dataSolicitacao
+    ? formatarDataParaInput(item.dataSolicitacao)
+    : "";
+  const dataPrevisao = item.dataPrevisao
+    ? formatarDataParaInput(item.dataPrevisao)
+    : "";
+  const dataLiberacao = item.dataLiberacao
+    ? formatarDataParaInput(item.dataLiberacao)
+    : "";
+
+  return `
       <tr style="${
         item.statusAgendamento === "Não iniciado" && item.reset === true
           ? "background-color: #f75c577d;"
@@ -999,17 +1043,25 @@ function criarLinhaAgendamentoObra(item, i) {
           ${item.id}
         </td>
         <td>
-          <button class="btn btn-link p-0 text-decoration-none end-id" id="textoParaCopiar" data-id="${item.endId}">
+          <button class="btn btn-link p-0 text-decoration-none end-id" id="textoParaCopiar" data-id="${
+            item.endId
+          }">
             ${item.endId}
           </button>
-          <i class="fa-regular fa-copy btnCopiar" title="Copiar" data-id="${item.endId}"></i>
+          <i class="fa-regular fa-copy btnCopiar" title="Copiar" data-id="${
+            item.endId
+          }"></i>
         </td>
         <td>
           <select disabled class="form-select border-0 bg-light p-2">
             <option value="status">${item.statusAgendamento}</option>
           </select>
           <button class="btn iniciar-btn p-0 border-0 bg-transparent ml-2" 
-            style="display:${["Em andamento", "Concluído"].includes(item.statusAgendamento) ? "none" : ""};" 
+            style="display:${
+              ["Em andamento", "Concluído"].includes(item.statusAgendamento)
+                ? "none"
+                : ""
+            };" 
             data-id-botao="${item.endId}">
             <i class="fa-solid fa-circle-play"></i>
           </button>
@@ -1024,7 +1076,11 @@ function criarLinhaAgendamentoObra(item, i) {
                   disabled
                   id="data-solicitacao-obra-${item.endId}"
                 />`
-              : renderInputDateAcessoObra("data-solicitacao-obra", item.endId, item.statusAgendamento)
+              : renderInputDateAcessoObra(
+                  "data-solicitacao-obra",
+                  item.endId,
+                  item.statusAgendamento
+                )
           }
         </td>
         <td>
@@ -1037,7 +1093,11 @@ function criarLinhaAgendamentoObra(item, i) {
                   disabled
                   id="data-previsao-obra-${item.endId}"
                 />`
-              : renderInputDateAcessoObra("data-previsao-obra", item.endId, item.statusAgendamento)
+              : renderInputDateAcessoObra(
+                  "data-previsao-obra",
+                  item.endId,
+                  item.statusAgendamento
+                )
           }
         </td>
         <td>
@@ -1050,15 +1110,22 @@ function criarLinhaAgendamentoObra(item, i) {
                   disabled
                   id="data-liberacao-obra-${item.endId}"
                 />`
-              : renderInputDateAcessoObra("data-liberacao-obra", item.endId, item.statusAgendamento)
+              : renderInputDateAcessoObra(
+                  "data-liberacao-obra",
+                  item.endId,
+                  item.statusAgendamento
+                )
           }
         </td>
         <td>
-          <button class="btn btn-primary finalizar-btn" data-id-botao="${item.endId}" ${
-            item.statusAgendamento === "Não iniciado" || item.statusAgendamento === "Concluído"
-              ? "disabled"
-              : ""
-          }>
+          <button class="btn btn-primary finalizar-btn" data-id-botao="${
+            item.endId
+          }" ${
+    item.statusAgendamento === "Não iniciado" ||
+    item.statusAgendamento === "Concluído"
+      ? "disabled"
+      : ""
+  }>
             Finalizar
           </button>
         </td>
@@ -1068,7 +1135,9 @@ function criarLinhaAgendamentoObra(item, i) {
             style="font-size: 1.7rem; color: ${
               item.reset ? "#007bff" : "rgba(0, 123, 255, 0.46)"
             }; 
-            ${item.observacoes ? `cursor: pointer;"` : 'cursor: not-allowed;"'}" 
+            ${
+              item.observacoes ? `cursor: pointer;"` : 'cursor: not-allowed;"'
+            }" 
             ${
               item.observacoes
                 ? `onclick="alert('${item.observacoes}');"`
@@ -1078,8 +1147,7 @@ function criarLinhaAgendamentoObra(item, i) {
         </td>
       </tr>
     `;
-  }
-  
+}
 
 // Busca as informações do projeto baseado no END ID
 function buscaProjeto(secao) {
@@ -1116,18 +1184,26 @@ function buscaProjeto(secao) {
     })
     .then((data) => {
       console.log(data);
-      document.getElementById("editarStatusLigacao").value = data.statusLigacao || "";
-      document.getElementById("editarConcessionaria").value = data.concessionaria || "";
-      document.getElementById("editarLeituraInicial").value = data.leituraInicial || "";
-      document.getElementById("editarNumeroMedidor").value = data.numeroMedidor || "";
-      document.getElementById("editarNumeroInstalacao").value = data.numeroInstalacao || "";
-      document.getElementById("editarNumeroFases").value = data.numeroDeFases || "";
+      document.getElementById("editarStatusLigacao").value =
+        data.statusLigacao || "";
+      document.getElementById("editarConcessionaria").value =
+        data.concessionaria || "";
+      document.getElementById("editarLeituraInicial").value =
+        data.leituraInicial || "";
+      document.getElementById("editarNumeroMedidor").value =
+        data.numeroMedidor || "";
+      document.getElementById("editarNumeroInstalacao").value =
+        data.numeroInstalacao || "";
+      document.getElementById("editarNumeroFases").value =
+        data.numeroDeFases || "";
       document.getElementById("editarRegional").value = data.regional || "";
       document.getElementById("editarUnidade").value = data.unidade || "";
       document.getElementById("editarCNPJ").value = data.cnpjUc || "";
       document.getElementById("editarTipoTensao").value = data.tipoTensao || "";
-      document.getElementById("editarPrevisaoLigacao").value = formatarDataParaInput(data.previsaoLigacao) || "";
-      document.getElementById("editarDataLigacao").value = formatarDataParaInput(data.dataLigacao) || "";
+      document.getElementById("editarPrevisaoLigacao").value =
+        formatarDataParaInput(data.previsaoLigacao) || "";
+      document.getElementById("editarDataLigacao").value =
+        formatarDataParaInput(data.dataLigacao) || "";
 
       // Habilitar o botão novamente
       botaoBuscar.disabled = false;
@@ -1136,90 +1212,96 @@ function buscaProjeto(secao) {
     })
     .catch((error) => {
       console.error("Erro:", error);
-      alert(
-        "O End Id não foi concluído na etapa projeto! Aguarde..."
-      );
+      alert("O End Id não foi concluído na etapa projeto! Aguarde...");
       botaoBuscar.disabled = false;
       botaoBuscar.innerHTML =
         '<i class="fa-solid fa-magnifying-glass"></i>⠀Buscar';
     });
 }
 
+// Atualiza as Informações de Ligação
+function atualizaInformacoesLigacao(secao) {
+  const secaoId = document.querySelector(`#${secao}`);
 
-  // Atualiza as Informações de Ligação
-  function atualizaInformacoesLigacao(secao) {
-    const secaoId = document.querySelector(`#${secao}`);
-  
-    if (!secaoId) {
-      console.error(`Seção com ID '${secao}' não encontrada no DOM.`);
-      return;
-    }
-  
-    const endIdInput = secaoId.querySelector(".editarEndIdProjeto");
-    if (!endIdInput) {
-      console.error("Elemento .editarEndId não encontrado na seção especificada.");
-      return;
-    }
-  
-    const endId = endIdInput.value;
-    if (!endId) {
-      alert("Por favor, informe o END ID para poder atualizar.");
-      return;
-    }
-  
-    const botaoAtualizar = document.querySelector("#salvarInfLigacao");
-    if (botaoAtualizar) {
-      botaoAtualizar.disabled = true;
-      botaoAtualizar.textContent = "Atualizando...";
-    }
-  
-    const payload = {
-      informacoesLigacao: {
-        statusLigacao: document.getElementById("editarStatusLigacao").value || "",
-        concessionaria: document.getElementById("editarConcessionaria").value || "",
-        leituraInicial: document.getElementById("editarLeituraInicial").value || "",
-        numeroMedidor: document.getElementById("editarNumeroMedidor").value || "",
-        numeroInstalacao: document.getElementById("editarNumeroInstalacao").value || "",
-        numeroDeFases: document.getElementById("editarNumeroFases").value || "",
-        regional: document.getElementById("editarRegional").value || "",
-        unidade: document.getElementById("editarUnidade").value  || "",
-        cnpjUc: document.getElementById("editarCNPJ").value || "",
-        tipoTensao: document.getElementById("editarTipoTensao").value || "",
-        previsaoLigacao: document.getElementById("editarPrevisaoLigacao").value || "",
-        dataLigacao: document.getElementById("editarDataLigacao").value || "",
-      }
-    };
-  
-    console.log("Payload preparado para envio:", JSON.stringify(payload, null, 2));
-  
-    fetch(`${host}/projetos/${endId}`, {
-      method: "PATCH",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    })
-      .then((response) => {
-        console.log("Resposta da requisição recebida:", response);
-        if (!response.ok) {
-          throw new Error(`Erro ao atualizar os dados: ${response.statusText}`);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("Dados retornados pelo servidor:", data);
-        alert("Informações de ligação atualizadas com sucesso!");
-        resetarCampos(secao);
-      })
-      .catch((error) => {
-        console.error("Erro durante a atualização dos dados:", error);
-        alert("Erro ao atualizar os dados. Veja os detalhes no console.");
-      })
-      .finally(() => {
-        if (botaoAtualizar) {
-          botaoAtualizar.disabled = false;
-          botaoAtualizar.textContent = "Atualizar";
-        }
-      });
+  if (!secaoId) {
+    console.error(`Seção com ID '${secao}' não encontrada no DOM.`);
+    return;
   }
+
+  const endIdInput = secaoId.querySelector(".editarEndIdProjeto");
+  if (!endIdInput) {
+    console.error(
+      "Elemento .editarEndId não encontrado na seção especificada."
+    );
+    return;
+  }
+
+  const endId = endIdInput.value;
+  if (!endId) {
+    alert("Por favor, informe o END ID para poder atualizar.");
+    return;
+  }
+
+  const botaoAtualizar = document.querySelector("#salvarInfLigacao");
+  if (botaoAtualizar) {
+    botaoAtualizar.disabled = true;
+    botaoAtualizar.textContent = "Atualizando...";
+  }
+
+  const payload = {
+    informacoesLigacao: {
+      statusLigacao: document.getElementById("editarStatusLigacao").value || "",
+      concessionaria:
+        document.getElementById("editarConcessionaria").value || "",
+      leituraInicial:
+        document.getElementById("editarLeituraInicial").value || "",
+      numeroMedidor: document.getElementById("editarNumeroMedidor").value || "",
+      numeroInstalacao:
+        document.getElementById("editarNumeroInstalacao").value || "",
+      numeroDeFases: document.getElementById("editarNumeroFases").value || "",
+      regional: document.getElementById("editarRegional").value || "",
+      unidade: document.getElementById("editarUnidade").value || "",
+      cnpjUc: document.getElementById("editarCNPJ").value || "",
+      tipoTensao: document.getElementById("editarTipoTensao").value || "",
+      previsaoLigacao:
+        document.getElementById("editarPrevisaoLigacao").value || "",
+      dataLigacao: document.getElementById("editarDataLigacao").value || "",
+    },
+  };
+
+  console.log(
+    "Payload preparado para envio:",
+    JSON.stringify(payload, null, 2)
+  );
+
+  fetch(`${host}/projetos/${endId}`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  })
+    .then((response) => {
+      console.log("Resposta da requisição recebida:", response);
+      if (!response.ok) {
+        throw new Error(`Erro ao atualizar os dados: ${response.statusText}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Dados retornados pelo servidor:", data);
+      alert("Informações de ligação atualizadas com sucesso!");
+      resetarCampos(secao);
+    })
+    .catch((error) => {
+      console.error("Erro durante a atualização dos dados:", error);
+      alert("Erro ao atualizar os dados. Veja os detalhes no console.");
+    })
+    .finally(() => {
+      if (botaoAtualizar) {
+        botaoAtualizar.disabled = false;
+        botaoAtualizar.textContent = "Atualizar";
+      }
+    });
+}

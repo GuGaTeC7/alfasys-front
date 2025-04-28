@@ -170,42 +170,40 @@ function preencherTabelaAcesso(page = 0) {
         tbody.insertAdjacentHTML("beforeend", row);
       });
 
-// Adicionar eventListener para cada botão "Copiar Texto"
-document.querySelectorAll(".btnCopiar").forEach((button) => {
-  button.addEventListener("click", function () {
-    const endId = this.getAttribute("data-id");
-    const textoParaCopiarPuro = document.querySelector(
-      `button[data-id="${endId}"]`
-    ).textContent;
-    const textoParaCopiar = textoParaCopiarPuro.trim();
+      // Adicionar eventListener para cada botão "Copiar Texto"
+      document.querySelectorAll(".btnCopiar").forEach((button) => {
+        button.addEventListener("click", function () {
+          const endId = this.getAttribute("data-id");
+          const textoParaCopiarPuro = document.querySelector(
+            `button[data-id="${endId}"]`
+          ).textContent;
+          const textoParaCopiar = textoParaCopiarPuro.trim();
 
-    navigator.clipboard
-      .writeText(textoParaCopiar)
-      .then(function () {})
-      .catch(function (err) {
-        console.error("Erro ao tentar copiar o texto: ", err);
+          navigator.clipboard
+            .writeText(textoParaCopiar)
+            .then(function () {})
+            .catch(function (err) {
+              console.error("Erro ao tentar copiar o texto: ", err);
+            });
+        });
       });
-  });
-});
 
-
-// Função para renderizar botões de páginação
-renderizarBotoesPaginacao(
-  "pagination-controls-agendamento",
-  preencherTabelaAcesso,
-  dados.pageable.pageNumber,
-  dados.totalPages
-);
-})
-.catch((error) => {
-console.error("Erro ao buscar dados:", error);
-alert("Erro ao carregar os dados. Tente novamente.");
-})
-.finally(() => {
-loadingOverlay.style.display = "none";
-});
+      // Função para renderizar botões de páginação
+      renderizarBotoesPaginacao(
+        "pagination-controls-agendamento",
+        preencherTabelaAcesso,
+        dados.pageable.pageNumber,
+        dados.totalPages
+      );
+    })
+    .catch((error) => {
+      console.error("Erro ao buscar dados:", error);
+      alert("Erro ao carregar os dados. Tente novamente.");
+    })
+    .finally(() => {
+      loadingOverlay.style.display = "none";
+    });
 }
-
 
 // Função para renderizar o input de data com ícone de envio
 function renderInputDate(action, endId, status) {
@@ -233,7 +231,6 @@ function renderInputDate(action, endId, status) {
           data-id="${endId}"></i>
       </div>`;
 }
-
 
 // Função para exibir uma confirmação
 function exibirConfirmacao(mensagem, onConfirm) {
@@ -271,7 +268,6 @@ function exibirConfirmacao(mensagem, onConfirm) {
     dismissAlert();
   });
 }
-
 
 // Função para iniciar um agendamento
 function iniciaAgendamento(endId) {
@@ -320,7 +316,7 @@ function iniciaAgendamento(endId) {
         now.getMilliseconds(),
       ];
 
-      const decodedToken = JSON.parse(atob(token.split('.')[1]));
+      const decodedToken = JSON.parse(atob(token.split(".")[1]));
       const usuarioNome = decodedToken.nome || "Usuário Desconhecido";
 
       const payloadMensagem = {
@@ -334,9 +330,9 @@ function iniciaAgendamento(endId) {
           email: null,
           telefone: null,
           cargo: null,
-          operadoras: null
+          operadoras: null,
         },
-        cargo: null
+        cargo: null,
       };
 
       // Envia a mensagem
@@ -368,9 +364,6 @@ function iniciaAgendamento(endId) {
       }
     });
 }
-
-
-
 
 function finalizaAgendamento(endId) {
   // Obtém os valores das datas
@@ -438,12 +431,17 @@ function finalizaAgendamento(endId) {
         throw new Error("Você não tem permissão para realizar esta ação.");
       }
       if (!response.ok) {
-        throw new Error(`Erro ao enviar o End ID para vistoria: ${response.statusText}`);
+        throw new Error(
+          `Erro ao enviar o End ID para vistoria: ${response.statusText}`
+        );
       }
       return atualizarEtapa(endId, 2);
     })
     .then((data) => {
-      console.log("End ID enviado com sucesso, com status 'Não Iniciado':", data);
+      console.log(
+        "End ID enviado com sucesso, com status 'Não Iniciado':",
+        data
+      );
 
       // Envia a mensagem de conclusão
       const now = new Date();
@@ -459,7 +457,7 @@ function finalizaAgendamento(endId) {
         now.getMilliseconds(),
       ];
 
-      const decodedToken = JSON.parse(atob(token.split('.')[1]));
+      const decodedToken = JSON.parse(atob(token.split(".")[1]));
       const usuarioNome = decodedToken.nome || "Usuário Desconhecido";
 
       const payloadMensagem = {
@@ -473,9 +471,9 @@ function finalizaAgendamento(endId) {
           email: null,
           telefone: null,
           cargo: null,
-          operadoras: null
+          operadoras: null,
         },
-        cargo: null
+        cargo: null,
       };
 
       // Envia a mensagem
@@ -504,7 +502,10 @@ function finalizaAgendamento(endId) {
       if (error.message === "Você não tem permissão para realizar esta ação.") {
         alert(error.message);
       } else {
-        console.error("Erro durante a finalização e envio para vistoria:", error);
+        console.error(
+          "Erro durante a finalização e envio para vistoria:",
+          error
+        );
         alert("Erro ao finalizar e enviar o End ID para vistoria.");
       }
     })
@@ -513,8 +514,6 @@ function finalizaAgendamento(endId) {
       loadingOverlay.style.display = "none";
     });
 }
-
-
 
 // Função para atualizar a etapa
 function atualizarEtapa(endId, novaEtapaId) {
@@ -542,8 +541,6 @@ function atualizarEtapa(endId, novaEtapaId) {
       console.log("Etapa atualizada com sucesso:", data);
     });
 }
-
-
 
 // Função para atualizar um end ID
 function atualizarNovoAcesso(secao) {
@@ -644,11 +641,12 @@ function atualizarNovoAcesso(secao) {
     });
 }
 
-
 // Delegação de eventos para os ícones de enviar data
-document.querySelector("#tabelaHistoricoAgendamento").addEventListener("click", (event) => {
+document
+  .querySelector("#tabelaHistoricoAgendamento")
+  .addEventListener("click", (event) => {
     const target = event.target;
-    
+
     if (target.classList.contains("fa-square-arrow-up-right")) {
       const action = target.getAttribute("data-action");
       const endId = target.getAttribute("data-id"); // Identifica o End ID
@@ -669,9 +667,10 @@ document.querySelector("#tabelaHistoricoAgendamento").addEventListener("click", 
     }
   });
 
-
 // // Busca rápida de informações do END ID
-document.querySelector("#tabelaHistoricoAgendamento").addEventListener("click", (event) => {
+document
+  .querySelector("#tabelaHistoricoAgendamento")
+  .addEventListener("click", (event) => {
     const loadingOverlay = document.getElementById("loading-overlay");
     if (event.target.classList.contains("end-id")) {
       const endId = event.target.getAttribute("data-id");
@@ -729,21 +728,39 @@ document.querySelector("#tabelaHistoricoAgendamento").addEventListener("click", 
               <ul style="flex: 1; padding-left: 20px; font-size: 1em; list-style: none;">
                   <li><strong>Site ID:</strong> ${dados.siteId}</li>
                   <li><strong>Demanda:</strong> ${dados.demanda}</li>
-                  <li><strong>Detentora:</strong> ${dados.detentora.detentora}</li>
-                  <li><strong>ID Detentora:</strong> ${dados.detentora.idDetentora}</li>
-                  <li><strong>Operadora cedente:</strong> ${dados.cedente.operadora}</li>
-                  <li><strong>ID Operadora:</strong> ${dados.cedente.idOperadora}</li>
-                  <li><strong>Logradouro:</strong> ${dados.endereco.logradouro}</li>
+                  <li><strong>Detentora:</strong> ${
+                    dados.detentora.detentora
+                  }</li>
+                  <li><strong>ID Detentora:</strong> ${
+                    dados.detentora.idDetentora
+                  }</li>
+                  <li><strong>Operadora cedente:</strong> ${
+                    dados.cedente.operadora
+                  }</li>
+                  <li><strong>ID Operadora:</strong> ${
+                    dados.cedente.idOperadora
+                  }</li>
+                  <li><strong>Logradouro:</strong> ${
+                    dados.endereco.logradouro
+                  }</li>
                   <li><strong>Número:</strong> ${dados.endereco.numero}</li>
               </ul>
               <ul style="flex: 1; padding-right: 20px; font-size: 1em; list-style: none;">
                   <li><strong>Bairro:</strong> ${dados.endereco.bairro}</li>
-                  <li><strong>Município:</strong> ${dados.endereco.municipio}</li>
+                  <li><strong>Município:</strong> ${
+                    dados.endereco.municipio
+                  }</li>
                   <li><strong>Estado:</strong> ${dados.endereco.estado}</li>
                   <li><strong>CEP:</strong> ${dados.endereco.cep}</li>
-                  <li><strong>Latitude:</strong> ${dados.endereco.latitude}</li>
-                  <li><strong>Longitude:</strong> ${dados.endereco.longitude}</li>
-                  <li><strong>Observações:</strong> ${dados.observacoes}</li>
+                  <li><strong>Latitude:</strong> ${
+                    dados.endereco.latitude || ""
+                  }</li>
+                  <li><strong>Longitude:</strong> ${
+                    dados.endereco.longitude || ""
+                  }</li>
+                  <li><strong>Observações:</strong> ${
+                    dados.observacoes || ""
+                  }</li>
               </ul>
           </div>
         `;
@@ -784,7 +801,9 @@ document.querySelector("#tabelaHistoricoAgendamento").addEventListener("click", 
   });
 
 // Delegação de eventos para os botões na tabela
-document.querySelector("#tabelaHistoricoAgendamento tbody").addEventListener("click", (event) => {
+document
+  .querySelector("#tabelaHistoricoAgendamento tbody")
+  .addEventListener("click", (event) => {
     const button = event.target.closest("[data-id-botao]");
     if (!button) return; // Se não clicar em um botão relevante, retorna
 
@@ -806,7 +825,9 @@ document.querySelector("#tabelaHistoricoAgendamento tbody").addEventListener("cl
   });
 
 // Selecione o link "Histórico de agendamentos" e "Editar agendamento"
-const historicoLinkAgendamento = document.querySelector("a[href='#todos-agendamentos']");
+const historicoLinkAgendamento = document.querySelector(
+  "a[href='#todos-agendamentos']"
+);
 
 // Adicione o evento de clique ao link de "Histórico de agendamentos"
 historicoLinkAgendamento.addEventListener("click", function (event) {
@@ -814,8 +835,9 @@ historicoLinkAgendamento.addEventListener("click", function (event) {
 });
 
 // Adiciona o evento ao botão resetar
-document.getElementById("botaoResetar").addEventListener("click", resetarCampos("cadastro-fazer"));
-
+document
+  .getElementById("botaoResetar")
+  .addEventListener("click", resetarCampos("cadastro-fazer"));
 
 function filtrarTabelaAgendamento(page = 0, secao, idTabela) {
   const loadingOverlay = document.getElementById("loading-overlay");
@@ -824,9 +846,9 @@ function filtrarTabelaAgendamento(page = 0, secao, idTabela) {
 
   // Obtém os valores dos campos de pesquisa
   const pesquisaCampos = {
-      endId: secaoId.querySelector("#pesquisaEndIdAg").value.trim(),
-      status: secaoId.querySelector("#pesquisaStatusAgendamentoo").value.trim(),
-      municipio: secaoId.querySelector("#pesquisaMunicipioo").value.trim(),
+    endId: secaoId.querySelector("#pesquisaEndIdAg").value.trim(),
+    status: secaoId.querySelector("#pesquisaStatusAgendamentoo").value.trim(),
+    municipio: secaoId.querySelector("#pesquisaMunicipioo").value.trim(),
   };
 
   // Monta os parâmetros da URL
@@ -836,39 +858,42 @@ function filtrarTabelaAgendamento(page = 0, secao, idTabela) {
   loadingOverlay.style.display = "block";
 
   fetch(`${endpoint}?${params.toString()}`, {
-      method: "GET",
-      headers: { Authorization: `Bearer ${token}` },
+    method: "GET",
+    headers: { Authorization: `Bearer ${token}` },
   })
-      .then((response) => {
-          if (!response.ok) throw new Error("Erro ao buscar dados.");
-          return response.json();
-      })
-      .then((dados) => {
-          renderizarTabelaAgendamento(dados, idTabela, tbody);
-          renderizarBotoesPaginacao(
-              "pagination-controls-agendamento",
-              filtrarTabelaAgendamento,
-              dados.pageable.pageNumber,
-              dados.totalPages,
-              secao,
-              idTabela
-          );
-          exibirTotalResultados("total-pesquisa-agendamento", dados.totalElements);
-      })
-      .catch((error) => {
-          console.error("Erro ao buscar dados:", error);
-          alert("Erro ao carregar os dados. Atualize a tela apertando 'F5'.");
-      })
-      .finally(() => {
-          loadingOverlay.style.display = "none";
-      });
+    .then((response) => {
+      if (!response.ok) throw new Error("Erro ao buscar dados.");
+      return response.json();
+    })
+    .then((dados) => {
+      renderizarTabelaAgendamento(dados, idTabela, tbody);
+      renderizarBotoesPaginacao(
+        "pagination-controls-agendamento",
+        filtrarTabelaAgendamento,
+        dados.pageable.pageNumber,
+        dados.totalPages,
+        secao,
+        idTabela
+      );
+      exibirTotalResultados("total-pesquisa-agendamento", dados.totalElements);
+    })
+    .catch((error) => {
+      console.error("Erro ao buscar dados:", error);
+      alert("Erro ao carregar os dados. Atualize a tela apertando 'F5'.");
+    })
+    .finally(() => {
+      loadingOverlay.style.display = "none";
+    });
 }
 
 function montarParametrosAgendamento(pesquisaCampos, page) {
   const params = new URLSearchParams();
-  if (pesquisaCampos.endId) params.append("endId", pesquisaCampos.endId.toUpperCase());
-  if (pesquisaCampos.status) params.append("status", pesquisaCampos.status.toUpperCase());
-  if (pesquisaCampos.municipio) params.append("municipio", pesquisaCampos.municipio.toUpperCase());
+  if (pesquisaCampos.endId)
+    params.append("endId", pesquisaCampos.endId.toUpperCase());
+  if (pesquisaCampos.status)
+    params.append("status", pesquisaCampos.status.toUpperCase());
+  if (pesquisaCampos.municipio)
+    params.append("municipio", pesquisaCampos.municipio.toUpperCase());
   params.append("page", page);
   params.append("size", pageSize);
   return params;
@@ -878,30 +903,35 @@ function renderizarTabelaAgendamento(dados, idTabela, tbody) {
   tbody.innerHTML = ""; // Limpa a tabela antes de preencher
 
   if (!dados.content || dados.content.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="8" class="text-center">Nenhum dado encontrado.</td></tr>`;
-      return;
+    tbody.innerHTML = `<tr><td colspan="8" class="text-center">Nenhum dado encontrado.</td></tr>`;
+    return;
   }
 
   dados.content.forEach((item, i) => {
-      const row = criarLinhaAgendamento(item, i);
-      tbody.insertAdjacentHTML("beforeend", row);
+    const row = criarLinhaAgendamento(item, i);
+    tbody.insertAdjacentHTML("beforeend", row);
   });
 
   configurarEventosCopiar(); // Chama a função para configurar os eventos de copiar
-
 }
 
 function criarLinhaAgendamento(item, i) {
-  const dataSolicitacao = item.dataSolicitacao ? formatarDataParaInput(item.dataSolicitacao) : "";
-  const dataPrevisao = item.dataPrevisao ? formatarDataParaInput(item.dataPrevisao) : "";
-  const dataLiberacao = item.dataLiberacao ? formatarDataParaInput(item.dataLiberacao) : "";
+  const dataSolicitacao = item.dataSolicitacao
+    ? formatarDataParaInput(item.dataSolicitacao)
+    : "";
+  const dataPrevisao = item.dataPrevisao
+    ? formatarDataParaInput(item.dataPrevisao)
+    : "";
+  const dataLiberacao = item.dataLiberacao
+    ? formatarDataParaInput(item.dataLiberacao)
+    : "";
 
   return `
     <tr style="${
-            item.statusAgendamento === "Não iniciado" && item.reset === true
-              ? "background-color: #f75c577d;"
-              : ""
-          }">
+      item.statusAgendamento === "Não iniciado" && item.reset === true
+        ? "background-color: #f75c577d;"
+        : ""
+    }">
             <td>
               ${item.id}
             </td>
@@ -984,11 +1014,11 @@ function criarLinhaAgendamento(item, i) {
               <button class="btn btn-primary finalizar-btn" data-id-botao="${
                 item.endId
               }" ${
-          item.statusAgendamento === "Não iniciado" ||
-          item.statusAgendamento === "Concluído"
-            ? "disabled"
-            : ""
-        }>
+    item.statusAgendamento === "Não iniciado" ||
+    item.statusAgendamento === "Concluído"
+      ? "disabled"
+      : ""
+  }>
                 Finalizar
               </button>
             </td>
