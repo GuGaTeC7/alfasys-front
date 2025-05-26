@@ -715,6 +715,7 @@ function resetarVistoria(endId) {
           console.error("Erro ao deletar a vistoria:", error);
           alert("Erro ao deletar a vistoria.");
         });
+        return atualizarEtapa(endId, 1);
     })
     .catch((error) => {
       console.error("Erro ao resetar os dados:", error);
