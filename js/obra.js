@@ -936,6 +936,7 @@ function resetarObra(endId) {
           console.error("Erro ao deletar a obra:", error);
           alert("Erro ao deletar a obra.");
         });
+        return atualizarEtapa(endId, 6);
     })
     .catch((error) => {
       console.error("Erro ao resetar os dados:", error);
