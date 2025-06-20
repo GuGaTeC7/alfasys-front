@@ -60,6 +60,7 @@ function realizarCadastro() {
     statusAgendamento: "Não iniciado",
     etapa: {id:1},
     reset: 0,
+    status: "Não iniciado",
     demanda: demanda,
     observacoes: observacoes || null,
     localizacao: localizacao || null,

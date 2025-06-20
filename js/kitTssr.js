@@ -90,7 +90,7 @@ function preencherTabelaKitTssr(page = 0) {
             <td>
               <select class="form-select border-0 bg-light p-2" id="select-parecer-${
                 item.endId
-              }" ${parecerDisabled ? "disabled" : ""}>
+              }" ${!(dataPrevista && dataRealizacao) ? "disabled" : ""}>
                 <option value="" selected>Selecione um parecer</option>
                 <option value="Viável" ${
                   item.parecer === "Viável" ? "selected" : ""
@@ -850,7 +850,7 @@ function criarLinhaKitTssr(item, i) {
         <select class="form-select border-0 bg-light p-2" id="select-parecer-${
           item.endId
         }" 
-          ${parecerDisabled ? "disabled" : ""}>
+          ${!(dataPrevista && dataRealizacao) ? "disabled" : ""}>
           <option value="" selected>Selecione um parecer</option>
           <option value="Viável" ${
             item.parecer === "Viável" ? "selected" : ""

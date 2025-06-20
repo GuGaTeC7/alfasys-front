@@ -146,6 +146,8 @@ function renderizarTabelaStatus(dados, idTabela, tbody) {
     return;
   }
 
+  console.log(dados)
+
   dados.content.forEach((item, i) => {
     const row = criarLinhaStatus(item, i);
     tbody.insertAdjacentHTML("beforeend", row);

@@ -678,6 +678,29 @@ function enviarData(endId, dateInput, action, etapa) {
 
       alert("Data enviada com sucesso!");
       console.log("Resposta do servidor:", dados);
+
+      // 👉 HABILITA O SELECT DO PARECER
+      if (etapa === "vistoria" && action === "data-realizacao") {
+        const selectParecer = document.getElementById(`select-parecer-${endId}`);
+        if (selectParecer) {
+          selectParecer.removeAttribute("disabled");
+        }
+      }
+
+      if (etapa === "kit-tssr") {
+        // Pega os valores dos dois campos de data
+        const dataPrevista = document.getElementById(`data-prevista-${endId}`)?.value;
+        const dataRealizada = document.getElementById(`data-realizada-${endId}`)?.value;
+
+        // Verifica se ambos estão preenchidos
+        if (dataPrevista && dataRealizada) {
+          const selectParecer = document.getElementById(`select-parecer-${endId}`);
+          if (selectParecer) {
+            selectParecer.removeAttribute("disabled");
+          }
+        }
+      }
+
       
       // Atualiza a tabela correspondente à etapa
       if (etapa === "obra") {
