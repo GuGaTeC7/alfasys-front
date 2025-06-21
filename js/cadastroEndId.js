@@ -59,6 +59,7 @@ function realizarCadastro() {
     siteId: siteId,
     statusAgendamento: "Não iniciado",
     etapa: {id:1},
+    statusEtapaAtual: "Não iniciado",
     reset: 0,
     status: "Não iniciado",
     demanda: demanda,
